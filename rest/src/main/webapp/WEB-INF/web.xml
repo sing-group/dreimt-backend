@@ -1,0 +1,63 @@
+<!-- #%L REST %% Copyright (C) 2018 Daniel Glez-Peña, Miguel Reboiro-Jato, 
+  Florentino Fdez-Riverola, Alba Nogueira Rodríguez %% This program is free 
+  software: you can redistribute it and/or modify it under the terms of the 
+  GNU General Public License as published by the Free Software Foundation, 
+  either version 3 of the License, or (at your option) any later version. This 
+  program is distributed in the hope that it will be useful, but WITHOUT ANY 
+  WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS 
+  FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. 
+  You should have received a copy of the GNU General Public License along with 
+  this program. If not, see <http://www.gnu.org/licenses/gpl-3.0.html>. #L% -->
+
+
+
+
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+   http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+  version="3.1">
+  <display-name>DREIMT REST</display-name>
+  
+   <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>public</web-resource-name>
+      <url-pattern>/api/stream*</url-pattern>
+      <http-method>*</http-method>
+    </web-resource-collection>
+  </security-constraint>
+  
+
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>private</web-resource-name>
+      <url-pattern>/api/user/*</url-pattern>
+      <url-pattern>/api/exploration/*</url-pattern>
+      <url-pattern>/api/polyp/*</url-pattern>
+      <url-pattern>/api/video/*</url-pattern>
+      <url-pattern>/api/polyprecording/*</url-pattern>
+      <url-pattern>/api/videomodification/*</url-pattern>
+      <url-pattern>/api/patient/*</url-pattern>
+      <url-pattern>/api/idspace/*</url-pattern>
+      <http-method-omission>OPTIONS</http-method-omission>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>ADMIN</role-name>
+      <role-name>USER</role-name>
+    </auth-constraint>
+  </security-constraint>
+  
+  <security-role>
+    <role-name>ADMIN</role-name>
+  </security-role>
+
+  <security-role>
+    <role-name>USER</role-name>
+  </security-role>
+  
+  <login-config>
+    <auth-method>BASIC</auth-method>
+    <realm-name>default</realm-name>
+  </login-config>
+
+</web-app>

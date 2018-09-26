@@ -1,0 +1,604 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.sing_group</groupId>
+	<artifactId>dreimt-backend</artifactId>
+	<version>0.1.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>DREIMT - Backend</name>
+	<description>Drug Repositioning for Immuno Transcriptomics</description>
+	<inceptionYear>2018</inceptionYear>
+
+	<developers>
+    <developer>
+      <name>Daniel Glez-Peña</name>
+      <organization>SING Group - University of Vigo</organization>
+      <organizationUrl>http://www.sing-group.org/</organizationUrl>
+    </developer>
+		<developer>
+			<name>Miguel Reboiro-Jato</name>
+			<organization>SING Group - University of Vigo</organization>
+			<organizationUrl>http://www.sing-group.org/</organizationUrl>
+			<email>mrjato@uvigo.es</email>
+		</developer>
+		<developer>
+			<name>Hugo López-Fernández</name>
+			<organization>SING Group - University of Vigo</organization>
+			<organizationUrl>http://www.sing-group.org/</organizationUrl>
+			<email>mrjato@uvigo.es</email>
+		</developer>
+	</developers>
+
+	<contributors>
+    <contributor>
+      <name>Kevin Troulé</name>
+      <organization>CNIO</organization>
+      <organizationUrl>https://www.cnio.es</organizationUrl>
+      <email>ktroule@cnio.es</email>
+      <roles>
+        <role>Principal Investigator</role>
+      </roles>
+    </contributor>
+    <contributor>
+      <name>Gonzalo Gómez-López</name>
+      <organization>CNIO</organization>
+      <organizationUrl>https://www.cnio.es</organizationUrl>
+      <email>ggomez@cnio.es</email>
+      <roles>
+        <role>Researcher</role>
+      </roles>
+    </contributor>
+    <contributor>
+      <name>Fátima Al-Shahrour</name>
+      <organization>CNIO</organization>
+      <organizationUrl>https://www.cnio.es</organizationUrl>
+      <email>falshahrour@cnio.es</email>
+      <roles>
+        <role>Researcher</role>
+      </roles>
+    </contributor>
+	</contributors>
+
+	<licenses>
+		<license>
+			<name>GNU GENERAL PUBLIC LICENSE, Version 3</name>
+			<url>http://www.gnu.org/licenses/gpl.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<distributionManagement>
+		<repository>
+			<id>sing-maven-releases</id>
+			<name>SING Maven Releases</name>
+			<url>https://maven.sing-group.org/repository/maven-releases/</url>
+		</repository>
+
+		<snapshotRepository>
+			<id>sing-maven-releases</id>
+			<name>SING Maven Snapshots</name>
+			<url>https://maven.sing-group.org/repository/maven-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<id>sing-maven-releases</id>
+			<name>SING Maven Releases</name>
+			<url>https://maven.sing-group.org/repository/maven-releases/</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>sing-maven-snapshots</id>
+			<name>SING Maven Snapshots</name>
+			<url>https://maven.sing-group.org/repository/maven-snapshots/</url>
+			<releases>
+				<enabled>false</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
+	<properties>
+		<!-- General properties -->
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<failOnMissingWebXml>false</failOnMissingWebXml>
+
+		<wildfly.home>${project.build.directory}/wildfly-${wildfly.version}</wildfly.home>
+		<wildfly.standalone>${project.basedir}/additional-material/wildfly10</wildfly.standalone>
+
+		<!-- license-maven-plugin configuration -->
+		<license.licenseName>gpl_v3</license.licenseName>
+		<license.copyrightOwners>Daniel Glez-Peña, Miguel Reboiro-Jato, Hugo López-Fernández,
+			Kevin Troulé, Gonzálo Gómez-López, Fátima Al-Shahrour</license.copyrightOwners>
+		<license.organizationName>SING Group (University of Vigo)</license.organizationName>
+		<license.addJavaLicenseAfterPackage>false</license.addJavaLicenseAfterPackage>
+
+		<!-- BOM versions -->
+		<arquillian.version>1.2.1.Final</arquillian.version>
+		<javaee.api.version>7.0</javaee.api.version>
+
+		<!-- Dependencies versions -->
+		<fluent-commons.version>0.1.0-SNAPSHOT</fluent-commons.version>
+		<swagger.version>1.5.16</swagger.version>
+		<wildfly.arquillian.container.version>2.1.0.Final</wildfly.arquillian.container.version>
+		<wildfly.version>10.1.0.Final</wildfly.version>
+
+		<!-- Resteasy specific version required, as it fixes ResourceInfo injection bug -->
+		<resteasy.version>3.0.24.Final</resteasy.version>
+
+		<!-- Testing dependecies versions -->
+		<arquillian.jacoco.version>1.0.0.Alpha9</arquillian.jacoco.version>
+		<arquillian.persistence.dbunit.version>1.0.0.Alpha7</arquillian.persistence.dbunit.version>
+		<arquillian.rest.version>1.0.0.Alpha4</arquillian.rest.version>
+		<easymock.version>3.5.1</easymock.version>
+		<hamcrest.version>2.0.0.0</hamcrest.version>
+		<jacoco.version>0.8.0</jacoco.version>
+		<junit.version>4.12</junit.version>
+		<mysql.connector.java.version>5.1.21</mysql.connector.java.version>
+		<slf4j.version>1.7.25</slf4j.version>
+
+		<!-- Plugins versions -->
+		<license-maven-plugin.version>1.14</license-maven-plugin.version>
+		<maven.antrun.plugin.version>1.8</maven.antrun.plugin.version>
+		<maven.compiler.plugin.version>3.6.1</maven.compiler.plugin.version>
+		<maven.ear.plugin.version>2.10.1</maven.ear.plugin.version>
+		<maven.javadoc.plugin.version>2.10.4</maven.javadoc.plugin.version>
+		<maven.dependency.plugin.version>3.0.1</maven.dependency.plugin.version>
+		<maven.deploy.plugin.version>2.8.2</maven.deploy.plugin.version>
+		<maven.resources.plugin.version>3.0.2</maven.resources.plugin.version>
+		<maven.source.plugin.version>3.0.1</maven.source.plugin.version>
+		<maven.surefire.plugin.version>2.20</maven.surefire.plugin.version>
+		<maven.failsafe.plugin.version>2.20</maven.failsafe.plugin.version>
+		<wildfly.maven.plugin.version>1.2.1.Final</wildfly.maven.plugin.version>
+	</properties>
+
+	<modules>
+		<module>domain</module>
+		<module>service</module>
+		<module>rest</module>
+		<module>ear</module>
+		<module>tests</module>
+	</modules>
+
+	<dependencyManagement>
+		<dependencies>
+			<!-- BOM -->
+			<dependency>
+				<groupId>javax</groupId>
+				<artifactId>javaee-api</artifactId>
+				<version>${javaee.api.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian</groupId>
+				<artifactId>arquillian-bom</artifactId>
+				<version>${arquillian.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- Modules -->
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>dreimt-domain</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>dreimt-service</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>dreimt-rest</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>${project.groupId}</groupId>
+				<artifactId>dreimt-tests</artifactId>
+				<version>${project.version}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<!-- General -->
+			<dependency>
+				<groupId>org.sing_group</groupId>
+				<artifactId>fluent-commons</artifactId>
+				<version>${fluent-commons.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.swagger</groupId>
+				<artifactId>swagger-jersey2-jaxrs</artifactId>
+				<version>${swagger.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-client</artifactId>
+				<version>${resteasy.version}</version>
+			</dependency>
+
+			<!-- Testing -->
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>java-hamcrest</artifactId>
+				<version>${hamcrest.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.easymock</groupId>
+				<artifactId>easymock</artifactId>
+				<version>${easymock.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian.extension</groupId>
+				<artifactId>arquillian-persistence-dbunit</artifactId>
+				<version>${arquillian.persistence.dbunit.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian.extension</groupId>
+				<artifactId>arquillian-rest-client-impl-3x</artifactId>
+				<version>${arquillian.rest.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jackson-provider</artifactId>
+				<version>${resteasy.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian.graphene</groupId>
+				<artifactId>graphene-webdriver</artifactId>
+				<version>${graphene.webdrive.version}</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian.extension</groupId>
+				<artifactId>arquillian-jacoco</artifactId>
+				<version>${arquillian.jacoco.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.jacoco</groupId>
+				<artifactId>org.jacoco.core</artifactId>
+				<version>${jacoco.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>mysql</groupId>
+				<artifactId>mysql-connector-java</artifactId>
+				<version>${mysql.connector.java.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-simple</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wildfly</groupId>
+				<artifactId>wildfly-dist</artifactId>
+				<version>${wildfly.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.wildfly.arquillian</groupId>
+				<artifactId>wildfly-arquillian-container-embedded</artifactId>
+				<version>${wildfly.arquillian.container.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>${maven.compiler.plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>${maven.javadoc.plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>${maven.source.plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>${maven.deploy.plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>${maven.dependency.plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-antrun-plugin</artifactId>
+					<version>${maven.antrun.plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>${maven.surefire.plugin.version}</version>
+					<configuration>
+						<!-- By default, only tests suites are executed -->
+						<includes>
+							<include>**/*TestSuite.java</include>
+						</includes>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>${maven.failsafe.plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>${maven.resources.plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.wildfly.plugins</groupId>
+					<artifactId>wildfly-maven-plugin</artifactId>
+					<version>${wildfly.maven.plugin.version}</version>
+					<configuration>
+						<!-- Avoids the execution of the wildfly:* goals in the subproject unless the plugin is activated in the subproject. -->
+						<skip>true</skip>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-ear-plugin</artifactId>
+					<version>${maven.ear.plugin.version}</version>
+				</plugin>
+				<plugin>
+					<groupId>org.jacoco</groupId>
+					<artifactId>jacoco-maven-plugin</artifactId>
+					<version>${jacoco.version}</version>
+					<configuration>
+						<classDumpDir>${session.executionRootDirectory}/target/classes</classDumpDir>
+					</configuration>
+					<executions>
+						<execution>
+							<id>pre-unit-test</id>
+							<goals>
+								<goal>prepare-agent</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>post-unit-test</id>
+							<phase>test</phase>
+							<goals>
+								<goal>report</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>pre-integration-test</id>
+							<phase>pre-integration-test</phase>
+							<goals>
+								<goal>prepare-agent</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>post-integration-test</id>
+							<phase>post-integration-test</phase>
+							<goals>
+								<goal>report</goal>
+							</goals>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>metadata-build</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>license-maven-plugin</artifactId>
+						<version>${license-maven-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>first</id>
+								<goals>
+									<goal>update-file-header</goal>
+								</goals>
+								<phase>process-sources</phase>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-deploy-plugin</artifactId>
+						<configuration>
+							<deployAtEnd>true</deployAtEnd>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>wildfly-embedded-h2</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>org.wildfly.arquillian</groupId>
+					<artifactId>wildfly-arquillian-container-embedded</artifactId>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-simple</artifactId>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+			<build>
+				<testResources>
+					<testResource>
+						<directory>src/test/resources</directory>
+					</testResource>
+					<testResource>
+						<directory>src/test/resources-wildfly-embedded-h2</directory>
+						<excludes>
+							<exclude>standalone.xml</exclude>
+						</excludes>
+					</testResource>
+				</testResources>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<forkCount>1</forkCount>
+							<systemPropertyVariables>
+								<arquillian.launch>wildfly-embedded</arquillian.launch>
+								<java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+								<jboss.socket.binding.port-offset>10000</jboss.socket.binding.port-offset>
+								<wildfly.version>${wildfly.version}</wildfly.version>
+								<wildfly.http.port>18080</wildfly.http.port>
+								<wildfly.management.port>19990</wildfly.management.port>
+								<wildfly.jbossHome>target/wildfly-${wildfly.version}</wildfly.jbossHome>
+								<wildfly.modulePath>target/wildfly-${wildfly.version}/modules</wildfly.modulePath>
+							</systemPropertyVariables>
+							<redirectTestOutputToFile>false</redirectTestOutputToFile>
+						</configuration>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>unpack</id>
+								<phase>generate-test-resources</phase>
+								<goals>
+									<goal>unpack</goal>
+								</goals>
+								<configuration>
+									<artifactItems>
+										<artifactItem>
+											<groupId>org.wildfly</groupId>
+											<artifactId>wildfly-dist</artifactId>
+											<version>${wildfly.version}</version>
+											<type>zip</type>
+											<overWrite>false</overWrite>
+											<outputDirectory>target</outputDirectory>
+										</artifactItem>
+									</artifactItems>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>copy-wildfly-resources</id>
+								<phase>process-test-resources</phase>
+								<goals>
+									<goal>copy-resources</goal>
+								</goals>
+								<configuration>
+									<outputDirectory>target/wildfly-${wildfly.version}/standalone/configuration</outputDirectory>
+									<resources>
+										<resource>
+											<directory>src/test/resources-wildfly-embedded-h2</directory>
+											<include>standalone.xml</include>
+										</resource>
+									</resources>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>wildfly-mysql-run</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<skipTests>true</skipTests>
+						</configuration>
+					</plugin>
+
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<configuration>
+							<skipTests>true</skipTests>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>
