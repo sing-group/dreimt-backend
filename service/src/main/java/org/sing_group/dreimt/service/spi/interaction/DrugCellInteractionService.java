@@ -20,31 +20,15 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.service.user;
+package org.sing_group.dreimt.service.spi.interaction;
 
-import javax.annotation.Resource;
-import javax.annotation.security.PermitAll;
-import javax.ejb.SessionContext;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
+import java.util.stream.Stream;
 
-import org.sing_group.dreimt.domain.dao.spi.user.UserDao;
-import org.sing_group.dreimt.domain.entities.user.User;
-import org.sing_group.dreimt.service.spi.user.UserService;
+import javax.ejb.Local;
 
-@Stateless
-@PermitAll
-public class DefaultUserService implements UserService {
+import org.sing_group.dreimt.domain.entities.interation.DrugCellInteraction;
 
-  @Inject
-  private UserDao userDAO;
-
-  @Resource
-  private SessionContext context;
-
-  @Override
-  public User getCurrentUser() {
-    return userDAO.get(this.context.getCallerPrincipal().getName());
-  }
-
+@Local
+public interface DrugCellInteractionService {
+  public Stream<DrugCellInteraction> list();
 }

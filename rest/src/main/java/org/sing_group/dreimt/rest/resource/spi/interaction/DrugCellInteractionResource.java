@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DREIMT - Service
+ * DREIMT - REST
  * %%
  * Copyright (C) 2018 Daniel Glez-Peña, Miguel Reboiro-Jato, Hugo López-Fernández,
  * 			Kevin Troulé, Gonzálo Gómez-López, Fátima Al-Shahrour
@@ -20,31 +20,12 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.service.user;
+package org.sing_group.dreimt.rest.resource.spi.interaction;
 
-import javax.annotation.Resource;
-import javax.annotation.security.PermitAll;
-import javax.ejb.SessionContext;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
+import javax.ejb.Local;
+import javax.ws.rs.core.Response;
 
-import org.sing_group.dreimt.domain.dao.spi.user.UserDao;
-import org.sing_group.dreimt.domain.entities.user.User;
-import org.sing_group.dreimt.service.spi.user.UserService;
-
-@Stateless
-@PermitAll
-public class DefaultUserService implements UserService {
-
-  @Inject
-  private UserDao userDAO;
-
-  @Resource
-  private SessionContext context;
-
-  @Override
-  public User getCurrentUser() {
-    return userDAO.get(this.context.getCallerPrincipal().getName());
-  }
-
+@Local
+public interface DrugCellInteractionResource {
+  public Response list();
 }

@@ -22,29 +22,30 @@
  */
 package org.sing_group.dreimt.domain.dao.user;
 
+import static javax.transaction.Transactional.TxType.MANDATORY;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import javax.transaction.Transactional.TxType;
 
 import org.sing_group.dreimt.domain.dao.DAOHelper;
-import org.sing_group.dreimt.domain.dao.spi.user.UserDAO;
+import org.sing_group.dreimt.domain.dao.spi.user.UserDao;
 import org.sing_group.dreimt.domain.entities.user.User;
 
 @Default
-@Transactional(value = TxType.MANDATORY)
-public class DefaultUserDAO implements UserDAO {
+@Transactional(MANDATORY)
+public class DefaultUserDao implements UserDao {
 
   @PersistenceContext
   private EntityManager em;
 
   private DAOHelper<String, User> dh;
 
-  DefaultUserDAO() {}
+  DefaultUserDao() {}
 
-  public DefaultUserDAO(EntityManager em) {
+  public DefaultUserDao(EntityManager em) {
     this.em = em;
     createDAOHelper();
   }

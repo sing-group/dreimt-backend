@@ -20,11 +20,12 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.domain.dao.spi.user;
+package org.sing_group.dreimt.domain.dao.spi.interaction;
 
-import org.sing_group.dreimt.domain.entities.user.User;
+import java.util.stream.Stream;
 
-public interface UserDAO {
-  public User get(String login);
+import org.sing_group.dreimt.domain.entities.interation.DrugCellInteraction;
 
+public interface DrugCellInteractionDao {
+  public Stream<DrugCellInteraction> list();
 }

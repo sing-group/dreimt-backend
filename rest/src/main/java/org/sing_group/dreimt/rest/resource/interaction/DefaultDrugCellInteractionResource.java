@@ -20,7 +20,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.rest.resource.user;
+package org.sing_group.dreimt.rest.resource.interaction;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -28,50 +28,50 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import org.sing_group.dreimt.domain.entities.user.Role;
-import org.sing_group.dreimt.domain.entities.user.User;
+import org.sing_group.dreimt.rest.entity.interaction.DrugCellInteractionData;
 import org.sing_group.dreimt.rest.filter.CrossDomain;
-import org.sing_group.dreimt.rest.mapper.SecurityExceptionMapper;
-import org.sing_group.dreimt.rest.resource.spi.user.UserResource;
-import org.sing_group.dreimt.service.spi.user.UserService;
+import org.sing_group.dreimt.rest.mapper.spi.interaction.DrugCellInteractionMapper;
+import org.sing_group.dreimt.rest.resource.spi.interaction.DrugCellInteractionResource;
+import org.sing_group.dreimt.service.spi.interaction.DrugCellInteractionService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Path("user")
+@Path("interaction")
 @Produces(APPLICATION_JSON)
-@Api("user")
 @Stateless
 @CrossDomain
-public class DefaultUserResource implements UserResource {
+@Api("interaction")
+@ApiResponses({
+  @ApiResponse(code = 200, message = "successful operation")
+})
+public class DefaultDrugCellInteractionResource implements DrugCellInteractionResource {
 
   @Inject
-  private UserService userService;
+  private DrugCellInteractionService service;
+  
+  @Inject
+  private DrugCellInteractionMapper mapper;
 
   @GET
-  @Path("{login}/role")
   @ApiOperation(
-    value = "Checks the provided credentials", response = Role.class, code = 200
+    value = "List all the drug-cell interactions in the database",
+    response = DrugCellInteractionData.class,
+    responseContainer = "List",
+    code = 200
   )
-  @ApiResponses({
-    @ApiResponse(code = 200, message = "successful operation"),
-    @ApiResponse(code = 401, message = SecurityExceptionMapper.UNAUTHORIZED_MESSAGE)
-  })
   @Override
-  public Response role(@PathParam("login") String login) {
-    User currentUser = this.userService.getCurrentUser();
-    if (!login.equals(currentUser.getLogin())) {
-      return Response.status(Response.Status.UNAUTHORIZED).build();
-    }
-    return Response.ok(
-      currentUser.getRole()
-    ).build();
+  public Response list() {
+    final DrugCellInteractionData[] data = this.service.list()
+      .map(this.mapper::toDrugCellInteractionData)
+    .toArray(DrugCellInteractionData[]::new);
+    
+    return Response.ok(data).build();
   }
 
 }
