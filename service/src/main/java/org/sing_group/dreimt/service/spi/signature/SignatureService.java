@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DREIMT - REST
+ * DREIMT - Service
  * %%
  * Copyright (C) 2018 Daniel Glez-Peña, Miguel Reboiro-Jato, Hugo López-Fernández,
  * 			Kevin Troulé, Gonzálo Gómez-López, Fátima Al-Shahrour
@@ -20,12 +20,15 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.rest.resource.spi.interaction;
+package org.sing_group.dreimt.service.spi.signature;
+
+import java.util.stream.Stream;
 
 import javax.ejb.Local;
-import javax.ws.rs.core.Response;
+
+import org.sing_group.dreimt.domain.entities.signature.Signature;
 
 @Local
-public interface DrugCellInteractionResource {
-  public Response list();
+public interface SignatureService {
+  public Stream<Signature> list();
 }

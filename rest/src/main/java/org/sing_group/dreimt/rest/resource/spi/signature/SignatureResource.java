@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DREIMT - Service
+ * DREIMT - REST
  * %%
  * Copyright (C) 2018 Daniel Glez-Peña, Miguel Reboiro-Jato, Hugo López-Fernández,
  * 			Kevin Troulé, Gonzálo Gómez-López, Fátima Al-Shahrour
@@ -20,28 +20,12 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.service.interaction;
+package org.sing_group.dreimt.rest.resource.spi.signature;
 
-import java.util.stream.Stream;
+import javax.ejb.Local;
+import javax.ws.rs.core.Response;
 
-import javax.annotation.security.PermitAll;
-import javax.ejb.Stateless;
-import javax.inject.Inject;
-
-import org.sing_group.dreimt.domain.dao.spi.interaction.DrugCellInteractionDao;
-import org.sing_group.dreimt.domain.entities.interation.DrugCellInteraction;
-import org.sing_group.dreimt.service.spi.interaction.DrugCellInteractionService;
-
-@Stateless
-@PermitAll
-public class DefaultDrugCellInteractionService implements DrugCellInteractionService {
-  
-  @Inject
-  private DrugCellInteractionDao dao;
-  
-  @Override
-  public Stream<DrugCellInteraction> list() {
-    return dao.list();
-  }
-
+@Local
+public interface SignatureResource {
+  public Response list();
 }

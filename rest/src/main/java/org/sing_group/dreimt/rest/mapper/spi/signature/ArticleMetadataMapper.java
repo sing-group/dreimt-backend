@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DREIMT - Domain
+ * DREIMT - REST
  * %%
  * Copyright (C) 2018 Daniel Glez-Peña, Miguel Reboiro-Jato, Hugo López-Fernández,
  * 			Kevin Troulé, Gonzálo Gómez-López, Fátima Al-Shahrour
@@ -20,12 +20,11 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.domain.dao.spi.interaction;
+package org.sing_group.dreimt.rest.mapper.spi.signature;
 
-import java.util.stream.Stream;
+import org.sing_group.dreimt.domain.entities.signature.ArticleMetadata;
+import org.sing_group.dreimt.rest.entity.signature.ArticleMetadataData;
 
-import org.sing_group.dreimt.domain.entities.interation.DrugCellInteraction;
-
-public interface DrugCellInteractionDao {
-  public Stream<DrugCellInteraction> list();
+public interface ArticleMetadataMapper {
+  public ArticleMetadataData toArticleMetadataData(ArticleMetadata articleMetadata);
 }

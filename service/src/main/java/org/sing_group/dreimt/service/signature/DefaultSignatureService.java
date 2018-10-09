@@ -20,15 +20,27 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.service.spi.interaction;
+package org.sing_group.dreimt.service.signature;
 
 import java.util.stream.Stream;
 
-import javax.ejb.Local;
+import javax.annotation.security.PermitAll;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 
-import org.sing_group.dreimt.domain.entities.interation.DrugCellInteraction;
+import org.sing_group.dreimt.domain.dao.spi.signature.SignatureDao;
+import org.sing_group.dreimt.domain.entities.signature.Signature;
+import org.sing_group.dreimt.service.spi.signature.SignatureService;
 
-@Local
-public interface DrugCellInteractionService {
-  public Stream<DrugCellInteraction> list();
+@Stateless
+@PermitAll
+public class DefaultSignatureService implements SignatureService {
+
+  @Inject
+  private SignatureDao dao;
+
+  @Override
+  public Stream<Signature> list() {
+    return dao.list();
+  }
 }

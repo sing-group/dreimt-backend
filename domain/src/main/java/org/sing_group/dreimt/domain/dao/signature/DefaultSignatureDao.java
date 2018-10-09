@@ -20,7 +20,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.domain.dao.interaction;
+package org.sing_group.dreimt.domain.dao.signature;
 
 import static javax.transaction.Transactional.TxType.MANDATORY;
 
@@ -33,33 +33,32 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.sing_group.dreimt.domain.dao.DAOHelper;
-import org.sing_group.dreimt.domain.dao.spi.interaction.DrugCellInteractionDao;
-import org.sing_group.dreimt.domain.entities.interation.DrugCellInteraction;
+import org.sing_group.dreimt.domain.dao.spi.signature.SignatureDao;
+import org.sing_group.dreimt.domain.entities.signature.Signature;
 
 @Default
 @Transactional(MANDATORY)
-public class DefaultDrugCellInteractionDao implements DrugCellInteractionDao {
+public class DefaultSignatureDao implements SignatureDao {
 
   @PersistenceContext
   private EntityManager em;
 
-  private DAOHelper<Integer, DrugCellInteraction> dh;
+  private DAOHelper<Integer, Signature> dh;
 
-  DefaultDrugCellInteractionDao() {}
+  DefaultSignatureDao() {}
 
-  public DefaultDrugCellInteractionDao(EntityManager em) {
+  public DefaultSignatureDao(EntityManager em) {
     this.em = em;
     createDAOHelper();
   }
 
   @PostConstruct
   private void createDAOHelper() {
-    this.dh = DAOHelper.of(Integer.class, DrugCellInteraction.class, this.em);
+    this.dh = DAOHelper.of(Integer.class, Signature.class, this.em);
   }
 
   @Override
-  public Stream<DrugCellInteraction> list() {
+  public Stream<Signature> list() {
     return this.dh.list().stream();
   }
-
 }

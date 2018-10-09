@@ -20,11 +20,11 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.rest.mapper.spi.interaction;
+package org.sing_group.dreimt.rest.mapper.spi.signature;
 
-import org.sing_group.dreimt.domain.entities.interation.DrugCellInteraction;
-import org.sing_group.dreimt.rest.entity.interaction.DrugCellInteractionData;
+import org.sing_group.dreimt.domain.entities.signature.Signature;
+import org.sing_group.dreimt.rest.entity.signature.SignatureData;
 
-public interface DrugCellInteractionMapper {
-  public DrugCellInteractionData toDrugCellInteractionData(DrugCellInteraction interaction);
+public interface SignatureMapper {
+  public SignatureData toSignatureData(Signature signature);
 }

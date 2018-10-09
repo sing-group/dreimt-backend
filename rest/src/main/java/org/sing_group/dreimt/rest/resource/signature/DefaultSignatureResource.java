@@ -20,7 +20,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.rest.resource.interaction;
+package org.sing_group.dreimt.rest.resource.signature;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -31,45 +31,45 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import org.sing_group.dreimt.rest.entity.interaction.DrugCellInteractionData;
+import org.sing_group.dreimt.rest.entity.signature.SignatureData;
 import org.sing_group.dreimt.rest.filter.CrossDomain;
-import org.sing_group.dreimt.rest.mapper.spi.interaction.DrugCellInteractionMapper;
-import org.sing_group.dreimt.rest.resource.spi.interaction.DrugCellInteractionResource;
-import org.sing_group.dreimt.service.spi.interaction.DrugCellInteractionService;
+import org.sing_group.dreimt.rest.mapper.spi.signature.SignatureMapper;
+import org.sing_group.dreimt.rest.resource.spi.signature.SignatureResource;
+import org.sing_group.dreimt.service.spi.signature.SignatureService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Path("interaction")
+@Path("signature")
 @Produces(APPLICATION_JSON)
 @Stateless
 @CrossDomain
-@Api("interaction")
+@Api("signature")
 @ApiResponses({
   @ApiResponse(code = 200, message = "successful operation")
 })
-public class DefaultDrugCellInteractionResource implements DrugCellInteractionResource {
+public class DefaultSignatureResource implements SignatureResource {
 
   @Inject
-  private DrugCellInteractionService service;
+  private SignatureService service;
   
   @Inject
-  private DrugCellInteractionMapper mapper;
+  private SignatureMapper mapper;
 
   @GET
   @ApiOperation(
-    value = "List all the drug-cell interactions in the database",
-    response = DrugCellInteractionData.class,
+    value = "List all the signatures in the database",
+    response = SignatureData.class,
     responseContainer = "List",
     code = 200
   )
   @Override
   public Response list() {
-    final DrugCellInteractionData[] data = this.service.list()
-      .map(this.mapper::toDrugCellInteractionData)
-    .toArray(DrugCellInteractionData[]::new);
+    final SignatureData[] data = this.service.list()
+      .map(this.mapper::toSignatureData)
+    .toArray(SignatureData[]::new);
     
     return Response.ok(data).build();
   }
