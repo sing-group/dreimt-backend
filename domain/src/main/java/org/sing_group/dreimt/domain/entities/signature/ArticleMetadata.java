@@ -13,6 +13,8 @@ public class ArticleMetadata {
   private int pubmedId;
 
   private String title;
+
+  @Column(nullable = false, length = 2000)
   private String authors;
 
   @Column(nullable = true, length = 10000)

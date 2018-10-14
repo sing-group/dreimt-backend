@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `article_metadata`;
 CREATE TABLE `article_metadata` (
   `pubmedId` int(11) NOT NULL,
   `articleAbstract` varchar(10000) DEFAULT NULL,
-  `authors` varchar(255) DEFAULT NULL,
+  `authors` varchar(2000) NOT NULL,
   `title` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`pubmedId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -66,7 +66,7 @@ CREATE TABLE `drug_signature_interaction` (
   KEY `FKnsnnq5179w6clhenc6o6h8oov` (`signature`),
   CONSTRAINT `FK7nvqgcvx6si97ktc4c0jq6ejk` FOREIGN KEY (`drug_sourceDb`, `drug_sourceName`) REFERENCES `drug` (`sourceDb`, `sourceName`),
   CONSTRAINT `FKnsnnq5179w6clhenc6o6h8oov` FOREIGN KEY (`signature`) REFERENCES `signature` (`signatureName`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -132,4 +132,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-09 17:26:08
+-- Dump completed on 2018-10-14 16:58:54
