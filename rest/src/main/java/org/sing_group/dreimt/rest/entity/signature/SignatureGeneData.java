@@ -1,28 +1,26 @@
 package org.sing_group.dreimt.rest.entity.signature;
 
 import java.io.Serializable;
-
-import org.sing_group.dreimt.domain.entities.signature.SignatureGene.Type;
+import java.util.Set;
 
 public class SignatureGeneData implements Serializable {
   private static final long serialVersionUID = 1L;
-
-  private String gene;
-  private Type type;
+  
+  private Set<String> up;
+  private Set<String> down;
 
   SignatureGeneData() {}
 
-  public SignatureGeneData(String gene, Type type) {
-    super();
-    this.gene = gene;
-    this.type = type;
+  public SignatureGeneData(Set<String> up, Set<String> down) {
+    this.up = up;
+    this.down = down;
   }
-
-  public String getGene() {
-    return gene;
+  
+  public Set<String> getUp() {
+    return up;
   }
-
-  public Type getType() {
-    return type;
+  
+  public Set<String> getDown() {
+    return down;
   }
 }

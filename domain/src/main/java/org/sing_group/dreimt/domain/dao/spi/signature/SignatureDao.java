@@ -22,10 +22,10 @@
  */
 package org.sing_group.dreimt.domain.dao.spi.signature;
 
-import java.util.stream.Stream;
+import java.util.Optional;
 
 import org.sing_group.dreimt.domain.entities.signature.Signature;
 
 public interface SignatureDao {
-  public Stream<Signature> list();
+  public Optional<Signature> get(String signatureName);
 }

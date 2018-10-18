@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DREIMT - REST
+ * DREIMT - Service
  * %%
  * Copyright (C) 2018 Daniel Glez-Peña, Miguel Reboiro-Jato, Hugo López-Fernández,
  * 			Kevin Troulé, Gonzálo Gómez-López, Fátima Al-Shahrour
@@ -20,26 +20,27 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.rest.mapper.signature;
+package org.sing_group.dreimt.service.signature;
 
-import javax.enterprise.inject.Default;
+import java.util.Optional;
 
-import org.sing_group.dreimt.domain.entities.signature.Signature;
-import org.sing_group.dreimt.rest.entity.signature.SignatureData;
-import org.sing_group.dreimt.rest.mapper.spi.signature.SignatureMapper;
+import javax.annotation.security.PermitAll;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 
-@Default
-public class DefaultSignatureMapper implements SignatureMapper {
+import org.sing_group.dreimt.domain.dao.spi.signature.ArticleMetadataDao;
+import org.sing_group.dreimt.domain.entities.signature.ArticleMetadata;
+import org.sing_group.dreimt.service.spi.signature.ArticleMetadataService;
+
+@Stateless
+@PermitAll
+public class DefaultArticleMetadataService implements ArticleMetadataService {
+
+  @Inject
+  private ArticleMetadataDao dao;
 
   @Override
-  public SignatureData toSignatureData(Signature signature) {
-    return new SignatureData(
-      signature.getSignatureName(),
-      signature.getCellTypeA(), signature.getCellTypeB(),
-      signature.getSourceDb(), signature.getExperimentalDesign(),
-      signature.getOrganism(), signature.getDisease(),
-      signature.getArticleMetadata().getPubmedId(),
-      signature.getArticleMetadata().getTitle()
-    );
+  public Optional<ArticleMetadata> get(int pubMedId) {
+    return this.dao.get(pubMedId);
   }
 }

@@ -22,13 +22,16 @@
  */
 package org.sing_group.dreimt.domain.dao.signature;
 
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static javax.transaction.Transactional.TxType.MANDATORY;
 
-import java.util.stream.Stream;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
@@ -58,7 +61,11 @@ public class DefaultSignatureDao implements SignatureDao {
   }
 
   @Override
-  public Stream<Signature> list() {
-    return this.dh.list().stream();
+  public Optional<Signature> get(String signatureName) {
+    try {
+      return of(this.dh.getBy("signatureName", signatureName));
+    } catch (NoResultException e) {
+      return empty();
+    }
   }
 }

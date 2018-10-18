@@ -22,7 +22,7 @@
  */
 package org.sing_group.dreimt.service.signature;
 
-import java.util.stream.Stream;
+import java.util.Optional;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
@@ -40,7 +40,7 @@ public class DefaultSignatureService implements SignatureService {
   private SignatureDao dao;
 
   @Override
-  public Stream<Signature> list() {
-    return dao.list();
+  public Optional<Signature> get(String signatureName) {
+    return dao.get(signatureName);
   }
 }

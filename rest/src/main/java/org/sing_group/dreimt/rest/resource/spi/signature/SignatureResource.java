@@ -27,5 +27,6 @@ import javax.ws.rs.core.Response;
 
 @Local
 public interface SignatureResource {
-  public Response list();
+  public Response get(String signatureName);
+  public Response getGenes(String signatureName);
 }

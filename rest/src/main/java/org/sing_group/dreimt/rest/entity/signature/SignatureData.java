@@ -23,7 +23,6 @@
 package org.sing_group.dreimt.rest.entity.signature;
 
 import java.io.Serializable;
-import java.util.List;
 
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 
@@ -33,29 +32,36 @@ public class SignatureData implements Serializable {
   private String signatureName;
   private String cellTypeA;
   private String cellTypeB;
-  private ArticleMetadataData articleMetadata;
   private String sourceDb;
   private ExperimentalDesign experimentalDesign;
   private String organism;
   private String disease;
-  private List<SignatureGeneData> signatureGenes;
+  private int articlePubMedId;
+  private String articleTitle;
+
+  private String signatureGenesUri;
+  private String articleMetadataUri;
 
   SignatureData() {}
 
   public SignatureData(
-    String signatureName, String cellTypeA, String cellTypeB, ArticleMetadataData articlePubmedId, String sourceDb,
-    ExperimentalDesign experimentalDesign, String organism, String disease, List<SignatureGeneData> signatureGenes
+    String signatureName, String cellTypeA, String cellTypeB, String sourceDb,
+    ExperimentalDesign experimentalDesign, String organism, String disease,
+    int articlePubMedId, String articleTitle
   ) {
     super();
     this.signatureName = signatureName;
     this.cellTypeA = cellTypeA;
     this.cellTypeB = cellTypeB;
-    this.articleMetadata = articlePubmedId;
     this.sourceDb = sourceDb;
     this.experimentalDesign = experimentalDesign;
     this.organism = organism;
     this.disease = disease;
-    this.signatureGenes = signatureGenes;
+    this.articlePubMedId = articlePubMedId;
+    this.articleTitle = articleTitle;
+
+    this.signatureGenesUri = "signature/" + this.signatureName + "/genes";
+    this.articleMetadataUri = "article/" + this.articlePubMedId;
   }
 
   public String getSignatureName() {
@@ -70,12 +76,12 @@ public class SignatureData implements Serializable {
     return cellTypeB;
   }
 
-  public ArticleMetadataData getArticleMetadata() {
-    return articleMetadata;
+  public String getArticleTitle() {
+    return articleTitle;
   }
 
-  public String getArticleTitle() {
-    return articleMetadata.getTitle();
+  public int getArticlePubMedId() {
+    return articlePubMedId;
   }
 
   public String getSourceDb() {
@@ -94,7 +100,11 @@ public class SignatureData implements Serializable {
     return disease;
   }
 
-  public List<SignatureGeneData> getSignatureGenes() {
-    return signatureGenes;
+  public String getSignatureGenesUri() {
+    return signatureGenesUri;
+  }
+
+  public String getArticleMetadataUri() {
+    return articleMetadataUri;
   }
 }

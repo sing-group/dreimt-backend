@@ -20,26 +20,11 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.rest.mapper.signature;
+package org.sing_group.dreimt.rest.mapper.spi.signature;
 
-import javax.enterprise.inject.Default;
+import org.sing_group.dreimt.domain.entities.signature.Drug;
+import org.sing_group.dreimt.rest.entity.signature.DrugData;
 
-import org.sing_group.dreimt.domain.entities.signature.Signature;
-import org.sing_group.dreimt.rest.entity.signature.SignatureData;
-import org.sing_group.dreimt.rest.mapper.spi.signature.SignatureMapper;
-
-@Default
-public class DefaultSignatureMapper implements SignatureMapper {
-
-  @Override
-  public SignatureData toSignatureData(Signature signature) {
-    return new SignatureData(
-      signature.getSignatureName(),
-      signature.getCellTypeA(), signature.getCellTypeB(),
-      signature.getSourceDb(), signature.getExperimentalDesign(),
-      signature.getOrganism(), signature.getDisease(),
-      signature.getArticleMetadata().getPubmedId(),
-      signature.getArticleMetadata().getTitle()
-    );
-  }
+public interface DrugMapper {
+  public DrugData toDrugData(Drug drug);
 }

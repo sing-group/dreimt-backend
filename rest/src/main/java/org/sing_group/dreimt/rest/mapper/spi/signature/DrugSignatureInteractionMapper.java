@@ -20,26 +20,17 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.rest.mapper.signature;
+package org.sing_group.dreimt.rest.mapper.spi.signature;
 
-import javax.enterprise.inject.Default;
+import org.sing_group.dreimt.domain.entities.query.DrugSignatureInteractionListingOptions;
+import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
+import org.sing_group.dreimt.rest.entity.query.DrugSignatureInteractionListingOptionsData;
+import org.sing_group.dreimt.rest.entity.signature.DrugSignatureInteractionData;
 
-import org.sing_group.dreimt.domain.entities.signature.Signature;
-import org.sing_group.dreimt.rest.entity.signature.SignatureData;
-import org.sing_group.dreimt.rest.mapper.spi.signature.SignatureMapper;
+public interface DrugSignatureInteractionMapper {
+  public DrugSignatureInteractionData toDrugSignatureInteractionData(DrugSignatureInteraction signature);
 
-@Default
-public class DefaultSignatureMapper implements SignatureMapper {
-
-  @Override
-  public SignatureData toSignatureData(Signature signature) {
-    return new SignatureData(
-      signature.getSignatureName(),
-      signature.getCellTypeA(), signature.getCellTypeB(),
-      signature.getSourceDb(), signature.getExperimentalDesign(),
-      signature.getOrganism(), signature.getDisease(),
-      signature.getArticleMetadata().getPubmedId(),
-      signature.getArticleMetadata().getTitle()
-    );
-  }
+  public DrugSignatureInteractionListingOptions toDrugSignatureInteractionListingOptions(
+    DrugSignatureInteractionListingOptionsData listingOptionsData
+  );
 }

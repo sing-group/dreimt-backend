@@ -47,6 +47,10 @@ public class DrugSignatureInteraction implements Serializable {
     return drug;
   }
 
+  public Signature getSignature() {
+    return signature;
+  }
+
   public double getTes() {
     return tes;
   }

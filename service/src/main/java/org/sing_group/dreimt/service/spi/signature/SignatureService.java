@@ -22,7 +22,7 @@
  */
 package org.sing_group.dreimt.service.spi.signature;
 
-import java.util.stream.Stream;
+import java.util.Optional;
 
 import javax.ejb.Local;
 
@@ -30,5 +30,5 @@ import org.sing_group.dreimt.domain.entities.signature.Signature;
 
 @Local
 public interface SignatureService {
-  public Stream<Signature> list();
+  public Optional<Signature> get(String signatureName);
 }
