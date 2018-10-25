@@ -22,24 +22,45 @@
  */
 package org.sing_group.dreimt.rest.mapper.signature;
 
+import static java.util.Objects.requireNonNull;
+
 import javax.enterprise.inject.Default;
+import javax.ws.rs.core.UriBuilder;
 
 import org.sing_group.dreimt.domain.entities.signature.Signature;
 import org.sing_group.dreimt.rest.entity.signature.SignatureData;
 import org.sing_group.dreimt.rest.mapper.spi.signature.SignatureMapper;
+import org.sing_group.dreimt.rest.resource.route.BaseRestPathBuilder;
 
 @Default
 public class DefaultSignatureMapper implements SignatureMapper {
+  private UriBuilder uriBuilder;
+
+  @Override
+  public void setUriBuilder(UriBuilder uriBuilder) {
+    this.uriBuilder = requireNonNull(uriBuilder);
+  }
 
   @Override
   public SignatureData toSignatureData(Signature signature) {
+    final BaseRestPathBuilder pathBuilder = new BaseRestPathBuilder(getUriBuilder());
+
     return new SignatureData(
       signature.getSignatureName(),
       signature.getCellTypeA(), signature.getCellTypeB(),
       signature.getSourceDb(), signature.getExperimentalDesign(),
       signature.getOrganism(), signature.getDisease(),
       signature.getArticleMetadata().getPubmedId(),
-      signature.getArticleMetadata().getTitle()
+      signature.getArticleMetadata().getTitle(),
+      pathBuilder.signatureGenes(signature).build(),
+      pathBuilder.articleMetadata(signature.getArticleMetadata()).build()
     );
+  }
+
+  private UriBuilder getUriBuilder() {
+    if (this.uriBuilder == null) {
+      throw new IllegalStateException("The UriBuilder has not been initialized.");
+    }
+    return this.uriBuilder;
   }
 }

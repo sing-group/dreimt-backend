@@ -22,9 +22,13 @@
  */
 package org.sing_group.dreimt.rest.mapper.spi.signature;
 
+import javax.ws.rs.core.UriBuilder;
+
 import org.sing_group.dreimt.domain.entities.signature.Signature;
 import org.sing_group.dreimt.rest.entity.signature.SignatureData;
 
 public interface SignatureMapper {
+  public void setUriBuilder(UriBuilder uriBuilder);
+
   public SignatureData toSignatureData(Signature signature);
 }

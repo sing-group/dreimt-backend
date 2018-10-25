@@ -26,13 +26,17 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.util.Optional;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import org.sing_group.dreimt.domain.entities.signature.Signature;
 import org.sing_group.dreimt.rest.entity.signature.SignatureData;
@@ -66,6 +70,15 @@ public class DefaultSignatureResource implements SignatureResource {
   
   @Inject
   private SignatureGeneMapper geneMapper;
+  
+  @Context
+  private UriInfo uriInfo;
+
+  @PostConstruct
+  public void postConstruct() {
+    final UriBuilder uriBuilder = this.uriInfo.getBaseUriBuilder();
+    this.signatureMapper.setUriBuilder(uriBuilder);
+  }
 
   @GET
   @Path("{signatureName}")

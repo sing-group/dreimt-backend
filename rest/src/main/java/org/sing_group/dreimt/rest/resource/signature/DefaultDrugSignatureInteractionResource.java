@@ -24,13 +24,17 @@ package org.sing_group.dreimt.rest.resource.signature;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriBuilder;
+import javax.ws.rs.core.UriInfo;
 
 import org.sing_group.dreimt.domain.entities.query.DrugSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
@@ -61,7 +65,16 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   private DrugSignatureInteractionService service;
 
   @Inject
-  private DrugSignatureInteractionMapper mapper;
+  private DrugSignatureInteractionMapper drugSignatureMapper;
+  
+  @Context
+  private UriInfo uriInfo;
+
+  @PostConstruct
+  public void postConstruct() {
+    final UriBuilder uriBuilder = this.uriInfo.getBaseUriBuilder();
+    this.drugSignatureMapper.setUriBuilder(uriBuilder);
+  }
 
   @GET
   @Path("list")
@@ -89,11 +102,11 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
       );
 
     final DrugSignatureInteractionListingOptions listingOptions =
-      mapper.toDrugSignatureInteractionListingOptions(listingOptionsData);
+      drugSignatureMapper.toDrugSignatureInteractionListingOptions(listingOptionsData);
 
     final DrugSignatureInteractionData[] data =
       service.list(listingOptions)
-        .map(this.mapper::toDrugSignatureInteractionData)
+        .map(this.drugSignatureMapper::toDrugSignatureInteractionData)
         .toArray(DrugSignatureInteractionData[]::new);
 
     return Response.ok(data).build();

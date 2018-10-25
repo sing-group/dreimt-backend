@@ -23,6 +23,7 @@
 package org.sing_group.dreimt.rest.entity.signature;
 
 import java.io.Serializable;
+import java.net.URI;
 
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 
@@ -39,15 +40,16 @@ public class SignatureData implements Serializable {
   private int articlePubMedId;
   private String articleTitle;
 
-  private String signatureGenesUri;
-  private String articleMetadataUri;
+  private URI signatureGenesUri;
+  private URI articleMetadataUri;
 
   SignatureData() {}
 
   public SignatureData(
     String signatureName, String cellTypeA, String cellTypeB, String sourceDb,
     ExperimentalDesign experimentalDesign, String organism, String disease,
-    int articlePubMedId, String articleTitle
+    int articlePubMedId, String articleTitle, 
+    URI signatureGenesUri, URI articleMetadataUri
   ) {
     super();
     this.signatureName = signatureName;
@@ -60,8 +62,8 @@ public class SignatureData implements Serializable {
     this.articlePubMedId = articlePubMedId;
     this.articleTitle = articleTitle;
 
-    this.signatureGenesUri = "signature/" + this.signatureName + "/genes";
-    this.articleMetadataUri = "article/" + this.articlePubMedId;
+    this.signatureGenesUri = signatureGenesUri;
+    this.articleMetadataUri = articleMetadataUri;
   }
 
   public String getSignatureName() {
@@ -100,11 +102,11 @@ public class SignatureData implements Serializable {
     return disease;
   }
 
-  public String getSignatureGenesUri() {
+  public URI getSignatureGenesUri() {
     return signatureGenesUri;
   }
 
-  public String getArticleMetadataUri() {
+  public URI getArticleMetadataUri() {
     return articleMetadataUri;
   }
 }

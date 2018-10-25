@@ -20,35 +20,27 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.rest.entity.signature;
+package org.sing_group.dreimt.rest.resource.route;
 
-import java.io.Serializable;
+import java.net.URI;
 
-public class DrugData implements Serializable {
-  private static final long serialVersionUID = 1L;
+import javax.ws.rs.core.UriBuilder;
 
-  private String commonName;
-  private String sourceName;
-  private String sourceDb;
+public class ArticleMetadataRestPathBuilder implements RestPathBuilder {
+  private UriBuilder builder;
 
-  DrugData() {}
-
-  public DrugData(String commonName, String sourceName, String sourceDb) {
-    super();
-    this.commonName = commonName;
-    this.sourceName = sourceName;
-    this.sourceDb = sourceDb;
+  public ArticleMetadataRestPathBuilder(UriBuilder builder) {
+    this.builder = builder.clone().path("article");
   }
 
-  public String getCommonName() {
-    return commonName;
+  public ArticleMetadataRestPathBuilder(UriBuilder builder, Integer pubMedId) {
+    this(builder);
+
+    this.builder = this.builder.path(pubMedId.toString());
   }
 
-  public String getSourceName() {
-    return sourceName;
-  }
-
-  public String getSourceDb() {
-    return sourceDb;
+  @Override
+  public URI build() {
+    return this.builder.clone().build();
   }
 }

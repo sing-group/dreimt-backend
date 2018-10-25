@@ -22,12 +22,16 @@
  */
 package org.sing_group.dreimt.rest.mapper.spi.signature;
 
+import javax.ws.rs.core.UriBuilder;
+
 import org.sing_group.dreimt.domain.entities.query.DrugSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 import org.sing_group.dreimt.rest.entity.query.DrugSignatureInteractionListingOptionsData;
 import org.sing_group.dreimt.rest.entity.signature.DrugSignatureInteractionData;
 
 public interface DrugSignatureInteractionMapper {
+  public void setUriBuilder(UriBuilder uriBuilder);
+
   public DrugSignatureInteractionData toDrugSignatureInteractionData(DrugSignatureInteraction signature);
 
   public DrugSignatureInteractionListingOptions toDrugSignatureInteractionListingOptions(
