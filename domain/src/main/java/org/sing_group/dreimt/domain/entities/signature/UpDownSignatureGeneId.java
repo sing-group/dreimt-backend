@@ -24,49 +24,25 @@ package org.sing_group.dreimt.domain.entities.signature;
 
 import java.io.Serializable;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "signature_gene")
-@IdClass(SignatureGeneId.class)
-public class SignatureGene implements Serializable {
+public class UpDownSignatureGeneId implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  public static enum Type {
-    UP, DOWN
-  };
-
-  @Id
-  @ManyToOne(fetch = FetchType.LAZY, optional = false)
-  @JoinColumn(name = "signature", referencedColumnName = "signatureName", nullable = false)
-  private Signature signature;
-
-  @Id
+  private String signature;
   private String gene;
 
-  @Enumerated(EnumType.STRING)
-  private Type type;
+  public UpDownSignatureGeneId() {}
 
-  SignatureGene() {}
+  public UpDownSignatureGeneId(String signature, String gene) {
+    this.signature = signature;
+    this.gene = gene;
+  }
 
-  public Signature getSignature() {
+  public String getSignature() {
     return signature;
   }
 
   public String getGene() {
     return gene;
-  }
-
-  public Type getType() {
-    return type;
   }
 
   @Override
@@ -86,7 +62,7 @@ public class SignatureGene implements Serializable {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    SignatureGene other = (SignatureGene) obj;
+    UpDownSignatureGeneId other = (UpDownSignatureGeneId) obj;
     if (gene == null) {
       if (other.gene != null)
         return false;

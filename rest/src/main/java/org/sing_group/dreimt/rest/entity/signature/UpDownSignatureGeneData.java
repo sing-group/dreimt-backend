@@ -20,29 +20,29 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.rest.mapper.signature;
+package org.sing_group.dreimt.rest.entity.signature;
 
-import java.util.HashSet;
+import java.io.Serializable;
 import java.util.Set;
 
-import org.sing_group.dreimt.domain.entities.signature.Signature;
-import org.sing_group.dreimt.domain.entities.signature.SignatureGene.Type;
-import org.sing_group.dreimt.rest.entity.signature.SignatureGeneData;
-import org.sing_group.dreimt.rest.mapper.spi.signature.SignatureGeneMapper;
+public class UpDownSignatureGeneData implements Serializable {
+  private static final long serialVersionUID = 1L;
+  
+  private Set<String> up;
+  private Set<String> down;
 
-public class DefaultSignatureGeneMapper implements SignatureGeneMapper {
+  UpDownSignatureGeneData() {}
 
-  @Override
-  public SignatureGeneData toSignatureGeneData(Signature signature) {
-    Set<String> up = new HashSet<>();
-    Set<String> down = new HashSet<>();
-    signature.getSignatureGenes().stream().forEach(g -> {
-      if (g.getType().equals(Type.UP)) {
-        up.add(g.getGene());
-      } else {
-        down.add(g.getGene());
-      }
-    });
-    return new SignatureGeneData(up, down);
+  public UpDownSignatureGeneData(Set<String> up, Set<String> down) {
+    this.up = up;
+    this.down = down;
+  }
+  
+  public Set<String> getUp() {
+    return up;
+  }
+  
+  public Set<String> getDown() {
+    return down;
   }
 }

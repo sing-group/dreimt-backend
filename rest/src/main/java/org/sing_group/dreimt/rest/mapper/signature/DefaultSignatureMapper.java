@@ -24,11 +24,19 @@ package org.sing_group.dreimt.rest.mapper.signature;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.enterprise.inject.Default;
 import javax.ws.rs.core.UriBuilder;
 
+import org.sing_group.dreimt.domain.entities.signature.GeneSetSignature;
 import org.sing_group.dreimt.domain.entities.signature.Signature;
+import org.sing_group.dreimt.domain.entities.signature.SignatureType;
+import org.sing_group.dreimt.domain.entities.signature.UpDownSignature;
+import org.sing_group.dreimt.domain.entities.signature.UpDownSignatureGene.Type;
 import org.sing_group.dreimt.rest.entity.signature.SignatureData;
+import org.sing_group.dreimt.rest.entity.signature.UpDownSignatureGeneData;
 import org.sing_group.dreimt.rest.mapper.spi.signature.SignatureMapper;
 import org.sing_group.dreimt.rest.resource.route.BaseRestPathBuilder;
 
@@ -52,6 +60,7 @@ public class DefaultSignatureMapper implements SignatureMapper {
       signature.getOrganism(), signature.getDisease(),
       signature.getArticleMetadata().getPubmedId(),
       signature.getArticleMetadata().getTitle(),
+      signature.getSignatureType(),
       pathBuilder.signatureGenes(signature).build(),
       pathBuilder.articleMetadata(signature.getArticleMetadata()).build()
     );
@@ -62,5 +71,23 @@ public class DefaultSignatureMapper implements SignatureMapper {
       throw new IllegalStateException("The UriBuilder has not been initialized.");
     }
     return this.uriBuilder;
+  }
+
+  @Override
+  public Object toSignatureGeneData(Signature signature) {
+    if (signature.getSignatureType().equals(SignatureType.UPDOWN)) {
+      Set<String> up = new HashSet<>();
+      Set<String> down = new HashSet<>();
+      ((UpDownSignature) signature).getSignatureGenes().stream().forEach(g -> {
+        if (g.getType().equals(Type.UP)) {
+          up.add(g.getGene());
+        } else {
+          down.add(g.getGene());
+        }
+      });
+      return new UpDownSignatureGeneData(up, down);
+    } else {
+      return ((GeneSetSignature) signature).getSignatureGenes();
+    }
   }
 }

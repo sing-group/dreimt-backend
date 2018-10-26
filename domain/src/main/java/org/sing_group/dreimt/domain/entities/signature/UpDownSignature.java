@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DREIMT - REST
+ * DREIMT - Domain
  * %%
  * Copyright (C) 2018 Daniel Glez-Peña, Miguel Reboiro-Jato, Hugo López-Fernández,
  * 			Kevin Troulé, Gonzálo Gómez-López, Fátima Al-Shahrour
@@ -20,11 +20,31 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.rest.mapper.spi.signature;
+package org.sing_group.dreimt.domain.entities.signature;
 
-import org.sing_group.dreimt.domain.entities.signature.Signature;
-import org.sing_group.dreimt.rest.entity.signature.SignatureGeneData;
+import java.util.List;
 
-public interface SignatureGeneMapper {
-  public SignatureGeneData toSignatureGeneData(Signature signature);
+import javax.persistence.CascadeType;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+
+@Entity
+@DiscriminatorValue("UPDOWN")
+public class UpDownSignature extends Signature {
+  private static final long serialVersionUID = 1L;
+
+  @OneToMany(mappedBy = "signature", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<UpDownSignatureGene> signatureGenes;
+
+  UpDownSignature() {}
+
+  public List<UpDownSignatureGene> getSignatureGenes() {
+    return signatureGenes;
+  }
+  
+  public SignatureType getSignatureType() {
+    return SignatureType.UPDOWN;
+  }
 }

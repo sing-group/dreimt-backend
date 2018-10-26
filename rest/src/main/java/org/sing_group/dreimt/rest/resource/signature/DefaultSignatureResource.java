@@ -40,9 +40,8 @@ import javax.ws.rs.core.UriInfo;
 
 import org.sing_group.dreimt.domain.entities.signature.Signature;
 import org.sing_group.dreimt.rest.entity.signature.SignatureData;
-import org.sing_group.dreimt.rest.entity.signature.SignatureGeneData;
+import org.sing_group.dreimt.rest.entity.signature.UpDownSignatureGeneData;
 import org.sing_group.dreimt.rest.filter.CrossDomain;
-import org.sing_group.dreimt.rest.mapper.spi.signature.SignatureGeneMapper;
 import org.sing_group.dreimt.rest.mapper.spi.signature.SignatureMapper;
 import org.sing_group.dreimt.rest.resource.spi.signature.SignatureResource;
 import org.sing_group.dreimt.service.spi.signature.SignatureService;
@@ -67,9 +66,6 @@ public class DefaultSignatureResource implements SignatureResource {
 
   @Inject
   private SignatureMapper signatureMapper;
-  
-  @Inject
-  private SignatureGeneMapper geneMapper;
   
   @Context
   private UriInfo uriInfo;
@@ -105,7 +101,7 @@ public class DefaultSignatureResource implements SignatureResource {
   @Path("{signatureName}/genes")
   @ApiOperation(
     value = "Returns the genes associated with the query signature", 
-    response = SignatureGeneData.class, 
+    response = UpDownSignatureGeneData.class, 
     code = 200
   )
   @ApiResponses(
@@ -115,7 +111,7 @@ public class DefaultSignatureResource implements SignatureResource {
   public Response getGenes(@PathParam("signatureName") String signatureName) {
     Optional<Signature> signature = this.service.get(signatureName);
     if (signature.isPresent()) {
-      final SignatureGeneData data = this.geneMapper.toSignatureGeneData(signature.get());
+      final Object data = this.signatureMapper.toSignatureGeneData(signature.get());
 
       return Response.ok(data).build();
     } else {

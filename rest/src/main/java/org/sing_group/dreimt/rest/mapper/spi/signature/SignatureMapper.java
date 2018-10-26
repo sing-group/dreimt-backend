@@ -31,4 +31,6 @@ public interface SignatureMapper {
   public void setUriBuilder(UriBuilder uriBuilder);
 
   public SignatureData toSignatureData(Signature signature);
+  
+  public Object toSignatureGeneData(Signature signature);
 }

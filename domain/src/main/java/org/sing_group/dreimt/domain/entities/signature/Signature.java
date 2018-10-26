@@ -23,27 +23,29 @@
 package org.sing_group.dreimt.domain.entities.signature;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="signatureType")
 @Table(name = "signature")
-public class Signature implements Serializable {
+public abstract class Signature implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
@@ -79,10 +81,9 @@ public class Signature implements Serializable {
   private String organism;
   private String disease;
 
-  @OneToMany(mappedBy = "signature", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<SignatureGene> signatureGenes;
-
   Signature() {}
+  
+  public abstract SignatureType getSignatureType();
 
   public String getSignatureName() {
     return signatureName;
@@ -114,10 +115,6 @@ public class Signature implements Serializable {
 
   public String getDisease() {
     return disease;
-  }
-
-  public List<SignatureGene> getSignatureGenes() {
-    return signatureGenes;
   }
 
   @Override
