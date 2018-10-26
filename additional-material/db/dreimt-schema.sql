@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.23, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.24, for Linux (x86_64)
 --
 -- Host: localhost    Database: dreimt
 -- ------------------------------------------------------
--- Server version	5.7.23-0ubuntu0.18.04.1
+-- Server version	5.7.24-0ubuntu0.18.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -28,7 +28,7 @@ CREATE TABLE `article_metadata` (
   `authors` varchar(2000) NOT NULL,
   `title` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`pubmedId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +43,7 @@ CREATE TABLE `drug` (
   `sourceName` varchar(255) NOT NULL,
   `commonName` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`sourceDb`,`sourceName`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -66,7 +66,7 @@ CREATE TABLE `drug_signature_interaction` (
   KEY `FKnsnnq5179w6clhenc6o6h8oov` (`signature`),
   CONSTRAINT `FK7nvqgcvx6si97ktc4c0jq6ejk` FOREIGN KEY (`drug_sourceDb`, `drug_sourceName`) REFERENCES `drug` (`sourceDb`, `sourceName`),
   CONSTRAINT `FKnsnnq5179w6clhenc6o6h8oov` FOREIGN KEY (`signature`) REFERENCES `signature` (`signatureName`)
-) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -78,8 +78,6 @@ DROP TABLE IF EXISTS `signature`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `signature` (
   `signatureName` varchar(255) NOT NULL,
-  `cellTypeA` varchar(255) DEFAULT NULL,
-  `cellTypeB` varchar(255) DEFAULT NULL,
   `disease` varchar(255) DEFAULT NULL,
   `experimentalDesign` varchar(255) DEFAULT NULL,
   `organism` varchar(255) DEFAULT NULL,
@@ -88,7 +86,37 @@ CREATE TABLE `signature` (
   PRIMARY KEY (`signatureName`),
   KEY `FKob3uvde5er8oiayu91rowlcgm` (`article_pubmedId`),
   CONSTRAINT `FKob3uvde5er8oiayu91rowlcgm` FOREIGN KEY (`article_pubmedId`) REFERENCES `article_metadata` (`pubmedId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `signature_cell_type_a`
+--
+
+DROP TABLE IF EXISTS `signature_cell_type_a`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `signature_cell_type_a` (
+  `signatureName` varchar(255) NOT NULL,
+  `cellType` varchar(255) NOT NULL,
+  PRIMARY KEY (`signatureName`,`cellType`),
+  CONSTRAINT `FKav0ta8w7h6p10gfa7uddvfxl5` FOREIGN KEY (`signatureName`) REFERENCES `signature` (`signatureName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `signature_cell_type_b`
+--
+
+DROP TABLE IF EXISTS `signature_cell_type_b`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `signature_cell_type_b` (
+  `signatureName` varchar(255) NOT NULL,
+  `cellType` varchar(255) NOT NULL,
+  PRIMARY KEY (`signatureName`,`cellType`),
+  CONSTRAINT `FKd2cpam0rgflkr9yhsj7cwfihj` FOREIGN KEY (`signatureName`) REFERENCES `signature` (`signatureName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -105,7 +133,7 @@ CREATE TABLE `signature_gene` (
   PRIMARY KEY (`gene`,`signature`),
   KEY `FKim8oar0ybt6u60r8trfe40i3w` (`signature`),
   CONSTRAINT `FKim8oar0ybt6u60r8trfe40i3w` FOREIGN KEY (`signature`) REFERENCES `signature` (`signatureName`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -132,4 +160,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-14 16:58:54
+-- Dump completed on 2018-10-26 10:59:07

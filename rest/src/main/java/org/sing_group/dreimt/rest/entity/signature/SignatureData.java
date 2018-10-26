@@ -24,6 +24,7 @@ package org.sing_group.dreimt.rest.entity.signature;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.util.Set;
 
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 
@@ -31,8 +32,8 @@ public class SignatureData implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private String signatureName;
-  private String cellTypeA;
-  private String cellTypeB;
+  private Set<String> cellTypeA;
+  private Set<String> cellTypeB;
   private String sourceDb;
   private ExperimentalDesign experimentalDesign;
   private String organism;
@@ -46,9 +47,9 @@ public class SignatureData implements Serializable {
   SignatureData() {}
 
   public SignatureData(
-    String signatureName, String cellTypeA, String cellTypeB, String sourceDb,
+    String signatureName, Set<String> cellTypeA, Set<String> cellTypeB, String sourceDb,
     ExperimentalDesign experimentalDesign, String organism, String disease,
-    int articlePubMedId, String articleTitle, 
+    int articlePubMedId, String articleTitle,
     URI signatureGenesUri, URI articleMetadataUri
   ) {
     super();
@@ -70,11 +71,11 @@ public class SignatureData implements Serializable {
     return signatureName;
   }
 
-  public String getCellTypeA() {
+  public Set<String> getCellTypeA() {
     return cellTypeA;
   }
 
-  public String getCellTypeB() {
+  public Set<String> getCellTypeB() {
     return cellTypeB;
   }
 

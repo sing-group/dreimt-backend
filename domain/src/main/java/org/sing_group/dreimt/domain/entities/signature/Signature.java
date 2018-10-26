@@ -24,8 +24,12 @@ package org.sing_group.dreimt.domain.entities.signature;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -35,6 +39,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "signature")
@@ -44,8 +49,23 @@ public class Signature implements Serializable {
   @Id
   private String signatureName;
 
-  private String cellTypeA;
-  private String cellTypeB;
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(
+    name = "signature_cell_type_a", 
+    joinColumns = @JoinColumn(name = "signatureName"), 
+    uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "cellType"})
+  )
+  @Column(name = "cellType", nullable = false)
+  private Set<String> cellTypeA;
+  
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(
+    name = "signature_cell_type_b", 
+    joinColumns = @JoinColumn(name = "signatureName"), 
+    uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "cellType"})
+  )
+  @Column(name = "cellType", nullable = false)
+  private Set<String> cellTypeB;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "article_pubmedId", referencedColumnName = "pubmedId", nullable = true)
@@ -68,11 +88,11 @@ public class Signature implements Serializable {
     return signatureName;
   }
 
-  public String getCellTypeA() {
+  public Set<String> getCellTypeA() {
     return cellTypeA;
   }
 
-  public String getCellTypeB() {
+  public Set<String> getCellTypeB() {
     return cellTypeB;
   }
 

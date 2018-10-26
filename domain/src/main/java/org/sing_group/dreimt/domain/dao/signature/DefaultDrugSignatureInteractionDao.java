@@ -82,15 +82,15 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
       Join<DrugSignatureInteraction, Signature> joinSignature = root.join("signature", JoinType.LEFT);
       if (listingOptions.getCellTypeA().isPresent()) {
-        final Expression<String> cellTypeA = joinSignature.get("cellTypeA").as(String.class);
+        Join<Signature, String> joinSignatureCellTypeA = joinSignature.join("cellTypeA", JoinType.LEFT);
 
-        query = query.where(cb.like(cellTypeA, "%" + listingOptions.getCellTypeA().get() + "%"));
+        query = query.where(cb.like(joinSignatureCellTypeA, "%" + listingOptions.getCellTypeA().get() + "%"));
       }
 
       if (listingOptions.getCellTypeB().isPresent()) {
-        final Expression<String> cellTypeB = joinSignature.get("cellTypeB").as(String.class);
+        Join<Signature, String> joinSignatureCellTypeB = joinSignature.join("cellTypeB", JoinType.LEFT);
 
-        query = query.where(cb.like(cellTypeB, "%" + listingOptions.getCellTypeB().get() + "%"));
+        query = query.where(cb.like(joinSignatureCellTypeB, "%" + listingOptions.getCellTypeB().get() + "%"));
       }
 
       if (listingOptions.getExperimentalDesign().isPresent()) {
