@@ -136,6 +136,7 @@
 		<swagger.version>1.5.16</swagger.version>
 		<wildfly.arquillian.container.version>2.1.0.Final</wildfly.arquillian.container.version>
 		<wildfly.version>10.1.0.Final</wildfly.version>
+        <sing.math.version>0.1.1</sing.math.version>
 
 		<!-- Resteasy specific version required, as it fixes ResourceInfo injection bug -->
 		<resteasy.version>3.0.24.Final</resteasy.version>
@@ -233,6 +234,11 @@
 				<groupId>org.jboss.resteasy</groupId>
 				<artifactId>resteasy-client</artifactId>
 				<version>${resteasy.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>es.uvigo.ei.sing</groupId>
+				<artifactId>math</artifactId>
+				<version>${sing.math.version}</version>
 			</dependency>
 
 			<!-- Testing -->
