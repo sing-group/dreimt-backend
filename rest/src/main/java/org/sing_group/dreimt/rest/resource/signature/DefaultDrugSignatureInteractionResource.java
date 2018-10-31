@@ -77,7 +77,6 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @GET
-  @Path("list")
   @ApiOperation(
     value = "Lists the drug-signature interactions", 
     response = DrugSignatureInteractionData.class, 
