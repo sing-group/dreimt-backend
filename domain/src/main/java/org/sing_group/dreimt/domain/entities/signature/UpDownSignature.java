@@ -22,13 +22,18 @@
  */
 package org.sing_group.dreimt.domain.entities.signature;
 
+import static java.util.stream.Collectors.toSet;
+
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
+
+import org.sing_group.dreimt.domain.entities.signature.UpDownSignatureGene.Type;
 
 @Entity
 @DiscriminatorValue("UPDOWN")
@@ -40,10 +45,29 @@ public class UpDownSignature extends Signature {
 
   UpDownSignature() {}
 
-  public List<UpDownSignatureGene> getSignatureGenes() {
-    return signatureGenes;
+  public Set<String> getUpGenes() {
+    return getUpGenes(false);
   }
-  
+
+  public Set<String> getUpGenes(boolean onlyUniverseGenes) {
+    return getGenes(Type.UP, onlyUniverseGenes);
+  }
+
+  public Set<String> getDownGenes() {
+    return getDownGenes(false);
+  }
+
+  public Set<String> getDownGenes(boolean onlyUniverseGenes) {
+    return getGenes(Type.DOWN, onlyUniverseGenes);
+  }
+
+  private Set<String> getGenes(Type geneType, boolean onlyUniverseGenes) {
+    return signatureGenes.stream()
+      .filter(g -> g.getType().equals(geneType) && (!onlyUniverseGenes || g.isUniverseGene()))
+      .map(UpDownSignatureGene::getGene)
+      .collect(toSet());
+  }
+
   public SignatureType getSignatureType() {
     return SignatureType.UPDOWN;
   }

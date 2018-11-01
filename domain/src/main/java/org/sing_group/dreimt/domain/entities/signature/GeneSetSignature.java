@@ -22,15 +22,17 @@
  */
 package org.sing_group.dreimt.domain.entities.signature;
 
+import static java.util.stream.Collectors.toSet;
+
 import java.util.Set;
 
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.UniqueConstraint;
 
 @Entity
@@ -38,21 +40,28 @@ import javax.persistence.UniqueConstraint;
 public class GeneSetSignature extends Signature {
   private static final long serialVersionUID = 1L;
 
-  @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(
+  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinTable(
     name = "signature_geneset_genes", 
-    joinColumns = @JoinColumn(name = "signature", referencedColumnName = "signatureName"), 
+    joinColumns = @JoinColumn(name = "signature", referencedColumnName = "signatureName"),
+    inverseJoinColumns = @JoinColumn(name = "gene", referencedColumnName = "gene"),
     uniqueConstraints = @UniqueConstraint(columnNames = {"signature", "gene"})
   )
-  @Column(name = "gene", nullable = false)
-  private Set<String> signatureGenes;
+  private Set<Gene> signatureGenes;
 
   GeneSetSignature() {}
 
   public Set<String> getSignatureGenes() {
-    return signatureGenes;
+    return getSignatureGenes(false);
   }
   
+  public Set<String> getSignatureGenes(boolean onlyUniverseGenes) {
+    return signatureGenes.stream()
+      .filter(g -> !onlyUniverseGenes || g.isUniverseGene())
+      .map(Gene::getGene)
+      .collect(toSet());
+  }
+
   public SignatureType getSignatureType() {
     return SignatureType.GENESET;
   }

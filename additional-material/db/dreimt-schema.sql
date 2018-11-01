@@ -70,6 +70,20 @@ CREATE TABLE `drug_signature_interaction` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `genes`
+--
+
+DROP TABLE IF EXISTS `genes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `genes` (
+  `gene` varchar(255) NOT NULL,
+  `universe` varchar(255) NOT NULL,
+  PRIMARY KEY (`gene`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `signature`
 --
 
@@ -77,6 +91,7 @@ DROP TABLE IF EXISTS `signature`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `signature` (
+  `signatureType` varchar(31) NOT NULL,
   `signatureName` varchar(255) NOT NULL,
   `disease` varchar(255) DEFAULT NULL,
   `experimentalDesign` varchar(255) DEFAULT NULL,
@@ -120,19 +135,37 @@ CREATE TABLE `signature_cell_type_b` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `signature_gene`
+-- Table structure for table `signature_geneset_genes`
 --
 
-DROP TABLE IF EXISTS `signature_gene`;
+DROP TABLE IF EXISTS `signature_geneset_genes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `signature_gene` (
-  `gene` varchar(255) NOT NULL,
+CREATE TABLE `signature_geneset_genes` (
   `signature` varchar(255) NOT NULL,
+  `gene` varchar(255) NOT NULL,
+  PRIMARY KEY (`signature`,`gene`),
+  KEY `FKrddj16bdtfbejiox2tvxvimif` (`gene`),
+  CONSTRAINT `FKphu5u29cwlhygq5ihbasc7bsj` FOREIGN KEY (`signature`) REFERENCES `signature` (`signatureName`),
+  CONSTRAINT `FKrddj16bdtfbejiox2tvxvimif` FOREIGN KEY (`gene`) REFERENCES `genes` (`gene`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `signature_updown_genes`
+--
+
+DROP TABLE IF EXISTS `signature_updown_genes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `signature_updown_genes` (
   `type` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`gene`,`signature`),
-  KEY `FKim8oar0ybt6u60r8trfe40i3w` (`signature`),
-  CONSTRAINT `FKim8oar0ybt6u60r8trfe40i3w` FOREIGN KEY (`signature`) REFERENCES `signature` (`signatureName`)
+  `signature` varchar(255) NOT NULL,
+  `gene` varchar(255) NOT NULL,
+  PRIMARY KEY (`signature`,`gene`),
+  KEY `FK71w1mvo2s9n99b51fmy9jwkdh` (`gene`),
+  CONSTRAINT `FK71w1mvo2s9n99b51fmy9jwkdh` FOREIGN KEY (`gene`) REFERENCES `genes` (`gene`),
+  CONSTRAINT `FKeyhnrum6i9llm8m55ncrh3avi` FOREIGN KEY (`signature`) REFERENCES `signature` (`signatureName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -160,4 +193,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-26 10:59:07
+-- Dump completed on 2018-11-01 20:39:43

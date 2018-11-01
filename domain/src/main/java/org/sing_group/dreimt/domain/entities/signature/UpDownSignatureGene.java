@@ -29,14 +29,13 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "signature_updown_genes")
-@IdClass(UpDownSignatureGeneId.class)
+//@IdClass(UpDownSignatureGeneId.class)
 public class UpDownSignatureGene implements Serializable {
   private static final long serialVersionUID = 1L;
 
@@ -50,7 +49,9 @@ public class UpDownSignatureGene implements Serializable {
   private UpDownSignature signature;
 
   @Id
-  private String gene;
+  @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @JoinColumn(name = "gene", referencedColumnName = "gene", nullable = false)
+  private Gene gene;
 
   @Enumerated(EnumType.STRING)
   private Type type;
@@ -62,7 +63,11 @@ public class UpDownSignatureGene implements Serializable {
   }
 
   public String getGene() {
-    return gene;
+    return gene.getGene();
+  }
+
+  public boolean isUniverseGene() {
+    return gene.isUniverseGene();
   }
 
   public Type getType() {

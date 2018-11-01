@@ -46,12 +46,22 @@ INSERT INTO `drug_signature_interaction` VALUES (6,0.002,0.0031,-2.335,'Lincs','
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `genes`
+--
+
+LOCK TABLES `genes` WRITE;
+/*!40000 ALTER TABLE `genes` DISABLE KEYS */;
+INSERT INTO `genes` VALUES ('GeneA','T'),('GeneB','F'),('GeneC','T'),('GeneD','F'),('GeneE','T'),('GeneF','F'),('GeneG','F');
+/*!40000 ALTER TABLE `genes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `signature`
 --
 
 LOCK TABLES `signature` WRITE;
 /*!40000 ALTER TABLE `signature` DISABLE KEYS */;
-INSERT INTO `signature` VALUES ('Signature 1','Catarro','IN_VIVO','Homo sapiens','C7',1001),('Signature 2','Meningitis','IN_VIVO','Homo sapiens','C7',1001),('Signature 3','Ébola','EX_VIVO','Homo sapiens','C7',1002),('Signature 4','VIH','EX_VIVO','Homo sapiens','C7',1002),('Signature 5','Ébola','IN_VIVO','Homo sapiens','Selected',1003),('Signature 6','Titulitis','EX_VIVO','Mus musculus','Selected',1003);
+INSERT INTO `signature` VALUES ('UPDOWN','Signature 1','Catarro','IN_VIVO','Homo sapiens','C7',1001),('UPDOWN','Signature 2','Meningitis','IN_VIVO','Homo sapiens','C7',1001),('GENESET','Signature 3','Ébola','EX_VIVO','Homo sapiens','C7',1002),('GENESET','Signature 4','VIH','EX_VIVO','Homo sapiens','C7',1002),('GENESET','Signature 5','Ébola','IN_VIVO','Homo sapiens','Selected',1003),('UPDOWN','Signature 6','Titulitis','EX_VIVO','Mus musculus','Selected',1003);
 /*!40000 ALTER TABLE `signature` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -76,13 +86,23 @@ INSERT INTO `signature_cell_type_b` VALUES ('Signature 1','Type_2A'),('Signature
 UNLOCK TABLES;
 
 --
--- Dumping data for table `signature_gene`
+-- Dumping data for table `signature_geneset_genes`
 --
 
-LOCK TABLES `signature_gene` WRITE;
-/*!40000 ALTER TABLE `signature_gene` DISABLE KEYS */;
-INSERT INTO `signature_gene` VALUES ('GeneA','Signature 1','UP'),('GeneA','Signature 2','UP'),('GeneA','Signature 6','DOWN'),('GeneB','Signature 1','UP'),('GeneB','Signature 2','UP'),('GeneB','Signature 6','DOWN'),('GeneC','Signature 1','DOWN'),('GeneC','Signature 2','UP'),('GeneC','Signature 6','UP'),('GeneD','Signature 1','DOWN'),('GeneD','Signature 2','DOWN'),('GeneD','Signature 6','UP');
-/*!40000 ALTER TABLE `signature_gene` ENABLE KEYS */;
+LOCK TABLES `signature_geneset_genes` WRITE;
+/*!40000 ALTER TABLE `signature_geneset_genes` DISABLE KEYS */;
+INSERT INTO `signature_geneset_genes` VALUES ('Signature 3','GeneA'),('Signature 4','GeneA'),('Signature 5','GeneA'),('Signature 3','GeneB'),('Signature 3','GeneC'),('Signature 4','GeneE'),('Signature 5','GeneE'),('Signature 4','GeneF'),('Signature 5','GeneG');
+/*!40000 ALTER TABLE `signature_geneset_genes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `signature_updown_genes`
+--
+
+LOCK TABLES `signature_updown_genes` WRITE;
+/*!40000 ALTER TABLE `signature_updown_genes` DISABLE KEYS */;
+INSERT INTO `signature_updown_genes` VALUES ('UP','Signature 1','GeneA'),('UP','Signature 1','GeneB'),('DOWN','Signature 1','GeneC'),('DOWN','Signature 1','GeneD'),('UP','Signature 2','GeneA'),('UP','Signature 2','GeneB'),('UP','Signature 2','GeneC'),('DOWN','Signature 2','GeneD'),('DOWN','Signature 6','GeneA'),('DOWN','Signature 6','GeneB'),('UP','Signature 6','GeneC'),('UP','Signature 6','GeneD');
+/*!40000 ALTER TABLE `signature_updown_genes` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -104,4 +124,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-10-26 10:59:07
+-- Dump completed on 2018-11-01 20:39:43
