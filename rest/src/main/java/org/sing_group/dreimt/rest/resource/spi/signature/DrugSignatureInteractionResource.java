@@ -26,6 +26,7 @@ import javax.ejb.Local;
 import javax.ws.rs.core.Response;
 
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
+import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 
 @Local
 public interface DrugSignatureInteractionResource {
@@ -33,6 +34,7 @@ public interface DrugSignatureInteractionResource {
     Integer page, Integer pageSize,
     String cellTypeA, String cellTypeB,
     ExperimentalDesign experimentalDesign, String organism,
-    String drugSourceName, String drugCommonName
+    String drugSourceName, String drugCommonName,
+    SignatureType signatureType
   );
 }

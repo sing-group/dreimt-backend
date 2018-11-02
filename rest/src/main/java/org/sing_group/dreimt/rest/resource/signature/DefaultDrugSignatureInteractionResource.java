@@ -38,6 +38,7 @@ import javax.ws.rs.core.UriInfo;
 
 import org.sing_group.dreimt.domain.entities.query.DrugSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
+import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 import org.sing_group.dreimt.rest.entity.query.DrugSignatureInteractionListingOptionsData;
 import org.sing_group.dreimt.rest.entity.query.ListingOptionsData;
 import org.sing_group.dreimt.rest.entity.signature.DrugSignatureInteractionData;
@@ -92,12 +93,13 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
     @QueryParam("organism") String organism,
     @QueryParam("drugSourceName") String drugSourceName,
-    @QueryParam("drugCommonName") String drugCommonName
+    @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("signatureType") SignatureType signatureType
   ) {
     final DrugSignatureInteractionListingOptionsData listingOptionsData =
       new DrugSignatureInteractionListingOptionsData(
         new ListingOptionsData(page, pageSize),
-        cellTypeA, cellTypeB, experimentalDesign, organism, drugSourceName, drugCommonName
+        cellTypeA, cellTypeB, experimentalDesign, organism, drugSourceName, drugCommonName, signatureType
       );
 
     final DrugSignatureInteractionListingOptions listingOptions =

@@ -80,6 +80,9 @@ public abstract class Signature implements Serializable {
 
   private String organism;
   private String disease;
+  
+  @Column(name = "signatureType", insertable = false, updatable = false)
+  private String signatureType;
 
   Signature() {}
   

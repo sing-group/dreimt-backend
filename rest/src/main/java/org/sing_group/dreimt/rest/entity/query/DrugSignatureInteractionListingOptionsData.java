@@ -23,6 +23,7 @@
 package org.sing_group.dreimt.rest.entity.query;
 
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
+import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 
 public class DrugSignatureInteractionListingOptionsData {
   private ListingOptionsData listingOptions;
@@ -32,6 +33,7 @@ public class DrugSignatureInteractionListingOptionsData {
   private String organism;
   private String drugSourceName;
   private String drugCommonName;
+  private SignatureType signatureType;
 
   DrugSignatureInteractionListingOptionsData() {}
 
@@ -39,7 +41,8 @@ public class DrugSignatureInteractionListingOptionsData {
     ListingOptionsData listingOptions,
     String cellTypeA, String cellTypeB,
     ExperimentalDesign experimentalDesign, String organism,
-    String drugName, String drugCommonName
+    String drugName, String drugCommonName,
+    SignatureType signatureType
   ) {
     super();
     this.listingOptions = listingOptions;
@@ -49,6 +52,7 @@ public class DrugSignatureInteractionListingOptionsData {
     this.organism = organism;
     this.drugSourceName = drugName;
     this.drugCommonName = drugCommonName;
+    this.signatureType = signatureType;
   }
 
   public ListingOptionsData getListingOptions() {
@@ -78,6 +82,10 @@ public class DrugSignatureInteractionListingOptionsData {
   public String getDrugCommonName() {
     return drugCommonName;
   }
+  
+  public SignatureType getSignatureType() {
+    return signatureType;
+  }
 
   @Override
   public int hashCode() {
@@ -90,6 +98,7 @@ public class DrugSignatureInteractionListingOptionsData {
     result = prime * result + ((experimentalDesign == null) ? 0 : experimentalDesign.hashCode());
     result = prime * result + ((listingOptions == null) ? 0 : listingOptions.hashCode());
     result = prime * result + ((organism == null) ? 0 : organism.hashCode());
+    result = prime * result + ((signatureType == null) ? 0 : signatureType.hashCode());
     return result;
   }
 
@@ -133,6 +142,11 @@ public class DrugSignatureInteractionListingOptionsData {
       if (other.organism != null)
         return false;
     } else if (!organism.equals(other.organism))
+      return false;
+    if (signatureType == null) {
+      if (other.signatureType != null)
+        return false;
+    } else if (!signatureType.equals(other.signatureType))
       return false;
     return true;
   }

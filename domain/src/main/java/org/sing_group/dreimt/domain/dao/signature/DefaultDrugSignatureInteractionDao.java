@@ -104,6 +104,12 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
         query = query.where(cb.like(organism, "%" + listingOptions.getOrganism().get() + "%"));
       }
+      
+      if (listingOptions.getSignatureType().isPresent()) {
+        final Expression<String> signatureType = joinSignature.get("signatureType").as(String.class);
+
+        query = query.where(cb.like(signatureType, "%" + listingOptions.getSignatureType().get() + "%"));
+      }
 
       Join<DrugSignatureInteraction, Drug> joinDrug = root.join("drug", JoinType.LEFT);
       if (listingOptions.getDrugSourceName().isPresent()) {

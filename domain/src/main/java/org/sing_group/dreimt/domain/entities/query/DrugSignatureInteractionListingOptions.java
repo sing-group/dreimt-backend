@@ -29,6 +29,7 @@ import java.util.Optional;
 
 import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
+import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 
 public class DrugSignatureInteractionListingOptions implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -40,12 +41,14 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
   private final String organism;
   private final String drugSourceName;
   private final String drugCommonName;
+  private final SignatureType signatureType;
 
   public DrugSignatureInteractionListingOptions(
     ListingOptions listingOptions,
     String cellTypeA, String cellTypeB,
     ExperimentalDesign experimentalDesign, String organism,
-    String drugSourceName, String drugCommonName
+    String drugSourceName, String drugCommonName,
+    SignatureType signatureType
   ) {
     this.listingOptions = listingOptions;
     this.cellTypeA = cellTypeA;
@@ -54,6 +57,7 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     this.organism = organism;
     this.drugSourceName = drugSourceName;
     this.drugCommonName = drugCommonName;
+    this.signatureType = signatureType;
   }
 
   public boolean hasAnyQueryModification() {
@@ -63,7 +67,8 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
       || this.organism != null
       || this.experimentalDesign != null
       || this.drugSourceName != null
-      || this.drugCommonName != null;
+      || this.drugCommonName != null
+      || this.signatureType != null;
   }
 
   public ListingOptions getListingOptions() {
@@ -94,6 +99,10 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     return ofNullable(drugCommonName);
   }
 
+  public Optional<SignatureType> getSignatureType() {
+    return ofNullable(signatureType);
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;
@@ -105,6 +114,7 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     result = prime * result + ((experimentalDesign == null) ? 0 : experimentalDesign.hashCode());
     result = prime * result + ((listingOptions == null) ? 0 : listingOptions.hashCode());
     result = prime * result + ((organism == null) ? 0 : organism.hashCode());
+    result = prime * result + ((signatureType == null) ? 0 : signatureType.hashCode());
     return result;
   }
 
@@ -148,6 +158,8 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
       if (other.organism != null)
         return false;
     } else if (!organism.equals(other.organism))
+      return false;
+    if (signatureType != other.signatureType)
       return false;
     return true;
   }
