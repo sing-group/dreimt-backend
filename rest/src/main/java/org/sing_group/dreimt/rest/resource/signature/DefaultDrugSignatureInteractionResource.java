@@ -94,12 +94,16 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("organism") String organism,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("signatureType") SignatureType signatureType
+    @QueryParam("signatureType") SignatureType signatureType,
+    @QueryParam("maxPvalue") Double maxPvalue,
+    @QueryParam("minTes") Double minTes, 
+    @QueryParam("maxTes") Double maxTes,
+    @QueryParam("maxFdr") Double maxFdr
   ) {
     final DrugSignatureInteractionListingOptionsData listingOptionsData =
       new DrugSignatureInteractionListingOptionsData(
         new ListingOptionsData(page, pageSize),
-        cellTypeA, cellTypeB, experimentalDesign, organism, drugSourceName, drugCommonName, signatureType
+        cellTypeA, cellTypeB, experimentalDesign, organism, drugSourceName, drugCommonName, signatureType, maxPvalue, minTes, maxTes, maxFdr
       );
 
     final DrugSignatureInteractionListingOptions listingOptions =

@@ -35,6 +35,7 @@ public interface DrugSignatureInteractionResource {
     String cellTypeA, String cellTypeB,
     ExperimentalDesign experimentalDesign, String organism,
     String drugSourceName, String drugCommonName,
-    SignatureType signatureType
+    SignatureType signatureType,
+    Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
 }

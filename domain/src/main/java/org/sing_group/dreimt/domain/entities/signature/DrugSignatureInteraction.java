@@ -59,9 +59,9 @@ public class DrugSignatureInteraction implements Serializable {
   @JoinColumn(name = "signature", referencedColumnName = "signatureName", nullable = false)
   private Signature signature;
 
-  private double tes;
-  private double pValue;
-  private double fdr;
+  private Double tes;
+  private Double pValue;
+  private Double fdr;
 
   public DrugSignatureInteraction() {}
 
@@ -73,15 +73,15 @@ public class DrugSignatureInteraction implements Serializable {
     return signature;
   }
 
-  public double getTes() {
+  public Double getTes() {
     return tes;
   }
 
-  public double getpValue() {
+  public Double getpValue() {
     return pValue;
   }
 
-  public double getFdr() {
+  public Double getFdr() {
     return fdr;
   }
 

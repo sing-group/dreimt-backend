@@ -34,6 +34,10 @@ public class DrugSignatureInteractionListingOptionsData {
   private String drugSourceName;
   private String drugCommonName;
   private SignatureType signatureType;
+  private Double maxPvalue;
+  private Double minTes;
+  private Double maxTes;
+  private Double maxFdr;
 
   DrugSignatureInteractionListingOptionsData() {}
 
@@ -42,7 +46,8 @@ public class DrugSignatureInteractionListingOptionsData {
     String cellTypeA, String cellTypeB,
     ExperimentalDesign experimentalDesign, String organism,
     String drugName, String drugCommonName,
-    SignatureType signatureType
+    SignatureType signatureType,
+    Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   ) {
     super();
     this.listingOptions = listingOptions;
@@ -53,6 +58,14 @@ public class DrugSignatureInteractionListingOptionsData {
     this.drugSourceName = drugName;
     this.drugCommonName = drugCommonName;
     this.signatureType = signatureType;
+    this.maxPvalue = maxPvalue;
+    this.maxFdr = maxFdr;
+    
+    if (minTes != null && maxTes != null && minTes > maxTes) {
+      throw new IllegalArgumentException("minTes must be less than or equal to maxTes");
+    }
+    this.minTes = minTes;
+    this.maxTes = maxTes;
   }
 
   public ListingOptionsData getListingOptions() {
@@ -86,6 +99,22 @@ public class DrugSignatureInteractionListingOptionsData {
   public SignatureType getSignatureType() {
     return signatureType;
   }
+  
+  public Double getMaxPvalue() {
+    return maxPvalue;
+  }
+  
+  public Double getMinTes() {
+    return minTes;
+  }
+  
+  public Double getMaxTes() {
+    return maxTes;
+  }
+  
+  public Double getMaxFdr() {
+    return maxFdr;
+  }
 
   @Override
   public int hashCode() {
@@ -97,6 +126,10 @@ public class DrugSignatureInteractionListingOptionsData {
     result = prime * result + ((drugSourceName == null) ? 0 : drugSourceName.hashCode());
     result = prime * result + ((experimentalDesign == null) ? 0 : experimentalDesign.hashCode());
     result = prime * result + ((listingOptions == null) ? 0 : listingOptions.hashCode());
+    result = prime * result + ((maxFdr == null) ? 0 : maxFdr.hashCode());
+    result = prime * result + ((maxPvalue == null) ? 0 : maxPvalue.hashCode());
+    result = prime * result + ((maxTes == null) ? 0 : maxTes.hashCode());
+    result = prime * result + ((minTes == null) ? 0 : minTes.hashCode());
     result = prime * result + ((organism == null) ? 0 : organism.hashCode());
     result = prime * result + ((signatureType == null) ? 0 : signatureType.hashCode());
     return result;
@@ -138,15 +171,32 @@ public class DrugSignatureInteractionListingOptionsData {
         return false;
     } else if (!listingOptions.equals(other.listingOptions))
       return false;
+    if (maxFdr == null) {
+      if (other.maxFdr != null)
+        return false;
+    } else if (!maxFdr.equals(other.maxFdr))
+      return false;
+    if (maxPvalue == null) {
+      if (other.maxPvalue != null)
+        return false;
+    } else if (!maxPvalue.equals(other.maxPvalue))
+      return false;
+    if (maxTes == null) {
+      if (other.maxTes != null)
+        return false;
+    } else if (!maxTes.equals(other.maxTes))
+      return false;
+    if (minTes == null) {
+      if (other.minTes != null)
+        return false;
+    } else if (!minTes.equals(other.minTes))
+      return false;
     if (organism == null) {
       if (other.organism != null)
         return false;
     } else if (!organism.equals(other.organism))
       return false;
-    if (signatureType == null) {
-      if (other.signatureType != null)
-        return false;
-    } else if (!signatureType.equals(other.signatureType))
+    if (signatureType != other.signatureType)
       return false;
     return true;
   }

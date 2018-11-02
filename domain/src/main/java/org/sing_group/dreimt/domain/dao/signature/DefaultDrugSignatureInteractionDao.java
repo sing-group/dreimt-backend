@@ -80,6 +80,30 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
       query = query.select(root);
 
+      if (listingOptions.getMaxPvalue().isPresent()) {
+        final Expression<Double> pValue = root.get("pValue").as(Double.class);
+
+        query = query.where(cb.lessThanOrEqualTo(pValue, listingOptions.getMaxPvalue().get()));
+      }
+
+      if (listingOptions.getMaxFdr().isPresent()) {
+        final Expression<Double> fdr = root.get("fdr").as(Double.class);
+
+        query = query.where(cb.lessThanOrEqualTo(fdr, listingOptions.getMaxFdr().get()));
+      }
+
+      if (listingOptions.getMinTes().isPresent()) {
+        final Expression<Double> tes = root.get("tes").as(Double.class);
+
+        query = query.where(cb.greaterThanOrEqualTo(tes, listingOptions.getMinTes().get()));
+      }
+
+      if (listingOptions.getMaxTes().isPresent()) {
+        final Expression<Double> tes = root.get("tes").as(Double.class);
+
+        query = query.where(cb.lessThanOrEqualTo(tes, listingOptions.getMaxTes().get()));
+      }
+
       Join<DrugSignatureInteraction, Signature> joinSignature = root.join("signature", JoinType.LEFT);
       if (listingOptions.getCellTypeA().isPresent()) {
         Join<Signature, String> joinSignatureCellTypeA = joinSignature.join("cellTypeA", JoinType.LEFT);
@@ -110,7 +134,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
         query = query.where(cb.like(signatureType, "%" + listingOptions.getSignatureType().get() + "%"));
       }
-
+      
       Join<DrugSignatureInteraction, Drug> joinDrug = root.join("drug", JoinType.LEFT);
       if (listingOptions.getDrugSourceName().isPresent()) {
         final Expression<String> sourceName = joinDrug.get("id").get("sourceName").as(String.class);

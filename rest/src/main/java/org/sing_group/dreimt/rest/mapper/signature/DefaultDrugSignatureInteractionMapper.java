@@ -70,7 +70,10 @@ public class DefaultDrugSignatureInteractionMapper implements DrugSignatureInter
       listingOptionsData.getCellTypeA(), listingOptionsData.getCellTypeB(),
       listingOptionsData.getExperimentalDesign(), listingOptionsData.getOrganism(),
       listingOptionsData.getDrugSourceName(), listingOptionsData.getDrugCommonName(),
-      listingOptionsData.getSignatureType()
+      listingOptionsData.getSignatureType(),
+      listingOptionsData.getMaxPvalue(),
+      listingOptionsData.getMinTes(), listingOptionsData.getMaxTes(),
+      listingOptionsData.getMaxFdr()
     );
   }
 }
