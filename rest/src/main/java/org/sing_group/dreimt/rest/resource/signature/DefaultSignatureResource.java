@@ -29,10 +29,12 @@ import java.util.Optional;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
@@ -108,10 +110,13 @@ public class DefaultSignatureResource implements SignatureResource {
     @ApiResponse(code = 400, message = "Unknown signature name: {signatureName}")
   )
   @Override
-  public Response getGenes(@PathParam("signatureName") String signatureName) {
+  public Response getGenes(
+    @PathParam("signatureName") String signatureName,
+    @DefaultValue("false") @QueryParam("onlyUniverseGenes") boolean onlyUniverseGenes
+  ) {
     Optional<Signature> signature = this.service.get(signatureName);
     if (signature.isPresent()) {
-      final Object data = this.signatureMapper.toSignatureGeneData(signature.get());
+      final Object data = this.signatureMapper.toSignatureGeneData(signature.get(), onlyUniverseGenes);
 
       return Response.ok(data).build();
     } else {

@@ -32,5 +32,5 @@ public interface SignatureMapper {
 
   public SignatureData toSignatureData(Signature signature);
   
-  public Object toSignatureGeneData(Signature signature);
+  public Object toSignatureGeneData(Signature signature, boolean onlyUniverseGenes);
 }

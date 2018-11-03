@@ -28,5 +28,6 @@ import javax.ws.rs.core.Response;
 @Local
 public interface SignatureResource {
   public Response get(String signatureName);
-  public Response getGenes(String signatureName);
+
+  public Response getGenes(String signatureName, boolean onlyUniverseGenes);
 }

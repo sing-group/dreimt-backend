@@ -70,11 +70,14 @@ public class DefaultSignatureMapper implements SignatureMapper {
   }
 
   @Override
-  public Object toSignatureGeneData(Signature signature) {
+  public Object toSignatureGeneData(Signature signature, boolean onlyUniverseGenes) {
     if (signature.getSignatureType().equals(SignatureType.UPDOWN)) {
-      return new UpDownSignatureGeneData(((UpDownSignature) signature).getUpGenes(), ((UpDownSignature) signature).getDownGenes());
+      return new UpDownSignatureGeneData(
+        ((UpDownSignature) signature).getUpGenes(onlyUniverseGenes),
+        ((UpDownSignature) signature).getDownGenes(onlyUniverseGenes)
+      );
     } else {
-      return ((GeneSetSignature) signature).getSignatureGenes();
+      return ((GeneSetSignature) signature).getSignatureGenes(onlyUniverseGenes);
     }
   }
 }
