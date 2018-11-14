@@ -24,6 +24,8 @@ package org.sing_group.dreimt.domain.dao.signature;
 
 import static javax.transaction.Transactional.TxType.MANDATORY;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
@@ -33,9 +35,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
@@ -80,73 +83,77 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
       query = query.select(root);
 
-      if (listingOptions.getMaxPvalue().isPresent()) {
-        final Expression<Double> pValue = root.get("pValue").as(Double.class);
+      final List<Predicate> andPredicates = new ArrayList<>();
 
-        query = query.where(cb.lessThanOrEqualTo(pValue, listingOptions.getMaxPvalue().get()));
+      if (listingOptions.getMaxPvalue().isPresent()) {
+        final Path<Double> pValue = root.get("pValue");
+
+        andPredicates.add(cb.lessThanOrEqualTo(pValue, listingOptions.getMaxPvalue().get()));
       }
 
       if (listingOptions.getMaxFdr().isPresent()) {
-        final Expression<Double> fdr = root.get("fdr").as(Double.class);
+        final Path<Double> fdr = root.get("fdr");
 
-        query = query.where(cb.lessThanOrEqualTo(fdr, listingOptions.getMaxFdr().get()));
+        andPredicates.add(cb.lessThanOrEqualTo(fdr, listingOptions.getMaxFdr().get()));
       }
 
       if (listingOptions.getMinTes().isPresent()) {
-        final Expression<Double> tes = root.get("tes").as(Double.class);
+        final Path<Double> tes = root.get("tes");
 
-        query = query.where(cb.greaterThanOrEqualTo(tes, listingOptions.getMinTes().get()));
+        andPredicates.add(cb.greaterThanOrEqualTo(tes, listingOptions.getMinTes().get()));
       }
 
       if (listingOptions.getMaxTes().isPresent()) {
-        final Expression<Double> tes = root.get("tes").as(Double.class);
+        final Path<Double> tes = root.get("tes");
 
-        query = query.where(cb.lessThanOrEqualTo(tes, listingOptions.getMaxTes().get()));
+        andPredicates.add(cb.lessThanOrEqualTo(tes, listingOptions.getMaxTes().get()));
       }
 
       Join<DrugSignatureInteraction, Signature> joinSignature = root.join("signature", JoinType.LEFT);
       if (listingOptions.getCellTypeA().isPresent()) {
         Join<Signature, String> joinSignatureCellTypeA = joinSignature.join("cellTypeA", JoinType.LEFT);
 
-        query = query.where(cb.like(joinSignatureCellTypeA, "%" + listingOptions.getCellTypeA().get() + "%"));
+        andPredicates.add(cb.like(joinSignatureCellTypeA, "%" + listingOptions.getCellTypeA().get() + "%"));
       }
 
       if (listingOptions.getCellTypeB().isPresent()) {
         Join<Signature, String> joinSignatureCellTypeB = joinSignature.join("cellTypeB", JoinType.LEFT);
 
-        query = query.where(cb.like(joinSignatureCellTypeB, "%" + listingOptions.getCellTypeB().get() + "%"));
+        andPredicates.add(cb.like(joinSignatureCellTypeB, "%" + listingOptions.getCellTypeB().get() + "%"));
       }
 
       if (listingOptions.getExperimentalDesign().isPresent()) {
-        final Expression<String> experimentalDesign = joinSignature.get("experimentalDesign").as(String.class);
+        final Path<String> experimentalDesign = joinSignature.get("experimentalDesign");
 
-        query = query.where(cb.like(experimentalDesign, "%" + listingOptions.getExperimentalDesign().get() + "%"));
+        andPredicates.add(cb.equal(experimentalDesign, listingOptions.getExperimentalDesign().get()));
       }
 
       if (listingOptions.getOrganism().isPresent()) {
-        final Expression<String> organism = joinSignature.get("organism").as(String.class);
+        final Path<String> organism = joinSignature.get("organism");
 
-        query = query.where(cb.like(organism, "%" + listingOptions.getOrganism().get() + "%"));
+        andPredicates.add(cb.like(organism, "%" + listingOptions.getOrganism().get() + "%"));
       }
       
       if (listingOptions.getSignatureType().isPresent()) {
-        final Expression<String> signatureType = joinSignature.get("signatureType").as(String.class);
+        final Path<String> signatureType = joinSignature.get("signatureType");
 
-        query = query.where(cb.like(signatureType, "%" + listingOptions.getSignatureType().get() + "%"));
+        andPredicates.add(cb.like(signatureType, "%" + listingOptions.getSignatureType().get() + "%"));
       }
-      
+
       Join<DrugSignatureInteraction, Drug> joinDrug = root.join("drug", JoinType.LEFT);
       if (listingOptions.getDrugSourceName().isPresent()) {
-        final Expression<String> sourceName = joinDrug.get("id").get("sourceName").as(String.class);
+        final Path<String> sourceName = joinDrug.get("id").get("sourceName");
 
-        query = query.where(cb.like(sourceName, "%" + listingOptions.getDrugSourceName().get() + "%"));
+        andPredicates.add(cb.like(sourceName, "%" + listingOptions.getDrugSourceName().get() + "%"));
       }
 
       if (listingOptions.getDrugCommonName().isPresent()) {
-        final Expression<String> commonName = joinDrug.get("commonName").as(String.class);
+        final Path<String> commonName = joinDrug.get("commonName");
 
-        query = query.where(cb.like(commonName, "%" + listingOptions.getDrugCommonName().get() + "%"));
+        andPredicates.add(cb.like(commonName, "%" + listingOptions.getDrugCommonName().get() + "%"));
       }
+
+      query = query.where(andPredicates.toArray(new Predicate[andPredicates.size()]));
 
       ListingOptions generalListingOptions = listingOptions.getListingOptions();
 
