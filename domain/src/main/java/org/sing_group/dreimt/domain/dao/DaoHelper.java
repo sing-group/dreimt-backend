@@ -41,15 +41,15 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-public class DAOHelper<K, T> {
+public class DaoHelper<K, T> {
   private final EntityManager em;
   private final Class<T> entityClass;
   
-  public static <K, T> DAOHelper<K, T> of(Class<K> keyClass, Class<T> entityClass, EntityManager em) {
-    return new DAOHelper<>(keyClass, entityClass, em);
+  public static <K, T> DaoHelper<K, T> of(Class<K> keyClass, Class<T> entityClass, EntityManager em) {
+    return new DaoHelper<>(keyClass, entityClass, em);
   }
   
-  private DAOHelper(Class<K> keyClass, Class<T> entityClass, EntityManager em) {
+  private DaoHelper(Class<K> keyClass, Class<T> entityClass, EntityManager em) {
     this.entityClass = entityClass;
     this.em = em;
   }

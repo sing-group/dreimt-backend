@@ -55,9 +55,9 @@ DROP TABLE IF EXISTS `drug_signature_interaction`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `drug_signature_interaction` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `fdr` double NOT NULL,
-  `pValue` double NOT NULL,
-  `tes` double NOT NULL,
+  `fdr` double DEFAULT NULL,
+  `pValue` double DEFAULT NULL,
+  `tes` double DEFAULT NULL,
   `drug_sourceDb` varchar(255) DEFAULT NULL,
   `drug_sourceName` varchar(255) DEFAULT NULL,
   `signature` varchar(255) NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE `drug_signature_interaction` (
   KEY `FKnsnnq5179w6clhenc6o6h8oov` (`signature`),
   CONSTRAINT `FK7nvqgcvx6si97ktc4c0jq6ejk` FOREIGN KEY (`drug_sourceDb`, `drug_sourceName`) REFERENCES `drug` (`sourceDb`, `sourceName`),
   CONSTRAINT `FKnsnnq5179w6clhenc6o6h8oov` FOREIGN KEY (`signature`) REFERENCES `signature` (`signatureName`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -80,6 +80,123 @@ CREATE TABLE `genes` (
   `gene` varchar(255) NOT NULL,
   `universe` varchar(255) NOT NULL,
   PRIMARY KEY (`gene`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `jaccard_result`
+--
+
+DROP TABLE IF EXISTS `jaccard_result`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `jaccard_result` (
+  `id` char(36) NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `FK3vfegxa9spa1bjuc4jpsppm7y` FOREIGN KEY (`id`) REFERENCES `work` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `jaccard_result_gene_overlap`
+--
+
+DROP TABLE IF EXISTS `jaccard_result_gene_overlap`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `jaccard_result_gene_overlap` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fdr` double DEFAULT NULL,
+  `jaccard` double DEFAULT NULL,
+  `pValue` double DEFAULT NULL,
+  `sourceComparisonType` varchar(255) DEFAULT NULL,
+  `targetComparisonType` varchar(255) DEFAULT NULL,
+  `jaccardResultId` char(36) NOT NULL,
+  `targetSignature` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UKmp57c7n17poxtq4gjrftsi28r` (`jaccardResultId`,`targetSignature`,`targetComparisonType`,`sourceComparisonType`),
+  KEY `FK9v13mymrqag29wybo2seqqha` (`targetSignature`),
+  CONSTRAINT `FK9v13mymrqag29wybo2seqqha` FOREIGN KEY (`targetSignature`) REFERENCES `signature` (`signatureName`),
+  CONSTRAINT `FK_jaccard_result_jaccard_result_gene_overlap` FOREIGN KEY (`jaccardResultId`) REFERENCES `jaccard_result` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `jaccard_result_geneset`
+--
+
+DROP TABLE IF EXISTS `jaccard_result_geneset`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `jaccard_result_geneset` (
+  `id` char(36) NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `FK53ivtawgjjl8y4fckfpx3nqh7` FOREIGN KEY (`id`) REFERENCES `jaccard_result` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `jaccard_result_geneset_genes`
+--
+
+DROP TABLE IF EXISTS `jaccard_result_geneset_genes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `jaccard_result_geneset_genes` (
+  `id` char(36) NOT NULL,
+  `gene` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`,`gene`),
+  KEY `FKfgyc1oowp7gum79vwp260vji3` (`gene`),
+  CONSTRAINT `FKfgyc1oowp7gum79vwp260vji3` FOREIGN KEY (`gene`) REFERENCES `genes` (`gene`),
+  CONSTRAINT `FKjer3ebsimnsgrgy0kh6w6lopp` FOREIGN KEY (`id`) REFERENCES `jaccard_result_geneset` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `jaccard_result_updown`
+--
+
+DROP TABLE IF EXISTS `jaccard_result_updown`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `jaccard_result_updown` (
+  `id` char(36) NOT NULL,
+  PRIMARY KEY (`id`),
+  CONSTRAINT `FK2qw1852kipvjllj1971khxfp6` FOREIGN KEY (`id`) REFERENCES `jaccard_result` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `jaccard_result_updown_genes_down`
+--
+
+DROP TABLE IF EXISTS `jaccard_result_updown_genes_down`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `jaccard_result_updown_genes_down` (
+  `id` char(36) NOT NULL,
+  `gene` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`,`gene`),
+  KEY `FKoayt235ixruva0lg854ruentf` (`gene`),
+  CONSTRAINT `FKbdlbeqcqqp7g7b2mje31y5hxa` FOREIGN KEY (`id`) REFERENCES `jaccard_result_updown` (`id`),
+  CONSTRAINT `FKoayt235ixruva0lg854ruentf` FOREIGN KEY (`gene`) REFERENCES `genes` (`gene`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `jaccard_result_updown_genes_up`
+--
+
+DROP TABLE IF EXISTS `jaccard_result_updown_genes_up`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `jaccard_result_updown_genes_up` (
+  `id` char(36) NOT NULL,
+  `gene` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`,`gene`),
+  KEY `FKt6ni80wrxgncluma3qeuswudk` (`gene`),
+  CONSTRAINT `FK3ersliln9hql4ucng052bkcue` FOREIGN KEY (`id`) REFERENCES `jaccard_result_updown` (`id`),
+  CONSTRAINT `FKt6ni80wrxgncluma3qeuswudk` FOREIGN KEY (`gene`) REFERENCES `genes` (`gene`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -181,7 +298,48 @@ CREATE TABLE `user` (
   `password` varchar(32) NOT NULL,
   `role` varchar(255) NOT NULL,
   PRIMARY KEY (`login`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `work`
+--
+
+DROP TABLE IF EXISTS `work`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `work` (
+  `resultType` varchar(31) NOT NULL,
+  `id` char(36) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `resultReference` varchar(1023) DEFAULT NULL,
+  `creationDateTime` datetime NOT NULL,
+  `failureCause` varchar(255) DEFAULT NULL,
+  `finishingDateTime` datetime DEFAULT NULL,
+  `schedulingDateTime` datetime DEFAULT NULL,
+  `startDateTime` datetime DEFAULT NULL,
+  `status` varchar(9) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `work_step`
+--
+
+DROP TABLE IF EXISTS `work_step`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `work_step` (
+  `stepOrder` int(11) NOT NULL,
+  `workId` varchar(255) NOT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  `progress` double DEFAULT NULL,
+  PRIMARY KEY (`stepOrder`,`workId`),
+  KEY `FK_work_work_step` (`workId`),
+  CONSTRAINT `FK_work_work_step` FOREIGN KEY (`workId`) REFERENCES `work` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -193,4 +351,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-01 20:39:43
+-- Dump completed on 2018-11-15 11:50:02

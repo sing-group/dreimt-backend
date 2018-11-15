@@ -54,7 +54,7 @@ public class GeneSetSignature extends Signature {
   public Set<String> getSignatureGenes() {
     return getSignatureGenes(false);
   }
-  
+
   public Set<String> getSignatureGenes(boolean onlyUniverseGenes) {
     return signatureGenes.stream()
       .filter(g -> !onlyUniverseGenes || g.isUniverseGene())

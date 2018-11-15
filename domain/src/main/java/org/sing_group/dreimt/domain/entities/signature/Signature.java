@@ -43,7 +43,7 @@ import javax.persistence.UniqueConstraint;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name="signatureType")
+@DiscriminatorColumn(name = "signatureType")
 @Table(name = "signature")
 public abstract class Signature implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -85,7 +85,7 @@ public abstract class Signature implements Serializable {
   private String signatureType;
 
   Signature() {}
-  
+
   public abstract SignatureType getSignatureType();
 
   public String getSignatureName() {

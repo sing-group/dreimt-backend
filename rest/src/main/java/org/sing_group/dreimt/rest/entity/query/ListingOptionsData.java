@@ -22,14 +22,23 @@
  */
 package org.sing_group.dreimt.rest.entity.query;
 
+import static java.util.Arrays.asList;
+
+import java.util.List;
+
+import org.sing_group.dreimt.domain.dao.ListingOptions.SortField;
+
 public class ListingOptionsData {
   private Integer page;
   private Integer pageSize;
+  private final List<SortField> sortFields;
 
-  ListingOptionsData() {}
+  ListingOptionsData() {
+    this(null, null);
+  }
 
   public ListingOptionsData(
-    Integer page, Integer pageSize
+    Integer page, Integer pageSize, SortField... sortFields
   ) {
     if (page == null ^ pageSize == null) {
       throw new IllegalArgumentException("page and pageSize must be used together");
@@ -37,6 +46,7 @@ public class ListingOptionsData {
 
     this.page = page;
     this.pageSize = pageSize;
+    this.sortFields = asList(sortFields);
   }
 
   public Integer getPage() {
@@ -51,12 +61,17 @@ public class ListingOptionsData {
     return this.page != null && this.pageSize != null;
   }
 
+  public List<SortField> getSortFields() {
+    return sortFields;
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((page == null) ? 0 : page.hashCode());
     result = prime * result + ((pageSize == null) ? 0 : pageSize.hashCode());
+    result = prime * result + ((sortFields == null) ? 0 : sortFields.hashCode());
     return result;
   }
 
@@ -78,6 +93,11 @@ public class ListingOptionsData {
       if (other.pageSize != null)
         return false;
     } else if (!pageSize.equals(other.pageSize))
+      return false;
+    if (sortFields == null) {
+      if (other.sortFields != null)
+        return false;
+    } else if (!sortFields.equals(other.sortFields))
       return false;
     return true;
   }

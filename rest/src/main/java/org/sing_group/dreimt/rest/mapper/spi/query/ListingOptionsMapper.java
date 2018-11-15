@@ -26,5 +26,5 @@ import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.rest.entity.query.ListingOptionsData;
 
 public interface ListingOptionsMapper {
-  public ListingOptions toListingOptions(ListingOptionsData listingOptionsData);
+  ListingOptions toListingOptions(ListingOptionsData listingOptionsData);
 }

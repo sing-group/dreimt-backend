@@ -31,5 +31,5 @@ import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 
 @Local
 public interface DrugSignatureInteractionService {
-  public Stream<DrugSignatureInteraction> list(DrugSignatureInteractionListingOptions listingOptions);
+  Stream<DrugSignatureInteraction> list(DrugSignatureInteractionListingOptions listingOptions);
 }

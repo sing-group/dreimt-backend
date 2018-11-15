@@ -35,7 +35,6 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "signature_updown_genes")
-//@IdClass(UpDownSignatureGeneId.class)
 public class UpDownSignatureGene implements Serializable {
   private static final long serialVersionUID = 1L;
 

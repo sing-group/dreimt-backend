@@ -24,24 +24,29 @@ package org.sing_group.dreimt.domain.dao.signature;
 
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
+import static javax.transaction.Transactional.TxType.MANDATORY;
 
 import java.util.Optional;
 
 import javax.annotation.PostConstruct;
+import javax.enterprise.inject.Default;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 
-import org.sing_group.dreimt.domain.dao.DAOHelper;
+import org.sing_group.dreimt.domain.dao.DaoHelper;
 import org.sing_group.dreimt.domain.dao.spi.signature.ArticleMetadataDao;
 import org.sing_group.dreimt.domain.entities.signature.ArticleMetadata;
 
+@Default
+@Transactional(MANDATORY)
 public class DefaultArticleMetadataDao implements ArticleMetadataDao {
 
   @PersistenceContext
   private EntityManager em;
 
-  private DAOHelper<Integer, ArticleMetadata> dh;
+  private DaoHelper<Integer, ArticleMetadata> dh;
 
   DefaultArticleMetadataDao() {}
 
@@ -52,7 +57,7 @@ public class DefaultArticleMetadataDao implements ArticleMetadataDao {
 
   @PostConstruct
   private void createDAOHelper() {
-    this.dh = DAOHelper.of(Integer.class, ArticleMetadata.class, this.em);
+    this.dh = DaoHelper.of(Integer.class, ArticleMetadata.class, this.em);
   }
 
   @Override

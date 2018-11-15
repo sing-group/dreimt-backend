@@ -26,5 +26,5 @@ import org.sing_group.dreimt.domain.entities.signature.Drug;
 import org.sing_group.dreimt.rest.entity.signature.DrugData;
 
 public interface DrugMapper {
-  public DrugData toDrugData(Drug drug);
+  DrugData toDrugData(Drug drug);
 }

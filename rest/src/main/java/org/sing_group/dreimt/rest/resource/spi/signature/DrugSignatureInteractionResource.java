@@ -27,15 +27,23 @@ import javax.ws.rs.core.Response;
 
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.SignatureType;
+import org.sing_group.dreimt.rest.entity.query.jaccard.JaccardQueryInfo;
 
 @Local
 public interface DrugSignatureInteractionResource {
-  public Response list(
+  Response list(
     Integer page, Integer pageSize,
     String cellTypeA, String cellTypeB,
     ExperimentalDesign experimentalDesign, String organism,
     String drugSourceName, String drugCommonName,
     SignatureType signatureType,
     Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+  );
+
+  Response jaccardQuery(
+    JaccardQueryInfo post,
+    String cellTypeA, String cellTypeB,
+    ExperimentalDesign experimentalDesign, String organism,
+    SignatureType signatureType
   );
 }

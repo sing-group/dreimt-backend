@@ -30,5 +30,5 @@ import org.sing_group.dreimt.domain.entities.signature.Signature;
 
 @Local
 public interface SignatureService {
-  public Optional<Signature> get(String signatureName);
+  Optional<Signature> get(String signatureName);
 }

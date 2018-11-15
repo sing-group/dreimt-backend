@@ -32,6 +32,7 @@ import org.sing_group.dreimt.domain.entities.signature.Signature;
 import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 import org.sing_group.dreimt.domain.entities.signature.UpDownSignature;
 import org.sing_group.dreimt.rest.entity.signature.SignatureData;
+import org.sing_group.dreimt.rest.entity.signature.SignatureDataSummary;
 import org.sing_group.dreimt.rest.entity.signature.UpDownSignatureGeneData;
 import org.sing_group.dreimt.rest.mapper.spi.signature.SignatureMapper;
 import org.sing_group.dreimt.rest.resource.route.BaseRestPathBuilder;
@@ -57,6 +58,17 @@ public class DefaultSignatureMapper implements SignatureMapper {
       signature.getArticleMetadata().getPubmedId(),
       signature.getArticleMetadata().getTitle(),
       signature.getSignatureType(),
+      pathBuilder.signatureGenes(signature).build(),
+      pathBuilder.articleMetadata(signature.getArticleMetadata()).build()
+    );
+  }
+  
+  @Override
+  public SignatureDataSummary toSignatureDataSummary(Signature signature) {
+    final BaseRestPathBuilder pathBuilder = new BaseRestPathBuilder(getUriBuilder());
+    
+    return new SignatureDataSummary(
+      signature.getSignatureName(),
       pathBuilder.signatureGenes(signature).build(),
       pathBuilder.articleMetadata(signature.getArticleMetadata()).build()
     );

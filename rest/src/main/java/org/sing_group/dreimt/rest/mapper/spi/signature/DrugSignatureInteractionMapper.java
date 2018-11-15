@@ -30,11 +30,12 @@ import org.sing_group.dreimt.rest.entity.query.DrugSignatureInteractionListingOp
 import org.sing_group.dreimt.rest.entity.signature.DrugSignatureInteractionData;
 
 public interface DrugSignatureInteractionMapper {
-  public void setUriBuilder(UriBuilder uriBuilder);
 
-  public DrugSignatureInteractionData toDrugSignatureInteractionData(DrugSignatureInteraction signature);
+  void setUriBuilder(UriBuilder uriBuilder);
 
-  public DrugSignatureInteractionListingOptions toDrugSignatureInteractionListingOptions(
+  DrugSignatureInteractionData toDrugSignatureInteractionData(DrugSignatureInteraction signature);
+
+  DrugSignatureInteractionListingOptions toDrugSignatureInteractionListingOptions(
     DrugSignatureInteractionListingOptionsData listingOptionsData
   );
 }

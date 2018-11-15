@@ -31,7 +31,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `drug` WRITE;
 /*!40000 ALTER TABLE `drug` DISABLE KEYS */;
-INSERT INTO `drug` VALUES ('GDSC','IBR-0001','Ibuprofen'),('Lincs','BRD-4654','Aspirin'),('Lincs','TTT-2244','acetylsalicylic acid');
+INSERT INTO `drug` VALUES ('GDSC','EB-306','Ebastel'),('GDSC','IBR-0001','Ibuprofen'),('Lincs','BRD-4654','Aspirin'),('Lincs','TTT-2244','acetylsalicylic acid');
 /*!40000 ALTER TABLE `drug` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -41,7 +41,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `drug_signature_interaction` WRITE;
 /*!40000 ALTER TABLE `drug_signature_interaction` DISABLE KEYS */;
-INSERT INTO `drug_signature_interaction` VALUES (6,0.002,0.0031,-2.335,'Lincs','BRD-4654','Signature 1'),(7,0.0006,0.0041,-2.345,'Lincs','BRD-4654','Signature 2'),(8,0.001,0.0042,-3.345,'Lincs','TTT-2244','Signature 3'),(9,0.002,0.003,-1.345,'GDSC','IBR-0001','Signature 3'),(10,0.01,0.01,-2.345,'GDSC','IBR-0001','Signature 6');
+INSERT INTO `drug_signature_interaction` VALUES (1,0.04,0.05,2,'Lincs','BRD-4654','Signature 1'),(2,0.04,0.05,1.9,'Lincs','BRD-4654','Signature 2'),(3,0.031,0.02,1,'Lincs','TTT-2244','Signature 3'),(4,0.011,0.01,0.5,'GDSC','IBR-0001','Signature 3'),(5,0.001,0.001,0.1,'GDSC','IBR-0001','Signature 6'),(6,0.001,0.001,-1,'GDSC','EB-306','Signature 6');
 /*!40000 ALTER TABLE `drug_signature_interaction` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -51,8 +51,71 @@ UNLOCK TABLES;
 
 LOCK TABLES `genes` WRITE;
 /*!40000 ALTER TABLE `genes` DISABLE KEYS */;
-INSERT INTO `genes` VALUES ('GeneA','T'),('GeneB','F'),('GeneC','T'),('GeneD','F'),('GeneE','T'),('GeneF','F'),('GeneG','F');
+INSERT INTO `genes` VALUES ('A','T'),('B','T'),('C','T'),('D','T'),('E','T'),('F','T'),('G','T'),('H','T'),('I','T'),('J','T'),('K','T'),('L','T'),('M','T'),('N','T'),('O','T'),('P','T'),('Q','F'),('R','F'),('S','F'),('T','F');
 /*!40000 ALTER TABLE `genes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `jaccard_result`
+--
+
+LOCK TABLES `jaccard_result` WRITE;
+/*!40000 ALTER TABLE `jaccard_result` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jaccard_result` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `jaccard_result_gene_overlap`
+--
+
+LOCK TABLES `jaccard_result_gene_overlap` WRITE;
+/*!40000 ALTER TABLE `jaccard_result_gene_overlap` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jaccard_result_gene_overlap` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `jaccard_result_geneset`
+--
+
+LOCK TABLES `jaccard_result_geneset` WRITE;
+/*!40000 ALTER TABLE `jaccard_result_geneset` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jaccard_result_geneset` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `jaccard_result_geneset_genes`
+--
+
+LOCK TABLES `jaccard_result_geneset_genes` WRITE;
+/*!40000 ALTER TABLE `jaccard_result_geneset_genes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jaccard_result_geneset_genes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `jaccard_result_updown`
+--
+
+LOCK TABLES `jaccard_result_updown` WRITE;
+/*!40000 ALTER TABLE `jaccard_result_updown` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jaccard_result_updown` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `jaccard_result_updown_genes_down`
+--
+
+LOCK TABLES `jaccard_result_updown_genes_down` WRITE;
+/*!40000 ALTER TABLE `jaccard_result_updown_genes_down` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jaccard_result_updown_genes_down` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `jaccard_result_updown_genes_up`
+--
+
+LOCK TABLES `jaccard_result_updown_genes_up` WRITE;
+/*!40000 ALTER TABLE `jaccard_result_updown_genes_up` DISABLE KEYS */;
+/*!40000 ALTER TABLE `jaccard_result_updown_genes_up` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -61,7 +124,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `signature` WRITE;
 /*!40000 ALTER TABLE `signature` DISABLE KEYS */;
-INSERT INTO `signature` VALUES ('UPDOWN','Signature 1','Catarro','IN_VIVO','Homo sapiens','C7',1001),('UPDOWN','Signature 2','Meningitis','IN_VIVO','Homo sapiens','C7',1001),('GENESET','Signature 3','Ébola','EX_VIVO','Homo sapiens','C7',1002),('GENESET','Signature 4','VIH','EX_VIVO','Homo sapiens','C7',1002),('GENESET','Signature 5','Ébola','IN_VIVO','Homo sapiens','Selected',1003),('UPDOWN','Signature 6','Titulitis','EX_VIVO','Mus musculus','Selected',1003);
+INSERT INTO `signature` VALUES ('UPDOWN','Signature 1','Catarro','IN_VIVO','Homo sapiens','C7',1001),('GENESET','Signature 2','Ébola','EX_VIVO','Homo sapiens','C7',1002),('UPDOWN','Signature 3','Meningitis','IN_VIVO','Homo sapiens','C7',1001),('GENESET','Signature 4','VIH','EX_VIVO','Homo sapiens','C7',1002),('GENESET','Signature 5','Ébola','IN_VIVO','Homo sapiens','Selected',1003),('UPDOWN','Signature 6','Titulitis','EX_VIVO','Mus musculus','Selected',1003);
 /*!40000 ALTER TABLE `signature` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,7 +154,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `signature_geneset_genes` WRITE;
 /*!40000 ALTER TABLE `signature_geneset_genes` DISABLE KEYS */;
-INSERT INTO `signature_geneset_genes` VALUES ('Signature 3','GeneA'),('Signature 4','GeneA'),('Signature 5','GeneA'),('Signature 3','GeneB'),('Signature 3','GeneC'),('Signature 4','GeneE'),('Signature 5','GeneE'),('Signature 4','GeneF'),('Signature 5','GeneG');
+INSERT INTO `signature_geneset_genes` VALUES ('Signature 2','A'),('Signature 2','B'),('Signature 2','C'),('Signature 2','D'),('Signature 2','E'),('Signature 2','F'),('Signature 2','G'),('Signature 2','H'),('Signature 2','I'),('Signature 2','J'),('Signature 4','K'),('Signature 4','L'),('Signature 4','M'),('Signature 4','N'),('Signature 4','O'),('Signature 4','P'),('Signature 4','Q');
 /*!40000 ALTER TABLE `signature_geneset_genes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -101,7 +164,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `signature_updown_genes` WRITE;
 /*!40000 ALTER TABLE `signature_updown_genes` DISABLE KEYS */;
-INSERT INTO `signature_updown_genes` VALUES ('UP','Signature 1','GeneA'),('UP','Signature 1','GeneB'),('DOWN','Signature 1','GeneC'),('DOWN','Signature 1','GeneD'),('UP','Signature 2','GeneA'),('UP','Signature 2','GeneB'),('UP','Signature 2','GeneC'),('DOWN','Signature 2','GeneD'),('DOWN','Signature 6','GeneA'),('DOWN','Signature 6','GeneB'),('UP','Signature 6','GeneC'),('UP','Signature 6','GeneD');
+INSERT INTO `signature_updown_genes` VALUES ('UP','Signature 1','A'),('UP','Signature 1','B'),('UP','Signature 1','C'),('UP','Signature 1','D'),('DOWN','Signature 1','E'),('DOWN','Signature 1','F'),('DOWN','Signature 1','G'),('DOWN','Signature 1','H');
 /*!40000 ALTER TABLE `signature_updown_genes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -114,6 +177,24 @@ LOCK TABLES `user` WRITE;
 INSERT INTO `user` VALUES ('hlfernandez','b49f846960fcac513453cf712926d327','USER');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Dumping data for table `work`
+--
+
+LOCK TABLES `work` WRITE;
+/*!40000 ALTER TABLE `work` DISABLE KEYS */;
+/*!40000 ALTER TABLE `work` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `work_step`
+--
+
+LOCK TABLES `work_step` WRITE;
+/*!40000 ALTER TABLE `work_step` DISABLE KEYS */;
+/*!40000 ALTER TABLE `work_step` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -124,4 +205,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-01 20:39:43
+-- Dump completed on 2018-11-15 11:50:02

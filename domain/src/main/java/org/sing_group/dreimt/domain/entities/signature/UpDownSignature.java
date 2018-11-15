@@ -24,7 +24,6 @@ package org.sing_group.dreimt.domain.entities.signature;
 
 import static java.util.stream.Collectors.toSet;
 
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -41,7 +40,7 @@ public class UpDownSignature extends Signature {
   private static final long serialVersionUID = 1L;
 
   @OneToMany(mappedBy = "signature", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<UpDownSignatureGene> signatureGenes;
+  private Set<UpDownSignatureGene> signatureGenes;
 
   UpDownSignature() {}
 

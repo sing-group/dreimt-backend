@@ -44,6 +44,14 @@ public final class BaseRestPathBuilder implements RestPathBuilder {
     return new ArticleMetadataRestPathBuilder(this.builder, metadata.getPubmedId());
   }
 
+  public JaccardResultsPathBuilder jaccardResult(String resultId) {
+    return new JaccardResultsPathBuilder(this.builder, resultId);
+  }
+
+  public WorkRestPathBuilder work(String id) {
+    return new WorkRestPathBuilder(this.builder, id);
+  }
+
   @Override
   public URI build() {
     return this.builder.build();

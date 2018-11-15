@@ -26,11 +26,14 @@ import javax.ws.rs.core.UriBuilder;
 
 import org.sing_group.dreimt.domain.entities.signature.Signature;
 import org.sing_group.dreimt.rest.entity.signature.SignatureData;
+import org.sing_group.dreimt.rest.entity.signature.SignatureDataSummary;
 
 public interface SignatureMapper {
-  public void setUriBuilder(UriBuilder uriBuilder);
+  void setUriBuilder(UriBuilder uriBuilder);
 
-  public SignatureData toSignatureData(Signature signature);
+  SignatureData toSignatureData(Signature signature);
   
-  public Object toSignatureGeneData(Signature signature, boolean onlyUniverseGenes);
+  SignatureDataSummary toSignatureDataSummary(Signature signature);
+  
+  Object toSignatureGeneData(Signature signature, boolean onlyUniverseGenes);
 }

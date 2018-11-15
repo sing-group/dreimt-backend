@@ -39,11 +39,41 @@ public class Gene {
 
   Gene() {}
 
+  public Gene(String gene, boolean universe) {
+    this.gene = gene;
+    this.universe = universe;
+  }
+
   public String getGene() {
     return gene;
   }
 
   public boolean isUniverseGene() {
     return universe;
+  }
+
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((gene == null) ? 0 : gene.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (getClass() != obj.getClass())
+      return false;
+    Gene other = (Gene) obj;
+    if (gene == null) {
+      if (other.gene != null)
+        return false;
+    } else if (!gene.equals(other.gene))
+      return false;
+    return true;
   }
 }

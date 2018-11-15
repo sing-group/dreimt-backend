@@ -33,5 +33,4 @@ public class DuplicatedEntityException extends EJBException {
   public DuplicatedEntityException(String message) {
     super(message);
   }
-
 }

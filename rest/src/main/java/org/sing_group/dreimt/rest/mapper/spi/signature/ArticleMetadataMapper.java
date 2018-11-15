@@ -26,5 +26,5 @@ import org.sing_group.dreimt.domain.entities.signature.ArticleMetadata;
 import org.sing_group.dreimt.rest.entity.signature.ArticleMetadataData;
 
 public interface ArticleMetadataMapper {
-  public ArticleMetadataData toArticleMetadataData(ArticleMetadata articleMetadata);
+  ArticleMetadataData toArticleMetadataData(ArticleMetadata articleMetadata);
 }

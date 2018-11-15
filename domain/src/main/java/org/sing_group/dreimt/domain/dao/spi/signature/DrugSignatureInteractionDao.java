@@ -28,5 +28,5 @@ import org.sing_group.dreimt.domain.entities.query.DrugSignatureInteractionListi
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 
 public interface DrugSignatureInteractionDao {
-  public Stream<DrugSignatureInteraction> list(DrugSignatureInteractionListingOptions listingOptions);
+  Stream<DrugSignatureInteraction> list(DrugSignatureInteractionListingOptions listingOptions);
 }

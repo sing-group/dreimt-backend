@@ -36,7 +36,7 @@ public class GeneOverlapResult {
     return jaccard;
   }
 
-  public double getpValue() {
+  public double getPvalue() {
     return pValue;
   }
 

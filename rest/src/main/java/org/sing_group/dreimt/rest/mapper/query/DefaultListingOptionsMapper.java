@@ -39,6 +39,6 @@ public class DefaultListingOptionsMapper implements ListingOptionsMapper {
       start = end = null;
     }
 
-    return new ListingOptions(start, end);
+    return new ListingOptions(start, end, listingOptionsData.getSortFields());
   }
 }

@@ -30,7 +30,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
-import org.sing_group.dreimt.domain.dao.DAOHelper;
+import org.sing_group.dreimt.domain.dao.DaoHelper;
 import org.sing_group.dreimt.domain.dao.spi.user.UserDao;
 import org.sing_group.dreimt.domain.entities.user.User;
 
@@ -41,7 +41,7 @@ public class DefaultUserDao implements UserDao {
   @PersistenceContext
   private EntityManager em;
 
-  private DAOHelper<String, User> dh;
+  private DaoHelper<String, User> dh;
 
   DefaultUserDao() {}
 
@@ -52,7 +52,7 @@ public class DefaultUserDao implements UserDao {
 
   @PostConstruct
   private void createDAOHelper() {
-    this.dh = DAOHelper.of(String.class, User.class, this.em);
+    this.dh = DaoHelper.of(String.class, User.class, this.em);
   }
 
   @Override

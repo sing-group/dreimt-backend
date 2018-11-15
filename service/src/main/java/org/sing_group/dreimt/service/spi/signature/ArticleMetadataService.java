@@ -30,5 +30,5 @@ import org.sing_group.dreimt.domain.entities.signature.ArticleMetadata;
 
 @Local
 public interface ArticleMetadataService {
-  public Optional<ArticleMetadata> get(int pubMedId);
+  Optional<ArticleMetadata> get(int pubMedId);
 }

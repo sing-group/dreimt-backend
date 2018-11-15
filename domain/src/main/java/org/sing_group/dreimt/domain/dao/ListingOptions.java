@@ -36,16 +36,20 @@ public class ListingOptions implements Serializable {
   private final Integer start;
   private final Integer end;
   private final List<SortField> sortFields;
-  
+
   public static ListingOptions noModification() {
     return new ListingOptions(null, null);
   }
-  
+
   public static ListingOptions between(int start, int end) {
     return new ListingOptions(start, end);
   }
-  
-  public ListingOptions(Integer start, Integer end, SortField ... sortFields) {
+
+  public ListingOptions(Integer start, Integer end, SortField... sortFields) {
+    this(start, end, asList(sortFields));
+  }
+
+  public ListingOptions(Integer start, Integer end, List<SortField> sortFields) {
     if (start == null ^ end == null) {
       throw new IllegalArgumentException("start and end must be used together");
     } else if (start != null) {
@@ -55,11 +59,11 @@ public class ListingOptions implements Serializable {
       if (start > end)
         throw new IllegalArgumentException("start should be lower or equal to end");
     }
-    
+
     this.start = start;
     this.end = end;
-    
-    this.sortFields = asList(sortFields);
+
+    this.sortFields = sortFields;
   }
 
   public OptionalInt getStart() {
