@@ -46,6 +46,7 @@ import org.sing_group.dreimt.domain.dao.DaoHelper;
 import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.dao.spi.signature.DrugSignatureInteractionDao;
 import org.sing_group.dreimt.domain.entities.query.DrugSignatureInteractionListingOptions;
+import org.sing_group.dreimt.domain.entities.query.SignatureListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.Drug;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.signature.Signature;
@@ -109,35 +110,37 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
         andPredicates.add(cb.lessThanOrEqualTo(tes, listingOptions.getMaxTes().get()));
       }
 
+      SignatureListingOptions signatureListingOptions = listingOptions.getSignatureListingOptions();
+      
       Join<DrugSignatureInteraction, Signature> joinSignature = root.join("signature", JoinType.LEFT);
-      if (listingOptions.getCellTypeA().isPresent()) {
+      if (signatureListingOptions.getCellTypeA().isPresent()) {
         Join<Signature, String> joinSignatureCellTypeA = joinSignature.join("cellTypeA", JoinType.LEFT);
 
-        andPredicates.add(cb.like(joinSignatureCellTypeA, "%" + listingOptions.getCellTypeA().get() + "%"));
+        andPredicates.add(cb.like(joinSignatureCellTypeA, "%" + signatureListingOptions.getCellTypeA().get() + "%"));
       }
 
-      if (listingOptions.getCellTypeB().isPresent()) {
+      if (signatureListingOptions.getCellTypeB().isPresent()) {
         Join<Signature, String> joinSignatureCellTypeB = joinSignature.join("cellTypeB", JoinType.LEFT);
 
-        andPredicates.add(cb.like(joinSignatureCellTypeB, "%" + listingOptions.getCellTypeB().get() + "%"));
+        andPredicates.add(cb.like(joinSignatureCellTypeB, "%" +signatureListingOptions.getCellTypeB().get() + "%"));
       }
 
-      if (listingOptions.getExperimentalDesign().isPresent()) {
+      if (signatureListingOptions.getExperimentalDesign().isPresent()) {
         final Path<String> experimentalDesign = joinSignature.get("experimentalDesign");
 
-        andPredicates.add(cb.equal(experimentalDesign, listingOptions.getExperimentalDesign().get()));
+        andPredicates.add(cb.equal(experimentalDesign, signatureListingOptions.getExperimentalDesign().get()));
       }
 
-      if (listingOptions.getOrganism().isPresent()) {
+      if (signatureListingOptions.getOrganism().isPresent()) {
         final Path<String> organism = joinSignature.get("organism");
 
-        andPredicates.add(cb.like(organism, "%" + listingOptions.getOrganism().get() + "%"));
+        andPredicates.add(cb.like(organism, "%" + signatureListingOptions.getOrganism().get() + "%"));
       }
       
-      if (listingOptions.getSignatureType().isPresent()) {
+      if (signatureListingOptions.getSignatureType().isPresent()) {
         final Path<String> signatureType = joinSignature.get("signatureType");
 
-        andPredicates.add(cb.like(signatureType, "%" + listingOptions.getSignatureType().get() + "%"));
+        andPredicates.add(cb.like(signatureType, "%" + signatureListingOptions.getSignatureType().get() + "%"));
       }
 
       Join<DrugSignatureInteraction, Drug> joinDrug = root.join("drug", JoinType.LEFT);

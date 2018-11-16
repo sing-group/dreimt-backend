@@ -28,20 +28,14 @@ import java.io.Serializable;
 import java.util.Optional;
 
 import org.sing_group.dreimt.domain.dao.ListingOptions;
-import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
-import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 
 public class DrugSignatureInteractionListingOptions implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private final ListingOptions listingOptions;
-  private final String cellTypeA;
-  private final String cellTypeB;
-  private final ExperimentalDesign experimentalDesign;
-  private final String organism;
+  private final SignatureListingOptions signatureListingOptions;
   private final String drugSourceName;
   private final String drugCommonName;
-  private final SignatureType signatureType;
   private final Double maxPvalue;
   private final Double minTes;
   private final Double maxTes;
@@ -49,20 +43,14 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
 
   public DrugSignatureInteractionListingOptions(
     ListingOptions listingOptions,
-    String cellTypeA, String cellTypeB,
-    ExperimentalDesign experimentalDesign, String organism,
+    SignatureListingOptions signatureListingOptions,
     String drugSourceName, String drugCommonName,
-    SignatureType signatureType,
     Double pValue, Double minTes, Double maxTes, Double maxFdr
   ) {
     this.listingOptions = listingOptions;
-    this.cellTypeA = cellTypeA;
-    this.cellTypeB = cellTypeB;
-    this.experimentalDesign = experimentalDesign;
-    this.organism = organism;
+    this.signatureListingOptions = signatureListingOptions;
     this.drugSourceName = drugSourceName;
     this.drugCommonName = drugCommonName;
-    this.signatureType = signatureType;
     this.maxPvalue = pValue;
     this.minTes = minTes;
     this.maxTes = maxTes;
@@ -70,14 +58,10 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
   }
 
   public boolean hasAnyQueryModification() {
-    return getListingOptions().hasResultLimits()
-      || this.cellTypeA != null
-      || this.cellTypeB != null
-      || this.organism != null
-      || this.experimentalDesign != null
+    return this.listingOptions.hasResultLimits()
+      || this.signatureListingOptions.hasAnyQueryModification()
       || this.drugSourceName != null
       || this.drugCommonName != null
-      || this.signatureType != null
       || this.maxPvalue != null
       || this.minTes != null
       || this.maxTes != null
@@ -88,20 +72,8 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     return listingOptions;
   }
 
-  public Optional<String> getCellTypeA() {
-    return ofNullable(cellTypeA);
-  }
-
-  public Optional<String> getCellTypeB() {
-    return ofNullable(cellTypeB);
-  }
-
-  public Optional<ExperimentalDesign> getExperimentalDesign() {
-    return ofNullable(experimentalDesign);
-  }
-
-  public Optional<String> getOrganism() {
-    return ofNullable(organism);
+  public SignatureListingOptions getSignatureListingOptions() {
+    return signatureListingOptions;
   }
 
   public Optional<String> getDrugSourceName() {
@@ -112,22 +84,18 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     return ofNullable(drugCommonName);
   }
 
-  public Optional<SignatureType> getSignatureType() {
-    return ofNullable(signatureType);
-  }
-  
   public Optional<Double> getMaxPvalue() {
     return ofNullable(maxPvalue);
   }
-  
+
   public Optional<Double> getMinTes() {
     return ofNullable(minTes);
   }
-  
+
   public Optional<Double> getMaxTes() {
     return ofNullable(maxTes);
   }
-  
+
   public Optional<Double> getMaxFdr() {
     return ofNullable(maxFdr);
   }
@@ -136,18 +104,14 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((cellTypeA == null) ? 0 : cellTypeA.hashCode());
-    result = prime * result + ((cellTypeB == null) ? 0 : cellTypeB.hashCode());
     result = prime * result + ((drugCommonName == null) ? 0 : drugCommonName.hashCode());
     result = prime * result + ((drugSourceName == null) ? 0 : drugSourceName.hashCode());
-    result = prime * result + ((experimentalDesign == null) ? 0 : experimentalDesign.hashCode());
     result = prime * result + ((listingOptions == null) ? 0 : listingOptions.hashCode());
     result = prime * result + ((maxFdr == null) ? 0 : maxFdr.hashCode());
     result = prime * result + ((maxPvalue == null) ? 0 : maxPvalue.hashCode());
     result = prime * result + ((maxTes == null) ? 0 : maxTes.hashCode());
     result = prime * result + ((minTes == null) ? 0 : minTes.hashCode());
-    result = prime * result + ((organism == null) ? 0 : organism.hashCode());
-    result = prime * result + ((signatureType == null) ? 0 : signatureType.hashCode());
+    result = prime * result + ((signatureListingOptions == null) ? 0 : signatureListingOptions.hashCode());
     return result;
   }
 
@@ -160,16 +124,6 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     DrugSignatureInteractionListingOptions other = (DrugSignatureInteractionListingOptions) obj;
-    if (cellTypeA == null) {
-      if (other.cellTypeA != null)
-        return false;
-    } else if (!cellTypeA.equals(other.cellTypeA))
-      return false;
-    if (cellTypeB == null) {
-      if (other.cellTypeB != null)
-        return false;
-    } else if (!cellTypeB.equals(other.cellTypeB))
-      return false;
     if (drugCommonName == null) {
       if (other.drugCommonName != null)
         return false;
@@ -179,8 +133,6 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
       if (other.drugSourceName != null)
         return false;
     } else if (!drugSourceName.equals(other.drugSourceName))
-      return false;
-    if (experimentalDesign != other.experimentalDesign)
       return false;
     if (listingOptions == null) {
       if (other.listingOptions != null)
@@ -207,12 +159,10 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
         return false;
     } else if (!minTes.equals(other.minTes))
       return false;
-    if (organism == null) {
-      if (other.organism != null)
+    if (signatureListingOptions == null) {
+      if (other.signatureListingOptions != null)
         return false;
-    } else if (!organism.equals(other.organism))
-      return false;
-    if (signatureType != other.signatureType)
+    } else if (!signatureListingOptions.equals(other.signatureListingOptions))
       return false;
     return true;
   }

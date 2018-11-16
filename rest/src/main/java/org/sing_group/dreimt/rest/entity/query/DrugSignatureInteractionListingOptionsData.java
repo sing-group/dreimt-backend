@@ -45,8 +45,8 @@ public class DrugSignatureInteractionListingOptionsData {
     ListingOptionsData listingOptions,
     String cellTypeA, String cellTypeB,
     ExperimentalDesign experimentalDesign, String organism,
-    String drugName, String drugCommonName,
     SignatureType signatureType,
+    String drugName, String drugCommonName,
     Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   ) {
     super();

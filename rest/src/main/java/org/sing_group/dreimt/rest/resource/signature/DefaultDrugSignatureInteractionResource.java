@@ -46,7 +46,6 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
-import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.entities.execution.WorkEntity;
 import org.sing_group.dreimt.domain.entities.query.DrugSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.entities.query.SignatureListingOptions;
@@ -130,7 +129,9 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final DrugSignatureInteractionListingOptionsData listingOptionsData =
       new DrugSignatureInteractionListingOptionsData(
         new ListingOptionsData(page, pageSize),
-        cellTypeA, cellTypeB, experimentalDesign, organism, drugSourceName, drugCommonName, signatureType, maxPvalue, minTes, maxTes, maxFdr
+        cellTypeA, cellTypeB, experimentalDesign, organism, signatureType,
+        drugSourceName, drugCommonName,
+        maxPvalue, minTes, maxTes, maxFdr
       );
 
     final DrugSignatureInteractionListingOptions listingOptions =
@@ -178,7 +179,6 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
 
     SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
-        new ListingOptions(null, null),
         cellTypeA, cellTypeB, experimentalDesign, organism, signatureType
       );
 

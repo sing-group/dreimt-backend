@@ -23,6 +23,8 @@
 package org.sing_group.dreimt.domain.dao;
 
 import static java.util.Arrays.asList;
+import static java.util.OptionalInt.empty;
+import static java.util.OptionalInt.of;
 import static org.sing_group.fluent.checker.Checks.requireNonNegative;
 
 import java.io.Serializable;
@@ -67,11 +69,11 @@ public class ListingOptions implements Serializable {
   }
 
   public OptionalInt getStart() {
-    return start == null ? OptionalInt.empty() : OptionalInt.of(start);
+    return start == null ? empty() : of(start);
   }
 
   public OptionalInt getEnd() {
-    return end == null ? OptionalInt.empty() : OptionalInt.of(end);
+    return end == null ? empty() : of(end);
   }
   
   public boolean hasResultLimits() {
@@ -79,11 +81,7 @@ public class ListingOptions implements Serializable {
   }
   
   public OptionalInt getMaxResults() {
-    if (this.hasResultLimits()) {
-      return OptionalInt.of(this.end - this.start + 1);
-    } else {
-      return OptionalInt.empty();
-    }
+    return this.hasResultLimits() ? of(this.end - this.start + 1) : empty();
   }
   
   public boolean hasOrder() {

@@ -24,6 +24,7 @@ package org.sing_group.dreimt.domain.entities.query;
 
 import static java.util.Collections.emptySet;
 import static java.util.Optional.ofNullable;
+import static org.sing_group.dreimt.domain.dao.ListingOptions.noModification;
 
 import java.io.Serializable;
 import java.util.Optional;
@@ -43,6 +44,15 @@ public class SignatureListingOptions implements Serializable {
   private final String organism;
   private final SignatureType signatureType;
   private final Set<String> mandatoryGenes;
+  
+  public SignatureListingOptions(
+    String cellTypeA, String cellTypeB,
+    ExperimentalDesign experimentalDesign,
+    String organism,
+    SignatureType signatureType
+    ) {
+    this(noModification(), cellTypeA, cellTypeB, experimentalDesign, organism, signatureType, emptySet());
+  }
 
   public SignatureListingOptions(
     ListingOptions listingOptions,
@@ -72,13 +82,17 @@ public class SignatureListingOptions implements Serializable {
   }
 
   public boolean hasAnyQueryModification() {
-    return getListingOptions().hasResultLimits()
+    return this.listingOptions.hasResultLimits()
       || this.cellTypeA != null
       || this.cellTypeB != null
       || this.organism != null
       || this.experimentalDesign != null
       || this.signatureType != null
-      || this.mandatoryGenes != null;
+      || this.hasMandatoryGenes();
+  }
+
+  private boolean hasMandatoryGenes() {
+    return this.mandatoryGenes != null && !this.mandatoryGenes.isEmpty();
   }
 
   public ListingOptions getListingOptions() {

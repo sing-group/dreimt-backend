@@ -28,6 +28,7 @@ import javax.inject.Inject;
 import javax.ws.rs.core.UriBuilder;
 
 import org.sing_group.dreimt.domain.entities.query.DrugSignatureInteractionListingOptions;
+import org.sing_group.dreimt.domain.entities.query.SignatureListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 import org.sing_group.dreimt.rest.entity.query.DrugSignatureInteractionListingOptionsData;
 import org.sing_group.dreimt.rest.entity.signature.DrugSignatureInteractionData;
@@ -67,13 +68,25 @@ public class DefaultDrugSignatureInteractionMapper implements DrugSignatureInter
   ) {
     return new DrugSignatureInteractionListingOptions(
       listingOptionsMapper.toListingOptions(listingOptionsData.getListingOptions()),
-      listingOptionsData.getCellTypeA(), listingOptionsData.getCellTypeB(),
-      listingOptionsData.getExperimentalDesign(), listingOptionsData.getOrganism(),
-      listingOptionsData.getDrugSourceName(), listingOptionsData.getDrugCommonName(),
-      listingOptionsData.getSignatureType(),
+      extractSignatureListingOptions(listingOptionsData),
+      listingOptionsData.getDrugSourceName(),
+      listingOptionsData.getDrugCommonName(),
       listingOptionsData.getMaxPvalue(),
-      listingOptionsData.getMinTes(), listingOptionsData.getMaxTes(),
+      listingOptionsData.getMinTes(),
+      listingOptionsData.getMaxTes(),
       listingOptionsData.getMaxFdr()
+    );
+  }
+
+  private static SignatureListingOptions extractSignatureListingOptions(
+    DrugSignatureInteractionListingOptionsData listingOptionsData
+  ) {
+    return new SignatureListingOptions(
+      listingOptionsData.getCellTypeA(),
+      listingOptionsData.getCellTypeB(),
+      listingOptionsData.getExperimentalDesign(),
+      listingOptionsData.getOrganism(),
+      listingOptionsData.getSignatureType()
     );
   }
 }
