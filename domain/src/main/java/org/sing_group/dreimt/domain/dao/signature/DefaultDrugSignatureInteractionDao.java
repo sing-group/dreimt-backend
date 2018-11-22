@@ -145,7 +145,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
       Join<DrugSignatureInteraction, Drug> joinDrug = root.join("drug", JoinType.LEFT);
       if (listingOptions.getDrugSourceName().isPresent()) {
-        final Path<String> sourceName = joinDrug.get("id").get("sourceName");
+        final Path<String> sourceName = joinDrug.get("sourceName");
 
         andPredicates.add(cb.like(sourceName, "%" + listingOptions.getDrugSourceName().get() + "%"));
       }

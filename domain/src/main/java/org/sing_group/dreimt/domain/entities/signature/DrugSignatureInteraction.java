@@ -31,7 +31,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinColumns;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -45,14 +44,7 @@ public class DrugSignatureInteraction implements Serializable {
   private int id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumns({
-    @JoinColumn(
-      name = "drug_sourceName", referencedColumnName = "sourceName"
-    ),
-    @JoinColumn(
-      name = "drug_sourceDb", referencedColumnName = "sourceDb"
-    )
-  })
+  @JoinColumn(name = "drugId", referencedColumnName = "id")
   private Drug drug;
 
   @ManyToOne(fetch = FetchType.LAZY)
