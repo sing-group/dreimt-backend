@@ -24,19 +24,17 @@ package org.sing_group.dreimt.rest.mapper.signature;
 
 import static java.util.Objects.requireNonNull;
 
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.ws.rs.core.UriBuilder;
 
-import org.sing_group.dreimt.domain.entities.query.DrugSignatureInteractionListingOptions;
-import org.sing_group.dreimt.domain.entities.query.SignatureListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
-import org.sing_group.dreimt.rest.entity.query.DrugSignatureInteractionListingOptionsData;
 import org.sing_group.dreimt.rest.entity.signature.DrugSignatureInteractionData;
-import org.sing_group.dreimt.rest.mapper.spi.query.ListingOptionsMapper;
 import org.sing_group.dreimt.rest.mapper.spi.signature.DrugMapper;
 import org.sing_group.dreimt.rest.mapper.spi.signature.DrugSignatureInteractionMapper;
 import org.sing_group.dreimt.rest.mapper.spi.signature.SignatureMapper;
 
+@Default
 public class DefaultDrugSignatureInteractionMapper implements DrugSignatureInteractionMapper {
 
   @Inject
@@ -44,9 +42,6 @@ public class DefaultDrugSignatureInteractionMapper implements DrugSignatureInter
 
   @Inject
   private SignatureMapper signatureMapper;
-
-  @Inject
-  private ListingOptionsMapper listingOptionsMapper;
 
   @Override
   public void setUriBuilder(UriBuilder uriBuilder) {
@@ -59,34 +54,6 @@ public class DefaultDrugSignatureInteractionMapper implements DrugSignatureInter
       this.drugMapper.toDrugData(interaction.getDrug()),
       this.signatureMapper.toSignatureData(interaction.getSignature()),
       interaction.getTes(), interaction.getpValue(), interaction.getFdr()
-    );
-  }
-
-  @Override
-  public DrugSignatureInteractionListingOptions toDrugSignatureInteractionListingOptions(
-    DrugSignatureInteractionListingOptionsData listingOptionsData
-  ) {
-    return new DrugSignatureInteractionListingOptions(
-      listingOptionsMapper.toListingOptions(listingOptionsData.getListingOptions()),
-      extractSignatureListingOptions(listingOptionsData),
-      listingOptionsData.getDrugSourceName(),
-      listingOptionsData.getDrugCommonName(),
-      listingOptionsData.getMaxPvalue(),
-      listingOptionsData.getMinTes(),
-      listingOptionsData.getMaxTes(),
-      listingOptionsData.getMaxFdr()
-    );
-  }
-
-  private static SignatureListingOptions extractSignatureListingOptions(
-    DrugSignatureInteractionListingOptionsData listingOptionsData
-  ) {
-    return new SignatureListingOptions(
-      listingOptionsData.getCellTypeA(),
-      listingOptionsData.getCellTypeB(),
-      listingOptionsData.getExperimentalDesign(),
-      listingOptionsData.getOrganism(),
-      listingOptionsData.getSignatureType()
     );
   }
 }

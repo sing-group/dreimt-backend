@@ -24,7 +24,7 @@ package org.sing_group.dreimt.service.query.jaccard.event;
 
 import java.io.Serializable;
 
-import org.sing_group.dreimt.domain.entities.query.SignatureListingOptions;
+import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
 import org.sing_group.dreimt.service.spi.query.jaccard.event.JaccardComputationRequestEvent;
 
 public class DefaultJaccardComputationRequestEvent implements JaccardComputationRequestEvent, Serializable {

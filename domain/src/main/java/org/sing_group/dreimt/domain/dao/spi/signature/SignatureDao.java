@@ -25,7 +25,7 @@ package org.sing_group.dreimt.domain.dao.spi.signature;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import org.sing_group.dreimt.domain.entities.query.SignatureListingOptions;
+import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.Signature;
 
 public interface SignatureDao {

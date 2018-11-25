@@ -47,6 +47,10 @@ public final class BaseRestPathBuilder implements RestPathBuilder {
   public JaccardResultsPathBuilder jaccardResult(String resultId) {
     return new JaccardResultsPathBuilder(this.builder, resultId);
   }
+  
+  public CmapResultsPathBuilder cmapResult(String resultId) {
+    return new CmapResultsPathBuilder(this.builder, resultId);
+  }
 
   public WorkRestPathBuilder work(String id) {
     return new WorkRestPathBuilder(this.builder, id);

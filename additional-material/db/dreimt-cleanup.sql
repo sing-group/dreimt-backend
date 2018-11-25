@@ -8,6 +8,14 @@ TRUNCATE TABLE `jaccard_result_updown`;
 TRUNCATE TABLE `jaccard_result_gene_overlap`;
 TRUNCATE TABLE `jaccard_result`;
 
+TRUNCATE TABLE `cmap_result_updown_genes_down`;
+TRUNCATE TABLE `cmap_result_updown_genes_up`;
+TRUNCATE TABLE `cmap_result_geneset_genes`;
+TRUNCATE TABLE `cmap_result_drug_interactions`;
+TRUNCATE TABLE `cmap_result_geneset`;
+TRUNCATE TABLE `cmap_result_updown`;
+TRUNCATE TABLE `cmap_result`;
+
 TRUNCATE TABLE `work_step`;
 TRUNCATE TABLE `work`;
 
@@ -38,6 +46,14 @@ ALTER TABLE `jaccard_result_geneset_genes` AUTO_INCREMENT = 1;
 ALTER TABLE `jaccard_result_updown` AUTO_INCREMENT = 1;
 ALTER TABLE `jaccard_result_gene_overlap` AUTO_INCREMENT = 1;
 ALTER TABLE `jaccard_result` AUTO_INCREMENT = 1;
+
+ALTER TABLE `cmap_result_updown_genes_down` AUTO_INCREMENT = 1;
+ALTER TABLE `cmap_result_updown_genes_up` AUTO_INCREMENT = 1;
+ALTER TABLE `cmap_result_geneset_genes` AUTO_INCREMENT = 1;
+ALTER TABLE `cmap_result_drug_interactions` AUTO_INCREMENT = 1;
+ALTER TABLE `cmap_result_geneset` AUTO_INCREMENT = 1;
+ALTER TABLE `cmap_result_updown` AUTO_INCREMENT = 1;
+ALTER TABLE `cmap_result` AUTO_INCREMENT = 1;
 
 ALTER TABLE `signature_updown_genes` AUTO_INCREMENT = 1;
 ALTER TABLE `signature_geneset_genes` AUTO_INCREMENT = 1;

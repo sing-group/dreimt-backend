@@ -29,7 +29,7 @@ import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import org.sing_group.dreimt.domain.dao.signature.DefaultDrugSignatureInteractionDao;
-import org.sing_group.dreimt.domain.entities.query.DrugSignatureInteractionListingOptions;
+import org.sing_group.dreimt.domain.dao.signature.DrugSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 import org.sing_group.dreimt.service.spi.signature.DrugSignatureInteractionService;
 

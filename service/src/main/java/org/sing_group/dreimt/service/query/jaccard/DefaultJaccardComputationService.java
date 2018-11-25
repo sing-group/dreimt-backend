@@ -56,7 +56,9 @@ public class DefaultJaccardComputationService implements JaccardComputationServi
     @Observes(during = TransactionPhase.AFTER_SUCCESS) DefaultJaccardComputationRequestEvent event
   ) {
     final JaccardPipelineConfiguration configuration =
-      new DefaultJaccardPipelineConfiguration(event.getWorkId(), event.getWorkId(), event.getSignatureListingOptions());
+      new DefaultJaccardPipelineConfiguration(
+        event.getWorkId(), event.getWorkId(), event.getSignatureListingOptions()
+      );
 
     this.executor.execute(pipeline, configuration);
   }

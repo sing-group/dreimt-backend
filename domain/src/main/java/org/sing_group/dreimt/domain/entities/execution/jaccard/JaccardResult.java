@@ -24,6 +24,7 @@ package org.sing_group.dreimt.domain.entities.execution.jaccard;
 
 import static java.util.stream.Collectors.toSet;
 
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Function;
@@ -46,7 +47,7 @@ public abstract class JaccardResult extends WorkEntity {
   private static final long serialVersionUID = 1L;
 
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "jaccardResult", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<GeneOverlap> geneOverlapResults;
+  private List<GeneOverlap> geneOverlapResults;
 
   @Transient
   private final ReentrantReadWriteLock geneOverlapResultsLock;

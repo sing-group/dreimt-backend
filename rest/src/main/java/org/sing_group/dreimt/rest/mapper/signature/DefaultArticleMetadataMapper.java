@@ -22,10 +22,14 @@
  */
 package org.sing_group.dreimt.rest.mapper.signature;
 
+import javax.enterprise.inject.Default;
+
 import org.sing_group.dreimt.domain.entities.signature.ArticleMetadata;
 import org.sing_group.dreimt.rest.entity.signature.ArticleMetadataData;
 import org.sing_group.dreimt.rest.mapper.spi.signature.ArticleMetadataMapper;
 
+
+@Default
 public class DefaultArticleMetadataMapper implements ArticleMetadataMapper {
 
   @Override

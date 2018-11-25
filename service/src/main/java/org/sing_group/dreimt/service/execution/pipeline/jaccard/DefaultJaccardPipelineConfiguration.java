@@ -22,7 +22,7 @@
  */
 package org.sing_group.dreimt.service.execution.pipeline.jaccard;
 
-import org.sing_group.dreimt.domain.entities.query.SignatureListingOptions;
+import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
 import org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.JaccardPipelineConfiguration;
 
 public class DefaultJaccardPipelineConfiguration implements JaccardPipelineConfiguration {

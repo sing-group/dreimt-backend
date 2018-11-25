@@ -31,18 +31,18 @@ public class GeneOverlapData {
   private SignatureDataSummary targetSignatureData;
   private JaccardComparisonType targetComparisonType;
   private Double jaccard;
-  private Double getpValue;
+  private Double pValue;
   private Double fdr;
 
   public GeneOverlapData(
     JaccardComparisonType sourceComparisonType, SignatureDataSummary targetSignatureData,
-    JaccardComparisonType targetComparisonType, Double jaccard, Double getpValue, Double fdr
+    JaccardComparisonType targetComparisonType, Double jaccard, Double pValue, Double fdr
   ) {
     this.sourceComparisonType = sourceComparisonType;
     this.targetSignatureData = targetSignatureData;
     this.targetComparisonType = targetComparisonType;
     this.jaccard = jaccard;
-    this.getpValue = getpValue;
+    this.pValue = pValue;
     this.fdr = fdr;
   }
 
@@ -62,8 +62,8 @@ public class GeneOverlapData {
     return jaccard;
   }
 
-  public Double getGetpValue() {
-    return getpValue;
+  public Double getPvalue() {
+    return pValue;
   }
 
   public Double getFdr() {

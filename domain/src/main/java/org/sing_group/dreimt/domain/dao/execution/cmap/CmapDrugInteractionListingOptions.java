@@ -20,7 +20,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.domain.entities.query;
+package org.sing_group.dreimt.domain.dao.execution.cmap;
 
 import static java.util.Optional.ofNullable;
 
@@ -29,11 +29,10 @@ import java.util.Optional;
 
 import org.sing_group.dreimt.domain.dao.ListingOptions;
 
-public class DrugSignatureInteractionListingOptions implements Serializable {
+public class CmapDrugInteractionListingOptions implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private final ListingOptions listingOptions;
-  private final SignatureListingOptions signatureListingOptions;
   private final String drugSourceName;
   private final String drugCommonName;
   private final Double maxPvalue;
@@ -41,14 +40,12 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
   private final Double maxTes;
   private final Double maxFdr;
 
-  public DrugSignatureInteractionListingOptions(
+  public CmapDrugInteractionListingOptions(
     ListingOptions listingOptions,
-    SignatureListingOptions signatureListingOptions,
     String drugSourceName, String drugCommonName,
     Double pValue, Double minTes, Double maxTes, Double maxFdr
   ) {
     this.listingOptions = listingOptions;
-    this.signatureListingOptions = signatureListingOptions;
     this.drugSourceName = drugSourceName;
     this.drugCommonName = drugCommonName;
     this.maxPvalue = pValue;
@@ -59,7 +56,6 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
 
   public boolean hasAnyQueryModification() {
     return this.listingOptions.hasResultLimits()
-      || this.signatureListingOptions.hasAnyQueryModification()
       || this.drugSourceName != null
       || this.drugCommonName != null
       || this.maxPvalue != null
@@ -70,10 +66,6 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
 
   public ListingOptions getListingOptions() {
     return listingOptions;
-  }
-
-  public SignatureListingOptions getSignatureListingOptions() {
-    return signatureListingOptions;
   }
 
   public Optional<String> getDrugSourceName() {
@@ -111,7 +103,6 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     result = prime * result + ((maxPvalue == null) ? 0 : maxPvalue.hashCode());
     result = prime * result + ((maxTes == null) ? 0 : maxTes.hashCode());
     result = prime * result + ((minTes == null) ? 0 : minTes.hashCode());
-    result = prime * result + ((signatureListingOptions == null) ? 0 : signatureListingOptions.hashCode());
     return result;
   }
 
@@ -123,7 +114,7 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
       return false;
     if (getClass() != obj.getClass())
       return false;
-    DrugSignatureInteractionListingOptions other = (DrugSignatureInteractionListingOptions) obj;
+    CmapDrugInteractionListingOptions other = (CmapDrugInteractionListingOptions) obj;
     if (drugCommonName == null) {
       if (other.drugCommonName != null)
         return false;
@@ -158,11 +149,6 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
       if (other.minTes != null)
         return false;
     } else if (!minTes.equals(other.minTes))
-      return false;
-    if (signatureListingOptions == null) {
-      if (other.signatureListingOptions != null)
-        return false;
-    } else if (!signatureListingOptions.equals(other.signatureListingOptions))
       return false;
     return true;
   }

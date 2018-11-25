@@ -22,7 +22,8 @@
  */
 package org.sing_group.dreimt.service.query.jaccard;
 
-import static org.sing_group.dreimt.service.util.Sets.intersection;
+import static org.sing_group.dreimt.service.spi.query.GeneListsValidationService.MAXIMUM_GENESET_SIZE;
+import static org.sing_group.dreimt.service.spi.query.GeneListsValidationService.MINIMUM_GENESET_SIZE;
 
 import java.util.Optional;
 import java.util.Set;
@@ -39,14 +40,16 @@ import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardGeneSetSig
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardUpDownSignatureResult;
 import org.sing_group.dreimt.service.query.jaccard.event.DefaultJaccardComputationRequestEvent;
+import org.sing_group.dreimt.service.spi.query.GeneListsValidationService;
 import org.sing_group.dreimt.service.spi.query.jaccard.JaccardQueryOptions;
 import org.sing_group.dreimt.service.spi.query.jaccard.JaccardQueryService;
 
 @Stateless
 @PermitAll
 public class DefaultJaccardQueryService implements JaccardQueryService {
-  private static final int MINIMUM_GENESET_SIZE = 1;
-  private static final int MAXIMUM_GENESET_SIZE = 10;
+  
+  @Inject
+  private GeneListsValidationService geneListsValidationService;
 
   @Inject
   private Event<DefaultJaccardComputationRequestEvent> jaccardComputationEvents;
@@ -82,12 +85,23 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
     JaccardResult result =
       !options.getDownGenes().isEmpty() ? this.jaccardUpDownQuery(options) : this.jaccardGeneSetQuery(options);
 
-    this.jaccardComputationEvents
-      .fire(new DefaultJaccardComputationRequestEvent(result.getId(), options.getSignatureListingOptions()));
+    DefaultJaccardComputationRequestEvent event =
+      new DefaultJaccardComputationRequestEvent(result.getId(), options.getSignatureListingOptions());
+      
+    this.jaccardComputationEvents.fire(event);
 
     result.setScheduled();
 
     return result;
+  }
+
+  private void validateGeneListsSizes(JaccardQueryOptions options) {
+    this.geneListsValidationService.validateGeneListsSizes(
+      options.getUpGenes(),
+      options.getDownGenes(),
+      getMinimumGeneSetSize(),
+      getMaximumGeneSetSize()
+    );
   }
 
   private JaccardResult jaccardUpDownQuery(JaccardQueryOptions options) {
@@ -113,28 +127,6 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
       );
 
     return result;
-  }
-
-  private void validateGeneListsSizes(JaccardQueryOptions options) {
-    if (options.getUpGenes().isEmpty()) {
-      throw new IllegalArgumentException("Up (or geneset) genes list is always required.");
-    } else if (!this.isValidGeneSet(options.getUpGenes())) {
-      throw new IllegalArgumentException(
-        "Invalid up (or geneset) genes list size. It must have at least " + this.getMinimumGeneSetSize()
-          + " and at most " + this.getMaximumGeneSetSize() + " genes."
-        );
-    }
-
-    if (!options.getDownGenes().isEmpty() && !this.isValidGeneSet(options.getDownGenes())) {
-      throw new IllegalArgumentException(
-        "Invalid down genes list size. It must have at least " + this.getMinimumGeneSetSize()
-          + " and at most " + this.getMaximumGeneSetSize() + " genes."
-        );
-    }
-    
-    if (!options.getDownGenes().isEmpty() && intersection(options.getUpGenes(), options.getDownGenes()).size() > 0) {
-      throw new IllegalArgumentException("Up and down gene lists cannot have genes in common");
-    }
   }
 
   @Override

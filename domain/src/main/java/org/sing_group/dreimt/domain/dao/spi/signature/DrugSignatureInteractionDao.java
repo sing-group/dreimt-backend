@@ -24,7 +24,7 @@ package org.sing_group.dreimt.domain.dao.spi.signature;
 
 import java.util.stream.Stream;
 
-import org.sing_group.dreimt.domain.entities.query.DrugSignatureInteractionListingOptions;
+import org.sing_group.dreimt.domain.dao.signature.DrugSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 
 public interface DrugSignatureInteractionDao {

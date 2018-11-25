@@ -25,7 +25,7 @@ package org.sing_group.dreimt.service.query.jaccard;
 import java.util.Set;
 import java.util.function.Function;
 
-import org.sing_group.dreimt.domain.entities.query.SignatureListingOptions;
+import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
 import org.sing_group.dreimt.service.spi.query.jaccard.JaccardQueryOptions;
 
 public class DefaultJaccardQueryOptions implements JaccardQueryOptions {

@@ -26,12 +26,75 @@ INSERT INTO `article_metadata` VALUES (1001,'The abstract of this paper: it can 
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `cmap_result`
+--
+
+LOCK TABLES `cmap_result` WRITE;
+/*!40000 ALTER TABLE `cmap_result` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cmap_result` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `cmap_result_drug_interactions`
+--
+
+LOCK TABLES `cmap_result_drug_interactions` WRITE;
+/*!40000 ALTER TABLE `cmap_result_drug_interactions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cmap_result_drug_interactions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `cmap_result_geneset`
+--
+
+LOCK TABLES `cmap_result_geneset` WRITE;
+/*!40000 ALTER TABLE `cmap_result_geneset` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cmap_result_geneset` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `cmap_result_geneset_genes`
+--
+
+LOCK TABLES `cmap_result_geneset_genes` WRITE;
+/*!40000 ALTER TABLE `cmap_result_geneset_genes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cmap_result_geneset_genes` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `cmap_result_updown`
+--
+
+LOCK TABLES `cmap_result_updown` WRITE;
+/*!40000 ALTER TABLE `cmap_result_updown` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cmap_result_updown` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `cmap_result_updown_genes_down`
+--
+
+LOCK TABLES `cmap_result_updown_genes_down` WRITE;
+/*!40000 ALTER TABLE `cmap_result_updown_genes_down` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cmap_result_updown_genes_down` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `cmap_result_updown_genes_up`
+--
+
+LOCK TABLES `cmap_result_updown_genes_up` WRITE;
+/*!40000 ALTER TABLE `cmap_result_updown_genes_up` DISABLE KEYS */;
+/*!40000 ALTER TABLE `cmap_result_updown_genes_up` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `drug`
 --
 
 LOCK TABLES `drug` WRITE;
 /*!40000 ALTER TABLE `drug` DISABLE KEYS */;
-INSERT INTO `drug` VALUES ('GDSC','EB-306','Ebastel'),('GDSC','IBR-0001','Ibuprofen'),('Lincs','BRD-4654','Aspirin'),('Lincs','TTT-2244','acetylsalicylic acid');
+INSERT INTO `drug` VALUES (1,'Aspirin','Lincs','BRD-4654'),(2,'Ibuprofen','GDSC','IBR-0001'),(3,'acetylsalicylic acid','Lincs','TTT-2244'),(4,'Ebastel','GDSC','EB-306');
 /*!40000 ALTER TABLE `drug` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -41,7 +104,7 @@ UNLOCK TABLES;
 
 LOCK TABLES `drug_signature_interaction` WRITE;
 /*!40000 ALTER TABLE `drug_signature_interaction` DISABLE KEYS */;
-INSERT INTO `drug_signature_interaction` VALUES (1,0.04,0.05,2,'Lincs','BRD-4654','Signature 1'),(2,0.04,0.05,1.9,'Lincs','BRD-4654','Signature 2'),(3,0.031,0.02,1,'Lincs','TTT-2244','Signature 3'),(4,0.011,0.01,0.5,'GDSC','IBR-0001','Signature 3'),(5,0.001,0.001,0.1,'GDSC','IBR-0001','Signature 6'),(6,0.001,0.001,-1,'GDSC','EB-306','Signature 6');
+INSERT INTO `drug_signature_interaction` VALUES (1,0.04,0.05,2,1,'Signature 1'),(2,0.04,0.05,1.9,1,'Signature 2'),(3,0.031,0.02,1,2,'Signature 3'),(4,0.011,0.01,0.5,2,'Signature 3'),(5,0.001,0.001,0.1,3,'Signature 6'),(6,0.001,0.001,-1,4,'Signature 6');
 /*!40000 ALTER TABLE `drug_signature_interaction` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -205,4 +268,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-15 11:50:02
+-- Dump completed on 2018-11-25 15:34:49

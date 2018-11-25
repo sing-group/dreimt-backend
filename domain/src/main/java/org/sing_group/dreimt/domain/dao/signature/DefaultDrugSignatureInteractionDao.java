@@ -45,8 +45,6 @@ import javax.transaction.Transactional;
 import org.sing_group.dreimt.domain.dao.DaoHelper;
 import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.dao.spi.signature.DrugSignatureInteractionDao;
-import org.sing_group.dreimt.domain.entities.query.DrugSignatureInteractionListingOptions;
-import org.sing_group.dreimt.domain.entities.query.SignatureListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.Drug;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.signature.Signature;

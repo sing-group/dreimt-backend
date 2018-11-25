@@ -20,7 +20,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.domain.entities.query;
+package org.sing_group.dreimt.domain.dao.signature;
 
 import static java.util.Collections.emptySet;
 import static java.util.Optional.ofNullable;

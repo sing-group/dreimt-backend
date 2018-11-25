@@ -122,7 +122,7 @@ public class SingleJaccardComputationStep implements SingleJaccardPipelineStep {
     JaccardResult jaccardResult =
       jaccardResultDao.get(context.getConfiguration().getResultId())
         .orElseThrow(
-          () -> new RuntimeException("Jaccard result not found: " + this.signatureName)
+          () -> new RuntimeException("Jaccard result not found: " + context.getConfiguration().getResultId())
         );
 
     final JaccardPipelineContextBuilder builder = this.jaccardPipelineContextBuilderFactory.createBuilderFor(context);

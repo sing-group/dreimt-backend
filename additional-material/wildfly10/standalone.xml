@@ -31,7 +31,6 @@
         <extension module="org.wildfly.extension.undertow"/>
     </extensions>
 
-
     <management>
         <security-realms>
             <security-realm name="ManagementRealm">
@@ -320,6 +319,14 @@
                 <simple name="java:global/dreimt/swagger/host" value="localhost:8080" type="java.lang.String"/>
                 <simple name="java:global/dreimt/swagger/basePath" value="/dreimt-backend/rest/api" type="java.lang.String"/>
                 <simple name="java:global/dreimt/defaultfilestorage/path" value="/opt/dreimt/storage" type="java.lang.String"/>
+                
+                <simple name="java:global/dreimt/docker/cmap/dataDir" value="/tmp/dreimt/data" type="java.lang.String"/>
+                <simple name="java:global/dreimt/docker/cmap/dataDir/deleteOnFinish" value="false" type="boolean"/>
+                <simple name="java:global/dreimt/docker/cmap/configuration/cores" value="2" type="int"/>
+                <simple name="java:global/dreimt/docker/cmap/command/signature" 
+                  value="docker run --rm -i -v /opt/dreimt:/mnt/dreimt/scripts -v /tmp/dreimt/data:/mnt/dreimt/data singgroup/r-dreimt Rscript /mnt/dreimt/scripts/DrugRepositionCMapD1_parallel.R /mnt/dreimt/data/[INPUT_FILE_NAME] /mnt/dreimt/data/[OUTPUT_FILE_NAME] [NPERM] [MAX_PVALUE] [CORES]" type="java.lang.String"/>
+                <simple name="java:global/dreimt/docker/cmap/command/geneset" 
+                  value="docker run --rm -i -v /opt/dreimt:/mnt/dreimt/scripts -v /tmp/dreimt/data:/mnt/dreimt/data singgroup/r-dreimt Rscript /mnt/dreimt/scripts/DrugRepositionCMapD1singleGS_parallel.R /mnt/dreimt/data/[INPUT_FILE_NAME] /mnt/dreimt/data/[OUTPUT_FILE_NAME]  [NPERM] [MAX_PVALUE] [CORES]" type="java.lang.String"/>
             </bindings>
             <remote-naming/>
         </subsystem>

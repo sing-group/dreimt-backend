@@ -52,7 +52,6 @@ import javax.transaction.Transactional;
 import org.sing_group.dreimt.domain.dao.DaoHelper;
 import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.dao.spi.signature.SignatureDao;
-import org.sing_group.dreimt.domain.entities.query.SignatureListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.Gene;
 import org.sing_group.dreimt.domain.entities.signature.GeneSetSignature;
 import org.sing_group.dreimt.domain.entities.signature.Signature;

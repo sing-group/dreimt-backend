@@ -22,7 +22,7 @@
  */
 package org.sing_group.dreimt.service.spi.query.jaccard.event;
 
-import org.sing_group.dreimt.domain.entities.query.SignatureListingOptions;
+import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
 
 public interface JaccardComputationRequestEvent {
 

@@ -27,6 +27,7 @@ import static java.util.stream.Collectors.toList;
 
 import java.util.List;
 
+import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.ws.rs.core.UriBuilder;
 
@@ -36,6 +37,7 @@ import org.sing_group.dreimt.rest.entity.query.jaccard.GeneOverlapResultData;
 import org.sing_group.dreimt.rest.mapper.spi.query.jaccard.GeneOverlapMapper;
 import org.sing_group.dreimt.rest.mapper.spi.signature.SignatureMapper;
 
+@Default
 public class DefaultGeneOverlapMapper implements GeneOverlapMapper {
 
   @Inject
@@ -57,7 +59,7 @@ public class DefaultGeneOverlapMapper implements GeneOverlapMapper {
         signatureMapper.toSignatureDataSummary(g.getTargetSignature()),
         g.getTargetComparisonType(),
         g.getJaccard(),
-        g.getpValue(),
+        g.getPvalue(),
         g.getFdr()
       );
     }).collect(toList());
@@ -67,21 +69,20 @@ public class DefaultGeneOverlapMapper implements GeneOverlapMapper {
 
   @Override
   public String toGeneOverlapCsvData(List<GeneOverlap> geneOverlaps) {
-    GeneOverlapResultData resultData = toGeneOverlapResultData(geneOverlaps);
     StringBuilder sb = new StringBuilder();
     sb.append("source,target,target_signature,jaccard,pvalue,fdr\n");
-    resultData.getOverlapData().forEach(o -> {
+    geneOverlaps.forEach(o -> {
 
       sb
         .append(o.getSourceComparisonType())
         .append(",")
         .append(o.getTargetComparisonType())
         .append(",")
-        .append(o.getTargetSignatureData().getSignatureName())
+        .append(o.getTargetSignature().getSignatureName())
         .append(",")
         .append(o.getJaccard())
         .append(",")
-        .append(o.getGetpValue())
+        .append(o.getPvalue())
         .append(",")
         .append(o.getFdr())
         .append("\n");

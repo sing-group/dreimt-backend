@@ -23,6 +23,7 @@
 package org.sing_group.dreimt.domain.entities.execution.jaccard;
 
 import java.io.Serializable;
+import java.util.logging.Logger;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -110,7 +111,7 @@ public class GeneOverlap implements Serializable {
     return jaccard;
   }
 
-  public Double getpValue() {
+  public Double getPvalue() {
     return pValue;
   }
 
@@ -151,6 +152,7 @@ public class GeneOverlap implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     GeneOverlap other = (GeneOverlap) obj;
+    Logger.getAnonymousLogger().info("[GeneOverlap] id other.id\t" + id +"\t" + other.id);
     if (id != other.id)
       return false;
     return true;

@@ -46,7 +46,7 @@ public class DefaultGeneOverlapDao implements GeneOverlapDao {
 
   @PersistenceContext
   protected EntityManager em;
-  protected DaoHelper<String, GeneOverlap> dh;
+  protected DaoHelper<Integer, GeneOverlap> dh;
 
   public DefaultGeneOverlapDao() {
     super();
@@ -59,7 +59,7 @@ public class DefaultGeneOverlapDao implements GeneOverlapDao {
 
   @PostConstruct
   protected void createDAOHelper() {
-    this.dh = DaoHelper.of(String.class, GeneOverlap.class, this.em);
+    this.dh = DaoHelper.of(Integer.class, GeneOverlap.class, this.em);
   }
 
   @Override

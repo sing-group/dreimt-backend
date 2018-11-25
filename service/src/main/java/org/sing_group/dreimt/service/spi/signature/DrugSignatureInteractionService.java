@@ -26,7 +26,7 @@ import java.util.stream.Stream;
 
 import javax.ejb.Local;
 
-import org.sing_group.dreimt.domain.entities.query.DrugSignatureInteractionListingOptions;
+import org.sing_group.dreimt.domain.dao.signature.DrugSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 
 @Local

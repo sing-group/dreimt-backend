@@ -30,15 +30,12 @@ import org.sing_group.dreimt.domain.entities.execution.jaccard.GeneOverlapField;
 
 @Local
 public interface JaccardQueryResultsResource {
+  
   Response jaccardQueryResult(
-    String resultId, 
-    Integer page, Integer pageSize, 
-    GeneOverlapField orderField, SortDirection sortDirection
+    String resultId, Integer page, Integer pageSize, GeneOverlapField orderField, SortDirection sortDirection
   );
 
   Response jaccardQueryResultAsCsv(
-    String resultId, 
-    Integer page, Integer pageSize, 
-    GeneOverlapField orderField, SortDirection sortDirection
+    String resultId, Integer page, Integer pageSize, GeneOverlapField orderField, SortDirection sortDirection
   );
 }

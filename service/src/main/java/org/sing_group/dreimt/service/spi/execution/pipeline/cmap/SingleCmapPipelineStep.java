@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DREIMT - REST
+ * DREIMT - Service
  * %%
  * Copyright (C) 2018 Daniel Glez-Peña, Miguel Reboiro-Jato, Hugo López-Fernández,
  * 			Kevin Troulé, Gonzálo Gómez-López, Fátima Al-Shahrour
@@ -20,24 +20,19 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.rest.entity.query.jaccard;
+package org.sing_group.dreimt.service.spi.execution.pipeline.cmap;
 
-public class JaccardQueryInfo {
-  private String[] upGenes;
-  private String[] downGenes;
+import javax.ejb.Local;
 
-  JaccardQueryInfo() {}
+import org.sing_group.dreimt.service.spi.execution.pipeline.SinglePipelineStep;
 
-  public JaccardQueryInfo(String[] upGenes, String[] downGenes) {
-    this.upGenes = upGenes;
-    this.downGenes = downGenes;
-  }
-
-  public String[] getUpGenes() {
-    return upGenes;
-  }
-
-  public String[] getDownGenes() {
-    return downGenes;
-  }
+@Local
+public interface SingleCmapPipelineStep extends CmapPipelineStep, SinglePipelineStep<
+ CmapPipelineConfiguration,
+ CmapPipelineContext,
+ CmapPipelineStep,
+ CmapPipeline,
+ CmapPipelineEvent,
+ CmapPipelineEventManager
+> {
 }

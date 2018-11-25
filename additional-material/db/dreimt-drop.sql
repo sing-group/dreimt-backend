@@ -6,6 +6,14 @@ DROP TABLE `jaccard_result_updown`;
 DROP TABLE `jaccard_result_gene_overlap`;
 DROP TABLE `jaccard_result`;
 
+DROP TABLE `cmap_result_updown_genes_down`;
+DROP TABLE `cmap_result_updown_genes_up`;
+DROP TABLE `cmap_result_geneset_genes`;
+DROP TABLE `cmap_result_drug_interactions`;
+DROP TABLE `cmap_result_geneset`;
+DROP TABLE `cmap_result_updown`;
+DROP TABLE `cmap_result`;
+
 DROP TABLE `work_step`;
 DROP TABLE `work`;
 

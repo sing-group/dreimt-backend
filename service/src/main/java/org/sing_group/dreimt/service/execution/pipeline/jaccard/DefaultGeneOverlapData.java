@@ -60,7 +60,7 @@ public class DefaultGeneOverlapData implements GeneOverlapData {
       geneOverlapEntity.getTargetSignature().getSignatureName(),
       geneOverlapEntity.getTargetComparisonType(),
       geneOverlapEntity.getJaccard(),
-      geneOverlapEntity.getpValue()
+      geneOverlapEntity.getPvalue()
     );
   }
 

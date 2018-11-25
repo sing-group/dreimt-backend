@@ -22,10 +22,13 @@
  */
 package org.sing_group.dreimt.rest.mapper.signature;
 
+import javax.enterprise.inject.Default;
+
 import org.sing_group.dreimt.domain.entities.signature.Drug;
 import org.sing_group.dreimt.rest.entity.signature.DrugData;
 import org.sing_group.dreimt.rest.mapper.spi.signature.DrugMapper;
 
+@Default
 public class DefaultDrugMapper implements DrugMapper {
 
   @Override

@@ -22,6 +22,7 @@
  */
 package org.sing_group.dreimt.rest.entity.query;
 
+import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 
@@ -72,32 +73,12 @@ public class DrugSignatureInteractionListingOptionsData {
     return listingOptions;
   }
 
-  public String getCellTypeA() {
-    return cellTypeA;
-  }
-
-  public String getCellTypeB() {
-    return cellTypeB;
-  }
-
-  public ExperimentalDesign getExperimentalDesign() {
-    return experimentalDesign;
-  }
-
-  public String getOrganism() {
-    return organism;
-  }
-
   public String getDrugSourceName() {
     return drugSourceName;
   }
 
   public String getDrugCommonName() {
     return drugCommonName;
-  }
-  
-  public SignatureType getSignatureType() {
-    return signatureType;
   }
   
   public Double getMaxPvalue() {
@@ -114,6 +95,16 @@ public class DrugSignatureInteractionListingOptionsData {
   
   public Double getMaxFdr() {
     return maxFdr;
+  }
+
+  public SignatureListingOptions getSignatureListingOptions() {
+    return new SignatureListingOptions(
+      this.cellTypeA,
+      this.cellTypeB,
+      this.experimentalDesign,
+      this.organism,
+      this.signatureType
+    );
   }
 
   @Override
