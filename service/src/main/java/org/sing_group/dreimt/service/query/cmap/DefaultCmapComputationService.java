@@ -26,6 +26,7 @@ import static javax.ejb.TransactionAttributeType.NEVER;
 import static javax.ejb.TransactionManagementType.BEAN;
 
 import javax.annotation.security.PermitAll;
+import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionManagement;
@@ -51,10 +52,13 @@ public class DefaultCmapComputationService implements CmapComputationService {
   @Inject
   private CmapPipeline pipeline;
 
+  @Asynchronous
   @Override
   public void computeCmap(
     @Observes(during = TransactionPhase.AFTER_SUCCESS) DefaultCmapComputationRequestEvent event
   ) {
+    System.out.println("LAUNCHING PIPELINE");
+    
     final CmapPipelineConfiguration configuration =
       new DefaultCmapPipelineConfiguration(
         event.getWorkId(), event.getWorkId(), 

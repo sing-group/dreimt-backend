@@ -26,6 +26,7 @@ import static javax.ejb.TransactionAttributeType.NEVER;
 import static javax.ejb.TransactionManagementType.BEAN;
 
 import javax.annotation.security.PermitAll;
+import javax.ejb.Asynchronous;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionManagement;
@@ -51,6 +52,7 @@ public class DefaultJaccardComputationService implements JaccardComputationServi
   @Inject
   private JaccardPipeline pipeline;
 
+  @Asynchronous
   @Override
   public void computeJaccard(
     @Observes(during = TransactionPhase.AFTER_SUCCESS) DefaultJaccardComputationRequestEvent event
