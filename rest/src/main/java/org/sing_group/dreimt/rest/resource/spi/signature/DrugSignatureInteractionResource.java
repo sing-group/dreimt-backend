@@ -40,7 +40,7 @@ public interface DrugSignatureInteractionResource {
 
   Response jaccardQuery(
     GenesQueryInfo post, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
-    SignatureType signatureType
+    SignatureType signatureType, boolean onlyUniverseGenes
   );
 
   Response cmapQuery(GenesQueryInfo post, Integer numPerm, Double maxPvalue);

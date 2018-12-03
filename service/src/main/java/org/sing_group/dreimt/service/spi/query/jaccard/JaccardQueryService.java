@@ -31,7 +31,7 @@ import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult;
 
 @Local
 public interface JaccardQueryService {
-  boolean isValidGeneSet(Set<String> genes);
+  boolean isValidGeneSet(Set<String> genes, boolean onlyUniverseGenes);
 
   int getMinimumGeneSetSize();
 

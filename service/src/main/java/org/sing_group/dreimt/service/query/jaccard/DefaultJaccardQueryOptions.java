@@ -32,16 +32,19 @@ public class DefaultJaccardQueryOptions implements JaccardQueryOptions {
 
   private Set<String> upGenes;
   private Set<String> downGenes;
+  private boolean onlyUniverseGenes;
   private Function<String, String> resultUriBuilder;
   private SignatureListingOptions signatureListingOptions;
 
   public DefaultJaccardQueryOptions(
     Set<String> upGenes, Set<String> downGenes,
+    boolean onlyUniverseGenes,
     Function<String, String> resultUriBuilder,
     SignatureListingOptions signatureListingOptions
   ) {
     this.upGenes = upGenes;
     this.downGenes = downGenes;
+    this.onlyUniverseGenes = onlyUniverseGenes;
     this.resultUriBuilder = resultUriBuilder;
     this.signatureListingOptions = signatureListingOptions;
   }
@@ -54,6 +57,11 @@ public class DefaultJaccardQueryOptions implements JaccardQueryOptions {
   @Override
   public Set<String> getDownGenes() {
     return downGenes;
+  }
+
+  @Override
+  public boolean isOnlyUniverseGenes() {
+    return this.onlyUniverseGenes;
   }
 
   @Override

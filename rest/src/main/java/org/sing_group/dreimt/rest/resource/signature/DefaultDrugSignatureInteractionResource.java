@@ -29,6 +29,7 @@ import static org.sing_group.dreimt.service.util.Sets.intersection;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -175,10 +176,11 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("cellTypeB") String cellTypeB,
     @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
     @QueryParam("organism") String organism,
-    @QueryParam("signatureType") SignatureType signatureType
+    @QueryParam("signatureType") SignatureType signatureType,
+    @QueryParam("onlyUniverseGenes") @DefaultValue("false") boolean onlyUniverseGenes
   ) {
-    Set<String> upGenes = parseAndValidateJaccardQueryUpGenes(post.getUpGenes());
-    Set<String> downGenes = parseAndValidateJaccardQueryDownGenes(post.getDownGenes());
+    Set<String> upGenes = parseAndValidateJaccardQueryUpGenes(post.getUpGenes(), onlyUniverseGenes);
+    Set<String> downGenes = parseAndValidateJaccardQueryDownGenes(post.getDownGenes(), onlyUniverseGenes);
 
     if (!downGenes.isEmpty() && intersection(upGenes, downGenes).size() > 0) {
       throw new IllegalArgumentException("Up and down gene lists cannot have genes in common");
@@ -196,25 +198,27 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
       );
 
     JaccardQueryOptions options =
-      new DefaultJaccardQueryOptions(upGenes, downGenes, resultUriBuilder, signatureListingOptions);
+      new DefaultJaccardQueryOptions(upGenes, downGenes, onlyUniverseGenes, resultUriBuilder, signatureListingOptions);
 
     final WorkEntity work = this.jaccardQueryService.jaccardQuery(options);
 
     return Response.ok(this.executionMapper.toWorkData(work)).build();
   }
 
-  private Set<String> parseAndValidateJaccardQueryUpGenes(String[] upGenes) {
+  private Set<String> parseAndValidateJaccardQueryUpGenes(String[] upGenes, boolean onlyUniverseGenes) {
     return parseAndValidateUpGenes(
       upGenes,
+      onlyUniverseGenes,
       this.jaccardQueryService::isValidGeneSet,
       this.jaccardQueryService::getMaximumGeneSetSize,
       this.jaccardQueryService::getMinimumGeneSetSize
     );
   }
 
-  private Set<String> parseAndValidateJaccardQueryDownGenes(String[] downGenes) {
+  private Set<String> parseAndValidateJaccardQueryDownGenes(String[] downGenes, boolean onlyUniverseGenes) {
     return parseAndValidateDownGenes(
       downGenes,
+      onlyUniverseGenes,
       this.jaccardQueryService::isValidGeneSet,
       this.jaccardQueryService::getMaximumGeneSetSize,
       this.jaccardQueryService::getMinimumGeneSetSize
@@ -223,7 +227,8 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
 
   private static Set<String> parseAndValidateUpGenes(
     String[] upGenes,
-    Function<Set<String>, Boolean> isValidGeneSet,
+    boolean onlyUniverseGenes,
+    BiFunction<Set<String>, Boolean, Boolean> isValidGeneSet,
     Supplier<Integer> maximumGeneSetSizeSupplier,
     Supplier<Integer> minimumGeneSetSizeSupplier
   ) {
@@ -232,10 +237,10 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
 
     if (upGenesSet.isEmpty()) {
       throw new IllegalArgumentException("Up (or geneset) genes list is always required.");
-    } else if (!isValidGeneSet.apply(upGenesSet)) {
+    } else if (!isValidGeneSet.apply(upGenesSet, onlyUniverseGenes)) {
       throw new IllegalArgumentException(
         "Invalid up (or geneset) genes list size. It must have at least " + minimumGeneSetSizeSupplier.get()
-          + " and at most " + maximumGeneSetSizeSupplier.get() + " genes."
+          + " and at most " + maximumGeneSetSizeSupplier.get() + " genes." + onlyUniverseGenesWarning(onlyUniverseGenes)
       );
     }
 
@@ -244,21 +249,26 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
 
   private static Set<String> parseAndValidateDownGenes(
     String[] downGenes,
-    Function<Set<String>, Boolean> isValidGeneSet,
+    boolean onlyUniverseGenes,
+    BiFunction<Set<String>, Boolean, Boolean> isValidGeneSet,
     Supplier<Integer> maximumGeneSetSizeSupplier,
     Supplier<Integer> minimumGeneSetSizeSupplier
   ) {
     Set<String> downGenesSet =
       downGenes == null ? emptySet() : new HashSet<String>(asList(downGenes));
 
-    if (!downGenesSet.isEmpty() && !isValidGeneSet.apply(downGenesSet)) {
+    if (!downGenesSet.isEmpty() && !isValidGeneSet.apply(downGenesSet, onlyUniverseGenes)) {
       throw new IllegalArgumentException(
         "Invalid down genes list size. It must have at least " + minimumGeneSetSizeSupplier.get()
-          + " and at most " + maximumGeneSetSizeSupplier.get() + " genes."
+          + " and at most " + maximumGeneSetSizeSupplier.get() + " genes." + onlyUniverseGenesWarning(onlyUniverseGenes)
       );
     }
 
     return downGenesSet;
+  }
+  
+  private static String onlyUniverseGenesWarning(boolean onlyUniverseGenes) {
+    return onlyUniverseGenes ? " Note that genes must be in the genes universe." : "";
   }
 
   @POST
@@ -302,7 +312,8 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   private Set<String> parseAndValidateCmapQueryUpGenes(String[] upGenes) {
     return parseAndValidateUpGenes(
       upGenes,
-      this.cmapQueryService::isValidGeneSet,
+      true,
+      (s, o) -> this.cmapQueryService.isValidGeneSet(s),
       this.cmapQueryService::getMaximumGeneSetSize,
       this.cmapQueryService::getMinimumGeneSetSize
     );
@@ -311,7 +322,8 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   private Set<String> parseAndValidateCmapQueryDownGenes(String[] downGenes) {
     return parseAndValidateDownGenes(
       downGenes,
-      this.cmapQueryService::isValidGeneSet,
+      true,
+      (s, o) -> this.cmapQueryService.isValidGeneSet(s),
       this.cmapQueryService::getMaximumGeneSetSize,
       this.cmapQueryService::getMinimumGeneSetSize
     );

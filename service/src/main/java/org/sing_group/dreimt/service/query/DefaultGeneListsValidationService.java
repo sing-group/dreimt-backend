@@ -22,44 +22,79 @@
  */
 package org.sing_group.dreimt.service.query;
 
+import static java.util.stream.Collectors.toSet;
 import static org.sing_group.dreimt.service.util.Sets.intersection;
 
 import java.util.Set;
 
+import javax.enterprise.inject.Default;
+import javax.inject.Inject;
+
+import org.sing_group.dreimt.domain.dao.spi.signature.GeneDao;
+import org.sing_group.dreimt.domain.entities.signature.Gene;
 import org.sing_group.dreimt.service.spi.query.GeneListsValidationService;
 
+@Default
 public class DefaultGeneListsValidationService implements GeneListsValidationService {
-  
+
+  @Inject
+  private GeneDao geneDao;
+
   @Override
   public void validateGeneListsSizes(
-    Set<String> upGenes, 
-    Set<String> downGenes, 
-    int minimumGeneSetSize, 
+    Set<String> upGenes,
+    Set<String> downGenes,
+    boolean onlyUniverseGenes,
+    int minimumGeneSetSize,
     int maximumGeneSetSize
   ) {
+    Set<String> processedUpGenes = processGenes(upGenes, onlyUniverseGenes);
+    Set<String> processedDownGenes = processGenes(downGenes, onlyUniverseGenes);
+
     if (upGenes.isEmpty()) {
       throw new IllegalArgumentException("Up (or geneset) genes list is always required.");
-    } else if (!this.isValidGeneSet(upGenes, minimumGeneSetSize, maximumGeneSetSize)) {
+    } else if (!this.isSetSizeInRange(processedUpGenes, minimumGeneSetSize, maximumGeneSetSize)) {
       throw new IllegalArgumentException(
         "Invalid up (or geneset) genes list size. It must have at least " + minimumGeneSetSize
-          + " and at most " + maximumGeneSetSize + " genes."
-        );
+          + " and at most " + maximumGeneSetSize + " genes." + onlyUniverseGenesWarning(onlyUniverseGenes)
+      );
     }
 
-    if (!downGenes.isEmpty() && !this.isValidGeneSet(downGenes, minimumGeneSetSize, maximumGeneSetSize)) {
+    if (!downGenes.isEmpty() && !this.isSetSizeInRange(processedDownGenes, minimumGeneSetSize, maximumGeneSetSize)) {
       throw new IllegalArgumentException(
         "Invalid down genes list size. It must have at least " + minimumGeneSetSize
-          + " and at most " + maximumGeneSetSize + " genes."
-        );
+          + " and at most " + maximumGeneSetSize + " genes." + onlyUniverseGenesWarning(onlyUniverseGenes)
+      );
     }
-    
-    if (!downGenes.isEmpty() && intersection(upGenes, downGenes).size() > 0) {
+
+    if (!downGenes.isEmpty() && intersection(processedUpGenes, processedDownGenes).size() > 0) {
       throw new IllegalArgumentException("Up and down gene lists cannot have genes in common");
     }
   }
 
   @Override
-  public boolean isValidGeneSet(Set<String> genes, int minimumGeneSetSize, int maximumGeneSetSize) {
-    return genes.size() >= minimumGeneSetSize && genes.size() <= maximumGeneSetSize;
+  public boolean isValidGeneSet(
+    Set<String> genes,
+    boolean onlyUniverseGenes,
+    int minimumGeneSetSize,
+    int maximumGeneSetSize
+  ) {
+    return isSetSizeInRange(processGenes(genes, onlyUniverseGenes), minimumGeneSetSize, maximumGeneSetSize);
+  }
+
+  private boolean isSetSizeInRange(Set<String> processedGenes, int minimumGeneSetSize, int maximumGeneSetSize) {
+    return processedGenes.size() >= minimumGeneSetSize && processedGenes.size() <= maximumGeneSetSize;
+  }
+
+  private Set<String> processGenes(Set<String> genes, boolean onlyUniverseGenes) {
+    if (onlyUniverseGenes) {
+      return geneDao.getGenes(genes, false).stream().map(Gene::getGene).collect(toSet());
+    } else {
+      return genes;
+    }
+  }
+
+  private String onlyUniverseGenesWarning(boolean onlyUniverseGenes) {
+    return onlyUniverseGenes ? " Note that genes must be in the genes universe." : "";
   }
 }

@@ -47,7 +47,7 @@ import org.sing_group.dreimt.service.spi.query.jaccard.JaccardQueryService;
 @Stateless
 @PermitAll
 public class DefaultJaccardQueryService implements JaccardQueryService {
-  
+
   @Inject
   private GeneListsValidationService geneListsValidationService;
 
@@ -64,8 +64,9 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
   private JaccardUpDownSignatureResultDao jaccardUpDownSignatureDao;
 
   @Override
-  public boolean isValidGeneSet(Set<String> genes) {
-    return genes.size() >= getMinimumGeneSetSize() && genes.size() <= getMaximumGeneSetSize();
+  public boolean isValidGeneSet(Set<String> genes, boolean onlyUniverseGenes) {
+    return this.geneListsValidationService
+      .isValidGeneSet(genes, onlyUniverseGenes, getMinimumGeneSetSize(), getMaximumGeneSetSize());
   }
 
   @Override
@@ -87,7 +88,7 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
 
     DefaultJaccardComputationRequestEvent event =
       new DefaultJaccardComputationRequestEvent(result.getId(), options.getSignatureListingOptions());
-      
+
     this.jaccardComputationEvents.fire(event);
 
     result.setScheduled();
@@ -99,6 +100,7 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
     this.geneListsValidationService.validateGeneListsSizes(
       options.getUpGenes(),
       options.getDownGenes(),
+      options.isOnlyUniverseGenes(),
       getMinimumGeneSetSize(),
       getMaximumGeneSetSize()
     );

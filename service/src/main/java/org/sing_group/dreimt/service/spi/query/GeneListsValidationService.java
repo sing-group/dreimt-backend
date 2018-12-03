@@ -35,12 +35,14 @@ public interface GeneListsValidationService {
   void validateGeneListsSizes(
     Set<String> upGenes,
     Set<String> downGenes,
+    boolean onlyUniverseGenes,
     int minimumGeneSetSize,
     int maximumGeneSetSize
   );
 
   boolean isValidGeneSet(
     Set<String> genes,
+    boolean onlyUniverseGenes,
     int minimumGeneSetSize,
     int maximumGeneSetSize
   );

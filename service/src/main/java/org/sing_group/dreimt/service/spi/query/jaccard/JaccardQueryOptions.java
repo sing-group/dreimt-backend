@@ -33,6 +33,8 @@ public interface JaccardQueryOptions {
 
   Set<String> getDownGenes();
 
+  boolean isOnlyUniverseGenes();
+
   Function<String, String> getResultUriBuilder();
 
   SignatureListingOptions getSignatureListingOptions();

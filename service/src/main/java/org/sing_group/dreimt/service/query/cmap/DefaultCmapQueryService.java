@@ -67,7 +67,8 @@ public class DefaultCmapQueryService implements CmapQueryService {
 
   @Override
   public boolean isValidGeneSet(Set<String> genes) {
-    return this.geneListsValidationService.isValidGeneSet(genes, getMinimumGeneSetSize(), getMaximumGeneSetSize());
+    return this.geneListsValidationService
+      .isValidGeneSet(genes, true, getMinimumGeneSetSize(), getMaximumGeneSetSize());
   }
 
   @Override
@@ -111,6 +112,7 @@ public class DefaultCmapQueryService implements CmapQueryService {
     this.geneListsValidationService.validateGeneListsSizes(
       options.getUpGenes(),
       options.getDownGenes(),
+      true,
       getMinimumGeneSetSize(),
       getMaximumGeneSetSize()
     );
