@@ -29,12 +29,16 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.sing_group.dreimt.domain.entities.signature.UpDownSignatureGene.UpDownSignatureGeneId;
+
 @Entity
 @Table(name = "signature_updown_genes")
+@IdClass(UpDownSignatureGeneId.class)
 public class UpDownSignatureGene implements Serializable {
   private static final long serialVersionUID = 1L;
 
@@ -102,5 +106,67 @@ public class UpDownSignatureGene implements Serializable {
     } else if (!signature.equals(other.signature))
       return false;
     return true;
+  }
+  
+  public static class UpDownSignatureGeneId implements Serializable {
+    private static final long serialVersionUID = 1L;
+    
+    private String signature;
+
+    private String gene;
+    
+    UpDownSignatureGeneId() {}
+
+    public UpDownSignatureGeneId(String signature, String gene) {
+      this.signature = signature;
+      this.gene = gene;
+    }
+
+    public String getSignature() {
+      return signature;
+    }
+
+    public void setSignature(String signature) {
+      this.signature = signature;
+    }
+
+    public String getGene() {
+      return gene;
+    }
+
+    public void setGene(String gene) {
+      this.gene = gene;
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((gene == null) ? 0 : gene.hashCode());
+      result = prime * result + ((signature == null) ? 0 : signature.hashCode());
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (obj == null)
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      UpDownSignatureGeneId other = (UpDownSignatureGeneId) obj;
+      if (gene == null) {
+        if (other.gene != null)
+          return false;
+      } else if (!gene.equals(other.gene))
+        return false;
+      if (signature == null) {
+        if (other.signature != null)
+          return false;
+      } else if (!signature.equals(other.signature))
+        return false;
+      return true;
+    }
   }
 }
