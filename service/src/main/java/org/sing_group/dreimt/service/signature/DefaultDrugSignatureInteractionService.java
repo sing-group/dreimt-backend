@@ -28,9 +28,11 @@ import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import org.sing_group.dreimt.domain.dao.signature.DefaultDrugSignatureInteractionDao;
 import org.sing_group.dreimt.domain.dao.signature.DrugSignatureInteractionListingOptions;
+import org.sing_group.dreimt.domain.dao.spi.signature.DrugSignatureInteractionDao;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
+import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
+import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 import org.sing_group.dreimt.service.spi.signature.DrugSignatureInteractionService;
 
 @Stateless
@@ -38,15 +40,72 @@ import org.sing_group.dreimt.service.spi.signature.DrugSignatureInteractionServi
 public class DefaultDrugSignatureInteractionService implements DrugSignatureInteractionService {
 
   @Inject
-  private DefaultDrugSignatureInteractionDao dao;
+  private DrugSignatureInteractionDao dao;
 
   @Override
   public Stream<DrugSignatureInteraction> list(DrugSignatureInteractionListingOptions listingOptions) {
     return this.dao.list(listingOptions);
   }
-  
+
   @Override
   public long count(DrugSignatureInteractionListingOptions listingOptions) {
     return this.dao.count(listingOptions);
   }
+
+  @Override
+  public Stream<String> listCellTypeAValues(
+    DrugSignatureInteractionListingOptions listingOptions
+  ) {
+    return this.dao.listCellTypeAValues(listingOptions);
+  }
+  
+  @Override
+  public Stream<String> listCellTypeBValues(
+    DrugSignatureInteractionListingOptions listingOptions
+  ) {
+    return this.dao.listCellTypeBValues(listingOptions);
+  }
+
+  @Override
+  public Stream<ExperimentalDesign> listExperimentalDesignValues(
+    DrugSignatureInteractionListingOptions listingOptions
+  ) {
+    return this.dao.listExperimentalDesignValues(listingOptions);
+  }
+
+  @Override
+  public Stream<String> listOrganismValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.dao.listOrganismValues(listingOptions);
+  }
+
+  @Override
+  public Stream<String> listDiseaseValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.dao.listDiseaseValues(listingOptions);
+  }
+
+  @Override
+  public Stream<String> listSignatureSourceDbValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.dao.listSignatureSourceDbValues(listingOptions);
+  }
+
+  @Override
+  public Stream<SignatureType> listSignatureTypeValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.dao.listSignatureTypeValues(listingOptions);
+  }
+
+  @Override
+  public Stream<String> listDrugSourceNameValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.dao.listDrugSourceNameValues(listingOptions);
+  }
+
+  @Override
+  public Stream<String> listDrugSourceDbValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.dao.listDrugSourceDbValues(listingOptions);
+  }
+
+  @Override
+  public Stream<String> listDrugCommonNameValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.dao.listDrugCommonNameValues(listingOptions);
+  }
+
 }

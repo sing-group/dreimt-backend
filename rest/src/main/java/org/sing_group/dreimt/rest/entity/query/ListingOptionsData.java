@@ -33,7 +33,7 @@ public class ListingOptionsData {
   private Integer pageSize;
   private final List<SortField> sortFields;
 
-  ListingOptionsData() {
+  public ListingOptionsData() {
     this(null, null);
   }
 

@@ -47,7 +47,9 @@ import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.dao.spi.signature.DrugSignatureInteractionDao;
 import org.sing_group.dreimt.domain.entities.signature.Drug;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
+import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.Signature;
+import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 
 @Default
 @Transactional(MANDATORY)
@@ -98,6 +100,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     }
   }
 
+  @Override
   public long count(DrugSignatureInteractionListingOptions listingOptions) {
     if (!listingOptions.hasAnyQueryModification()) {
       return this.dh.count();
@@ -109,9 +112,106 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       final Predicate[] predicates = createPredicates(listingOptions, root);
 
       query = query.select(cb.count(root)).where(predicates);
-      
+
       return this.em.createQuery(query).getSingleResult();
     }
+  }
+
+  @Override
+  public Stream<String> listCellTypeAValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.listDoubleJoinColumnValues(String.class, "signature", "cellTypeA", listingOptions);
+  }
+
+  @Override
+  public Stream<String> listCellTypeBValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.listDoubleJoinColumnValues(String.class, "signature", "cellTypeB", listingOptions);
+  }
+
+  private <T> Stream<T> listDoubleJoinColumnValues(
+    Class<T> valueClass, String firstJoinAttribute, String secondJoinAttribute,
+    DrugSignatureInteractionListingOptions listingOptions
+  ) {
+    final CriteriaBuilder cb = dh.cb();
+
+    CriteriaQuery<T> query = cb.createQuery(valueClass);
+    final Root<DrugSignatureInteraction> root = query.from(dh.getEntityType());
+    final Join<DrugSignatureInteraction, ?> join = root.join(firstJoinAttribute);
+    final Join<?, ?> join2 = join.join(secondJoinAttribute, JoinType.LEFT);
+
+    query = query.multiselect(join2.as(String.class)).distinct(true);
+
+    if (listingOptions.hasAnyQueryModification()) {
+      query = query.where(createPredicates(listingOptions, root));
+    }
+
+    return this.em.createQuery(query).getResultList().stream();
+  }
+
+  @Override
+  public Stream<ExperimentalDesign> listExperimentalDesignValues(
+    DrugSignatureInteractionListingOptions listingOptions
+  ) {
+    return this.listSingleJoinColumnValues(ExperimentalDesign.class, "signature", "experimentalDesign", listingOptions);
+  }
+
+  @Override
+  public Stream<String> listOrganismValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.listSingleJoinColumnValues(String.class, "signature", "organism", listingOptions);
+  }
+  
+  @Override
+  public Stream<String> listDiseaseValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.listSingleJoinColumnValues(String.class, "signature", "disease", listingOptions);
+  }
+  
+  @Override
+  public Stream<String> listSignatureSourceDbValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.listSingleJoinColumnValues(String.class, "signature", "sourceDb", listingOptions);
+  }
+  
+  @Override
+  public Stream<SignatureType> listSignatureTypeValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.listSingleJoinColumnValues(String.class, "signature", "signatureType", listingOptions).map(SignatureType::valueOf);
+  }
+
+  @Override
+  public Stream<String> listDrugSourceNameValues(
+    DrugSignatureInteractionListingOptions listingOptions
+  ) {
+    return this.listSingleJoinColumnValues(String.class, "drug", "sourceName", listingOptions);
+  }
+
+  @Override
+  public Stream<String> listDrugSourceDbValues(
+    DrugSignatureInteractionListingOptions listingOptions
+  ) {
+    return this.listSingleJoinColumnValues(String.class, "drug", "sourceDb", listingOptions);
+  }
+
+  @Override
+  public Stream<String> listDrugCommonNameValues(
+    DrugSignatureInteractionListingOptions listingOptions
+  ) {
+    return this.listSingleJoinColumnValues(String.class, "drug", "commonName", listingOptions);
+  }
+
+  private <T> Stream<T> listSingleJoinColumnValues(
+    Class<T> valueClass, String joinAttribute, String columnName,
+    DrugSignatureInteractionListingOptions listingOptions
+  ) {
+    final CriteriaBuilder cb = dh.cb();
+
+    CriteriaQuery<T> query = cb.createQuery(valueClass);
+    final Root<DrugSignatureInteraction> root = query.from(dh.getEntityType());
+    final Join<DrugSignatureInteraction, ?> join = root.join(joinAttribute);
+
+    query = query.select(join.get(columnName)).distinct(true);
+
+    if (listingOptions.hasAnyQueryModification()) {
+      query = query.where(createPredicates(listingOptions, root));
+    }
+
+    return this.em.createQuery(query).getResultList().stream();
   }
 
   private Predicate[] createPredicates(
@@ -173,6 +273,18 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       andPredicates.add(cb.like(organism, "%" + signatureListingOptions.getOrganism().get() + "%"));
     }
     
+    if (signatureListingOptions.getDisease().isPresent()) {
+      final Path<String> disease = joinSignature.get("disease");
+      
+      andPredicates.add(cb.like(disease, "%" + signatureListingOptions.getDisease().get() + "%"));
+    }
+    
+    if (signatureListingOptions.getSourceDb().isPresent()) {
+      final Path<String> sourceDb = joinSignature.get("sourceDb");
+      
+      andPredicates.add(cb.like(sourceDb, "%" + signatureListingOptions.getSourceDb().get() + "%"));
+    }
+    
     if (signatureListingOptions.getSignatureType().isPresent()) {
       final Path<String> signatureType = joinSignature.get("signatureType");
 
@@ -186,11 +298,18 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       andPredicates.add(cb.like(sourceName, "%" + listingOptions.getDrugSourceName().get() + "%"));
     }
 
+    if (listingOptions.getDrugSourceDb().isPresent()) {
+      final Path<String> sourceDb = joinDrug.get("sourceDb");
+      
+      andPredicates.add(cb.like(sourceDb, "%" + listingOptions.getDrugSourceDb().get() + "%"));
+    }
+    
     if (listingOptions.getDrugCommonName().isPresent()) {
       final Path<String> commonName = joinDrug.get("commonName");
 
       andPredicates.add(cb.like(commonName, "%" + listingOptions.getDrugCommonName().get() + "%"));
     }
+    
     return andPredicates.toArray(new Predicate[andPredicates.size()]);
   }
 }

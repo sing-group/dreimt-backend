@@ -31,17 +31,77 @@ import org.sing_group.dreimt.rest.entity.query.GenesQueryInfo;
 
 @Local
 public interface DrugSignatureInteractionResource {
-  
+
   Response list(
     Integer page, Integer pageSize, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign,
-    String organism, String drugSourceName, String drugCommonName, SignatureType signatureType, Double maxPvalue,
-    Double minTes, Double maxTes, Double maxFdr
+    String organism, String disease, String signatureSourceDb, SignatureType signatureType, String drugSourceName,
+    String drugSourceDb, String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
 
   Response jaccardQuery(
     GenesQueryInfo post, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
-    SignatureType signatureType, boolean onlyUniverseGenes
+    String disease, String signatureSourceDb, SignatureType signatureType, boolean onlyUniverseGenes
   );
 
   Response cmapQuery(GenesQueryInfo post, Integer numPerm, Double maxPvalue);
+
+  Response listCellTypeAValues(
+    String cellTypeB, ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, String drugSourceName, String drugSourceDb, String drugCommonName, Double maxPvalue,
+    Double minTes, Double maxTes, Double maxFdr
+  );
+
+  Response listCellTypeBValues(
+    String cellTypeA, ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, String drugSourceName, String drugSourceDb, String drugCommonName, Double maxPvalue,
+    Double minTes, Double maxTes, Double maxFdr
+  );
+
+  Response listExperimentalDesignValues(
+    String cellTypeA, String cellTypeB, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, String drugSourceName, String drugSourceDb, String drugCommonName, Double maxPvalue,
+    Double minTes, Double maxTes, Double maxFdr
+  );
+
+  Response listOrganismValues(
+    String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String disease, String signatureSourceDb,
+    SignatureType signatureType, String drugSourceName, String drugSourceDb, String drugCommonName, Double maxPvalue,
+    Double minTes, Double maxTes, Double maxFdr
+  );
+
+  Response listDiseaseValues(
+    String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
+    String signatureSourceDb, SignatureType signatureType, String drugSourceName, String drugSourceDb,
+    String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+  );
+
+  Response listSignatureSourceDbValues(
+    String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism, String disease,
+    SignatureType signatureType, String drugSourceName, String drugSourceDb, String drugCommonName, Double maxPvalue,
+    Double minTes, Double maxTes, Double maxFdr
+  );
+
+  Response listSignatureTypeValues(
+    String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism, String disease,
+    String signatureSourceDb, String drugSourceName, String drugSourceDb, String drugCommonName, Double maxPvalue,
+    Double minTes, Double maxTes, Double maxFdr
+  );
+
+  Response listDrugSourceNameValues(
+    String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism, String disease,
+    String signatureSourceDb, SignatureType signatureType, String drugSourceDb, String drugCommonName, Double maxPvalue,
+    Double minTes, Double maxTes, Double maxFdr
+  );
+
+  Response listDrugSourceDbValues(
+    String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism, String disease,
+    String signatureSourceDb, SignatureType signatureType, String drugSourceName, String drugCommonName,
+    Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+  );
+
+  Response listDrugCommonNameValues(
+    String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism, String disease,
+    String signatureSourceDb, SignatureType signatureType, String drugSourceName, String drugSourceDb, Double maxPvalue,
+    Double minTes, Double maxTes, Double maxFdr
+  );
 }

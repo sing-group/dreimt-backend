@@ -32,7 +32,10 @@ public class DrugSignatureInteractionListingOptionsData {
   private String cellTypeB;
   private ExperimentalDesign experimentalDesign;
   private String organism;
+  private String disease;
+  private String signatureSourceDb;
   private String drugSourceName;
+  private String drugSourceDb;
   private String drugCommonName;
   private SignatureType signatureType;
   private Double maxPvalue;
@@ -43,12 +46,9 @@ public class DrugSignatureInteractionListingOptionsData {
   DrugSignatureInteractionListingOptionsData() {}
 
   public DrugSignatureInteractionListingOptionsData(
-    ListingOptionsData listingOptions,
-    String cellTypeA, String cellTypeB,
-    ExperimentalDesign experimentalDesign, String organism,
-    SignatureType signatureType,
-    String drugName, String drugCommonName,
-    Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+    ListingOptionsData listingOptions, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign,
+    String organism, String disease, String signatureSourceDb, SignatureType signatureType, String drugSourceName,
+    String drugSourceDb, String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   ) {
     super();
     this.listingOptions = listingOptions;
@@ -56,7 +56,10 @@ public class DrugSignatureInteractionListingOptionsData {
     this.cellTypeB = cellTypeB;
     this.experimentalDesign = experimentalDesign;
     this.organism = organism;
-    this.drugSourceName = drugName;
+    this.disease = disease;
+    this.signatureSourceDb = signatureSourceDb;
+    this.drugSourceName = drugSourceName;
+    this.drugSourceDb = drugSourceDb;
     this.drugCommonName = drugCommonName;
     this.signatureType = signatureType;
     this.maxPvalue = maxPvalue;
@@ -75,6 +78,10 @@ public class DrugSignatureInteractionListingOptionsData {
 
   public String getDrugSourceName() {
     return drugSourceName;
+  }
+  
+  public String getDrugSourceDb() {
+    return drugSourceDb;
   }
 
   public String getDrugCommonName() {
@@ -103,6 +110,8 @@ public class DrugSignatureInteractionListingOptionsData {
       this.cellTypeB,
       this.experimentalDesign,
       this.organism,
+      this.disease,
+      this.signatureSourceDb,
       this.signatureType
     );
   }

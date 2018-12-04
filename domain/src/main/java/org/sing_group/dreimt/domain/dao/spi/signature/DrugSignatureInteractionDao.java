@@ -26,7 +26,31 @@ import java.util.stream.Stream;
 
 import org.sing_group.dreimt.domain.dao.signature.DrugSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
+import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
+import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 
 public interface DrugSignatureInteractionDao {
   Stream<DrugSignatureInteraction> list(DrugSignatureInteractionListingOptions listingOptions);
+
+  long count(DrugSignatureInteractionListingOptions listingOptions);
+
+  Stream<String> listCellTypeAValues(DrugSignatureInteractionListingOptions listingOptions);
+  
+  Stream<String> listCellTypeBValues(DrugSignatureInteractionListingOptions listingOptions);
+  
+  Stream<ExperimentalDesign> listExperimentalDesignValues(DrugSignatureInteractionListingOptions listingOptions);
+
+  Stream<String> listOrganismValues(DrugSignatureInteractionListingOptions listingOptions);
+  
+  Stream<String> listDiseaseValues(DrugSignatureInteractionListingOptions listingOptions);
+
+  Stream<String> listSignatureSourceDbValues(DrugSignatureInteractionListingOptions listingOptions);
+  
+  Stream<SignatureType> listSignatureTypeValues(DrugSignatureInteractionListingOptions listingOptions);
+  
+  Stream<String> listDrugSourceNameValues(DrugSignatureInteractionListingOptions listingOptions);
+
+  Stream<String> listDrugSourceDbValues(DrugSignatureInteractionListingOptions listingOptions);
+
+  Stream<String> listDrugCommonNameValues(DrugSignatureInteractionListingOptions listingOptions);
 }

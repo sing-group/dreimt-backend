@@ -42,42 +42,41 @@ public class SignatureListingOptions implements Serializable {
   private final String cellTypeB;
   private final ExperimentalDesign experimentalDesign;
   private final String organism;
+  private final String disease;
   private final SignatureType signatureType;
+  private final String sourceDb;
   private final Set<String> mandatoryGenes;
-  
-  public SignatureListingOptions(
-    String cellTypeA, String cellTypeB,
-    ExperimentalDesign experimentalDesign,
-    String organism,
-    SignatureType signatureType
-    ) {
-    this(noModification(), cellTypeA, cellTypeB, experimentalDesign, organism, signatureType, emptySet());
-  }
 
   public SignatureListingOptions(
-    ListingOptions listingOptions,
-    String cellTypeA, String cellTypeB,
-    ExperimentalDesign experimentalDesign,
-    String organism,
-    SignatureType signatureType
+    String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String sourceDb, SignatureType signatureType
   ) {
-    this(listingOptions, cellTypeA, cellTypeB, experimentalDesign, organism, signatureType, emptySet());
+    this(
+      noModification(), cellTypeA, cellTypeB, experimentalDesign, organism, disease, sourceDb, signatureType, emptySet()
+    );
   }
 
   public SignatureListingOptions(
-    ListingOptions listingOptions,
-    String cellTypeA, String cellTypeB,
-    ExperimentalDesign experimentalDesign,
-    String organism,
-    SignatureType signatureType,
-    Set<String> mandatoryGenes
+    ListingOptions listingOptions, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign,
+    String organism, String disease, String sourceDb, SignatureType signatureType
+  ) {
+    this(
+      listingOptions, cellTypeA, cellTypeB, experimentalDesign, organism, disease, sourceDb, signatureType, emptySet()
+    );
+  }
+
+  public SignatureListingOptions(
+    ListingOptions listingOptions, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign,
+    String organism, String disease, String sourceDb, SignatureType signatureType, Set<String> mandatoryGenes
   ) {
     this.listingOptions = listingOptions;
     this.cellTypeA = cellTypeA;
     this.cellTypeB = cellTypeB;
     this.experimentalDesign = experimentalDesign;
     this.organism = organism;
+    this.disease = disease;
     this.signatureType = signatureType;
+    this.sourceDb = sourceDb;
     this.mandatoryGenes = mandatoryGenes;
   }
 
@@ -86,8 +85,10 @@ public class SignatureListingOptions implements Serializable {
       || this.cellTypeA != null
       || this.cellTypeB != null
       || this.organism != null
+      || this.disease != null
       || this.experimentalDesign != null
       || this.signatureType != null
+      || this.sourceDb != null
       || this.hasMandatoryGenes();
   }
 
@@ -114,9 +115,17 @@ public class SignatureListingOptions implements Serializable {
   public Optional<String> getOrganism() {
     return ofNullable(organism);
   }
+  
+  public Optional<String> getDisease() {
+    return ofNullable(disease);
+  }
 
   public Optional<SignatureType> getSignatureType() {
     return ofNullable(signatureType);
+  }
+  
+  public Optional<String> getSourceDb() {
+    return ofNullable(sourceDb);
   }
 
   public Optional<Set<String>> getMandatoryGenes() {
@@ -125,7 +134,8 @@ public class SignatureListingOptions implements Serializable {
 
   public SignatureListingOptions withMandatoryGenes(Set<String> mandatoryGenes) {
     return new SignatureListingOptions(
-      listingOptions, cellTypeA, cellTypeB, experimentalDesign, organism, signatureType, mandatoryGenes
+      listingOptions, cellTypeA, cellTypeB, experimentalDesign, organism, disease, sourceDb, signatureType,
+      mandatoryGenes
     );
   }
 
@@ -135,11 +145,13 @@ public class SignatureListingOptions implements Serializable {
     int result = 1;
     result = prime * result + ((cellTypeA == null) ? 0 : cellTypeA.hashCode());
     result = prime * result + ((cellTypeB == null) ? 0 : cellTypeB.hashCode());
+    result = prime * result + ((disease == null) ? 0 : disease.hashCode());
     result = prime * result + ((experimentalDesign == null) ? 0 : experimentalDesign.hashCode());
     result = prime * result + ((listingOptions == null) ? 0 : listingOptions.hashCode());
     result = prime * result + ((mandatoryGenes == null) ? 0 : mandatoryGenes.hashCode());
     result = prime * result + ((organism == null) ? 0 : organism.hashCode());
     result = prime * result + ((signatureType == null) ? 0 : signatureType.hashCode());
+    result = prime * result + ((sourceDb == null) ? 0 : sourceDb.hashCode());
     return result;
   }
 
@@ -162,6 +174,11 @@ public class SignatureListingOptions implements Serializable {
         return false;
     } else if (!cellTypeB.equals(other.cellTypeB))
       return false;
+    if (disease == null) {
+      if (other.disease != null)
+        return false;
+    } else if (!disease.equals(other.disease))
+      return false;
     if (experimentalDesign != other.experimentalDesign)
       return false;
     if (listingOptions == null) {
@@ -180,6 +197,11 @@ public class SignatureListingOptions implements Serializable {
     } else if (!organism.equals(other.organism))
       return false;
     if (signatureType != other.signatureType)
+      return false;
+    if (sourceDb == null) {
+      if (other.sourceDb != null)
+        return false;
+    } else if (!sourceDb.equals(other.sourceDb))
       return false;
     return true;
   }
