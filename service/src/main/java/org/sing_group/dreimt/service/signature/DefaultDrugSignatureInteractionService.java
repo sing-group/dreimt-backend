@@ -44,4 +44,9 @@ public class DefaultDrugSignatureInteractionService implements DrugSignatureInte
   public Stream<DrugSignatureInteraction> list(DrugSignatureInteractionListingOptions listingOptions) {
     return this.dao.list(listingOptions);
   }
+  
+  @Override
+  public long count(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.dao.count(listingOptions);
+  }
 }

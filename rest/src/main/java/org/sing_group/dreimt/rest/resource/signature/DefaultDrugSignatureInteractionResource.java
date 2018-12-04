@@ -81,7 +81,7 @@ import io.swagger.annotations.ApiResponses;
 @Path("interactions")
 @Produces(APPLICATION_JSON)
 @Stateless
-@CrossDomain
+@CrossDomain(allowedHeaders = "X-Count")
 @Api("interactions")
 @ApiResponses({
   @ApiResponse(code = 200, message = "successful operation")
@@ -155,8 +155,12 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
       service.list(listingOptions)
         .map(this.drugSignatureMapper::toDrugSignatureInteractionData)
         .toArray(DrugSignatureInteractionData[]::new);
+    
+    final long count = service.count(listingOptions);
 
-    return Response.ok(data).build();
+    return Response.ok(data)
+      .header("X-Count", count)
+    .build();
   }
   
   @POST
