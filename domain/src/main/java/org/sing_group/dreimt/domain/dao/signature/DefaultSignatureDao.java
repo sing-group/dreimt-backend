@@ -44,6 +44,7 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -52,9 +53,11 @@ import javax.transaction.Transactional;
 import org.sing_group.dreimt.domain.dao.DaoHelper;
 import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.dao.spi.signature.SignatureDao;
+import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.Gene;
 import org.sing_group.dreimt.domain.entities.signature.GeneSetSignature;
 import org.sing_group.dreimt.domain.entities.signature.Signature;
+import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 import org.sing_group.dreimt.domain.entities.signature.UpDownSignature;
 import org.sing_group.dreimt.domain.entities.signature.UpDownSignatureGene;
 
@@ -122,51 +125,14 @@ public class DefaultSignatureDao implements SignatureDao {
     if (!listingOptions.hasAnyQueryModification()) {
       return this.dh.list().stream();
     } else {
-      final CriteriaBuilder cb = dh.cb();
-
       CriteriaQuery<T> query = dh.cb().createQuery(signatureClass);
       final Root<T> root = query.from(signatureClass);
 
       query = query.select(root);
 
-      final List<Predicate> andPredicates = new ArrayList<>();
+      Predicate[] predicates = createPredicates(listingOptions, geneFilterBuilder, root);
 
-      if (listingOptions.getCellTypeA().isPresent()) {
-        final Path<String> cellTypeA = root.get("cellTypeA");
-
-        andPredicates.add(cb.like(cellTypeA, "%" + listingOptions.getCellTypeA().get() + "%"));
-      }
-
-      if (listingOptions.getCellTypeB().isPresent()) {
-        final Path<String> cellTypeB = root.get("cellTypeB");
-
-        andPredicates.add(cb.like(cellTypeB, "%" + listingOptions.getCellTypeB().get() + "%"));
-      }
-
-      if (listingOptions.getExperimentalDesign().isPresent()) {
-        final Path<String> experimentalDesign = root.get("experimentalDesign");
-
-        andPredicates.add(cb.equal(experimentalDesign, listingOptions.getExperimentalDesign().get()));
-      }
-
-      if (listingOptions.getOrganism().isPresent()) {
-        final Path<String> organism = root.get("organism");
-
-        andPredicates.add(cb.like(organism, "%" + listingOptions.getOrganism().get() + "%"));
-      }
-
-      if (listingOptions.getSignatureType().isPresent()) {
-        final Path<String> signatureType = root.get("signatureType");
-
-        andPredicates.add(cb.equal(signatureType, listingOptions.getSignatureType().get()));
-      }
-
-      Set<String> genes = listingOptions.getMandatoryGenes().orElse(emptySet());
-      if (!genes.isEmpty()) {
-        andPredicates.add(geneFilterBuilder.apply(root, genes));
-      }
-
-      query = query.where(andPredicates.toArray(new Predicate[andPredicates.size()]));
+      query = query.where(predicates);
 
       ListingOptions generalListingOptions = listingOptions.getListingOptions();
 
@@ -184,5 +150,131 @@ public class DefaultSignatureDao implements SignatureDao {
       return typedQuery.getResultList().stream()
         .map(signature -> (Signature) signature);
     }
+  }
+
+  private <T extends Signature> Predicate[] createPredicates(
+    SignatureListingOptions listingOptions, BiFunction<Root<T>, Set<String>, Predicate> geneFilterBuilder,
+    final Root<T> root
+  ) {
+    final CriteriaBuilder cb = dh.cb();
+
+    final List<Predicate> andPredicates = new ArrayList<>();
+
+    if (listingOptions.getCellTypeA().isPresent()) {
+      Join<Signature, String> joinSignatureCellTypeA = root.join("cellTypeA", JoinType.LEFT);
+
+      andPredicates.add(cb.like(joinSignatureCellTypeA, "%" + listingOptions.getCellTypeA().get() + "%"));
+    }
+
+    if (listingOptions.getCellTypeB().isPresent()) {
+      Join<Signature, String> joinSignatureCellTypeB = root.join("cellTypeB", JoinType.LEFT);
+
+      andPredicates.add(cb.like(joinSignatureCellTypeB, "%" + listingOptions.getCellTypeB().get() + "%"));
+    }
+
+    if (listingOptions.getExperimentalDesign().isPresent()) {
+      final Path<String> experimentalDesign = root.get("experimentalDesign");
+
+      andPredicates.add(cb.equal(experimentalDesign, listingOptions.getExperimentalDesign().get()));
+    }
+
+    if (listingOptions.getOrganism().isPresent()) {
+      final Path<String> organism = root.get("organism");
+
+      andPredicates.add(cb.like(organism, "%" + listingOptions.getOrganism().get() + "%"));
+    }
+    
+    if (listingOptions.getDisease().isPresent()) {
+      final Path<String> disease = root.get("disease");
+      
+      andPredicates.add(cb.like(disease, "%" + listingOptions.getDisease().get() + "%"));
+    }
+    
+    if (listingOptions.getSourceDb().isPresent()) {
+      final Path<String> sourceDb = root.get("sourceDb");
+      
+      andPredicates.add(cb.like(sourceDb, "%" + listingOptions.getSourceDb().get() + "%"));
+    }
+
+    if (listingOptions.getSignatureType().isPresent()) {
+      final Path<String> signatureType = root.get("signatureType");
+
+      andPredicates.add(cb.equal(signatureType, listingOptions.getSignatureType().get()));
+    }
+
+    if (geneFilterBuilder != null) {
+      Set<String> genes = listingOptions.getMandatoryGenes().orElse(emptySet());
+      if (!genes.isEmpty()) {
+        andPredicates.add(geneFilterBuilder.apply(root, genes));
+      }
+    }
+
+    return andPredicates.toArray(new Predicate[andPredicates.size()]);
+  }
+
+  @Override
+  public Stream<String> listCellTypeAValues(SignatureListingOptions signatureListingOptions) {
+    return listCellTypeValues(signatureListingOptions, "cellTypeA");
+  }
+
+  @Override
+  public Stream<String> listCellTypeBValues(SignatureListingOptions signatureListingOptions) {
+    return listCellTypeValues(signatureListingOptions, "cellTypeB");
+  }
+
+  private Stream<String> listCellTypeValues(SignatureListingOptions signatureListingOptions, String cellTypeColumn) {
+    final CriteriaBuilder cb = dh.cb();
+    CriteriaQuery<String> query = cb.createQuery(String.class);
+    final Root<Signature> root = query.from(dh.getEntityType());
+    final Join<Signature, ?> join = root.join(cellTypeColumn);
+
+    query = query.multiselect(join.as(String.class)).distinct(true);
+
+    if (signatureListingOptions.hasAnyQueryModification()) {
+      query = query.where(createPredicates(signatureListingOptions, null, root));
+    }
+
+    return this.em.createQuery(query).getResultList().stream();
+  }
+
+  @Override
+  public Stream<ExperimentalDesign> listExperimentalDesignValues(SignatureListingOptions signatureListingOptions) {
+    return listColumnValues("experimentalDesign", ExperimentalDesign.class, signatureListingOptions);
+  }
+
+  @Override
+  public Stream<String> listOrganismValues(SignatureListingOptions signatureListingOptions) {
+    return listColumnValues("organism", String.class, signatureListingOptions);
+  }
+
+  @Override
+  public Stream<String> listDiseaseValues(SignatureListingOptions signatureListingOptions) {
+    return listColumnValues("disease", String.class, signatureListingOptions);
+  }
+
+  @Override
+  public Stream<String> listSourceDbValues(SignatureListingOptions signatureListingOptions) {
+    return listColumnValues("sourceDb", String.class, signatureListingOptions);
+  }
+
+  @Override
+  public Stream<SignatureType> listSignatureTypeValues(SignatureListingOptions signatureListingOptions) {
+    return listColumnValues("signatureType", String.class, signatureListingOptions).map(SignatureType::valueOf);
+  }
+
+  private <T> Stream<T> listColumnValues(
+    String columnName, Class<T> targetClass, SignatureListingOptions signatureListingOptions
+  ) {
+    final CriteriaBuilder cb = dh.cb();
+    CriteriaQuery<T> query = cb.createQuery(targetClass);
+    final Root<Signature> root = query.from(dh.getEntityType());
+
+    query = query.select(root.get(columnName)).distinct(true);
+
+    if (signatureListingOptions.hasAnyQueryModification()) {
+      query = query.where(createPredicates(signatureListingOptions, null, root));
+    }
+
+    return this.em.createQuery(query).getResultList().stream();
   }
 }

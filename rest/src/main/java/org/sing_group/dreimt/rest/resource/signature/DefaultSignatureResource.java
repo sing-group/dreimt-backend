@@ -40,7 +40,10 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
+import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.Signature;
+import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 import org.sing_group.dreimt.rest.entity.signature.SignatureData;
 import org.sing_group.dreimt.rest.entity.signature.UpDownSignatureGeneData;
 import org.sing_group.dreimt.rest.filter.CrossDomain;
@@ -122,5 +125,208 @@ public class DefaultSignatureResource implements SignatureResource {
     } else {
       throw new IllegalArgumentException("Unknown signature name: " + signatureName);
     }
+  }
+
+  @Path("params/cell-type-a/values")
+  @GET
+  @ApiOperation(
+    value = "Lists the possible cell type a values in signatures", 
+    response = String.class,
+    responseContainer = "list", 
+    code = 200
+  )
+  @Override
+  public Response listCellTypeAValues(
+    @QueryParam("cellTypeB") String cellTypeB,
+    @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
+    @QueryParam("organism") String organism,
+    @QueryParam("disease") String disease,
+    @QueryParam("signatureSourceDb") String signatureSourceDb,
+    @QueryParam("signatureType") SignatureType signatureType
+  ) {
+    final SignatureListingOptions signatureListingOptions =
+      new SignatureListingOptions(
+        null, cellTypeB, experimentalDesign, organism, disease, signatureSourceDb, signatureType
+      );
+
+    final String[] data =
+      service.listCellTypeAValues(signatureListingOptions)
+        .toArray(String[]::new);
+
+    return Response.ok(data).build();
+  }
+  
+  @Path("params/cell-type-b/values")
+  @GET
+  @ApiOperation(
+    value = "Lists the possible cell type b values in signatures", 
+    response = String.class,
+    responseContainer = "list", 
+    code = 200
+  )
+  @Override
+  public Response listCellTypeBValues(
+    @QueryParam("cellTypeA") String cellTypeA,
+    @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
+    @QueryParam("organism") String organism,
+    @QueryParam("disease") String disease,
+    @QueryParam("signatureSourceDb") String signatureSourceDb,
+    @QueryParam("signatureType") SignatureType signatureType
+  ) {
+    final SignatureListingOptions signatureListingOptions =
+      new SignatureListingOptions(
+        cellTypeA, null, experimentalDesign, organism, disease, signatureSourceDb, signatureType
+      );
+
+    final String[] data =
+      service.listCellTypeBValues(signatureListingOptions)
+        .toArray(String[]::new);
+
+    return Response.ok(data).build();
+  }
+  
+  @Path("params/experimental-design/values")
+  @GET
+  @ApiOperation(
+    value = "Lists the possible experimental design values in signatures", 
+    response = ExperimentalDesign.class,
+    responseContainer = "list", 
+    code = 200
+  )
+  @Override
+  public Response listExperimentalDesignValues(
+    @QueryParam("cellTypeA") String cellTypeA,
+    @QueryParam("cellTypeB") String cellTypeB,
+    @QueryParam("organism") String organism,
+    @QueryParam("disease") String disease,
+    @QueryParam("signatureSourceDb") String signatureSourceDb,
+    @QueryParam("signatureType") SignatureType signatureType
+  ) {
+    final SignatureListingOptions signatureListingOptions =
+      new SignatureListingOptions(
+        cellTypeA, cellTypeB, null, organism, disease, signatureSourceDb, signatureType
+      );
+
+    final ExperimentalDesign[] data =
+      service.listExperimentalDesignValues(signatureListingOptions)
+        .toArray(ExperimentalDesign[]::new);
+
+    return Response.ok(data).build();
+  }
+  
+  @Path("params/organism/values")
+  @GET
+  @ApiOperation(
+    value = "Lists the possible organism values in signatures", 
+    response = String.class,
+    responseContainer = "list", 
+    code = 200
+  )
+  @Override
+  public Response listOrganismValues(
+    @QueryParam("cellTypeA") String cellTypeA,
+    @QueryParam("cellTypeB") String cellTypeB,
+    @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
+    @QueryParam("disease") String disease,
+    @QueryParam("signatureSourceDb") String signatureSourceDb,
+    @QueryParam("signatureType") SignatureType signatureType
+  ) {
+    final SignatureListingOptions signatureListingOptions =
+      new SignatureListingOptions(
+        cellTypeA, cellTypeB, experimentalDesign, null, disease, signatureSourceDb, signatureType
+      );
+
+    final String[] data =
+      service.listOrganismValues(signatureListingOptions)
+        .toArray(String[]::new);
+
+    return Response.ok(data).build();
+  }
+
+  @Path("params/disease/values")
+  @GET
+  @ApiOperation(
+    value = "Lists the possible disease values in signatures", 
+    response = String.class,
+    responseContainer = "list", 
+    code = 200
+  )
+  @Override
+  public Response listDiseaseValues(
+    @QueryParam("cellTypeA") String cellTypeA,
+    @QueryParam("cellTypeB") String cellTypeB,
+    @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
+    @QueryParam("organism") String organism,
+    @QueryParam("signatureSourceDb") String signatureSourceDb,
+    @QueryParam("signatureType") SignatureType signatureType
+  ) {
+    final SignatureListingOptions signatureListingOptions =
+      new SignatureListingOptions(
+        cellTypeA, cellTypeB, experimentalDesign, organism, null, signatureSourceDb, signatureType
+      );
+
+    final String[] data =
+      service.listDiseaseValues(signatureListingOptions)
+        .toArray(String[]::new);
+
+    return Response.ok(data).build();
+  }
+  
+  @Path("params/signature-source-db/values")
+  @GET
+  @ApiOperation(
+    value = "Lists the possible signature source DB values in signatures", 
+    response = String.class,
+    responseContainer = "list", 
+    code = 200
+  )
+  @Override
+  public Response listSignatureSourceDbValues(
+    @QueryParam("cellTypeA") String cellTypeA,
+    @QueryParam("cellTypeB") String cellTypeB,
+    @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
+    @QueryParam("organism") String organism,
+    @QueryParam("disease") String disease,
+    @QueryParam("signatureType") SignatureType signatureType
+  ) {
+    final SignatureListingOptions signatureListingOptions =
+      new SignatureListingOptions(
+        cellTypeA, cellTypeB, experimentalDesign, organism, disease, null, signatureType
+      );
+
+    final String[] data =
+      service.listSourceDbValues(signatureListingOptions)
+        .toArray(String[]::new);
+
+    return Response.ok(data).build();
+  }
+
+  @Path("params/signature-type/values")
+  @GET
+  @ApiOperation(
+    value = "Lists the possible signature type values in signatures", 
+    response = String.class,
+    responseContainer = "list", 
+    code = 200
+  )
+  @Override
+  public Response listSignatureTypeValues(
+    @QueryParam("cellTypeA") String cellTypeA,
+    @QueryParam("cellTypeB") String cellTypeB,
+    @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
+    @QueryParam("organism") String organism,
+    @QueryParam("disease") String disease,
+    @QueryParam("signatureSourceDb") String signatureSourceDb
+  ) {
+    final SignatureListingOptions signatureListingOptions =
+      new SignatureListingOptions(
+        cellTypeA, cellTypeB, experimentalDesign, organism, disease, signatureSourceDb, null
+      );
+
+    final SignatureType[] data =
+      service.listSignatureTypeValues(signatureListingOptions)
+        .toArray(SignatureType[]::new);
+
+    return Response.ok(data).build();
   }
 }

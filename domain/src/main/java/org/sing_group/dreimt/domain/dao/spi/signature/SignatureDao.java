@@ -26,10 +26,26 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
+import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.Signature;
+import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 
 public interface SignatureDao {
   Optional<Signature> get(String signatureName);
 
   Stream<Signature> list(SignatureListingOptions listingOptions);
+
+  Stream<String> listCellTypeAValues(SignatureListingOptions signatureListingOptions);
+
+  Stream<String> listCellTypeBValues(SignatureListingOptions signatureListingOptions);
+
+  Stream<ExperimentalDesign> listExperimentalDesignValues(SignatureListingOptions signatureListingOptions);
+
+  Stream<String> listOrganismValues(SignatureListingOptions signatureListingOptions);
+
+  Stream<String> listDiseaseValues(SignatureListingOptions signatureListingOptions);
+
+  Stream<String> listSourceDbValues(SignatureListingOptions signatureListingOptions);
+
+  Stream<SignatureType> listSignatureTypeValues(SignatureListingOptions signatureListingOptions);
 }

@@ -23,12 +23,30 @@
 package org.sing_group.dreimt.service.spi.signature;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import javax.ejb.Local;
 
+import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
+import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.Signature;
+import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 
 @Local
 public interface SignatureService {
   Optional<Signature> get(String signatureName);
+
+  Stream<String> listCellTypeAValues(SignatureListingOptions signatureListingOptions);
+
+  Stream<String> listCellTypeBValues(SignatureListingOptions signatureListingOptions);
+
+  Stream<ExperimentalDesign> listExperimentalDesignValues(SignatureListingOptions signatureListingOptions);
+
+  Stream<String> listOrganismValues(SignatureListingOptions signatureListingOptions);
+
+  Stream<String> listDiseaseValues(SignatureListingOptions signatureListingOptions);
+
+  Stream<String> listSourceDbValues(SignatureListingOptions signatureListingOptions);
+
+  Stream<SignatureType> listSignatureTypeValues(SignatureListingOptions signatureListingOptions);
 }
