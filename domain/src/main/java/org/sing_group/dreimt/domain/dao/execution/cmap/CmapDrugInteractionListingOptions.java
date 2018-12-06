@@ -34,6 +34,7 @@ public class CmapDrugInteractionListingOptions implements Serializable {
 
   private final ListingOptions listingOptions;
   private final String drugSourceName;
+  private final String drugSourceDb;
   private final String drugCommonName;
   private final Double maxPvalue;
   private final Double minTes;
@@ -42,11 +43,12 @@ public class CmapDrugInteractionListingOptions implements Serializable {
 
   public CmapDrugInteractionListingOptions(
     ListingOptions listingOptions,
-    String drugSourceName, String drugCommonName,
+    String drugSourceName, String drugSourceDb, String drugCommonName,
     Double pValue, Double minTes, Double maxTes, Double maxFdr
   ) {
     this.listingOptions = listingOptions;
     this.drugSourceName = drugSourceName;
+    this.drugSourceDb = drugSourceDb;
     this.drugCommonName = drugCommonName;
     this.maxPvalue = pValue;
     this.minTes = minTes;
@@ -55,8 +57,9 @@ public class CmapDrugInteractionListingOptions implements Serializable {
   }
 
   public boolean hasAnyQueryModification() {
-    return this.listingOptions.hasResultLimits()
+    return this.listingOptions.hasAnyQueryModification()
       || this.drugSourceName != null
+      || this.drugSourceDb != null
       || this.drugCommonName != null
       || this.maxPvalue != null
       || this.minTes != null
@@ -70,6 +73,10 @@ public class CmapDrugInteractionListingOptions implements Serializable {
 
   public Optional<String> getDrugSourceName() {
     return ofNullable(drugSourceName);
+  }
+  
+  public Optional<String> getDrugSourceDb() {
+    return ofNullable(drugSourceDb);
   }
 
   public Optional<String> getDrugCommonName() {
@@ -97,6 +104,7 @@ public class CmapDrugInteractionListingOptions implements Serializable {
     final int prime = 31;
     int result = 1;
     result = prime * result + ((drugCommonName == null) ? 0 : drugCommonName.hashCode());
+    result = prime * result + ((drugSourceDb == null) ? 0 : drugSourceDb.hashCode());
     result = prime * result + ((drugSourceName == null) ? 0 : drugSourceName.hashCode());
     result = prime * result + ((listingOptions == null) ? 0 : listingOptions.hashCode());
     result = prime * result + ((maxFdr == null) ? 0 : maxFdr.hashCode());
@@ -119,6 +127,11 @@ public class CmapDrugInteractionListingOptions implements Serializable {
       if (other.drugCommonName != null)
         return false;
     } else if (!drugCommonName.equals(other.drugCommonName))
+      return false;
+    if (drugSourceDb == null) {
+      if (other.drugSourceDb != null)
+        return false;
+    } else if (!drugSourceDb.equals(other.drugSourceDb))
       return false;
     if (drugSourceName == null) {
       if (other.drugSourceName != null)

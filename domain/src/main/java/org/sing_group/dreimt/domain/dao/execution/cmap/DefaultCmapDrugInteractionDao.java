@@ -22,10 +22,13 @@
  */
 package org.sing_group.dreimt.domain.dao.execution.cmap;
 
+import static java.util.stream.Collectors.toList;
 import static javax.transaction.Transactional.TxType.MANDATORY;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
@@ -35,8 +38,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -44,8 +49,10 @@ import javax.transaction.Transactional;
 
 import org.sing_group.dreimt.domain.dao.DaoHelper;
 import org.sing_group.dreimt.domain.dao.ListingOptions;
+import org.sing_group.dreimt.domain.dao.ListingOptions.SortField;
 import org.sing_group.dreimt.domain.dao.spi.execution.cmap.CmapDrugInteractionDao;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapDrugInteraction;
+import org.sing_group.dreimt.domain.entities.execution.cmap.CmapDrugInteractionField;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapResult;
 import org.sing_group.dreimt.domain.entities.signature.Drug;
 
@@ -119,6 +126,12 @@ public class DefaultCmapDrugInteractionDao implements CmapDrugInteractionDao {
         andPredicates.add(cb.like(sourceName, "%" + listingOptions.getDrugSourceName().get() + "%"));
       }
 
+      if (listingOptions.getDrugSourceDb().isPresent()) {
+        final Path<String> sourceDb = joinDrug.get("sourceDb");
+
+        andPredicates.add(cb.like(sourceDb, "%" + listingOptions.getDrugSourceDb().get() + "%"));
+      }
+
       if (listingOptions.getDrugCommonName().isPresent()) {
         final Path<String> commonName = joinDrug.get("commonName");
 
@@ -128,6 +141,51 @@ public class DefaultCmapDrugInteractionDao implements CmapDrugInteractionDao {
       query = query.where(andPredicates.toArray(new Predicate[andPredicates.size()]));
 
       ListingOptions generalListingOptions = listingOptions.getListingOptions();
+
+      if (generalListingOptions.hasOrder()) {
+        List<Order> orders = new LinkedList<>();
+
+        for (SortField sortField : generalListingOptions.getSortFields().collect(toList())) {
+          CmapDrugInteractionField field = CmapDrugInteractionField.valueOf(sortField.getSortField());
+          final Function<Expression<?>, Order> order;
+          switch (sortField.getSortDirection()) {
+            case ASCENDING:
+              order = cb::asc;
+              break;
+            case DESCENDING:
+              order = cb::desc;
+              break;
+            default:
+              order = null;
+          }
+          switch (field) {
+            case DRUG_SOURCE_NAME:
+              orders.add(order.apply(root.join("drug").get("sourceName")));
+              break;
+            case DRUG_SOURCE_DB:
+              orders.add(order.apply(root.join("drug").get("sourceDb")));
+              break;
+            case DRUG_COMMON_NAME:
+              orders.add(order.apply(root.join("drug").get("commonName")));
+              break;
+
+            case FDR:
+              orders.add(order.apply(root.get("fdr")));
+              break;
+            case P_VALUE:
+              orders.add(order.apply(root.get("pValue")));
+              break;
+            case TES:
+              orders.add(order.apply(root.get("tes")));
+              break;
+
+            case NONE:
+              break;
+          }
+        }
+
+        query = query.orderBy(orders);
+      }
 
       TypedQuery<CmapDrugInteraction> typedQuery = em.createQuery(query);
       if (generalListingOptions.hasResultLimits()) {

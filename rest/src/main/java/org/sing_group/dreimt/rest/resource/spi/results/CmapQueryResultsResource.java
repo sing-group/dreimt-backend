@@ -32,13 +32,13 @@ import org.sing_group.dreimt.domain.entities.execution.cmap.CmapDrugInteractionF
 public interface CmapQueryResultsResource {
   Response cmapQueryResult(
     String resultId, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr, String drugSourceName,
-    String drugCommonName, Integer page, Integer pageSize, CmapDrugInteractionField orderField,
+    String drugSourceDb, String drugCommonName, Integer page, Integer pageSize, CmapDrugInteractionField orderField,
     SortDirection sortDirection
   );
 
   Response cmapQueryResultAsCsv(
     String resultId, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr, String drugSourceName,
-    String drugCommonName, Integer page, Integer pageSize, CmapDrugInteractionField orderField,
+    String drugSourceDb, String drugCommonName, Integer page, Integer pageSize, CmapDrugInteractionField orderField,
     SortDirection sortDirection
   );
 }

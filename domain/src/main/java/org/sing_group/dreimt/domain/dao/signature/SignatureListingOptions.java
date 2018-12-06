@@ -81,7 +81,7 @@ public class SignatureListingOptions implements Serializable {
   }
 
   public boolean hasAnyQueryModification() {
-    return this.listingOptions.hasResultLimits()
+    return this.listingOptions.hasAnyQueryModification()
       || this.cellTypeA != null
       || this.cellTypeB != null
       || this.organism != null

@@ -40,14 +40,14 @@ import javax.ws.rs.core.Response;
 
 import org.sing_group.dreimt.domain.dao.ListingOptions.SortField;
 import org.sing_group.dreimt.domain.dao.SortDirection;
+import org.sing_group.dreimt.domain.dao.execution.cmap.CmapDrugInteractionListingOptions;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapDrugInteraction;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapDrugInteractionField;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapResult;
 import org.sing_group.dreimt.rest.entity.query.ListingOptionsData;
-import org.sing_group.dreimt.rest.entity.query.cmap.CmapDrugInteractionListingOptionsData;
 import org.sing_group.dreimt.rest.entity.query.cmap.CmapDrugInteractionResultData;
 import org.sing_group.dreimt.rest.filter.CrossDomain;
-import org.sing_group.dreimt.rest.mapper.spi.query.cmap.CmapDrugInteractionListingOptionsMapper;
+import org.sing_group.dreimt.rest.mapper.spi.query.ListingOptionsMapper;
 import org.sing_group.dreimt.rest.mapper.spi.query.cmap.CmapDrugInteractionMapper;
 import org.sing_group.dreimt.rest.resource.spi.results.CmapQueryResultsResource;
 import org.sing_group.dreimt.service.spi.execution.pipeline.cmap.CmapDrugInteractionService;
@@ -78,8 +78,8 @@ public class DefaultCmapQueryResultsResource implements CmapQueryResultsResource
   private CmapDrugInteractionMapper cmapDrugInteractionMapper;
   
   @Inject
-  private CmapDrugInteractionListingOptionsMapper cmapDrugInteractionListingOptionsMapper;
-  
+  private ListingOptionsMapper listingOptionsMapper;
+
   @GET
   @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}")
   @Produces(APPLICATION_JSON)
@@ -99,6 +99,7 @@ public class DefaultCmapQueryResultsResource implements CmapQueryResultsResource
     @QueryParam("maxTes") Double maxTes,
     @QueryParam("maxFdr") @DefaultValue("0.05") Double maxFdr,
     @QueryParam("drugSourceName") String drugSourceName,
+    @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("page") Integer page,
     @QueryParam("pageSize") Integer pageSize,
@@ -106,7 +107,7 @@ public class DefaultCmapQueryResultsResource implements CmapQueryResultsResource
     @QueryParam("sortDirection") @DefaultValue("NONE") SortDirection sortDirection
   ) {
     return this.cmapQueryResult(
-      resultId, maxPvalue, minTes, maxTes, maxFdr, drugSourceName, drugCommonName, page, pageSize, orderField,
+      resultId, maxPvalue, minTes, maxTes, maxFdr, drugSourceName, drugSourceDb, drugCommonName, page, pageSize, orderField,
       sortDirection, cmapDrugInteractionMapper::toCmapDrugInteractionResultData, APPLICATION_JSON
     );
   }
@@ -130,6 +131,7 @@ public class DefaultCmapQueryResultsResource implements CmapQueryResultsResource
     @QueryParam("maxTes") Double maxTes,
     @QueryParam("maxFdr") Double maxFdr,
     @QueryParam("drugSourceName") String drugSourceName,
+    @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("page") Integer page,
     @QueryParam("pageSize") Integer pageSize,
@@ -137,7 +139,7 @@ public class DefaultCmapQueryResultsResource implements CmapQueryResultsResource
     @QueryParam("sortDirection") @DefaultValue("NONE") SortDirection sortDirection
   ) {
     return this.cmapQueryResult(
-      resultId, maxPvalue, minTes, maxTes, maxFdr, drugSourceName, drugCommonName, page, pageSize, orderField,
+      resultId, maxPvalue, minTes, maxTes, maxFdr, drugSourceName, drugSourceDb, drugCommonName, page, pageSize, orderField,
       sortDirection, cmapDrugInteractionMapper::toCmapDrugInteractionCsvData, "text/csv"
     );
   }
@@ -145,7 +147,7 @@ public class DefaultCmapQueryResultsResource implements CmapQueryResultsResource
   private Response cmapQueryResult(
     String resultId,
     Double maxPvalue, Double minTes, Double maxTes, Double maxFdr,
-    String drugSourceName, String drugCommonName,
+    String drugSourceName, String drugSourceDb, String drugCommonName,
     Integer page, Integer pageSize,
     CmapDrugInteractionField orderField, SortDirection sortDirection,
     Function<List<CmapDrugInteraction>, Object> cmapDrugInteractionMapper,
@@ -153,21 +155,19 @@ public class DefaultCmapQueryResultsResource implements CmapQueryResultsResource
   ) {
     final ListingOptionsData listingOptions = getListingOptions(page, pageSize, orderField, sortDirection);
 
-    final CmapDrugInteractionListingOptionsData cmapListingOptions =
-      new CmapDrugInteractionListingOptionsData(
-        listingOptions, drugSourceName, drugCommonName, maxPvalue, minTes, maxTes, maxFdr
-      );
+    final CmapDrugInteractionListingOptions cmapListingOptions =
+      new CmapDrugInteractionListingOptions(
+        listingOptionsMapper.toListingOptions(listingOptions), 
+        drugSourceName, drugSourceDb, drugCommonName, 
+        maxPvalue, minTes, maxTes, maxFdr
+     );
 
     CmapResult cmapResult =
       cmapQueryService.getResult(resultId)
         .orElseThrow(() -> new IllegalArgumentException("Unknown cmap result: " + resultId));
 
     List<CmapDrugInteraction> cmapDrugInteractions =
-      this.cmapDrugInteractionService
-        .list(
-          cmapResult, cmapDrugInteractionListingOptionsMapper.toCmapDrugInteractionListingOptions(cmapListingOptions)
-        )
-        .collect(toList());
+      this.cmapDrugInteractionService.list(cmapResult, cmapListingOptions).collect(toList());
 
     return Response
       .ok(cmapDrugInteractionMapper.apply(cmapDrugInteractions), responseContentType)
@@ -182,7 +182,7 @@ public class DefaultCmapQueryResultsResource implements CmapQueryResultsResource
     if (orderField == null || sortDirection == null || sortDirection == SortDirection.NONE) {
       listingOptions = new ListingOptionsData(page, pageSize);
     } else {
-      SortField sortField = new SortField(orderField.getFieldName(), sortDirection);
+      SortField sortField = new SortField(orderField.name(), sortDirection);
       listingOptions = new ListingOptionsData(page, pageSize, sortField);
     }
     return listingOptions;

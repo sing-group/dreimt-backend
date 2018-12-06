@@ -23,18 +23,13 @@
 package org.sing_group.dreimt.domain.entities.execution.cmap;
 
 public enum CmapDrugInteractionField {
-  NONE("NONE"),
-  TES("tes"),
-  PVALUE("pValue"),
-  FDR("fdr");
+  NONE,
 
-  private String fieldName;
+  DRUG_SOURCE_NAME,
+  DRUG_SOURCE_DB,
+  DRUG_COMMON_NAME,
 
-  CmapDrugInteractionField(String fieldName) {
-    this.fieldName = fieldName;
-  }
-
-  public String getFieldName() {
-    return fieldName;
-  }
+  TES,
+  P_VALUE,
+  FDR;
 }

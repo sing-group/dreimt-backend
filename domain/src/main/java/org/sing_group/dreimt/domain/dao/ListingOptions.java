@@ -75,7 +75,11 @@ public class ListingOptions implements Serializable {
   public OptionalInt getEnd() {
     return end == null ? empty() : of(end);
   }
-  
+
+  public boolean hasAnyQueryModification() {
+    return this.hasResultLimits() || this.hasOrder();
+  }
+
   public boolean hasResultLimits() {
     return this.start != null;
   }
