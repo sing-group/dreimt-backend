@@ -49,9 +49,12 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
+import org.sing_group.dreimt.domain.dao.ListingOptions.SortField;
+import org.sing_group.dreimt.domain.dao.SortDirection;
 import org.sing_group.dreimt.domain.dao.signature.DrugSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
 import org.sing_group.dreimt.domain.entities.execution.WorkEntity;
+import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionField;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 import org.sing_group.dreimt.rest.entity.execution.WorkData;
@@ -127,6 +130,8 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   public Response list(
     @QueryParam("page") Integer page,
     @QueryParam("pageSize") Integer pageSize,
+    @QueryParam("orderField") @DefaultValue("NONE") DrugSignatureInteractionField orderField,
+    @QueryParam("sortDirection") @DefaultValue("NONE") SortDirection sortDirection,
     @QueryParam("cellTypeA") String cellTypeA,
     @QueryParam("cellTypeB") String cellTypeB,
     @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
@@ -149,7 +154,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
 
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        listingOptionsMapper.toListingOptions(new ListingOptionsData(page, pageSize)),
+        listingOptionsMapper.toListingOptions(getListingOptions(page, pageSize, orderField, sortDirection)),
         signatureListingOptions,
         drugSourceName, drugSourceDb, drugCommonName,
         maxPvalue, minTes, maxTes, maxFdr
@@ -165,6 +170,20 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     return Response.ok(data)
       .header("X-Count", count)
     .build();
+  }
+
+  private ListingOptionsData getListingOptions(
+    Integer page, Integer pageSize, DrugSignatureInteractionField orderField, SortDirection sortDirection
+  ) {
+    final ListingOptionsData listingOptions;
+
+    if (orderField == null || sortDirection == null || sortDirection == SortDirection.NONE) {
+      listingOptions = new ListingOptionsData(page, pageSize);
+    } else {
+      SortField sortField = new SortField(orderField.name(), sortDirection);
+      listingOptions = new ListingOptionsData(page, pageSize, sortField);
+    }
+    return listingOptions;
   }
 
   @Path("params/cell-type-a/values")

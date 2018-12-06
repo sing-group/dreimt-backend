@@ -74,7 +74,7 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
   }
 
   public boolean hasAnyQueryModification() {
-    return this.listingOptions.hasResultLimits()
+    return this.listingOptions.hasAnyQueryModification()
       || this.signatureListingOptions.hasAnyQueryModification()
       || this.drugSourceName != null
       || this.drugSourceDb != null

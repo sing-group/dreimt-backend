@@ -23,8 +23,12 @@
 package org.sing_group.dreimt.rest.resource.spi.signature;
 
 import javax.ejb.Local;
+import javax.ws.rs.DefaultValue;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 
+import org.sing_group.dreimt.domain.dao.SortDirection;
+import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionField;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 import org.sing_group.dreimt.rest.entity.query.GenesQueryInfo;
@@ -33,7 +37,8 @@ import org.sing_group.dreimt.rest.entity.query.GenesQueryInfo;
 public interface DrugSignatureInteractionResource {
 
   Response list(
-    Integer page, Integer pageSize, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign,
+    Integer page, Integer pageSize, DrugSignatureInteractionField orderField, SortDirection sortDirection,
+    String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign,
     String organism, String disease, String signatureSourceDb, SignatureType signatureType, String drugSourceName,
     String drugSourceDb, String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
