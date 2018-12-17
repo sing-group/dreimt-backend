@@ -103,20 +103,26 @@ public class DefaultJaccardPipelinePersistenceManager implements JaccardPipeline
 
           break;
         case SINGLE_FDR_CORRECTION_STEP_ID:
+          long targetSignatureIdsCount =
+            context.getTargetSignatureIds()
+              .orElseThrow(() -> new RuntimeException("Target signature IDs must be set before this step."))
+              .count();
 
-          Map<GeneOverlapData, Double> correctedPvaluesMap =
-            context.getCorrectedPvaluesMap()
-              .orElseThrow(() -> new RuntimeException("Corrected p-values map is not available"));
+          if (targetSignatureIdsCount != 0) {
+            Map<GeneOverlapData, Double> correctedPvaluesMap =
+              context.getCorrectedPvaluesMap()
+                .orElseThrow(() -> new RuntimeException("Corrected p-values map is not available"));
 
-          result.getGeneOverlapResults().forEach(geneOverlapEntity -> {
-            GeneOverlapData geneOverlapData = new DefaultGeneOverlapData(geneOverlapEntity);
-            Double fdr = correctedPvaluesMap.get(geneOverlapData);
-            if (fdr != null) {
-              geneOverlapEntity.setFdr(fdr);
-            } else {
-              throw new RuntimeException("Gene Overlap not found in corrected p-values map " + geneOverlapEntity);
-            }
-          });
+            result.getGeneOverlapResults().forEach(geneOverlapEntity -> {
+              GeneOverlapData geneOverlapData = new DefaultGeneOverlapData(geneOverlapEntity);
+              Double fdr = correctedPvaluesMap.get(geneOverlapData);
+              if (fdr != null) {
+                geneOverlapEntity.setFdr(fdr);
+              } else {
+                throw new RuntimeException("Gene Overlap not found in corrected p-values map " + geneOverlapEntity);
+              }
+            });
+          }
           break;
         default:
       }

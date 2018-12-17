@@ -73,12 +73,22 @@ public class FdrCorrectionStep implements SingleJaccardPipelineStep {
 
   @Override
   public boolean isComplete(JaccardPipelineContext context) {
-    return context.getTargetSignatureIds().isPresent();
+    return context.getTargetSignatureIds().isPresent()
+      && (context.getTargetSignatureIds().get().count() == 0 || context.getCorrectedPvaluesMap().isPresent());
   }
 
   @Transactional(REQUIRED)
   @Override
   public JaccardPipelineContext execute(JaccardPipelineContext context) {
+    long targetSignatureIdsCount =
+      context.getTargetSignatureIds()
+        .orElseThrow(() -> new RuntimeException("Target signature IDs must be set before this step."))
+        .count();
+
+    if (targetSignatureIdsCount == 0) {
+      return this.jaccardPipelineContextBuilderFactory.createBuilderFor(context).build();
+    }
+
     Map<GeneOverlapData, Double> pValuesMap =
       context.getTargetSignatureOverlaps()
         .orElseThrow(() -> new RuntimeException("Gene overlaps must be calculated before this step."))
