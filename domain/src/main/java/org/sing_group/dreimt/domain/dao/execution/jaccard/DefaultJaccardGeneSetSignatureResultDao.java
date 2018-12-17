@@ -72,11 +72,13 @@ public class DefaultJaccardGeneSetSignatureResultDao implements JaccardGeneSetSi
 
   @Override
   public JaccardGeneSetSignatureResult create(
-    String name, String description, Function<String, String> resultReferenceBuilder, Set<String> genes
+    String name, String description, Function<String, String> resultReferenceBuilder, boolean onlyUniverseGenes,
+    Set<String> genes
   ) {
     return this.dh.persist(
       new JaccardGeneSetSignatureResult(
         name, description, resultReferenceBuilder,
+        onlyUniverseGenes,
         this.geneDao.getGenes(genes, true)
       )
     );

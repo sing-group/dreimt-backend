@@ -74,11 +74,13 @@ public class DefaultJaccardUpDownSignatureResultDao implements JaccardUpDownSign
   public JaccardUpDownSignatureResult create(
     String name, String description,
     Function<String, String> resultReferenceBuilder,
+    boolean onlyUniverseGenes,
     Set<String> upGenes, Set<String> downGenes
   ) {
     return this.dh.persist(
       new JaccardUpDownSignatureResult(
         name, description, resultReferenceBuilder,
+        onlyUniverseGenes,
         this.geneDao.getGenes(upGenes, true),
         this.geneDao.getGenes(downGenes, true)
       )

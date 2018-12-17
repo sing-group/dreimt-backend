@@ -72,9 +72,10 @@ public class JaccardUpDownSignatureResult extends JaccardResult implements Seria
   public JaccardUpDownSignatureResult(
     String name, String description,
     Function<String, String> resultReferenceBuilder,
+    boolean onlyUniverseGenes,
     Set<Gene> upGenes, Set<Gene> downGenes
   ) {
-    super(name, description, resultReferenceBuilder);
+    super(name, description, resultReferenceBuilder, onlyUniverseGenes);
 
     this.upGenes = upGenes;
     this.downGenes = downGenes;

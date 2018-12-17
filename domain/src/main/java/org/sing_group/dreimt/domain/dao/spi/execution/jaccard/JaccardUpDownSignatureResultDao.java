@@ -35,6 +35,7 @@ public interface JaccardUpDownSignatureResultDao {
     String name,
     String description,
     Function<String, String> resultReferenceBuilder,
+    boolean onlyUniverseGenes,
     Set<String> upGenes,
     Set<String> downGenes
   );

@@ -29,4 +29,6 @@ public interface JaccardComputationRequestEvent {
   String getWorkId();
 
   SignatureListingOptions getSignatureListingOptions();
+
+  boolean isOnlyUniverseGenes();
 }

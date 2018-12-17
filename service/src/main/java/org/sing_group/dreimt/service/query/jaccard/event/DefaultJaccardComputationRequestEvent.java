@@ -32,10 +32,14 @@ public class DefaultJaccardComputationRequestEvent implements JaccardComputation
 
   private String workId;
   private SignatureListingOptions signatureListingOptions;
+  private boolean onlyUniverseGenes;
 
-  public DefaultJaccardComputationRequestEvent(String workId, SignatureListingOptions signatureListingOptions) {
+  public DefaultJaccardComputationRequestEvent(
+    String workId, SignatureListingOptions signatureListingOptions, boolean onlyUniverseGenes
+  ) {
     this.workId = workId;
     this.signatureListingOptions = signatureListingOptions;
+    this.onlyUniverseGenes = onlyUniverseGenes;
   }
 
   @Override
@@ -49,9 +53,15 @@ public class DefaultJaccardComputationRequestEvent implements JaccardComputation
   }
 
   @Override
+  public boolean isOnlyUniverseGenes() {
+    return onlyUniverseGenes;
+  }
+
+  @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
+    result = prime * result + (onlyUniverseGenes ? 1231 : 1237);
     result = prime * result + ((signatureListingOptions == null) ? 0 : signatureListingOptions.hashCode());
     result = prime * result + ((workId == null) ? 0 : workId.hashCode());
     return result;
@@ -66,6 +76,8 @@ public class DefaultJaccardComputationRequestEvent implements JaccardComputation
     if (getClass() != obj.getClass())
       return false;
     DefaultJaccardComputationRequestEvent other = (DefaultJaccardComputationRequestEvent) obj;
+    if (onlyUniverseGenes != other.onlyUniverseGenes)
+      return false;
     if (signatureListingOptions == null) {
       if (other.signatureListingOptions != null)
         return false;

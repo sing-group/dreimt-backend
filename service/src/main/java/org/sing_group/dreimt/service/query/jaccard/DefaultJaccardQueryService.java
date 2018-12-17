@@ -87,7 +87,7 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
       !options.getDownGenes().isEmpty() ? this.jaccardUpDownQuery(options) : this.jaccardGeneSetQuery(options);
 
     DefaultJaccardComputationRequestEvent event =
-      new DefaultJaccardComputationRequestEvent(result.getId(), options.getSignatureListingOptions());
+      new DefaultJaccardComputationRequestEvent(result.getId(), options.getSignatureListingOptions(), options.isOnlyUniverseGenes());
 
     this.jaccardComputationEvents.fire(event);
 
@@ -112,6 +112,7 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
         "Jaccard UpDown Signature query",
         "Jaccard UpDown Signature query",
         options.getResultUriBuilder(),
+        options.isOnlyUniverseGenes(),
         options.getUpGenes(),
         options.getDownGenes()
       );
@@ -125,6 +126,7 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
         "Jaccard GeneSet query",
         "Jaccard GeneSet query",
         options.getResultUriBuilder(),
+        options.isOnlyUniverseGenes(),
         options.getUpGenes()
       );
 

@@ -138,6 +138,7 @@ public class SingleJaccardComputationStep implements SingleJaccardPipelineStep {
     JaccardResult jaccardResult, Signature targetSignature, int universeSize
   ) {
     List<GeneOverlapData> toret = new LinkedList<>();
+    boolean onlyUniverseGenes = jaccardResult.isOnlyUniverseGenes();
 
     if (jaccardResult instanceof JaccardUpDownSignatureResult) {
       JaccardUpDownSignatureResult result = (JaccardUpDownSignatureResult) jaccardResult;
@@ -145,7 +146,7 @@ public class SingleJaccardComputationStep implements SingleJaccardPipelineStep {
         UpDownSignature upDownTargetSignature = (UpDownSignature) targetSignature;
 
         GeneOverlapResult upVersusUp =
-          geneOverlap(result.getUpGenes(true), upDownTargetSignature.getUpGenes(true), universeSize);
+          geneOverlap(result.getUpGenes(onlyUniverseGenes), upDownTargetSignature.getUpGenes(onlyUniverseGenes), universeSize);
         toret.add(
           new DefaultGeneOverlapData(
             SIGNATURE_UP,
@@ -155,7 +156,7 @@ public class SingleJaccardComputationStep implements SingleJaccardPipelineStep {
         );
 
         GeneOverlapResult upVersusDown =
-          geneOverlap(result.getUpGenes(true), upDownTargetSignature.getDownGenes(true), universeSize);
+          geneOverlap(result.getUpGenes(onlyUniverseGenes), upDownTargetSignature.getDownGenes(onlyUniverseGenes), universeSize);
         toret.add(
           new DefaultGeneOverlapData(
             SIGNATURE_UP,
@@ -165,7 +166,7 @@ public class SingleJaccardComputationStep implements SingleJaccardPipelineStep {
         );
 
         GeneOverlapResult downVersusUp =
-          geneOverlap(result.getDownGenes(true), upDownTargetSignature.getUpGenes(true), universeSize);
+          geneOverlap(result.getDownGenes(onlyUniverseGenes), upDownTargetSignature.getUpGenes(onlyUniverseGenes), universeSize);
         toret.add(
           new DefaultGeneOverlapData(
             SIGNATURE_DOWN,
@@ -175,7 +176,7 @@ public class SingleJaccardComputationStep implements SingleJaccardPipelineStep {
         );
 
         GeneOverlapResult downVersusDown =
-          geneOverlap(result.getDownGenes(true), upDownTargetSignature.getDownGenes(true), universeSize);
+          geneOverlap(result.getDownGenes(onlyUniverseGenes), upDownTargetSignature.getDownGenes(onlyUniverseGenes), universeSize);
         toret.add(
           new DefaultGeneOverlapData(
             SIGNATURE_DOWN,
@@ -187,7 +188,7 @@ public class SingleJaccardComputationStep implements SingleJaccardPipelineStep {
         GeneSetSignature geneSetSignature = (GeneSetSignature) targetSignature;
 
         GeneOverlapResult upVersusSignature =
-          geneOverlap(result.getUpGenes(true), geneSetSignature.getSignatureGenes(true), universeSize);
+          geneOverlap(result.getUpGenes(onlyUniverseGenes), geneSetSignature.getSignatureGenes(onlyUniverseGenes), universeSize);
         toret.add(
           new DefaultGeneOverlapData(
             SIGNATURE_UP,
@@ -197,7 +198,7 @@ public class SingleJaccardComputationStep implements SingleJaccardPipelineStep {
         );
 
         GeneOverlapResult downVersusSignature =
-          geneOverlap(result.getDownGenes(true), geneSetSignature.getSignatureGenes(true), universeSize);
+          geneOverlap(result.getDownGenes(onlyUniverseGenes), geneSetSignature.getSignatureGenes(onlyUniverseGenes), universeSize);
         toret.add(
           new DefaultGeneOverlapData(
             SIGNATURE_DOWN,
@@ -212,7 +213,7 @@ public class SingleJaccardComputationStep implements SingleJaccardPipelineStep {
         UpDownSignature upDownTargetSignature = (UpDownSignature) targetSignature;
 
         GeneOverlapResult signatureVersusUp =
-          geneOverlap(result.getGenes(true), upDownTargetSignature.getUpGenes(true), universeSize);
+          geneOverlap(result.getGenes(onlyUniverseGenes), upDownTargetSignature.getUpGenes(onlyUniverseGenes), universeSize);
         toret.add(
           new DefaultGeneOverlapData(
             GENESET,
@@ -222,7 +223,7 @@ public class SingleJaccardComputationStep implements SingleJaccardPipelineStep {
         );
 
         GeneOverlapResult signatureVersusDown =
-          geneOverlap(result.getGenes(true), upDownTargetSignature.getDownGenes(true), universeSize);
+          geneOverlap(result.getGenes(onlyUniverseGenes), upDownTargetSignature.getDownGenes(onlyUniverseGenes), universeSize);
         toret.add(
           new DefaultGeneOverlapData(
             GENESET,
@@ -234,7 +235,7 @@ public class SingleJaccardComputationStep implements SingleJaccardPipelineStep {
         GeneSetSignature geneSetSignature = (GeneSetSignature) targetSignature;
 
         GeneOverlapResult signatureVersusSignature =
-          geneOverlap(result.getGenes(true), geneSetSignature.getSignatureGenes(true), universeSize);
+          geneOverlap(result.getGenes(onlyUniverseGenes), geneSetSignature.getSignatureGenes(onlyUniverseGenes), universeSize);
         toret.add(
           new DefaultGeneOverlapData(
             GENESET,

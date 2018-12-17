@@ -49,6 +49,8 @@ public abstract class JaccardResult extends WorkEntity {
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "jaccardResult", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<GeneOverlap> geneOverlapResults;
 
+  private boolean onlyUniverseGenes;
+
   @Transient
   private final ReentrantReadWriteLock geneOverlapResultsLock;
 
@@ -56,9 +58,17 @@ public abstract class JaccardResult extends WorkEntity {
     this.geneOverlapResultsLock = new ReentrantReadWriteLock();
   }
 
-  protected JaccardResult(String name, String description, Function<String, String> resultReferenceBuilder) {
+  protected JaccardResult(
+    String name, String description, Function<String, String> resultReferenceBuilder, boolean onlyUniverseGenes
+  ) {
     super(name, description, resultReferenceBuilder);
+
+    this.onlyUniverseGenes = onlyUniverseGenes;
     this.geneOverlapResultsLock = new ReentrantReadWriteLock();
+  }
+
+  public boolean isOnlyUniverseGenes() {
+    return onlyUniverseGenes;
   }
 
   public Stream<GeneOverlap> getGeneOverlapResults() {

@@ -64,6 +64,7 @@ public abstract class CmapResult extends WorkEntity {
     int numPerm, double maxPvalue
   ) {
     super(name, description, resultReferenceBuilder);
+
     this.numPerm = numPerm;
     this.maxPvalue = maxPvalue;
     this.cmapResultsLock = new ReentrantReadWriteLock();

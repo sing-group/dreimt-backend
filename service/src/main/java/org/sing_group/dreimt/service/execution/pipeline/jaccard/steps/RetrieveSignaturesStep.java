@@ -115,13 +115,14 @@ public class RetrieveSignaturesStep implements SingleJaccardPipelineStep {
 
   private Set<String> getInputGenes(JaccardResult jaccardResult) {
     Set<String> inputGenes = new HashSet<>();
+    boolean onlyUniverseGenes = jaccardResult.isOnlyUniverseGenes();
     if (jaccardResult instanceof JaccardUpDownSignatureResult) {
       JaccardUpDownSignatureResult result = (JaccardUpDownSignatureResult) jaccardResult;
-      inputGenes.addAll(result.getUpGenes(true));
-      inputGenes.addAll(result.getDownGenes(true));
+      inputGenes.addAll(result.getUpGenes(onlyUniverseGenes));
+      inputGenes.addAll(result.getDownGenes(onlyUniverseGenes));
     } else if (jaccardResult instanceof JaccardGeneSetSignatureResult) {
       JaccardGeneSetSignatureResult result = (JaccardGeneSetSignatureResult) jaccardResult;
-      inputGenes.addAll(result.getGenes(true));
+      inputGenes.addAll(result.getGenes(onlyUniverseGenes));
     }
 
     return inputGenes;

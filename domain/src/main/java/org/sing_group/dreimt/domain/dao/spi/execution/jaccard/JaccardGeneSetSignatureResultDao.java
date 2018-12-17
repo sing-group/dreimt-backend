@@ -35,6 +35,7 @@ public interface JaccardGeneSetSignatureResultDao {
     String name,
     String description,
     Function<String, String> resultReferenceBuilder,
+    boolean onlyUniverseGenes,
     Set<String> genes
   );
 }

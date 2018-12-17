@@ -60,9 +60,10 @@ public class JaccardGeneSetSignatureResult extends JaccardResult implements Seri
   }
 
   public JaccardGeneSetSignatureResult(
-    String name, String description, Function<String, String> resultReferenceBuilder, Set<Gene> genes
+    String name, String description, Function<String, String> resultReferenceBuilder, boolean onlyUniverseGenes,
+    Set<Gene> genes
   ) {
-    super(name, description, resultReferenceBuilder);
+    super(name, description, resultReferenceBuilder, onlyUniverseGenes);
 
     this.genes = genes;
   }

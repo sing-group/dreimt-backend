@@ -209,6 +209,7 @@ DROP TABLE IF EXISTS `jaccard_result`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jaccard_result` (
   `id` char(36) NOT NULL,
+  `onlyUniverseGenes` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FK3vfegxa9spa1bjuc4jpsppm7y` FOREIGN KEY (`id`) REFERENCES `work` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
