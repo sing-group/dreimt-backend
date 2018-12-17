@@ -89,11 +89,7 @@ public class SignatureListingOptions implements Serializable {
       || this.experimentalDesign != null
       || this.signatureType != null
       || this.sourceDb != null
-      || this.hasMandatoryGenes();
-  }
-
-  private boolean hasMandatoryGenes() {
-    return this.mandatoryGenes != null && !this.mandatoryGenes.isEmpty();
+      || this.mandatoryGenes != null;
   }
 
   public ListingOptions getListingOptions() {
