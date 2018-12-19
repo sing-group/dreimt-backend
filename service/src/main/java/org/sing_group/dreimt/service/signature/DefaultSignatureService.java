@@ -49,6 +49,11 @@ public class DefaultSignatureService implements SignatureService {
   }
 
   @Override
+  public Stream<String> listSignatureNameValues(SignatureListingOptions signatureListingOptions) {
+    return this.dao.listSignatureNameValues(signatureListingOptions);
+  }
+
+  @Override
   public Stream<String> listCellTypeAValues(SignatureListingOptions signatureListingOptions) {
     return this.dao.listCellTypeAValues(signatureListingOptions);
   }
@@ -81,5 +86,10 @@ public class DefaultSignatureService implements SignatureService {
   @Override
   public Stream<SignatureType> listSignatureTypeValues(SignatureListingOptions signatureListingOptions) {
     return this.dao.listSignatureTypeValues(signatureListingOptions);
+  }
+
+  @Override
+  public Stream<Integer> listSignaturePubMedIdValues(SignatureListingOptions signatureListingOptions) {
+    return this.dao.listSignaturePubMedIdValues(signatureListingOptions);
   }
 }

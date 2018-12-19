@@ -34,38 +34,48 @@ public interface SignatureResource {
 
   Response getGenes(String signatureName, boolean onlyUniverseGenes);
 
+  Response listSignatureNameValues(
+    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId
+  );
+
   Response listCellTypeAValues(
-    String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism, String disease,
-    String signatureSourceDb, SignatureType signatureType
+    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId
   );
 
   Response listCellTypeBValues(
-    String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism, String disease,
-    String signatureSourceDb, SignatureType signatureType
+    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId
   );
 
   Response listExperimentalDesignValues(
-    String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism, String disease,
-    String signatureSourceDb, SignatureType signatureType
+    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId
   );
 
   Response listOrganismValues(
-    String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism, String disease,
-    String signatureSourceDb, SignatureType signatureType
+    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId
   );
 
   Response listDiseaseValues(
-    String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism, String disease,
-    String signatureSourceDb, SignatureType signatureType
+    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId
   );
 
   Response listSignatureSourceDbValues(
-    String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism, String disease,
-    String signatureSourceDb, SignatureType signatureType
+    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId
   );
 
   Response listSignatureTypeValues(
-    String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism, String disease,
-    String signatureSourceDb, SignatureType signatureType
+    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId
+  );
+
+  Response listSignaturePubMedIdValues(
+    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId
   );
 }

@@ -53,6 +53,11 @@ public class DefaultDrugSignatureInteractionService implements DrugSignatureInte
   }
 
   @Override
+  public Stream<String> listSignatureNameValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.dao.listSignatureNameValues(listingOptions);
+  }
+
+  @Override
   public Stream<String> listCellTypeAValues(
     DrugSignatureInteractionListingOptions listingOptions
   ) {
@@ -91,6 +96,11 @@ public class DefaultDrugSignatureInteractionService implements DrugSignatureInte
   @Override
   public Stream<SignatureType> listSignatureTypeValues(DrugSignatureInteractionListingOptions listingOptions) {
     return this.dao.listSignatureTypeValues(listingOptions);
+  }
+
+  @Override
+  public Stream<Integer> listSignaturePubMedIdValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.dao.listSignaturePubMedIdValues(listingOptions);
   }
 
   @Override

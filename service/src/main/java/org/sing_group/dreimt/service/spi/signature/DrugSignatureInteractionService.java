@@ -37,23 +37,27 @@ public interface DrugSignatureInteractionService {
 
   long count(DrugSignatureInteractionListingOptions listingOptions);
 
-  Stream<ExperimentalDesign> listExperimentalDesignValues(DrugSignatureInteractionListingOptions listingOptions);
+  Stream<String> listSignatureNameValues(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<String> listCellTypeAValues(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<String> listCellTypeBValues(DrugSignatureInteractionListingOptions listingOptions);
 
+  Stream<ExperimentalDesign> listExperimentalDesignValues(DrugSignatureInteractionListingOptions listingOptions);
+
   Stream<String> listOrganismValues(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<String> listDiseaseValues(DrugSignatureInteractionListingOptions listingOptions);
-  
+
   Stream<String> listSignatureSourceDbValues(DrugSignatureInteractionListingOptions listingOptions);
-  
+
   Stream<SignatureType> listSignatureTypeValues(DrugSignatureInteractionListingOptions listingOptions);
+
+  Stream<Integer> listSignaturePubMedIdValues(DrugSignatureInteractionListingOptions listingOptions);
   
   Stream<String> listDrugSourceNameValues(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<String> listDrugSourceDbValues(DrugSignatureInteractionListingOptions listingOptions);
-  
+
   Stream<String> listDrugCommonNameValues(DrugSignatureInteractionListingOptions listingOptions);
 }

@@ -38,6 +38,7 @@ public class SignatureListingOptions implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private final ListingOptions listingOptions;
+  private final String signatureName;
   private final String cellTypeA;
   private final String cellTypeB;
   private final ExperimentalDesign experimentalDesign;
@@ -45,31 +46,36 @@ public class SignatureListingOptions implements Serializable {
   private final String disease;
   private final SignatureType signatureType;
   private final String sourceDb;
+  private final Integer signaturePubMedId;
   private final Set<String> mandatoryGenes;
 
   public SignatureListingOptions(
-    String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
-    String disease, String sourceDb, SignatureType signatureType
+    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String sourceDb, SignatureType signatureType, Integer signaturePubMedId
   ) {
     this(
-      noModification(), cellTypeA, cellTypeB, experimentalDesign, organism, disease, sourceDb, signatureType, emptySet()
+      noModification(), signatureName, cellTypeA, cellTypeB, experimentalDesign, organism, disease, sourceDb,
+      signatureType, signaturePubMedId, emptySet()
     );
   }
 
   public SignatureListingOptions(
-    ListingOptions listingOptions, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign,
-    String organism, String disease, String sourceDb, SignatureType signatureType
+    ListingOptions listingOptions, String signatureName, String cellTypeA, String cellTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String sourceDb, SignatureType signatureType, Integer signaturePubMedId
   ) {
     this(
-      listingOptions, cellTypeA, cellTypeB, experimentalDesign, organism, disease, sourceDb, signatureType, emptySet()
+      listingOptions, signatureName, cellTypeA, cellTypeB, experimentalDesign, organism, disease, sourceDb,
+      signatureType, signaturePubMedId, emptySet()
     );
   }
 
   public SignatureListingOptions(
-    ListingOptions listingOptions, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign,
-    String organism, String disease, String sourceDb, SignatureType signatureType, Set<String> mandatoryGenes
+    ListingOptions listingOptions, String signatureName, String cellTypeA, String cellTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String sourceDb,
+    SignatureType signatureType, Integer signaturePubMedId, Set<String> mandatoryGenes
   ) {
     this.listingOptions = listingOptions;
+    this.signatureName = signatureName;
     this.cellTypeA = cellTypeA;
     this.cellTypeB = cellTypeB;
     this.experimentalDesign = experimentalDesign;
@@ -77,11 +83,13 @@ public class SignatureListingOptions implements Serializable {
     this.disease = disease;
     this.signatureType = signatureType;
     this.sourceDb = sourceDb;
+    this.signaturePubMedId = signaturePubMedId;
     this.mandatoryGenes = mandatoryGenes;
   }
 
   public boolean hasAnyQueryModification() {
     return this.listingOptions.hasAnyQueryModification()
+      || this.signatureName != null
       || this.cellTypeA != null
       || this.cellTypeB != null
       || this.organism != null
@@ -89,11 +97,16 @@ public class SignatureListingOptions implements Serializable {
       || this.experimentalDesign != null
       || this.signatureType != null
       || this.sourceDb != null
+      || this.signaturePubMedId != null
       || this.mandatoryGenes != null;
   }
 
   public ListingOptions getListingOptions() {
     return listingOptions;
+  }
+
+  public Optional<String> getSignatureName() {
+    return ofNullable(signatureName);
   }
 
   public Optional<String> getCellTypeA() {
@@ -111,7 +124,7 @@ public class SignatureListingOptions implements Serializable {
   public Optional<String> getOrganism() {
     return ofNullable(organism);
   }
-  
+
   public Optional<String> getDisease() {
     return ofNullable(disease);
   }
@@ -119,7 +132,7 @@ public class SignatureListingOptions implements Serializable {
   public Optional<SignatureType> getSignatureType() {
     return ofNullable(signatureType);
   }
-  
+
   public Optional<String> getSourceDb() {
     return ofNullable(sourceDb);
   }
@@ -127,11 +140,15 @@ public class SignatureListingOptions implements Serializable {
   public Optional<Set<String>> getMandatoryGenes() {
     return ofNullable(mandatoryGenes);
   }
+  
+  public Optional<Integer> getSignaturePubMedId() {
+    return ofNullable(signaturePubMedId);
+  }
 
   public SignatureListingOptions withMandatoryGenes(Set<String> mandatoryGenes) {
     return new SignatureListingOptions(
-      listingOptions, cellTypeA, cellTypeB, experimentalDesign, organism, disease, sourceDb, signatureType,
-      mandatoryGenes
+      listingOptions, signatureName, cellTypeA, cellTypeB, experimentalDesign, organism, disease, sourceDb,
+      signatureType, signaturePubMedId, mandatoryGenes
     );
   }
 
@@ -146,6 +163,7 @@ public class SignatureListingOptions implements Serializable {
     result = prime * result + ((listingOptions == null) ? 0 : listingOptions.hashCode());
     result = prime * result + ((mandatoryGenes == null) ? 0 : mandatoryGenes.hashCode());
     result = prime * result + ((organism == null) ? 0 : organism.hashCode());
+    result = prime * result + ((signatureName == null) ? 0 : signatureName.hashCode());
     result = prime * result + ((signatureType == null) ? 0 : signatureType.hashCode());
     result = prime * result + ((sourceDb == null) ? 0 : sourceDb.hashCode());
     return result;
@@ -191,6 +209,11 @@ public class SignatureListingOptions implements Serializable {
       if (other.organism != null)
         return false;
     } else if (!organism.equals(other.organism))
+      return false;
+    if (signatureName == null) {
+      if (other.signatureName != null)
+        return false;
+    } else if (!signatureName.equals(other.signatureName))
       return false;
     if (signatureType != other.signatureType)
       return false;

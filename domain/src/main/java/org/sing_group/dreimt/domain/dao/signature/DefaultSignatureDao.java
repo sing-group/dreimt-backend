@@ -53,6 +53,7 @@ import javax.transaction.Transactional;
 import org.sing_group.dreimt.domain.dao.DaoHelper;
 import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.dao.spi.signature.SignatureDao;
+import org.sing_group.dreimt.domain.entities.signature.ArticleMetadata;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.Gene;
 import org.sing_group.dreimt.domain.entities.signature.GeneSetSignature;
@@ -160,6 +161,12 @@ public class DefaultSignatureDao implements SignatureDao {
 
     final List<Predicate> andPredicates = new ArrayList<>();
 
+    if (listingOptions.getSignatureName().isPresent()) {
+      final Path<String> signatureName = root.get("signatureName");
+
+      andPredicates.add(cb.like(signatureName, "%" + listingOptions.getSignatureName().get() + "%"));
+    }
+
     if (listingOptions.getCellTypeA().isPresent()) {
       Join<Signature, String> joinSignatureCellTypeA = root.join("cellTypeA", JoinType.LEFT);
 
@@ -202,6 +209,13 @@ public class DefaultSignatureDao implements SignatureDao {
       andPredicates.add(cb.equal(signatureType, listingOptions.getSignatureType().get()));
     }
 
+    if (listingOptions.getSignaturePubMedId().isPresent()) {
+      Join<Signature, ArticleMetadata> joinArticleMetadata = root.join("articleMetadata", JoinType.LEFT);
+      final Path<Integer> signaturePubMedId = joinArticleMetadata.get("pubmedId");
+
+      andPredicates.add(cb.equal(signaturePubMedId, listingOptions.getSignaturePubMedId().get()));
+    }
+
     if (geneFilterBuilder != null) {
       Set<String> genes = listingOptions.getMandatoryGenes().orElse(emptySet());
       if (!genes.isEmpty()) {
@@ -235,6 +249,11 @@ public class DefaultSignatureDao implements SignatureDao {
     }
 
     return this.em.createQuery(query).getResultList().stream();
+  }
+
+  @Override
+  public Stream<String> listSignatureNameValues(SignatureListingOptions signatureListingOptions) {
+    return listColumnValues("signatureName", String.class, signatureListingOptions);
   }
 
   @Override
@@ -273,6 +292,22 @@ public class DefaultSignatureDao implements SignatureDao {
 
     if (signatureListingOptions.hasAnyQueryModification()) {
       query = query.where(createPredicates(signatureListingOptions, null, root));
+    }
+
+    return this.em.createQuery(query).getResultList().stream();
+  }
+
+  @Override
+  public Stream<Integer> listSignaturePubMedIdValues(SignatureListingOptions listingOptions) {
+    final CriteriaBuilder cb = dh.cb();
+    CriteriaQuery<Integer> query = cb.createQuery(Integer.class);
+    final Root<Signature> root = query.from(dh.getEntityType());
+    final Join<Signature, ArticleMetadata> join = root.join("articleMetadata", JoinType.LEFT);
+
+    query = query.select(join.get("pubmedId")).distinct(true);
+
+    if (listingOptions.hasAnyQueryModification()) {
+      query = query.where(createPredicates(listingOptions, null, root));
     }
 
     return this.em.createQuery(query).getResultList().stream();

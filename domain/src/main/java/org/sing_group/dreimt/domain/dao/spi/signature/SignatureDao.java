@@ -35,6 +35,8 @@ public interface SignatureDao {
 
   Stream<Signature> list(SignatureListingOptions listingOptions);
 
+  Stream<String> listSignatureNameValues(SignatureListingOptions signatureListingOptions);
+
   Stream<String> listCellTypeAValues(SignatureListingOptions signatureListingOptions);
 
   Stream<String> listCellTypeBValues(SignatureListingOptions signatureListingOptions);
@@ -48,4 +50,6 @@ public interface SignatureDao {
   Stream<String> listSourceDbValues(SignatureListingOptions signatureListingOptions);
 
   Stream<SignatureType> listSignatureTypeValues(SignatureListingOptions signatureListingOptions);
+
+  Stream<Integer> listSignaturePubMedIdValues(SignatureListingOptions signatureListingOptions);
 }

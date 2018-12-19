@@ -36,6 +36,8 @@ import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 public interface SignatureService {
   Optional<Signature> get(String signatureName);
 
+  Stream<String> listSignatureNameValues(SignatureListingOptions listingOptions);
+
   Stream<String> listCellTypeAValues(SignatureListingOptions signatureListingOptions);
 
   Stream<String> listCellTypeBValues(SignatureListingOptions signatureListingOptions);
@@ -49,4 +51,6 @@ public interface SignatureService {
   Stream<String> listSourceDbValues(SignatureListingOptions signatureListingOptions);
 
   Stream<SignatureType> listSignatureTypeValues(SignatureListingOptions signatureListingOptions);
+
+  Stream<Integer> listSignaturePubMedIdValues(SignatureListingOptions listingOptions);
 }

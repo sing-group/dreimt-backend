@@ -51,6 +51,7 @@ import org.sing_group.dreimt.domain.dao.DaoHelper;
 import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.dao.ListingOptions.SortField;
 import org.sing_group.dreimt.domain.dao.spi.signature.DrugSignatureInteractionDao;
+import org.sing_group.dreimt.domain.entities.signature.ArticleMetadata;
 import org.sing_group.dreimt.domain.entities.signature.Drug;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionField;
@@ -164,6 +165,11 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   }
 
   @Override
+  public Stream<String> listSignatureNameValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.listSingleJoinColumnValues(String.class, "signature", "signatureName", listingOptions);
+  }
+
+  @Override
   public Stream<String> listOrganismValues(DrugSignatureInteractionListingOptions listingOptions) {
     return this.listSingleJoinColumnValues(String.class, "signature", "organism", listingOptions);
   }
@@ -224,6 +230,24 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     return this.em.createQuery(query).getResultList().stream();
   }
 
+  @Override
+  public Stream<Integer> listSignaturePubMedIdValues(DrugSignatureInteractionListingOptions listingOptions) {
+    final CriteriaBuilder cb = dh.cb();
+
+    CriteriaQuery<Integer> query = cb.createQuery(Integer.class);
+    final Root<DrugSignatureInteraction> root = query.from(dh.getEntityType());
+    final Join<DrugSignatureInteraction, Signature> join = root.join("signature");
+    final Join<Signature, ArticleMetadata> join2 = join.join("articleMetadata", JoinType.LEFT);
+
+    query = query.select(join2.get("pubmedId")).distinct(true);
+
+    if (listingOptions.hasAnyQueryModification()) {
+      query = query.where(createPredicates(listingOptions, root));
+    }
+
+    return this.em.createQuery(query).getResultList().stream();
+  }
+
   private Predicate[] createPredicates(
     final DrugSignatureInteractionListingOptions listingOptions,
     final Root<DrugSignatureInteraction> root
@@ -257,8 +281,14 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     }
 
     SignatureListingOptions signatureListingOptions = listingOptions.getSignatureListingOptions();
-
     Join<DrugSignatureInteraction, Signature> joinSignature = root.join("signature", JoinType.LEFT);
+
+    if (signatureListingOptions.getSignatureName().isPresent()) {
+      final Path<String> signatureName = joinSignature.get("signatureName");
+
+      andPredicates.add(cb.like(signatureName, "%" + signatureListingOptions.getSignatureName().get() + "%"));
+    }
+
     if (signatureListingOptions.getCellTypeA().isPresent()) {
       Join<Signature, String> joinSignatureCellTypeA = joinSignature.join("cellTypeA", JoinType.LEFT);
 
@@ -299,6 +329,13 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       final Path<String> signatureType = joinSignature.get("signatureType");
 
       andPredicates.add(cb.like(signatureType, "%" + signatureListingOptions.getSignatureType().get() + "%"));
+    }
+
+    if (signatureListingOptions.getSignaturePubMedId().isPresent()) {
+      Join<Signature, ArticleMetadata> joinArticleMetadata = joinSignature.join("articleMetadata", JoinType.LEFT);
+      final Path<Integer> signaturePubMedId = joinArticleMetadata.get("pubmedId");
+
+      andPredicates.add(cb.equal(signaturePubMedId, signatureListingOptions.getSignaturePubMedId().get()));
     }
 
     Join<DrugSignatureInteraction, Drug> joinDrug = root.join("drug", JoinType.LEFT);
