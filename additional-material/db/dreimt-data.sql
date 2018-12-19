@@ -212,6 +212,26 @@ INSERT INTO `signature_cell_type_b` VALUES ('Signature 1','Type_2A'),('Signature
 UNLOCK TABLES;
 
 --
+-- Dumping data for table `signature_cell_subtype_a`
+--
+
+LOCK TABLES `signature_cell_subtype_a` WRITE;
+/*!40000 ALTER TABLE `signature_cell_subtype_a` DISABLE KEYS */;
+INSERT INTO `signature_cell_subtype_a` VALUES ('Signature 1','Subtype_1A'),('Signature 1','Subtype_1B'),('Signature 2','Subtype_1B'),('Signature 3','Subtype_2A'),('Signature 4','Subtype_2B'),('Signature 5','Subtype_2A'),('Signature 5','Subtype_2B'),('Signature 6','Subtype_3');
+/*!40000 ALTER TABLE `signature_cell_subtype_a` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Dumping data for table `signature_cell_subtype_b`
+--
+
+LOCK TABLES `signature_cell_subtype_b` WRITE;
+/*!40000 ALTER TABLE `signature_cell_subtype_b` DISABLE KEYS */;
+INSERT INTO `signature_cell_subtype_b` VALUES ('Signature 1','Subtype_2A'),('Signature 2','Subtype_2B'),('Signature 3','Subtype_4A'),('Signature 4','Subtype_4B'),('Signature 5','Subtype_5B'),('Signature 6','Subtype_1');
+/*!40000 ALTER TABLE `signature_cell_subtype_b` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Dumping data for table `signature_geneset_genes`
 --
 

@@ -38,7 +38,11 @@ public interface DrugSignatureInteractionDao {
 
   Stream<String> listCellTypeAValues(DrugSignatureInteractionListingOptions listingOptions);
 
+  Stream<String> listCellSubTypeAValues(DrugSignatureInteractionListingOptions listingOptions);
+
   Stream<String> listCellTypeBValues(DrugSignatureInteractionListingOptions listingOptions);
+
+  Stream<String> listCellSubTypeBValues(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<ExperimentalDesign> listExperimentalDesignValues(DrugSignatureInteractionListingOptions listingOptions);
 

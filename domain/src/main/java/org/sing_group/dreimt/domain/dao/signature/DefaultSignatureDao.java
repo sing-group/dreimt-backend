@@ -173,10 +173,22 @@ public class DefaultSignatureDao implements SignatureDao {
       andPredicates.add(cb.like(joinSignatureCellTypeA, "%" + listingOptions.getCellTypeA().get() + "%"));
     }
 
+    if (listingOptions.getCellSubTypeA().isPresent()) {
+      Join<Signature, String> joinSignatureCellSubTypeA = root.join("cellSubTypeA", JoinType.LEFT);
+
+      andPredicates.add(cb.like(joinSignatureCellSubTypeA, "%" + listingOptions.getCellSubTypeA().get() + "%"));
+    }
+
     if (listingOptions.getCellTypeB().isPresent()) {
       Join<Signature, String> joinSignatureCellTypeB = root.join("cellTypeB", JoinType.LEFT);
 
       andPredicates.add(cb.like(joinSignatureCellTypeB, "%" + listingOptions.getCellTypeB().get() + "%"));
+    }
+
+    if (listingOptions.getCellSubTypeB().isPresent()) {
+      Join<Signature, String> joinSignatureCellSubTypeB = root.join("cellSubTypeB", JoinType.LEFT);
+
+      andPredicates.add(cb.like(joinSignatureCellSubTypeB, "%" + listingOptions.getCellSubTypeB().get() + "%"));
     }
 
     if (listingOptions.getExperimentalDesign().isPresent()) {
@@ -232,8 +244,18 @@ public class DefaultSignatureDao implements SignatureDao {
   }
 
   @Override
+  public Stream<String> listCellSubTypeAValues(SignatureListingOptions signatureListingOptions) {
+    return listCellTypeValues(signatureListingOptions, "cellSubTypeA");
+  }
+
+  @Override
   public Stream<String> listCellTypeBValues(SignatureListingOptions signatureListingOptions) {
     return listCellTypeValues(signatureListingOptions, "cellTypeB");
+  }
+
+  @Override
+  public Stream<String> listCellSubTypeBValues(SignatureListingOptions signatureListingOptions) {
+    return listCellTypeValues(signatureListingOptions, "cellSubTypeB");
   }
 
   private Stream<String> listCellTypeValues(SignatureListingOptions signatureListingOptions, String cellTypeColumn) {

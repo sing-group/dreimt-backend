@@ -38,8 +38,12 @@ public interface SignatureDao {
   Stream<String> listSignatureNameValues(SignatureListingOptions signatureListingOptions);
 
   Stream<String> listCellTypeAValues(SignatureListingOptions signatureListingOptions);
+  
+  Stream<String> listCellSubTypeAValues(SignatureListingOptions signatureListingOptions);
 
   Stream<String> listCellTypeBValues(SignatureListingOptions signatureListingOptions);
+  
+  Stream<String> listCellSubTypeBValues(SignatureListingOptions signatureListingOptions);
 
   Stream<ExperimentalDesign> listExperimentalDesignValues(SignatureListingOptions signatureListingOptions);
 

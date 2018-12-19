@@ -52,7 +52,8 @@ public class DefaultSignatureMapper implements SignatureMapper {
 
     return new SignatureData(
       signature.getSignatureName(),
-      signature.getCellTypeA(), signature.getCellTypeB(),
+      signature.getCellTypeA(), signature.getCellSubTypeA(), 
+      signature.getCellTypeB(), signature.getCellSubTypeB(),
       signature.getSourceDb(), signature.getExperimentalDesign(),
       signature.getOrganism(), signature.getDisease(),
       signature.getArticleMetadata().getPubmedId(),

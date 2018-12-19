@@ -41,7 +41,11 @@ public interface DrugSignatureInteractionService {
 
   Stream<String> listCellTypeAValues(DrugSignatureInteractionListingOptions listingOptions);
 
+  Stream<String> listCellSubTypeAValues(DrugSignatureInteractionListingOptions listingOptions);
+
   Stream<String> listCellTypeBValues(DrugSignatureInteractionListingOptions listingOptions);
+
+  Stream<String> listCellSubTypeBValues(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<ExperimentalDesign> listExperimentalDesignValues(DrugSignatureInteractionListingOptions listingOptions);
 
@@ -54,7 +58,7 @@ public interface DrugSignatureInteractionService {
   Stream<SignatureType> listSignatureTypeValues(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<Integer> listSignaturePubMedIdValues(DrugSignatureInteractionListingOptions listingOptions);
-  
+
   Stream<String> listDrugSourceNameValues(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<String> listDrugSourceDbValues(DrugSignatureInteractionListingOptions listingOptions);

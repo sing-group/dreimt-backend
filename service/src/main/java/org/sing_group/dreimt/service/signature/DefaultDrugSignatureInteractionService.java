@@ -58,17 +58,23 @@ public class DefaultDrugSignatureInteractionService implements DrugSignatureInte
   }
 
   @Override
-  public Stream<String> listCellTypeAValues(
-    DrugSignatureInteractionListingOptions listingOptions
-  ) {
+  public Stream<String> listCellTypeAValues(DrugSignatureInteractionListingOptions listingOptions) {
     return this.dao.listCellTypeAValues(listingOptions);
+  }
+
+  @Override
+  public Stream<String> listCellSubTypeAValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.dao.listCellSubTypeAValues(listingOptions);
+  }
+
+  @Override
+  public Stream<String> listCellTypeBValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.dao.listCellTypeBValues(listingOptions);
   }
   
   @Override
-  public Stream<String> listCellTypeBValues(
-    DrugSignatureInteractionListingOptions listingOptions
-  ) {
-    return this.dao.listCellTypeBValues(listingOptions);
+  public Stream<String> listCellSubTypeBValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.dao.listCellSubTypeBValues(listingOptions);
   }
 
   @Override

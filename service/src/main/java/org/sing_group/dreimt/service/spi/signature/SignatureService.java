@@ -39,8 +39,12 @@ public interface SignatureService {
   Stream<String> listSignatureNameValues(SignatureListingOptions listingOptions);
 
   Stream<String> listCellTypeAValues(SignatureListingOptions signatureListingOptions);
+  
+  Stream<String> listCellSubTypeAValues(SignatureListingOptions signatureListingOptions);
 
   Stream<String> listCellTypeBValues(SignatureListingOptions signatureListingOptions);
+  
+  Stream<String> listCellSubTypeBValues(SignatureListingOptions signatureListingOptions);
 
   Stream<ExperimentalDesign> listExperimentalDesignValues(SignatureListingOptions signatureListingOptions);
 

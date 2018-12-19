@@ -26,7 +26,9 @@ public enum DrugSignatureInteractionField {
   NONE,
 
   CELL_TYPE_A,
+  CELL_SUBTYPE_A,
   CELL_TYPE_B,
+  CELL_SUBTYPE_B,
   SIGNATURE_NAME,
   EXPERIMENTAL_DESIGN,
   ORGANISM,

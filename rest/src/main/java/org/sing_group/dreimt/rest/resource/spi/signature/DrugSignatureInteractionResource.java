@@ -36,87 +36,115 @@ public interface DrugSignatureInteractionResource {
 
   Response list(
     Integer page, Integer pageSize, DrugSignatureInteractionField orderField, SortDirection sortDirection,
-    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
-    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId, String drugSourceName,
-    String drugSourceDb, String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
 
   Response jaccardQuery(
-    GenesQueryInfo post, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
-    String disease, String signatureSourceDb, SignatureType signatureType, boolean onlyUniverseGenes
+    GenesQueryInfo post, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, boolean onlyUniverseGenes
   );
 
   Response cmapQuery(GenesQueryInfo post, Integer numPerm, Double maxPvalue);
 
   Response listSignatureNameValues(
-    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
-    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId, String drugSourceName,
-    String drugSourceDb, String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
 
   Response listCellTypeAValues(
-    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
-    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId, String drugSourceName,
-    String drugSourceDb, String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+  );
+  
+  Response listCellSubTypeAValues(
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
 
   Response listCellTypeBValues(
-    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
-    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId, String drugSourceName,
-    String drugSourceDb, String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+  );
+  
+  Response listCellSubTypeBValues(
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
 
   Response listExperimentalDesignValues(
-    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
-    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId, String drugSourceName,
-    String drugSourceDb, String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
 
   Response listOrganismValues(
-    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
-    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId, String drugSourceName,
-    String drugSourceDb, String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
 
   Response listDiseaseValues(
-    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
-    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId, String drugSourceName,
-    String drugSourceDb, String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
 
   Response listSignatureSourceDbValues(
-    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
-    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId, String drugSourceName,
-    String drugSourceDb, String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
 
   Response listSignatureTypeValues(
-    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
-    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId, String drugSourceName,
-    String drugSourceDb, String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
 
   Response listSignaturePubMedIdValues(
-    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
-    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId, String drugSourceName,
-    String drugSourceDb, String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
 
   Response listDrugSourceNameValues(
-    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
-    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId, String drugSourceName,
-    String drugSourceDb, String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
 
   Response listDrugSourceDbValues(
-    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
-    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId, String drugSourceName,
-    String drugSourceDb, String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
 
   Response listDrugCommonNameValues(
-    String signatureName, String cellTypeA, String cellTypeB, ExperimentalDesign experimentalDesign, String organism,
-    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId, String drugSourceName,
-    String drugSourceDb, String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
 }

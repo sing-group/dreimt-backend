@@ -66,7 +66,7 @@ CREATE TABLE `cmap_result_drug_interactions` (
   KEY `FK7s3cw6jwjf5lwv6kxbk5lu3vy` (`drugId`),
   CONSTRAINT `FK7s3cw6jwjf5lwv6kxbk5lu3vy` FOREIGN KEY (`drugId`) REFERENCES `drug` (`id`),
   CONSTRAINT `FK_cmap_result_cmap_result_drug_interactions` FOREIGN KEY (`cmapResultId`) REFERENCES `cmap_result` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=14071 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -183,7 +183,7 @@ CREATE TABLE `drug_signature_interaction` (
   KEY `FKnsnnq5179w6clhenc6o6h8oov` (`signature`),
   CONSTRAINT `FKnsnnq5179w6clhenc6o6h8oov` FOREIGN KEY (`signature`) REFERENCES `signature` (`signatureName`),
   CONSTRAINT `FKqv24iupckh17q8jhr5hnkaemu` FOREIGN KEY (`drugId`) REFERENCES `drug` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=46901 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -236,7 +236,7 @@ CREATE TABLE `jaccard_result_gene_overlap` (
   KEY `FK9v13mymrqag29wybo2seqqha` (`targetSignature`),
   CONSTRAINT `FK9v13mymrqag29wybo2seqqha` FOREIGN KEY (`targetSignature`) REFERENCES `signature` (`signatureName`),
   CONSTRAINT `FK_jaccard_result_jaccard_result_gene_overlap` FOREIGN KEY (`jaccardResultId`) REFERENCES `jaccard_result` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=447 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -336,6 +336,36 @@ CREATE TABLE `signature` (
   PRIMARY KEY (`signatureName`),
   KEY `FKob3uvde5er8oiayu91rowlcgm` (`article_pubmedId`),
   CONSTRAINT `FKob3uvde5er8oiayu91rowlcgm` FOREIGN KEY (`article_pubmedId`) REFERENCES `article_metadata` (`pubmedId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `signature_cell_subtype_a`
+--
+
+DROP TABLE IF EXISTS `signature_cell_subtype_a`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `signature_cell_subtype_a` (
+  `signatureName` varchar(255) NOT NULL,
+  `cellSubType` varchar(255) NOT NULL,
+  PRIMARY KEY (`signatureName`,`cellSubType`),
+  CONSTRAINT `FKdw9fhtdt3vj45vjc453jl7ovh` FOREIGN KEY (`signatureName`) REFERENCES `signature` (`signatureName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `signature_cell_subtype_b`
+--
+
+DROP TABLE IF EXISTS `signature_cell_subtype_b`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `signature_cell_subtype_b` (
+  `signatureName` varchar(255) NOT NULL,
+  `cellSubType` varchar(255) NOT NULL,
+  PRIMARY KEY (`signatureName`,`cellSubType`),
+  CONSTRAINT `FKm67vnhg2rbgdctv8gh6055y8l` FOREIGN KEY (`signatureName`) REFERENCES `signature` (`signatureName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -469,4 +499,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-11-25 15:34:49
+-- Dump completed on 2018-12-19 16:06:03

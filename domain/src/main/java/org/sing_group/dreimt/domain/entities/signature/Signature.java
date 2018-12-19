@@ -59,6 +59,15 @@ public abstract class Signature implements Serializable {
   )
   @Column(name = "cellType", nullable = false)
   private Set<String> cellTypeA;
+
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(
+    name = "signature_cell_subtype_a", 
+    joinColumns = @JoinColumn(name = "signatureName"), 
+    uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "cellSubType"})
+  )
+  @Column(name = "cellSubType", nullable = false)
+  private Set<String> cellSubTypeA;
   
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(
@@ -68,6 +77,15 @@ public abstract class Signature implements Serializable {
   )
   @Column(name = "cellType", nullable = false)
   private Set<String> cellTypeB;
+  
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(
+    name = "signature_cell_subtype_b", 
+    joinColumns = @JoinColumn(name = "signatureName"), 
+    uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "cellSubType"})
+  )
+  @Column(name = "cellSubType", nullable = false)
+  private Set<String> cellSubTypeB;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "article_pubmedId", referencedColumnName = "pubmedId", nullable = true)
@@ -96,8 +114,16 @@ public abstract class Signature implements Serializable {
     return cellTypeA;
   }
 
+  public Set<String> getCellSubTypeA() {
+    return cellSubTypeA;
+  }
+
   public Set<String> getCellTypeB() {
     return cellTypeB;
+  }
+
+  public Set<String> getCellSubTypeB() {
+    return cellSubTypeB;
   }
 
   public ArticleMetadata getArticleMetadata() {

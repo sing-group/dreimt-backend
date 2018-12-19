@@ -133,8 +133,18 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   }
 
   @Override
+  public Stream<String> listCellSubTypeAValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.listDoubleJoinColumnValues(String.class, "signature", "cellSubTypeA", listingOptions);
+  }
+
+  @Override
   public Stream<String> listCellTypeBValues(DrugSignatureInteractionListingOptions listingOptions) {
     return this.listDoubleJoinColumnValues(String.class, "signature", "cellTypeB", listingOptions);
+  }
+
+  @Override
+  public Stream<String> listCellSubTypeBValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.listDoubleJoinColumnValues(String.class, "signature", "cellSubTypeB", listingOptions);
   }
 
   private <T> Stream<T> listDoubleJoinColumnValues(
@@ -294,6 +304,12 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
       andPredicates.add(cb.like(joinSignatureCellTypeA, "%" + signatureListingOptions.getCellTypeA().get() + "%"));
     }
+    
+    if (signatureListingOptions.getCellSubTypeA().isPresent()) {
+      Join<Signature, String> joinSignatureCellSubTypeA = joinSignature.join("cellSubTypeA", JoinType.LEFT);
+      
+      andPredicates.add(cb.like(joinSignatureCellSubTypeA, "%" + signatureListingOptions.getCellSubTypeA().get() + "%"));
+    }
 
     if (signatureListingOptions.getCellTypeB().isPresent()) {
       Join<Signature, String> joinSignatureCellTypeB = joinSignature.join("cellTypeB", JoinType.LEFT);
@@ -301,6 +317,12 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       andPredicates.add(cb.like(joinSignatureCellTypeB, "%" + signatureListingOptions.getCellTypeB().get() + "%"));
     }
 
+    if (signatureListingOptions.getCellSubTypeB().isPresent()) {
+      Join<Signature, String> joinSignatureCellSubTypeB = joinSignature.join("cellSubTypeB", JoinType.LEFT);
+      
+      andPredicates.add(cb.like(joinSignatureCellSubTypeB, "%" + signatureListingOptions.getCellSubTypeB().get() + "%"));
+    }
+    
     if (signatureListingOptions.getExperimentalDesign().isPresent()) {
       final Path<String> experimentalDesign = joinSignature.get("experimentalDesign");
 
@@ -389,8 +411,14 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
             case CELL_TYPE_A:
               orders.add(order.apply(root.join("signature").join("cellTypeA")));
               break;
+            case CELL_SUBTYPE_A:
+              orders.add(order.apply(root.join("signature").join("cellSubTypeA")));
+              break;
             case CELL_TYPE_B:
               orders.add(order.apply(root.join("signature").join("cellTypeB")));
+              break;
+            case CELL_SUBTYPE_B:
+              orders.add(order.apply(root.join("signature").join("cellSubTypeB")));
               break;
             case SIGNATURE_NAME:
               orders.add(order.apply(root.join("signature").get("signatureName")));
