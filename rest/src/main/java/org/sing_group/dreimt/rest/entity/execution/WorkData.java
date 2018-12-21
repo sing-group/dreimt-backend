@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
+import org.sing_group.dreimt.domain.entities.execution.ExecutionStatus;
 import org.sing_group.dreimt.rest.entity.LocalDateTimeToIsoStringAdapter;
 import org.sing_group.dreimt.rest.entity.UuidAndUri;
 
@@ -62,7 +63,7 @@ public class WorkData implements Serializable {
 
   private String resultReference;
 
-  private String status;
+  private ExecutionStatus status;
 
   private WorkStepData[] steps;
 
@@ -77,7 +78,7 @@ public class WorkData implements Serializable {
     LocalDateTime startingDateTime,
     LocalDateTime finishingDateTime,
     String resultReference,
-    String status,
+    ExecutionStatus status,
     WorkStepData[] steps
   ) {
     this.id = id;
@@ -156,11 +157,11 @@ public class WorkData implements Serializable {
     this.resultReference = resultReference;
   }
 
-  public String getStatus() {
+  public ExecutionStatus getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(ExecutionStatus status) {
     this.status = status;
   }
 

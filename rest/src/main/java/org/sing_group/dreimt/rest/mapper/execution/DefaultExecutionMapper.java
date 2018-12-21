@@ -57,7 +57,7 @@ public class DefaultExecutionMapper implements ExecutionMapper {
       work.getStartingDateTime().orElse(null),
       work.getFinishingDateTime().orElse(null),
       work.getResultReference().orElse(null),
-      work.getStatus().name(),
+      work.getStatus(),
       work.getSteps()
         .map(this::toWorkStepData)
       .toArray(WorkStepData[]::new)
