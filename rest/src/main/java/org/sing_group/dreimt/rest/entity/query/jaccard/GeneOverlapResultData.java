@@ -26,13 +26,13 @@ import java.util.List;
 
 public class GeneOverlapResultData {
 
-  private List<GeneOverlapData> overlapData;
+  private List<GeneOverlapData> interactions;
 
   public GeneOverlapResultData(List<GeneOverlapData> overlapData) {
-    this.overlapData = overlapData;
+    this.interactions = overlapData;
   }
 
-  public List<GeneOverlapData> getOverlapData() {
-    return overlapData;
+  public List<GeneOverlapData> getInteractions() {
+    return interactions;
   }
 }

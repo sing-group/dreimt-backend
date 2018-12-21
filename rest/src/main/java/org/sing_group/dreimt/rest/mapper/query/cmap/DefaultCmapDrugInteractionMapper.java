@@ -44,16 +44,16 @@ public class DefaultCmapDrugInteractionMapper implements CmapDrugInteractionMapp
 
   @Override
   public CmapDrugInteractionResultData toCmapDrugInteractionResultData(List<CmapDrugInteraction> cmapDrugInteractions) {
-    List<CmapDrugInteractionData> cmapDrugInteractionData = cmapDrugInteractions.stream().map(c -> {
-      return new CmapDrugInteractionData(
-        drugMapper.toDrugData(c.getDrug()),
-        c.getTes(),
-        c.getPvalue(),
-        c.getFdr()
-      );
-    }).collect(toList());
-
-    return new CmapDrugInteractionResultData(cmapDrugInteractionData);
+    return new CmapDrugInteractionResultData(
+      cmapDrugInteractions.stream().map(c -> 
+        new CmapDrugInteractionData(
+          drugMapper.toDrugData(c.getDrug()),
+          c.getTes(),
+          c.getPvalue(),
+          c.getFdr()
+        )
+      ).collect(toList())
+    );
   }
 
   @Override

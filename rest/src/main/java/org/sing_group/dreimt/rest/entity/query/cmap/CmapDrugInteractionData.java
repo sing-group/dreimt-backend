@@ -40,16 +40,8 @@ public class CmapDrugInteractionData {
     this.fdr = fdr;
   }
 
-  public String getDrugSourceDb() {
-    return drugData.getSourceDb();
-  }
-
-  public String getDrugSourceName() {
-    return drugData.getSourceName();
-  }
-
-  public String getDrugCommonName() {
-    return drugData.getCommonName();
+  public DrugData getDrug() {
+    return drugData;
   }
 
   public Double getTes() {

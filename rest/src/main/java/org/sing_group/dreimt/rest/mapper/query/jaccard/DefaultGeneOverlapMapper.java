@@ -53,18 +53,18 @@ public class DefaultGeneOverlapMapper implements GeneOverlapMapper {
 
   @Override
   public GeneOverlapResultData toGeneOverlapResultData(List<GeneOverlap> geneOverlaps) {
-    List<GeneOverlapData> overlapData = geneOverlaps.stream().map(g -> {
-      return new GeneOverlapData(
-        g.getSourceComparisonType(),
-        signatureMapper.toSignatureDataSummary(g.getTargetSignature()),
-        g.getTargetComparisonType(),
-        g.getJaccard(),
-        g.getPvalue(),
-        g.getFdr()
-      );
-    }).collect(toList());
-
-    return new GeneOverlapResultData(overlapData);
+    return new GeneOverlapResultData(
+        geneOverlaps.stream().map(g -> 
+          new GeneOverlapData(
+            g.getSourceComparisonType(),
+            signatureMapper.toSignatureDataSummary(g.getTargetSignature()),
+            g.getTargetComparisonType(),
+            g.getJaccard(),
+            g.getPvalue(),
+            g.getFdr()
+          )
+      ).collect(toList())
+    );
   }
 
   @Override

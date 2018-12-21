@@ -25,13 +25,13 @@ import java.util.List;
 
 public class CmapDrugInteractionResultData {
 
-  private List<CmapDrugInteractionData> cmapDrugInteractionData;
+  private List<CmapDrugInteractionData> interactions;
 
   public CmapDrugInteractionResultData(List<CmapDrugInteractionData> cmapDrugInteractionData) {
-    this.cmapDrugInteractionData = cmapDrugInteractionData;
+    this.interactions = cmapDrugInteractionData;
   }
 
-  public List<CmapDrugInteractionData> getCmapDrugInteractionData() {
-    return cmapDrugInteractionData;
+  public List<CmapDrugInteractionData> getInteractions() {
+    return interactions;
   }
 }
