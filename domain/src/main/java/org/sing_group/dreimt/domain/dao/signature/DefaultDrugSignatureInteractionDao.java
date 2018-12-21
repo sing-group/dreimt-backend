@@ -324,7 +324,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     }
     
     if (signatureListingOptions.getExperimentalDesign().isPresent()) {
-      final Path<String> experimentalDesign = joinSignature.get("experimentalDesign");
+      final Path<ExperimentalDesign> experimentalDesign = joinSignature.get("experimentalDesign");
 
       andPredicates.add(cb.equal(experimentalDesign, signatureListingOptions.getExperimentalDesign().get()));
     }
