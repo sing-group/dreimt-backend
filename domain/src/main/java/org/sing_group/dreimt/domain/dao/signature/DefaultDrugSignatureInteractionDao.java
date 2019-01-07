@@ -28,6 +28,8 @@ import static javax.transaction.Transactional.TxType.MANDATORY;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -290,95 +292,56 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       andPredicates.add(cb.lessThanOrEqualTo(tes, listingOptions.getMaxTes().get()));
     }
 
-    SignatureListingOptions signatureListingOptions = listingOptions.getSignatureListingOptions();
-    Join<DrugSignatureInteraction, Signature> joinSignature = root.join("signature", JoinType.LEFT);
+    final SignatureListingOptions signatureListingOptions = listingOptions.getSignatureListingOptions();
+    final Join<DrugSignatureInteraction, Signature> joinSignature = root.join("signature", JoinType.LEFT);
 
-    if (signatureListingOptions.getSignatureName().isPresent()) {
-      final Path<String> signatureName = joinSignature.get("signatureName");
+    final BiConsumer<String, Optional<String>> joinLikeSignatureBuilder = (attributeName, queryValue) -> {
+      if (queryValue.isPresent()) {
+        final Path<String> field = joinSignature.join(attributeName);
+        
+        andPredicates.add(cb.like(cb.upper(field), "%" + queryValue.get().toUpperCase() + "%"));
+      }
+    };
 
-      andPredicates.add(cb.like(signatureName, "%" + signatureListingOptions.getSignatureName().get() + "%"));
-    }
+    final BiConsumer<String, Optional<String>> likeSignatureBuilder = (attributeName, queryValue) -> {
+      if (queryValue.isPresent()) {
+        final Path<String> field = joinSignature.get(attributeName);
+        
+        andPredicates.add(cb.like(cb.upper(field), "%" + queryValue.get().toUpperCase() + "%"));
+      }
+    };
 
-    if (signatureListingOptions.getCellTypeA().isPresent()) {
-      Join<Signature, String> joinSignatureCellTypeA = joinSignature.join("cellTypeA", JoinType.LEFT);
-
-      andPredicates.add(cb.like(joinSignatureCellTypeA, "%" + signatureListingOptions.getCellTypeA().get() + "%"));
-    }
+    joinLikeSignatureBuilder.accept("cellTypeA", signatureListingOptions.getCellTypeA());
+    joinLikeSignatureBuilder.accept("cellSubTypeA", signatureListingOptions.getCellSubTypeA());
+    joinLikeSignatureBuilder.accept("cellTypeB", signatureListingOptions.getCellTypeB());
+    joinLikeSignatureBuilder.accept("cellSubTypeB", signatureListingOptions.getCellSubTypeB());
+    likeSignatureBuilder.accept("organism", signatureListingOptions.getOrganism());
+    likeSignatureBuilder.accept("disease", signatureListingOptions.getDisease());
+    likeSignatureBuilder.accept("sourceDb", signatureListingOptions.getSourceDb());
+    likeSignatureBuilder.accept("experimentalDesign", signatureListingOptions.getExperimentalDesign().map(ExperimentalDesign::toString));
+    likeSignatureBuilder.accept("signatureType", signatureListingOptions.getSignatureType().map(SignatureType::toString));
     
-    if (signatureListingOptions.getCellSubTypeA().isPresent()) {
-      Join<Signature, String> joinSignatureCellSubTypeA = joinSignature.join("cellSubTypeA", JoinType.LEFT);
-      
-      andPredicates.add(cb.like(joinSignatureCellSubTypeA, "%" + signatureListingOptions.getCellSubTypeA().get() + "%"));
-    }
-
-    if (signatureListingOptions.getCellTypeB().isPresent()) {
-      Join<Signature, String> joinSignatureCellTypeB = joinSignature.join("cellTypeB", JoinType.LEFT);
-
-      andPredicates.add(cb.like(joinSignatureCellTypeB, "%" + signatureListingOptions.getCellTypeB().get() + "%"));
-    }
-
-    if (signatureListingOptions.getCellSubTypeB().isPresent()) {
-      Join<Signature, String> joinSignatureCellSubTypeB = joinSignature.join("cellSubTypeB", JoinType.LEFT);
-      
-      andPredicates.add(cb.like(joinSignatureCellSubTypeB, "%" + signatureListingOptions.getCellSubTypeB().get() + "%"));
-    }
-    
-    if (signatureListingOptions.getExperimentalDesign().isPresent()) {
-      final Path<ExperimentalDesign> experimentalDesign = joinSignature.get("experimentalDesign");
-
-      andPredicates.add(cb.equal(experimentalDesign, signatureListingOptions.getExperimentalDesign().get()));
-    }
-
-    if (signatureListingOptions.getOrganism().isPresent()) {
-      final Path<String> organism = joinSignature.get("organism");
-
-      andPredicates.add(cb.like(organism, "%" + signatureListingOptions.getOrganism().get() + "%"));
-    }
-
-    if (signatureListingOptions.getDisease().isPresent()) {
-      final Path<String> disease = joinSignature.get("disease");
-
-      andPredicates.add(cb.like(disease, "%" + signatureListingOptions.getDisease().get() + "%"));
-    }
-
-    if (signatureListingOptions.getSourceDb().isPresent()) {
-      final Path<String> sourceDb = joinSignature.get("sourceDb");
-
-      andPredicates.add(cb.like(sourceDb, "%" + signatureListingOptions.getSourceDb().get() + "%"));
-    }
-
-    if (signatureListingOptions.getSignatureType().isPresent()) {
-      final Path<String> signatureType = joinSignature.get("signatureType");
-
-      andPredicates.add(cb.like(signatureType, "%" + signatureListingOptions.getSignatureType().get() + "%"));
-    }
-
     if (signatureListingOptions.getSignaturePubMedId().isPresent()) {
       Join<Signature, ArticleMetadata> joinArticleMetadata = joinSignature.join("articleMetadata", JoinType.LEFT);
       final Path<Integer> signaturePubMedId = joinArticleMetadata.get("pubmedId");
 
       andPredicates.add(cb.equal(signaturePubMedId, signatureListingOptions.getSignaturePubMedId().get()));
     }
+    
+    final Join<DrugSignatureInteraction, Drug> joinDrug = root.join("drug", JoinType.LEFT);
 
-    Join<DrugSignatureInteraction, Drug> joinDrug = root.join("drug", JoinType.LEFT);
-    if (listingOptions.getDrugSourceName().isPresent()) {
-      final Path<String> sourceName = joinDrug.get("sourceName");
-
-      andPredicates.add(cb.like(sourceName, "%" + listingOptions.getDrugSourceName().get() + "%"));
-    }
-
-    if (listingOptions.getDrugSourceDb().isPresent()) {
-      final Path<String> sourceDb = joinDrug.get("sourceDb");
-
-      andPredicates.add(cb.like(sourceDb, "%" + listingOptions.getDrugSourceDb().get() + "%"));
-    }
-
-    if (listingOptions.getDrugCommonName().isPresent()) {
-      final Path<String> commonName = joinDrug.get("commonName");
-
-      andPredicates.add(cb.like(commonName, "%" + listingOptions.getDrugCommonName().get() + "%"));
-    }
-
+    final BiConsumer<String, Optional<String>> joinLikeDrugBuilder = (attributeName, queryValue) -> {
+      if (queryValue.isPresent()) {
+        final Path<String> field = joinDrug.get(attributeName);
+        
+        andPredicates.add(cb.like(cb.upper(field), "%" + queryValue.get().toUpperCase() + "%"));
+      }
+    };
+    
+    joinLikeDrugBuilder.accept("sourceName", listingOptions.getDrugSourceName());
+    joinLikeDrugBuilder.accept("sourceDb", listingOptions.getDrugSourceDb());
+    joinLikeDrugBuilder.accept("commonName", listingOptions.getDrugCommonName());
+    
     return andPredicates.toArray(new Predicate[andPredicates.size()]);
   }
 
