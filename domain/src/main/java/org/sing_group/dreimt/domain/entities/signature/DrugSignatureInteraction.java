@@ -30,12 +30,20 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Index;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "drug_signature_interaction")
+@Table(
+  name = "drug_signature_interaction",
+  indexes = {
+    @Index(columnList = "tes"),
+    @Index(columnList = "pValue"),
+    @Index(columnList = "fdr")
+  }
+)
 public class DrugSignatureInteraction implements Serializable {
   private static final long serialVersionUID = 1L;
 
@@ -51,9 +59,9 @@ public class DrugSignatureInteraction implements Serializable {
   @JoinColumn(name = "signature", referencedColumnName = "signatureName", nullable = false)
   private Signature signature;
 
-  private Double tes;
-  private Double pValue;
-  private Double fdr;
+  private double tes;
+  private double pValue;
+  private double fdr;
 
   public DrugSignatureInteraction() {}
 
@@ -65,15 +73,15 @@ public class DrugSignatureInteraction implements Serializable {
     return signature;
   }
 
-  public Double getTes() {
+  public double getTes() {
     return tes;
   }
 
-  public Double getpValue() {
+  public double getpValue() {
     return pValue;
   }
 
-  public Double getFdr() {
+  public double getFdr() {
     return fdr;
   }
 
