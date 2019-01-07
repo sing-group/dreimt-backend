@@ -24,12 +24,10 @@ package org.sing_group.dreimt.domain.entities.execution.cmap;
 
 public enum CmapDrugInteractionField {
   NONE,
-
   DRUG_SOURCE_NAME,
   DRUG_SOURCE_DB,
   DRUG_COMMON_NAME,
-
   TES,
   P_VALUE,
-  FDR;
+  FDR
 }

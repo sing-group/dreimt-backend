@@ -27,13 +27,20 @@ import java.util.List;
 import javax.ws.rs.core.UriBuilder;
 
 import org.sing_group.dreimt.domain.entities.execution.jaccard.GeneOverlap;
-import org.sing_group.dreimt.rest.entity.query.jaccard.GeneOverlapResultData;
+import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult;
+import org.sing_group.dreimt.rest.entity.query.jaccard.GeneOverlapData;
+import org.sing_group.dreimt.rest.entity.query.jaccard.JaccardQueryMetadataData;
+import org.sing_group.dreimt.rest.entity.signature.UpDownSignatureGeneData;
 
-public interface GeneOverlapMapper {
+public interface JaccardQueryResultsMapper {
 
   void setUriBuilder(UriBuilder uriBuilder);
 
-  GeneOverlapResultData toGeneOverlapResultData(List<GeneOverlap> geneOverlaps);
+  JaccardQueryMetadataData toJaccardQueryMetadataData(JaccardResult jaccardResult);
+  
+  UpDownSignatureGeneData toGeneData(JaccardResult jaccardResult, boolean onlyUniverseGenes);
+
+  GeneOverlapData[] toGeneOverlapData(List<GeneOverlap> geneOverlaps);
 
   String toGeneOverlapCsvData(List<GeneOverlap> geneOverlaps);
 }

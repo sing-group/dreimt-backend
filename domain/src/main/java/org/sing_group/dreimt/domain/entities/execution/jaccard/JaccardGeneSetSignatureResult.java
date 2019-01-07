@@ -37,6 +37,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.Gene;
 
 @Entity
@@ -61,9 +62,13 @@ public class JaccardGeneSetSignatureResult extends JaccardResult implements Seri
 
   public JaccardGeneSetSignatureResult(
     String name, String description, Function<String, String> resultReferenceBuilder, boolean onlyUniverseGenes,
-    Set<Gene> genes
+    String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB, ExperimentalDesign experimentalDesign,
+    String organism, String disease, String signatureSourceDb, Set<Gene> genes
   ) {
-    super(name, description, resultReferenceBuilder, onlyUniverseGenes);
+    super(
+      name, description, resultReferenceBuilder, onlyUniverseGenes, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB,
+      experimentalDesign, organism, disease, signatureSourceDb
+    );
 
     this.genes = genes;
   }

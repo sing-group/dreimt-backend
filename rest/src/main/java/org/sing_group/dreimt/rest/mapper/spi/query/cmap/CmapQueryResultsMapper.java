@@ -20,18 +20,23 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.rest.entity.query.cmap;
+package org.sing_group.dreimt.rest.mapper.spi.query.cmap;
+
 import java.util.List;
 
-public class CmapDrugInteractionResultData {
+import org.sing_group.dreimt.domain.entities.execution.cmap.CmapDrugInteraction;
+import org.sing_group.dreimt.domain.entities.execution.cmap.CmapResult;
+import org.sing_group.dreimt.rest.entity.query.cmap.CmapDrugInteractionData;
+import org.sing_group.dreimt.rest.entity.query.cmap.CmapQueryMetadataData;
+import org.sing_group.dreimt.rest.entity.signature.UpDownSignatureGeneData;
 
-  private List<CmapDrugInteractionData> interactions;
+public interface CmapQueryResultsMapper {
 
-  public CmapDrugInteractionResultData(List<CmapDrugInteractionData> cmapDrugInteractionData) {
-    this.interactions = cmapDrugInteractionData;
-  }
+  CmapQueryMetadataData toCmapQueryMetadataData(CmapResult cmapResult);
 
-  public List<CmapDrugInteractionData> getInteractions() {
-    return interactions;
-  }
+  UpDownSignatureGeneData toGeneData(CmapResult cmapResult, boolean onlyUniverseGenes);
+
+  CmapDrugInteractionData[] toCmapDrugInteractionData(List<CmapDrugInteraction> cmapDrugInteractions);
+
+  String toCmapDrugInteractionCsvData(List<CmapDrugInteraction> cmapDrugInteractions);
 }

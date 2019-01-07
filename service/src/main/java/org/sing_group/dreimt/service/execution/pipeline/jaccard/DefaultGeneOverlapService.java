@@ -28,7 +28,7 @@ import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import org.sing_group.dreimt.domain.dao.ListingOptions;
+import org.sing_group.dreimt.domain.dao.execution.jaccard.GeneOverlapListingOptions;
 import org.sing_group.dreimt.domain.dao.spi.execution.jaccard.GeneOverlapDao;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.GeneOverlap;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult;
@@ -37,12 +37,17 @@ import org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.GeneOverlapS
 @Stateless
 @PermitAll
 public class DefaultGeneOverlapService implements GeneOverlapService {
-  
+
   @Inject
   private GeneOverlapDao geneOverlapDao;
 
   @Override
-  public Stream<GeneOverlap> list(JaccardResult jaccardResult, ListingOptions listingOptions) {
+  public Stream<GeneOverlap> list(JaccardResult jaccardResult, GeneOverlapListingOptions listingOptions) {
     return geneOverlapDao.list(jaccardResult, listingOptions);
+  }
+
+  @Override
+  public long count(JaccardResult jaccardResult, GeneOverlapListingOptions listingOptions) {
+    return geneOverlapDao.count(jaccardResult, listingOptions);
   }
 }

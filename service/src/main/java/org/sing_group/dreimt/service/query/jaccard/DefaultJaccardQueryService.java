@@ -113,6 +113,14 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
         "Jaccard UpDown Signature query",
         options.getResultUriBuilder(),
         options.isOnlyUniverseGenes(),
+        options.getSignatureListingOptions().getCellTypeA().orElse(null),
+        options.getSignatureListingOptions().getCellSubTypeA().orElse(null),
+        options.getSignatureListingOptions().getCellTypeB().orElse(null),
+        options.getSignatureListingOptions().getCellSubTypeB().orElse(null),
+        options.getSignatureListingOptions().getExperimentalDesign().orElse(null),
+        options.getSignatureListingOptions().getOrganism().orElse(null),
+        options.getSignatureListingOptions().getDisease().orElse(null),
+        options.getSignatureListingOptions().getSourceDb().orElse(null),
         options.getUpGenes(),
         options.getDownGenes()
       );
@@ -127,6 +135,14 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
         "Jaccard GeneSet query",
         options.getResultUriBuilder(),
         options.isOnlyUniverseGenes(),
+        options.getSignatureListingOptions().getCellTypeA().orElse(null),
+        options.getSignatureListingOptions().getCellSubTypeA().orElse(null),
+        options.getSignatureListingOptions().getCellTypeB().orElse(null),
+        options.getSignatureListingOptions().getCellSubTypeB().orElse(null),
+        options.getSignatureListingOptions().getExperimentalDesign().orElse(null),
+        options.getSignatureListingOptions().getOrganism().orElse(null),
+        options.getSignatureListingOptions().getDisease().orElse(null),
+        options.getSignatureListingOptions().getSourceDb().orElse(null),
         options.getUpGenes()
       );
 

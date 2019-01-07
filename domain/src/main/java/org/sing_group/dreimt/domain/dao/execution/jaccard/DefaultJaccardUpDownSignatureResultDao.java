@@ -39,6 +39,7 @@ import org.sing_group.dreimt.domain.dao.DaoHelper;
 import org.sing_group.dreimt.domain.dao.spi.execution.jaccard.JaccardUpDownSignatureResultDao;
 import org.sing_group.dreimt.domain.dao.spi.signature.GeneDao;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardUpDownSignatureResult;
+import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 
 @Default
 @Transactional(MANDATORY)
@@ -75,12 +76,20 @@ public class DefaultJaccardUpDownSignatureResultDao implements JaccardUpDownSign
     String name, String description,
     Function<String, String> resultReferenceBuilder,
     boolean onlyUniverseGenes,
+    String cellTypeA, String cellSubTypeA,
+    String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign,
+    String organism, String disease, String signatureSourceDb,
     Set<String> upGenes, Set<String> downGenes
   ) {
     return this.dh.persist(
       new JaccardUpDownSignatureResult(
         name, description, resultReferenceBuilder,
-        onlyUniverseGenes,
+        onlyUniverseGenes, 
+        cellTypeA, cellSubTypeA, 
+        cellTypeB, cellSubTypeB,
+        experimentalDesign, 
+        organism, disease, signatureSourceDb, 
         this.geneDao.getGenes(upGenes, true),
         this.geneDao.getGenes(downGenes, true)
       )

@@ -33,4 +33,12 @@ import org.sing_group.dreimt.domain.entities.execution.cmap.CmapResult;
 @Local
 public interface CmapDrugInteractionService {
   Stream<CmapDrugInteraction> list(CmapResult cmapResult, CmapDrugInteractionListingOptions listingOptions);
+
+  long count(CmapResult cmapResult, CmapDrugInteractionListingOptions listingOptions);
+  
+  Stream<String> listDrugSourceNameValues(CmapResult cmapResult, CmapDrugInteractionListingOptions listingOptions);
+
+  Stream<String> listDrugSourceDbValues(CmapResult cmapResult, CmapDrugInteractionListingOptions listingOptions);
+
+  Stream<String> listDrugCommonNameValues(CmapResult cmapResult, CmapDrugInteractionListingOptions listingOptions);
 }

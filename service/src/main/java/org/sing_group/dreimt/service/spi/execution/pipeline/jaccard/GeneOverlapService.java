@@ -26,11 +26,13 @@ import java.util.stream.Stream;
 
 import javax.ejb.Local;
 
-import org.sing_group.dreimt.domain.dao.ListingOptions;
+import org.sing_group.dreimt.domain.dao.execution.jaccard.GeneOverlapListingOptions;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.GeneOverlap;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult;
 
 @Local
 public interface GeneOverlapService {
-  Stream<GeneOverlap> list(JaccardResult jaccardResult, ListingOptions listingOptions);
+  Stream<GeneOverlap> list(JaccardResult jaccardResult, GeneOverlapListingOptions listingOptions);
+
+  long count(JaccardResult jaccardResult, GeneOverlapListingOptions listingOptions);
 }

@@ -40,9 +40,35 @@ public class DefaultCmapDrugInteractionService implements CmapDrugInteractionSer
 
   @Inject
   private CmapDrugInteractionDao cmapDrugInteractionDao;
-  
+
   @Override
   public Stream<CmapDrugInteraction> list(CmapResult cmapResult, CmapDrugInteractionListingOptions listingOptions) {
     return cmapDrugInteractionDao.list(cmapResult, listingOptions);
+  }
+
+  @Override
+  public long count(CmapResult cmapResult, CmapDrugInteractionListingOptions listingOptions) {
+    return cmapDrugInteractionDao.count(cmapResult, listingOptions);
+  }
+
+  @Override
+  public Stream<String> listDrugSourceNameValues(
+    CmapResult cmapResult, CmapDrugInteractionListingOptions listingOptions
+  ) {
+    return cmapDrugInteractionDao.listDrugSourceNameValues(cmapResult, listingOptions);
+  }
+
+  @Override
+  public Stream<String> listDrugSourceDbValues(
+    CmapResult cmapResult, CmapDrugInteractionListingOptions listingOptions
+  ) {
+    return cmapDrugInteractionDao.listDrugSourceDbValues(cmapResult, listingOptions);
+  }
+
+  @Override
+  public Stream<String> listDrugCommonNameValues(
+    CmapResult cmapResult, CmapDrugInteractionListingOptions listingOptions
+  ) {
+    return cmapDrugInteractionDao.listDrugCommonNameValues(cmapResult, listingOptions);
   }
 }

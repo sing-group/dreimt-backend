@@ -24,10 +24,12 @@ package org.sing_group.dreimt.domain.dao.spi.execution.jaccard;
 
 import java.util.stream.Stream;
 
-import org.sing_group.dreimt.domain.dao.ListingOptions;
+import org.sing_group.dreimt.domain.dao.execution.jaccard.GeneOverlapListingOptions;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.GeneOverlap;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult;
 
 public interface GeneOverlapDao {
-  Stream<GeneOverlap> list(JaccardResult jaccardResult, ListingOptions listingOptions);
+  Stream<GeneOverlap> list(JaccardResult jaccardResult, GeneOverlapListingOptions listingOptions);
+
+  long count(JaccardResult jaccardResult, GeneOverlapListingOptions listingOptions);
 }

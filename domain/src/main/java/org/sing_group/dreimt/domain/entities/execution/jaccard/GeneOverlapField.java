@@ -23,21 +23,12 @@
 package org.sing_group.dreimt.domain.entities.execution.jaccard;
 
 public enum GeneOverlapField {
-  NONE("NONE"),
-  JACCARD("jaccard"),
-  PVALUE("pValue"),
-  FDR("fdr"),
-  TARGET_SIGNATURE("targetSignature"),
-  SOURCE_COMPARISON_TYPE("sourceComparisonType"),
-  TARGET_COMPARISON_TYPE("targetComparisonType");
-
-  private String fieldName;
-
-  GeneOverlapField(String fieldName) {
-    this.fieldName = fieldName;
-  }
-
-  public String getFieldName() {
-    return fieldName;
-  }
+  NONE,
+  ID,
+  JACCARD,
+  P_VALUE,
+  FDR,
+  TARGET_SIGNATURE,
+  SOURCE_COMPARISON_TYPE,
+  TARGET_COMPARISON_TYPE;
 }

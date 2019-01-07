@@ -80,125 +80,174 @@ public class DefaultCmapDrugInteractionDao implements CmapDrugInteractionDao {
 
   @Override
   public Stream<CmapDrugInteraction> list(CmapResult cmapResult, CmapDrugInteractionListingOptions listingOptions) {
-    if (!listingOptions.hasAnyQueryModification()) {
-      return this.dh.list().stream();
-    } else {
-      final CriteriaBuilder cb = dh.cb();
+    final CriteriaBuilder cb = dh.cb();
 
-      CriteriaQuery<CmapDrugInteraction> query = dh.createCBQuery();
-      final Root<CmapDrugInteraction> root = query.from(dh.getEntityType());
+    CriteriaQuery<CmapDrugInteraction> query = dh.createCBQuery();
+    final Root<CmapDrugInteraction> root = query.from(dh.getEntityType());
+    final Predicate[] predicates = createPredicates(listingOptions, root, cmapResult);
 
-      query = query.select(root);
+    query = query.select(root).where(predicates);
 
-      final List<Predicate> andPredicates = new ArrayList<>();
+    ListingOptions generalListingOptions = listingOptions.getListingOptions();
 
-      final Path<CmapResult> cmapResultPath = root.get("cmapResult");
-      andPredicates.add(cb.equal(cmapResultPath, cmapResult));
+    if (generalListingOptions.hasOrder()) {
+      List<Order> orders = new LinkedList<>();
 
-      if (listingOptions.getMaxPvalue().isPresent()) {
-        final Path<Double> pValue = root.get("pValue");
-
-        andPredicates.add(cb.lessThanOrEqualTo(pValue, listingOptions.getMaxPvalue().get()));
-      }
-
-      if (listingOptions.getMaxFdr().isPresent()) {
-        final Path<Double> fdr = root.get("fdr");
-
-        andPredicates.add(cb.lessThanOrEqualTo(fdr, listingOptions.getMaxFdr().get()));
-      }
-
-      if (listingOptions.getMinTes().isPresent()) {
-        final Path<Double> tes = root.get("tes");
-
-        andPredicates.add(cb.greaterThanOrEqualTo(tes, listingOptions.getMinTes().get()));
-      }
-
-      if (listingOptions.getMaxTes().isPresent()) {
-        final Path<Double> tes = root.get("tes");
-
-        andPredicates.add(cb.lessThanOrEqualTo(tes, listingOptions.getMaxTes().get()));
-      }
-
-      Join<CmapDrugInteraction, Drug> joinDrug = root.join("drug", JoinType.LEFT);
-      if (listingOptions.getDrugSourceName().isPresent()) {
-        final Path<String> sourceName = joinDrug.get("sourceName");
-
-        andPredicates.add(cb.like(sourceName, "%" + listingOptions.getDrugSourceName().get() + "%"));
-      }
-
-      if (listingOptions.getDrugSourceDb().isPresent()) {
-        final Path<String> sourceDb = joinDrug.get("sourceDb");
-
-        andPredicates.add(cb.like(sourceDb, "%" + listingOptions.getDrugSourceDb().get() + "%"));
-      }
-
-      if (listingOptions.getDrugCommonName().isPresent()) {
-        final Path<String> commonName = joinDrug.get("commonName");
-
-        andPredicates.add(cb.like(commonName, "%" + listingOptions.getDrugCommonName().get() + "%"));
-      }
-
-      query = query.where(andPredicates.toArray(new Predicate[andPredicates.size()]));
-
-      ListingOptions generalListingOptions = listingOptions.getListingOptions();
-
-      if (generalListingOptions.hasOrder()) {
-        List<Order> orders = new LinkedList<>();
-
-        for (SortField sortField : generalListingOptions.getSortFields().collect(toList())) {
-          CmapDrugInteractionField field = CmapDrugInteractionField.valueOf(sortField.getSortField());
-          final Function<Expression<?>, Order> order;
-          switch (sortField.getSortDirection()) {
-            case ASCENDING:
-              order = cb::asc;
-              break;
-            case DESCENDING:
-              order = cb::desc;
-              break;
-            default:
-              order = null;
-          }
-          switch (field) {
-            case DRUG_SOURCE_NAME:
-              orders.add(order.apply(root.join("drug").get("sourceName")));
-              break;
-            case DRUG_SOURCE_DB:
-              orders.add(order.apply(root.join("drug").get("sourceDb")));
-              break;
-            case DRUG_COMMON_NAME:
-              orders.add(order.apply(root.join("drug").get("commonName")));
-              break;
-
-            case FDR:
-              orders.add(order.apply(root.get("fdr")));
-              break;
-            case P_VALUE:
-              orders.add(order.apply(root.get("pValue")));
-              break;
-            case TES:
-              orders.add(order.apply(root.get("tes")));
-              break;
-
-            case NONE:
-              break;
-          }
+      for (SortField sortField : generalListingOptions.getSortFields().collect(toList())) {
+        CmapDrugInteractionField field = CmapDrugInteractionField.valueOf(sortField.getSortField());
+        final Function<Expression<?>, Order> order;
+        switch (sortField.getSortDirection()) {
+          case ASCENDING:
+            order = cb::asc;
+            break;
+          case DESCENDING:
+            order = cb::desc;
+            break;
+          default:
+            order = null;
         }
+        switch (field) {
+          case DRUG_SOURCE_NAME:
+            orders.add(order.apply(root.join("drug").get("sourceName")));
+            break;
+          case DRUG_SOURCE_DB:
+            orders.add(order.apply(root.join("drug").get("sourceDb")));
+            break;
+          case DRUG_COMMON_NAME:
+            orders.add(order.apply(root.join("drug").get("commonName")));
+            break;
 
-        query = query.orderBy(orders);
+          case FDR:
+            orders.add(order.apply(root.get("fdr")));
+            break;
+          case P_VALUE:
+            orders.add(order.apply(root.get("pValue")));
+            break;
+          case TES:
+            orders.add(order.apply(root.get("tes")));
+            break;
+
+          case NONE:
+            break;
+        }
       }
 
-      TypedQuery<CmapDrugInteraction> typedQuery = em.createQuery(query);
-      if (generalListingOptions.hasResultLimits()) {
-        final int start = generalListingOptions.getStart().getAsInt();
-        final int end = generalListingOptions.getEnd().getAsInt();
-
-        typedQuery =
-          typedQuery
-            .setFirstResult(start)
-            .setMaxResults(end - start + 1);
-      }
-
-      return typedQuery.getResultList().stream();
+      query = query.orderBy(orders);
     }
+
+    TypedQuery<CmapDrugInteraction> typedQuery = em.createQuery(query);
+    if (generalListingOptions.hasResultLimits()) {
+      final int start = generalListingOptions.getStart().getAsInt();
+      final int end = generalListingOptions.getEnd().getAsInt();
+
+      typedQuery =
+        typedQuery
+          .setFirstResult(start)
+          .setMaxResults(end - start + 1);
+    }
+
+    return typedQuery.getResultList().stream();
+  }
+
+  private Predicate[] createPredicates(
+    CmapDrugInteractionListingOptions listingOptions, Root<CmapDrugInteraction> root, CmapResult cmapResult
+  ) {
+    final CriteriaBuilder cb = this.dh.cb();
+    final List<Predicate> andPredicates = new ArrayList<>();
+
+    andPredicates.add(cb.equal(root.get("cmapResult"), cmapResult));
+
+    if (listingOptions.getMaxPvalue().isPresent()) {
+      final Path<Double> pValue = root.get("pValue");
+      
+      andPredicates.add(cb.lessThanOrEqualTo(pValue, listingOptions.getMaxPvalue().get()));
+    }
+
+    if (listingOptions.getMaxFdr().isPresent()) {
+      final Path<Double> fdr = root.get("fdr");
+
+      andPredicates.add(cb.lessThanOrEqualTo(fdr, listingOptions.getMaxFdr().get()));
+    }
+
+    if (listingOptions.getMinTes().isPresent()) {
+      final Path<Double> tes = root.get("tes");
+
+      andPredicates.add(cb.greaterThanOrEqualTo(tes, listingOptions.getMinTes().get()));
+    }
+
+    if (listingOptions.getMaxTes().isPresent()) {
+      final Path<Double> tes = root.get("tes");
+
+      andPredicates.add(cb.lessThanOrEqualTo(tes, listingOptions.getMaxTes().get()));
+    }
+
+    Join<CmapDrugInteraction, Drug> joinDrug = root.join("drug", JoinType.LEFT);
+    if (listingOptions.getDrugSourceName().isPresent()) {
+      final Path<String> sourceName = joinDrug.get("sourceName");
+
+      andPredicates.add(cb.like(sourceName, "%" + listingOptions.getDrugSourceName().get() + "%"));
+    }
+
+    if (listingOptions.getDrugSourceDb().isPresent()) {
+      final Path<String> sourceDb = joinDrug.get("sourceDb");
+
+      andPredicates.add(cb.like(sourceDb, "%" + listingOptions.getDrugSourceDb().get() + "%"));
+    }
+
+    if (listingOptions.getDrugCommonName().isPresent()) {
+      final Path<String> commonName = joinDrug.get("commonName");
+
+      andPredicates.add(cb.like(commonName, "%" + listingOptions.getDrugCommonName().get() + "%"));
+    }
+
+    return andPredicates.toArray(new Predicate[andPredicates.size()]);
+  }
+
+  @Override
+  public long count(CmapResult cmapResult, CmapDrugInteractionListingOptions listingOptions) {
+    final CriteriaBuilder cb = dh.cb();
+
+    CriteriaQuery<Long> query = cb.createQuery(Long.class);
+    final Root<CmapDrugInteraction> root = query.from(dh.getEntityType());
+
+    query = query.select(cb.count(root)).where(createPredicates(listingOptions, root, cmapResult));
+
+    return this.em.createQuery(query).getSingleResult();
+  }
+
+  @Override
+  public Stream<String> listDrugSourceNameValues(
+    CmapResult cmapResult, CmapDrugInteractionListingOptions listingOptions
+  ) {
+    return listDrugColumnValues(cmapResult, listingOptions, "sourceName");
+  }
+
+  @Override
+  public Stream<String> listDrugSourceDbValues(
+    CmapResult cmapResult, CmapDrugInteractionListingOptions listingOptions
+  ) {
+    return listDrugColumnValues(cmapResult, listingOptions, "sourceDb");
+  }
+
+  @Override
+  public Stream<String> listDrugCommonNameValues(
+    CmapResult cmapResult, CmapDrugInteractionListingOptions listingOptions
+  ) {
+    return listDrugColumnValues(cmapResult, listingOptions, "commonName");
+  }
+
+  public Stream<String> listDrugColumnValues(
+    CmapResult cmapResult, CmapDrugInteractionListingOptions listingOptions, String columnName
+  ) {
+    final CriteriaBuilder cb = dh.cb();
+    CriteriaQuery<String> query = cb.createQuery(String.class);
+    final Root<CmapDrugInteraction> root = query.from(dh.getEntityType());
+    final Join<CmapDrugInteraction, Drug> join = root.join("drug", JoinType.LEFT);
+
+    query = query.select(join.get(columnName)).distinct(true);
+
+    query = query.where(createPredicates(listingOptions, root, cmapResult));
+
+    return this.em.createQuery(query).getResultList().stream();
   }
 }

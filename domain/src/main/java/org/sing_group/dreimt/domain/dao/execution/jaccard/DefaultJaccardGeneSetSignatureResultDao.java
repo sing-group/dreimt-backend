@@ -39,6 +39,7 @@ import org.sing_group.dreimt.domain.dao.DaoHelper;
 import org.sing_group.dreimt.domain.dao.spi.execution.jaccard.JaccardGeneSetSignatureResultDao;
 import org.sing_group.dreimt.domain.dao.spi.signature.GeneDao;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardGeneSetSignatureResult;
+import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 
 @Default
 @Transactional(MANDATORY)
@@ -72,13 +73,24 @@ public class DefaultJaccardGeneSetSignatureResultDao implements JaccardGeneSetSi
 
   @Override
   public JaccardGeneSetSignatureResult create(
-    String name, String description, Function<String, String> resultReferenceBuilder, boolean onlyUniverseGenes,
+    String name, String description,
+    Function<String, String> resultReferenceBuilder,
+    boolean onlyUniverseGenes,
+    String cellTypeA, String cellSubTypeA,
+    String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign,
+    String organism, String disease, String signatureSourceDb,
     Set<String> genes
   ) {
     return this.dh.persist(
       new JaccardGeneSetSignatureResult(
-        name, description, resultReferenceBuilder,
+        name, description,
+        resultReferenceBuilder,
         onlyUniverseGenes,
+        cellTypeA, cellSubTypeA,
+        cellTypeB, cellSubTypeB,
+        experimentalDesign,
+        organism, disease, signatureSourceDb,
         this.geneDao.getGenes(genes, true)
       )
     );

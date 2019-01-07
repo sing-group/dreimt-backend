@@ -32,12 +32,15 @@ import java.util.stream.Stream;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.sing_group.dreimt.domain.entities.execution.WorkEntity;
+import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.Gene;
 import org.sing_group.dreimt.domain.entities.signature.Signature;
 
@@ -51,6 +54,18 @@ public abstract class JaccardResult extends WorkEntity {
 
   private boolean onlyUniverseGenes;
 
+  private String cellTypeA;
+  private String cellSubTypeA;
+  private String cellTypeB;
+  private String cellSubTypeB;
+  
+  @Enumerated(EnumType.STRING)
+  private ExperimentalDesign experimentalDesign;
+
+  private String organism;
+  private String disease;
+  private String signatureSourceDb;
+
   @Transient
   private final ReentrantReadWriteLock geneOverlapResultsLock;
 
@@ -59,16 +74,90 @@ public abstract class JaccardResult extends WorkEntity {
   }
 
   protected JaccardResult(
-    String name, String description, Function<String, String> resultReferenceBuilder, boolean onlyUniverseGenes
+    String name, String description, Function<String, String> resultReferenceBuilder, boolean onlyUniverseGenes,
+    String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB, ExperimentalDesign experimentalDesign,
+    String organism, String disease, String signatureSourceDb
   ) {
     super(name, description, resultReferenceBuilder);
 
     this.onlyUniverseGenes = onlyUniverseGenes;
+    this.cellTypeA = cellTypeA;
+    this.cellSubTypeA = cellSubTypeA;
+    this.cellTypeB = cellTypeB;
+    this.cellSubTypeB = cellSubTypeB;
+    this.experimentalDesign = experimentalDesign;
+    this.organism = organism;
+    this.disease = disease;
+    this.signatureSourceDb = signatureSourceDb;
     this.geneOverlapResultsLock = new ReentrantReadWriteLock();
   }
 
   public boolean isOnlyUniverseGenes() {
     return onlyUniverseGenes;
+  }
+  
+  public String getCellTypeA() {
+    return cellTypeA;
+  }
+
+  public void setCellTypeA(String cellTypeA) {
+    this.cellTypeA = cellTypeA;
+  }
+
+  public String getCellSubTypeA() {
+    return cellSubTypeA;
+  }
+
+  public void setCellSubTypeA(String cellSubTypeA) {
+    this.cellSubTypeA = cellSubTypeA;
+  }
+
+  public String getCellTypeB() {
+    return cellTypeB;
+  }
+
+  public void setCellTypeB(String cellTypeB) {
+    this.cellTypeB = cellTypeB;
+  }
+
+  public String getCellSubTypeB() {
+    return cellSubTypeB;
+  }
+
+  public void setCellSubTypeB(String cellSubTypeB) {
+    this.cellSubTypeB = cellSubTypeB;
+  }
+
+  public ExperimentalDesign getExperimentalDesign() {
+    return experimentalDesign;
+  }
+
+  public void setExperimentalDesign(ExperimentalDesign experimentalDesign) {
+    this.experimentalDesign = experimentalDesign;
+  }
+
+  public String getOrganism() {
+    return organism;
+  }
+
+  public void setOrganism(String organism) {
+    this.organism = organism;
+  }
+
+  public String getDisease() {
+    return disease;
+  }
+
+  public void setDisease(String disease) {
+    this.disease = disease;
+  }
+
+  public String getSignatureSourceDb() {
+    return signatureSourceDb;
+  }
+
+  public void setSignatureSourceDb(String signatureSourceDb) {
+    this.signatureSourceDb = signatureSourceDb;
   }
 
   public Stream<GeneOverlap> getGeneOverlapResults() {

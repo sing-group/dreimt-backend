@@ -26,6 +26,7 @@ import static java.util.stream.Collectors.toList;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import javax.annotation.PostConstruct;
@@ -39,19 +40,22 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.ResponseBuilder;
 import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
-import org.sing_group.dreimt.domain.dao.ListingOptions.SortField;
 import org.sing_group.dreimt.domain.dao.SortDirection;
+import org.sing_group.dreimt.domain.dao.execution.jaccard.GeneOverlapListingOptions;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.GeneOverlap;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.GeneOverlapField;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult;
 import org.sing_group.dreimt.rest.entity.query.ListingOptionsData;
-import org.sing_group.dreimt.rest.entity.query.jaccard.GeneOverlapResultData;
+import org.sing_group.dreimt.rest.entity.query.jaccard.GeneOverlapData;
+import org.sing_group.dreimt.rest.entity.query.jaccard.JaccardQueryMetadataData;
+import org.sing_group.dreimt.rest.entity.signature.UpDownSignatureGeneData;
 import org.sing_group.dreimt.rest.filter.CrossDomain;
 import org.sing_group.dreimt.rest.mapper.spi.query.ListingOptionsMapper;
-import org.sing_group.dreimt.rest.mapper.spi.query.jaccard.GeneOverlapMapper;
+import org.sing_group.dreimt.rest.mapper.spi.query.jaccard.JaccardQueryResultsMapper;
 import org.sing_group.dreimt.rest.resource.spi.results.JaccardQueryResultsResource;
 import org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.GeneOverlapService;
 import org.sing_group.dreimt.service.spi.query.jaccard.JaccardQueryService;
@@ -64,7 +68,7 @@ import io.swagger.annotations.ApiResponses;
 @Path("results/jaccard/")
 @Produces({APPLICATION_JSON, "text/csv"})
 @Stateless
-@CrossDomain
+@CrossDomain(allowedHeaders = "X-Count")
 @Api("results/jaccard/")
 @ApiResponses({
   @ApiResponse(code = 200, message = "successful operation")
@@ -78,7 +82,7 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
   private JaccardQueryService jaccardQueryService;
   
   @Inject
-  private GeneOverlapMapper jaccardResultMapper;
+  private JaccardQueryResultsMapper mapper;
   
   @Inject
   private ListingOptionsMapper listingOptionsMapper;
@@ -90,40 +94,95 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
   public void postConstruct() {
     final UriBuilder uriBuilder = this.uriInfo.getBaseUriBuilder();
 
-    this.jaccardResultMapper.setUriBuilder(uriBuilder);
+    this.mapper.setUriBuilder(uriBuilder);
   }
-  
+
   @GET
   @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}")
   @Produces(APPLICATION_JSON)
   @ApiOperation(
-    value = "Returns the gene overlap results associated with the specified id in JSON format.",
-    response = GeneOverlapResultData.class,
+    value = "Returns the metadata associated with the specified Jaccard result.",
+    response = JaccardQueryMetadataData.class,
     code = 200
   )
   @ApiResponses(
     @ApiResponse(code = 400, message = "Unknown jaccard result: {id}")
   )
   @Override
-  public Response jaccardQueryResult(
+  public Response jaccardQueryMetadata(@PathParam("id") String resultId) {
+    return this.jaccardQueryResult(
+      resultId,
+      this.mapper::toJaccardQueryMetadataData
+    );
+  }
+
+  @GET
+  @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/genes")
+  @Produces(APPLICATION_JSON)
+  @ApiOperation(
+    value = "Returns the query genes associated with the specified Jaccard result.",
+    response = UpDownSignatureGeneData.class,
+    code = 200
+  )
+  @ApiResponses(
+    @ApiResponse(code = 400, message = "Unknown jaccard result: {id}")
+  )
+  @Override
+  public Response jaccardQueryGenes(
     @PathParam("id") String resultId,
+    @DefaultValue("false") @QueryParam("onlyUniverseGenes") boolean onlyUniverseGenes
+  ) {
+    return this.jaccardQueryResult(
+      resultId,
+      jaccardResult -> this.mapper.toGeneData(jaccardResult, onlyUniverseGenes)
+    );
+  }
+
+  private Response jaccardQueryResult(String resultId, Function<JaccardResult, Object> resultMapper) {
+    JaccardResult jaccardResult =
+      jaccardQueryService.getResult(resultId)
+        .orElseThrow(() -> new IllegalArgumentException("Unknown jaccard result: " + resultId));
+
+    return Response
+      .ok(resultMapper.apply(jaccardResult), APPLICATION_JSON)
+      .build();
+  }
+
+  @GET
+  @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/overlaps")
+  @Produces(APPLICATION_JSON)
+  @ApiOperation(
+    value = "Returns the gene overlap results associated with the specified Jaccard result in JSON format.",
+    response = GeneOverlapData.class,
+    responseContainer = "list",
+    code = 200
+  )
+  @ApiResponses(
+    @ApiResponse(code = 400, message = "Unknown jaccard result: {id}")
+  )
+  @Override
+  public Response jaccardQueryGeneOverlaps(
+    @PathParam("id") String resultId,
+    @QueryParam("maxJaccard") Double maxJaccard,
+    @QueryParam("maxPvalue") Double maxPvalue,
+    @QueryParam("maxFdr") Double maxFdr,
     @QueryParam("page") Integer page,
     @QueryParam("pageSize") Integer pageSize,
     @QueryParam("orderField") @DefaultValue("NONE") GeneOverlapField orderField,
     @QueryParam("sortDirection") @DefaultValue("NONE") SortDirection sortDirection
   ) {
     return this.jaccardQueryResult(
-      resultId, page, pageSize, orderField, sortDirection,
-      jaccardResultMapper::toGeneOverlapResultData,
-      APPLICATION_JSON
+      resultId, maxJaccard, maxPvalue, maxFdr, page, pageSize, orderField, sortDirection,
+      (jaccardResult, overlaps) -> mapper.toGeneOverlapData(overlaps),
+      APPLICATION_JSON, true
     );
   }
 
   @GET
-  @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}")
+  @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/overlaps")
   @Produces("text/csv")
   @ApiOperation(
-    value = "Returns the gene overlap results associated with the specified id in CSV format.",
+    value = "Returns the gene overlap results associated with the specified Jaccard result in CSV format.",
     response = String.class,
     code = 200
   )
@@ -131,35 +190,40 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
     @ApiResponse(code = 400, message = "Unknown jaccard result: {id}")
   )
   @Override
-  public Response jaccardQueryResultAsCsv(
+  public Response jaccardQueryGeneOverlapsAsCsv(
     @PathParam("id") String resultId,
+    @QueryParam("maxJaccard") Double maxJaccard,
+    @QueryParam("maxPvalue") Double maxPvalue,
+    @QueryParam("maxFdr") Double maxFdr,
     @QueryParam("page") Integer page,
     @QueryParam("pageSize") Integer pageSize,
     @QueryParam("orderField") @DefaultValue("NONE") GeneOverlapField orderField,
     @QueryParam("sortDirection") @DefaultValue("NONE") SortDirection sortDirection
   ) {
     return this.jaccardQueryResult(
-      resultId, page, pageSize, orderField, sortDirection,
-      jaccardResultMapper::toGeneOverlapCsvData,
-      "text/csv"
+      resultId, maxJaccard, maxPvalue, maxFdr, page, pageSize, orderField, sortDirection,
+      (jaccardResult, overlaps) -> mapper.toGeneOverlapCsvData(overlaps),
+      "text/csv", false
     );
   }
 
   private Response jaccardQueryResult(
     String resultId,
-    Integer page, Integer pageSize,
-    GeneOverlapField orderField, SortDirection sortDirection,
-    Function<List<GeneOverlap>, Object> geneOverlapMapper,
-    String responseContentType
+    Double maxJaccard, 
+    Double maxPvalue, 
+    Double maxFdr, 
+    Integer page,
+    Integer pageSize,
+    GeneOverlapField orderField,
+    SortDirection sortDirection,
+    BiFunction<JaccardResult, List<GeneOverlap>, Object> geneOverlapMapper,
+    String responseContentType,
+    boolean includeCountHeader
   ) {
-    final ListingOptionsData options;
-
-    if (orderField == null || sortDirection == null || sortDirection == SortDirection.NONE) {
-      options = new ListingOptionsData(page, pageSize);
-    } else {
-      SortField sortField = new SortField(orderField.getFieldName(), sortDirection);
-      options = new ListingOptionsData(page, pageSize, sortField);
-    }
+    final ListingOptionsData options = ListingOptionsData.from(page, pageSize, orderField.name(), sortDirection);
+    
+    final GeneOverlapListingOptions geneOverlapListingOptions =
+      new GeneOverlapListingOptions(listingOptionsMapper.toListingOptions(options), maxJaccard, maxPvalue, maxFdr);
 
     JaccardResult jaccardResult =
       jaccardQueryService.getResult(resultId)
@@ -167,11 +231,17 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
 
     List<GeneOverlap> geneOverlaps =
       this.geneOverlapService
-        .list(jaccardResult, listingOptionsMapper.toListingOptions(options))
+        .list(jaccardResult, geneOverlapListingOptions)
         .collect(toList());
+    
+    ResponseBuilder responseBuilder = Response
+      .ok(geneOverlapMapper.apply(jaccardResult, geneOverlaps), responseContentType);
+    
+    if (includeCountHeader) {
+      final long count = this.geneOverlapService.count(jaccardResult, geneOverlapListingOptions);
+      responseBuilder = responseBuilder .header("X-Count", count);
+    }
 
-    return Response
-      .ok(geneOverlapMapper.apply(geneOverlaps), responseContentType)
-      .build();
+    return responseBuilder.build();
   }
 }

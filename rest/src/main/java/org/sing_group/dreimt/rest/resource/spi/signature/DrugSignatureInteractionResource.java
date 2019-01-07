@@ -43,9 +43,9 @@ public interface DrugSignatureInteractionResource {
   );
 
   Response jaccardQuery(
-    GenesQueryInfo post, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    SignatureType signatureType, boolean onlyUniverseGenes
+    GenesQueryInfo post, boolean onlyUniverseGenes, String cellTypeA, String cellSubTypeA, String cellTypeB,
+    String cellSubTypeB, ExperimentalDesign experimentalDesign, String organism, String disease,
+    String signatureSourceDb
   );
 
   Response cmapQuery(GenesQueryInfo post, Integer numPerm, Double maxPvalue);

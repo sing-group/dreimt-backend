@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardGeneSetSignatureResult;
+import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 
 public interface JaccardGeneSetSignatureResultDao {
   Optional<JaccardGeneSetSignatureResult> get(String id);
@@ -36,6 +37,14 @@ public interface JaccardGeneSetSignatureResultDao {
     String description,
     Function<String, String> resultReferenceBuilder,
     boolean onlyUniverseGenes,
+    String cellTypeA,
+    String cellSubTypeA,
+    String cellTypeB,
+    String cellSubTypeB,
+    ExperimentalDesign experimentalDesign,
+    String organism,
+    String disease,
+    String signatureSourceDb,
     Set<String> genes
   );
 }

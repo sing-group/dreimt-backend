@@ -27,6 +27,7 @@ import static java.util.Arrays.asList;
 import java.util.List;
 
 import org.sing_group.dreimt.domain.dao.ListingOptions.SortField;
+import org.sing_group.dreimt.domain.dao.SortDirection;
 
 public class ListingOptionsData {
   private Integer page;
@@ -100,5 +101,19 @@ public class ListingOptionsData {
     } else if (!sortFields.equals(other.sortFields))
       return false;
     return true;
+  }
+
+  public static ListingOptionsData from(
+    Integer page, Integer pageSize, String orderField, SortDirection sortDirection
+  ) {
+    final ListingOptionsData listingOptions;
+
+    if (orderField == null || sortDirection == null || sortDirection == SortDirection.NONE) {
+      listingOptions = new ListingOptionsData(page, pageSize);
+    } else {
+      SortField sortField = new SortField(orderField, sortDirection);
+      listingOptions = new ListingOptionsData(page, pageSize, sortField);
+    }
+    return listingOptions;
   }
 }

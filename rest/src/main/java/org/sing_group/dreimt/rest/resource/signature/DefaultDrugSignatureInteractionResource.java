@@ -891,6 +891,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   @Override
   public Response jaccardQuery(
     GenesQueryInfo post,
+    @QueryParam("onlyUniverseGenes") @DefaultValue("false") boolean onlyUniverseGenes,
     @QueryParam("cellTypeA") String cellTypeA,
     @QueryParam("cellSubTypeA") String cellSubTypeA,
     @QueryParam("cellTypeB") String cellTypeB,
@@ -898,9 +899,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
-    @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
-    @QueryParam("onlyUniverseGenes") @DefaultValue("false") boolean onlyUniverseGenes
+    @QueryParam("signatureSourceDb") String signatureSourceDb
   ) {
     Set<String> upGenes = parseAndValidateJaccardQueryUpGenes(post.getUpGenes(), onlyUniverseGenes);
     Set<String> downGenes = parseAndValidateJaccardQueryDownGenes(post.getDownGenes(), onlyUniverseGenes);
@@ -918,7 +917,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         null, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, null
+        signatureSourceDb, null, null
       );
 
     JaccardQueryOptions options =

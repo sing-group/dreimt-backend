@@ -37,6 +37,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.Gene;
 
 @Entity
@@ -70,12 +71,14 @@ public class JaccardUpDownSignatureResult extends JaccardResult implements Seria
   }
 
   public JaccardUpDownSignatureResult(
-    String name, String description,
-    Function<String, String> resultReferenceBuilder,
-    boolean onlyUniverseGenes,
-    Set<Gene> upGenes, Set<Gene> downGenes
+    String name, String description, Function<String, String> resultReferenceBuilder, boolean onlyUniverseGenes,
+    String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB, ExperimentalDesign experimentalDesign,
+    String organism, String disease, String signatureSourceDb, Set<Gene> upGenes, Set<Gene> downGenes
   ) {
-    super(name, description, resultReferenceBuilder, onlyUniverseGenes);
+    super(
+      name, description, resultReferenceBuilder, onlyUniverseGenes, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB,
+      experimentalDesign, organism, disease, signatureSourceDb
+    );
 
     this.upGenes = upGenes;
     this.downGenes = downGenes;
