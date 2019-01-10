@@ -29,7 +29,8 @@ import org.sing_group.dreimt.domain.dao.SortDirection;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionField;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.SignatureType;
-import org.sing_group.dreimt.rest.entity.query.GenesQueryInfo;
+import org.sing_group.dreimt.rest.entity.query.cmap.CmapQueryParameters;
+import org.sing_group.dreimt.rest.entity.query.jaccard.JaccardQueryParameters;
 
 @Local
 public interface DrugSignatureInteractionResource {
@@ -42,13 +43,9 @@ public interface DrugSignatureInteractionResource {
     String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
 
-  Response jaccardQuery(
-    String queryTitle, GenesQueryInfo post, boolean onlyUniverseGenes, String cellTypeA, String cellSubTypeA, String cellTypeB,
-    String cellSubTypeB, ExperimentalDesign experimentalDesign, String organism, String disease,
-    String signatureSourceDb
-  );
+  Response jaccardQuery(JaccardQueryParameters jaccardQueryParameters);
 
-  Response cmapQuery(String queryTitle, GenesQueryInfo post, Integer numPerm, Double maxPvalue);
+  Response cmapQuery(CmapQueryParameters cmapQueryParameters);
 
   Response listSignatureNameValues(
     String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
@@ -63,7 +60,7 @@ public interface DrugSignatureInteractionResource {
     SignatureType signatureType, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
     String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
-  
+
   Response listCellSubTypeAValues(
     String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
     ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
@@ -77,7 +74,7 @@ public interface DrugSignatureInteractionResource {
     SignatureType signatureType, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
     String drugCommonName, Double maxPvalue, Double minTes, Double maxTes, Double maxFdr
   );
-  
+
   Response listCellSubTypeBValues(
     String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
     ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,

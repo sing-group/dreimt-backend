@@ -58,8 +58,9 @@ import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionF
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 import org.sing_group.dreimt.rest.entity.execution.WorkData;
-import org.sing_group.dreimt.rest.entity.query.GenesQueryInfo;
 import org.sing_group.dreimt.rest.entity.query.ListingOptionsData;
+import org.sing_group.dreimt.rest.entity.query.cmap.CmapQueryParameters;
+import org.sing_group.dreimt.rest.entity.query.jaccard.JaccardQueryParameters;
 import org.sing_group.dreimt.rest.entity.signature.DrugSignatureInteractionData;
 import org.sing_group.dreimt.rest.filter.CrossDomain;
 import org.sing_group.dreimt.rest.mapper.spi.execution.ExecutionMapper;
@@ -890,20 +891,16 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   )
   @Override
   public Response jaccardQuery(
-    @QueryParam("queryTitle") String queryTitle,
-    GenesQueryInfo post,
-    @QueryParam("onlyUniverseGenes") @DefaultValue("false") boolean onlyUniverseGenes,
-    @QueryParam("cellTypeA") String cellTypeA,
-    @QueryParam("cellSubTypeA") String cellSubTypeA,
-    @QueryParam("cellTypeB") String cellTypeB,
-    @QueryParam("cellSubTypeB") String cellSubTypeB,
-    @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
-    @QueryParam("organism") String organism,
-    @QueryParam("disease") String disease,
-    @QueryParam("signatureSourceDb") String signatureSourceDb
+    JaccardQueryParameters jaccardQueryParameters
   ) {
-    Set<String> upGenes = parseAndValidateJaccardQueryUpGenes(post.getUpGenes(), onlyUniverseGenes);
-    Set<String> downGenes = parseAndValidateJaccardQueryDownGenes(post.getDownGenes(), onlyUniverseGenes);
+    Set<String> upGenes =
+      parseAndValidateJaccardQueryUpGenes(
+        jaccardQueryParameters.getUpGenes(), jaccardQueryParameters.isOnlyUniverseGenes()
+      );
+    Set<String> downGenes =
+      parseAndValidateJaccardQueryDownGenes(
+        jaccardQueryParameters.getDownGenes(), jaccardQueryParameters.isOnlyUniverseGenes()
+      );
 
     if (!downGenes.isEmpty() && intersection(upGenes, downGenes).size() > 0) {
       throw new IllegalArgumentException("Up and down gene lists cannot have genes in common");
@@ -917,12 +914,17 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
 
     SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
-        null, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
-        signatureSourceDb, null, null
+        null, jaccardQueryParameters.getCellTypeA(), jaccardQueryParameters.getCellSubTypeA(),
+        jaccardQueryParameters.getCellTypeB(), jaccardQueryParameters.getCellSubTypeB(),
+        jaccardQueryParameters.getExperimentalDesign(), jaccardQueryParameters.getOrganism(),
+        jaccardQueryParameters.getDisease(), jaccardQueryParameters.getSignatureSourceDb(), null, null
       );
 
     JaccardQueryOptions options =
-      new DefaultJaccardQueryOptions(queryTitle, upGenes, downGenes, onlyUniverseGenes, resultUriBuilder, signatureListingOptions);
+      new DefaultJaccardQueryOptions(
+        jaccardQueryParameters.getQueryTitle(), upGenes, downGenes, jaccardQueryParameters.isOnlyUniverseGenes(),
+        resultUriBuilder, signatureListingOptions
+      );
 
     final WorkEntity work = this.jaccardQueryService.jaccardQuery(options);
 
@@ -1006,15 +1008,10 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     code = 200
   )
   @Override
-  public Response cmapQuery(
-    @QueryParam("queryTitle") String queryTitle,
-    GenesQueryInfo post,
-    @QueryParam("numPerm") @DefaultValue("1000") Integer numPerm,
-    @QueryParam("maxPvalue") @DefaultValue("1") Double maxPvalue
-  ) {
-    this.cmapQueryService.validateNumPerm(numPerm);
-    Set<String> upGenes = parseAndValidateCmapQueryUpGenes(post.getUpGenes());
-    Set<String> downGenes = parseAndValidateCmapQueryDownGenes(post.getDownGenes());
+  public Response cmapQuery(CmapQueryParameters cmapQueryParameters) {
+    this.cmapQueryService.validateNumPerm(cmapQueryParameters.getNumPerm());
+    Set<String> upGenes = parseAndValidateCmapQueryUpGenes(cmapQueryParameters.getUpGenes());
+    Set<String> downGenes = parseAndValidateCmapQueryDownGenes(cmapQueryParameters.getDownGenes());
 
     if (!downGenes.isEmpty() && intersection(upGenes, downGenes).size() > 0) {
       throw new IllegalArgumentException("Up and down gene lists cannot have genes in common");
@@ -1027,7 +1024,10 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
       id -> pathBuilder.cmapResult(id).build().toString();
 
     CmapQueryOptions options =
-      new DefaultCmapQueryOptions(queryTitle, upGenes, downGenes, resultUriBuilder, numPerm, maxPvalue);
+      new DefaultCmapQueryOptions(
+        cmapQueryParameters.getQueryTitle(), upGenes, downGenes, resultUriBuilder, cmapQueryParameters.getNumPerm(),
+        cmapQueryParameters.getMaxPvalue()
+      );
 
     final WorkEntity work = this.cmapQueryService.cmapQuery(options);
 
