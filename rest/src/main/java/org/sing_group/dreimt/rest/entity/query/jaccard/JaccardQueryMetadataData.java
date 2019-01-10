@@ -4,6 +4,7 @@ import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 
 public class JaccardQueryMetadataData {
 
+  private String queryTitle;
   private boolean onlyUniverseGenes;
   private String cellTypeA;
   private String cellSubTypeA;
@@ -19,10 +20,12 @@ public class JaccardQueryMetadataData {
   private Integer downUniverseGenesCount;
 
   public JaccardQueryMetadataData(
-    boolean onlyUniverseGenes, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer upGenesCount, Integer downGenesCount, Integer upUniverseGenesCount, Integer downUniverseGenesCount
+    String queryTitle, boolean onlyUniverseGenes, String cellTypeA, String cellSubTypeA, String cellTypeB,
+    String cellSubTypeB, ExperimentalDesign experimentalDesign, String organism, String disease,
+    String signatureSourceDb, Integer upGenesCount, Integer downGenesCount, Integer upUniverseGenesCount,
+    Integer downUniverseGenesCount
   ) {
+    this.queryTitle = queryTitle;
     this.onlyUniverseGenes = onlyUniverseGenes;
     this.cellTypeA = cellTypeA;
     this.cellSubTypeA = cellSubTypeA;
@@ -36,6 +39,10 @@ public class JaccardQueryMetadataData {
     this.downGenesCount = downGenesCount;
     this.upUniverseGenesCount = upUniverseGenesCount;
     this.downUniverseGenesCount = downUniverseGenesCount;
+  }
+
+  public String getQueryTitle() {
+    return queryTitle;
   }
 
   public boolean isOnlyUniverseGenes() {

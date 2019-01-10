@@ -22,6 +22,9 @@
  */
 package org.sing_group.dreimt.service.query.jaccard;
 
+import static java.util.Optional.ofNullable;
+
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -30,6 +33,7 @@ import org.sing_group.dreimt.service.spi.query.jaccard.JaccardQueryOptions;
 
 public class DefaultJaccardQueryOptions implements JaccardQueryOptions {
 
+  private String title;
   private Set<String> upGenes;
   private Set<String> downGenes;
   private boolean onlyUniverseGenes;
@@ -37,16 +41,24 @@ public class DefaultJaccardQueryOptions implements JaccardQueryOptions {
   private SignatureListingOptions signatureListingOptions;
 
   public DefaultJaccardQueryOptions(
+    String title,
     Set<String> upGenes, Set<String> downGenes,
     boolean onlyUniverseGenes,
     Function<String, String> resultUriBuilder,
     SignatureListingOptions signatureListingOptions
   ) {
+    this.title = title;
     this.upGenes = upGenes;
     this.downGenes = downGenes;
     this.onlyUniverseGenes = onlyUniverseGenes;
     this.resultUriBuilder = resultUriBuilder;
     this.signatureListingOptions = signatureListingOptions;
+  }
+  
+  
+  @Override
+  public Optional<String> getTitle() {
+    return ofNullable(this.title);
   }
 
   @Override

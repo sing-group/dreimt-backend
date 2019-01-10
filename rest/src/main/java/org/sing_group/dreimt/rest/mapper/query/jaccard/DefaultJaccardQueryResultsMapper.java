@@ -57,6 +57,7 @@ public class DefaultJaccardQueryResultsMapper implements JaccardQueryResultsMapp
   @Override
   public JaccardQueryMetadataData toJaccardQueryMetadataData(JaccardResult jaccardResult) {
     return new JaccardQueryMetadataData(
+      jaccardResult.getName(),
       jaccardResult.isOnlyUniverseGenes(),
       jaccardResult.getCellTypeA(),
       jaccardResult.getCellSubTypeA(),

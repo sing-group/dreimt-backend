@@ -22,6 +22,9 @@
  */
 package org.sing_group.dreimt.service.query.cmap;
 
+import static java.util.Optional.ofNullable;
+
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -29,6 +32,7 @@ import org.sing_group.dreimt.service.spi.query.cmap.CmapQueryOptions;
 
 public class DefaultCmapQueryOptions implements CmapQueryOptions {
 
+  private String title;
   private Set<String> upGenes;
   private Set<String> downGenes;
   private Function<String, String> resultUriBuilder;
@@ -36,17 +40,24 @@ public class DefaultCmapQueryOptions implements CmapQueryOptions {
   private Double maxPvalue;
 
   public DefaultCmapQueryOptions(
+    String title,
     Set<String> upGenes, 
     Set<String> downGenes,
     Function<String, String> resultUriBuilder,
     Integer numPerm,
     Double maxPvalue
   ) {
+    this.title = title;
     this.upGenes = upGenes;
     this.downGenes = downGenes;
     this.resultUriBuilder = resultUriBuilder;
     this.numPerm = numPerm;
     this.maxPvalue = maxPvalue;
+  }
+  
+  @Override
+  public Optional<String> getTitle() {
+    return ofNullable(this.title);
   }
 
   @Override

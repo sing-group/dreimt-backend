@@ -2,6 +2,7 @@ package org.sing_group.dreimt.rest.entity.query.cmap;
 
 public class CmapQueryMetadataData {
 
+  private String queryTitle;
   private int numPerm;
   private double maxPvalue;
   private Integer upGenesCount;
@@ -10,15 +11,20 @@ public class CmapQueryMetadataData {
   private Integer downUniverseGenesCount;
 
   public CmapQueryMetadataData(
-    int numPerm, double maxPvalue, Integer upGenesCount, Integer downGenesCount, Integer upUniverseGenesCount,
-    Integer downUniverseGenesCount
+    String queryTitle, int numPerm, double maxPvalue, Integer upGenesCount, Integer downGenesCount,
+    Integer upUniverseGenesCount, Integer downUniverseGenesCount
   ) {
+    this.queryTitle = queryTitle;
     this.numPerm = numPerm;
     this.maxPvalue = maxPvalue;
     this.upGenesCount = upGenesCount;
     this.downGenesCount = downGenesCount;
     this.upUniverseGenesCount = upUniverseGenesCount;
     this.downUniverseGenesCount = downUniverseGenesCount;
+  }
+
+  public String getQueryTitle() {
+    return queryTitle;
   }
 
   public int getNumPerm() {
@@ -28,7 +34,7 @@ public class CmapQueryMetadataData {
   public double getMaxPvalue() {
     return maxPvalue;
   }
-  
+
   public Integer getUpGenesCount() {
     return upGenesCount;
   }
@@ -36,11 +42,11 @@ public class CmapQueryMetadataData {
   public Integer getDownGenesCount() {
     return downGenesCount;
   }
-  
+
   public Integer getUpUniverseGenesCount() {
     return upUniverseGenesCount;
   }
-  
+
   public Integer getDownUniverseGenesCount() {
     return downUniverseGenesCount;
   }

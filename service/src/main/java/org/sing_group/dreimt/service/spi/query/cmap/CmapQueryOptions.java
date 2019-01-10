@@ -22,10 +22,13 @@
  */
 package org.sing_group.dreimt.service.spi.query.cmap;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
 public interface CmapQueryOptions {
+  
+  Optional<String> getTitle();
 
   Set<String> getUpGenes();
 

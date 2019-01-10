@@ -22,12 +22,15 @@
  */
 package org.sing_group.dreimt.service.spi.query.jaccard;
 
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 
 import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
 
 public interface JaccardQueryOptions {
+  
+  Optional<String> getTitle();
 
   Set<String> getUpGenes();
 

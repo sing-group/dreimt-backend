@@ -890,6 +890,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   )
   @Override
   public Response jaccardQuery(
+    @QueryParam("queryTitle") String queryTitle,
     GenesQueryInfo post,
     @QueryParam("onlyUniverseGenes") @DefaultValue("false") boolean onlyUniverseGenes,
     @QueryParam("cellTypeA") String cellTypeA,
@@ -921,7 +922,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
       );
 
     JaccardQueryOptions options =
-      new DefaultJaccardQueryOptions(upGenes, downGenes, onlyUniverseGenes, resultUriBuilder, signatureListingOptions);
+      new DefaultJaccardQueryOptions(queryTitle, upGenes, downGenes, onlyUniverseGenes, resultUriBuilder, signatureListingOptions);
 
     final WorkEntity work = this.jaccardQueryService.jaccardQuery(options);
 
@@ -1006,6 +1007,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   )
   @Override
   public Response cmapQuery(
+    @QueryParam("queryTitle") String queryTitle,
     GenesQueryInfo post,
     @QueryParam("numPerm") @DefaultValue("1000") Integer numPerm,
     @QueryParam("maxPvalue") @DefaultValue("1") Double maxPvalue
@@ -1025,7 +1027,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
       id -> pathBuilder.cmapResult(id).build().toString();
 
     CmapQueryOptions options =
-      new DefaultCmapQueryOptions(upGenes, downGenes, resultUriBuilder, numPerm, maxPvalue);
+      new DefaultCmapQueryOptions(queryTitle, upGenes, downGenes, resultUriBuilder, numPerm, maxPvalue);
 
     final WorkEntity work = this.cmapQueryService.cmapQuery(options);
 

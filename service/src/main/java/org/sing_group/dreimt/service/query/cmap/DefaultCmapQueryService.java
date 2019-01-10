@@ -141,7 +141,7 @@ public class DefaultCmapQueryService implements CmapQueryService {
   private CmapResult cmapUpDownQuery(CmapQueryOptions options) {
     final CmapUpDownSignatureResult result =
       this.cmapUpDownSignatureDao.create(
-        "Cmap UpDown Signature query",
+        options.getTitle().orElse("Untitled Cmap UpDown Signature query"),
         "Cmap UpDown Signature query",
         options.getResultUriBuilder(),
         options.getUpGenes(),
@@ -156,7 +156,7 @@ public class DefaultCmapQueryService implements CmapQueryService {
   private CmapResult cmapGeneSetQuery(CmapQueryOptions options) {
     final CmapGeneSetSignatureResult result =
       this.cmapGeneSetDao.create(
-        "Cmap GeneSet query",
+        options.getTitle().orElse("Untitled Cmap GeneSet query"),
         "Cmap GeneSet query",
         options.getResultUriBuilder(),
         options.getUpGenes(),

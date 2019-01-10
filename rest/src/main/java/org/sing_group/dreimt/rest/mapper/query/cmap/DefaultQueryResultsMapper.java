@@ -47,6 +47,7 @@ public class DefaultQueryResultsMapper implements CmapQueryResultsMapper {
   @Override
   public CmapQueryMetadataData toCmapQueryMetadataData(CmapResult cmapResult) {
     return new CmapQueryMetadataData(
+      cmapResult.getName(),
       cmapResult.getNumPerm(),
       cmapResult.getMaxPvalue(),
       getUpGenesCount(cmapResult, false),

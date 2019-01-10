@@ -109,7 +109,7 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
   private JaccardResult jaccardUpDownQuery(JaccardQueryOptions options) {
     final JaccardUpDownSignatureResult result =
       this.jaccardUpDownSignatureDao.create(
-        "Jaccard UpDown Signature query",
+        options.getTitle().orElse("Untitled Jaccard UpDown Signature query"),
         "Jaccard UpDown Signature query",
         options.getResultUriBuilder(),
         options.isOnlyUniverseGenes(),
@@ -131,7 +131,7 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
   private JaccardResult jaccardGeneSetQuery(JaccardQueryOptions options) {
     final JaccardGeneSetSignatureResult result =
       this.jaccardGeneSetDao.create(
-        "Jaccard GeneSet query",
+        options.getTitle().orElse("Untitled Jaccard GeneSet query"),
         "Jaccard GeneSet query",
         options.getResultUriBuilder(),
         options.isOnlyUniverseGenes(),
