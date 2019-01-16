@@ -315,19 +315,25 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     joinLikeSignatureBuilder.accept("cellSubTypeA", signatureListingOptions.getCellSubTypeA());
     joinLikeSignatureBuilder.accept("cellTypeB", signatureListingOptions.getCellTypeB());
     joinLikeSignatureBuilder.accept("cellSubTypeB", signatureListingOptions.getCellSubTypeB());
+    likeSignatureBuilder.accept("signatureName", signatureListingOptions.getSignatureName());
     likeSignatureBuilder.accept("organism", signatureListingOptions.getOrganism());
     likeSignatureBuilder.accept("disease", signatureListingOptions.getDisease());
     likeSignatureBuilder.accept("sourceDb", signatureListingOptions.getSourceDb());
-    likeSignatureBuilder.accept("experimentalDesign", signatureListingOptions.getExperimentalDesign().map(ExperimentalDesign::toString));
     likeSignatureBuilder.accept("signatureType", signatureListingOptions.getSignatureType().map(SignatureType::toString));
-    
-    if (signatureListingOptions.getSignaturePubMedId().isPresent()) {
-      Join<Signature, ArticleMetadata> joinArticleMetadata = joinSignature.join("articleMetadata", JoinType.LEFT);
-      final Path<Integer> signaturePubMedId = joinArticleMetadata.get("pubmedId");
 
-      andPredicates.add(cb.equal(signaturePubMedId, signatureListingOptions.getSignaturePubMedId().get()));
-    }
-    
+    signatureListingOptions.getExperimentalDesign().ifPresent(experimentalDesign -> {
+      final Path<ExperimentalDesign> experimentalDesignPath = joinSignature.get("experimentalDesign");
+
+      andPredicates.add(cb.equal(experimentalDesignPath, experimentalDesign));
+    });
+
+    signatureListingOptions.getSignaturePubMedId().ifPresent(signaturePubMedId -> {
+      Join<Signature, ArticleMetadata> joinArticleMetadata = joinSignature.join("articleMetadata", JoinType.LEFT);
+      final Path<Integer> signaturePubMedIdPath = joinArticleMetadata.get("pubmedId");
+
+      andPredicates.add(cb.equal(signaturePubMedIdPath, signaturePubMedId));
+    });
+
     final Join<DrugSignatureInteraction, Drug> joinDrug = root.join("drug", JoinType.LEFT);
 
     final BiConsumer<String, Optional<String>> joinLikeDrugBuilder = (attributeName, queryValue) -> {
