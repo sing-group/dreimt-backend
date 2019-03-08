@@ -23,24 +23,20 @@
 package org.sing_group.dreimt.rest.entity.query.cmap;
 
 public class CmapQueryParameters {
-
   public static final int DEFAULT_NUM_PERM = 1000;
-  public static final double DEFAULT_MAX_PVALUE = 1;
 
   private String queryTitle;
   private Integer numPerm = DEFAULT_NUM_PERM;
-  private Double maxPvalue = DEFAULT_MAX_PVALUE;
   private String[] upGenes;
   private String[] downGenes;
 
   CmapQueryParameters() {}
 
   public CmapQueryParameters(
-    String queryTitle, Integer numPerm, Double maxPvalue, String[] upGenes, String[] downGenes
+    String queryTitle, Integer numPerm, String[] upGenes, String[] downGenes
   ) {
     this.queryTitle = queryTitle;
     this.numPerm = numPerm;
-    this.maxPvalue = maxPvalue;
     this.upGenes = upGenes;
     this.downGenes = downGenes;
   }
@@ -51,10 +47,6 @@ public class CmapQueryParameters {
 
   public Integer getNumPerm() {
     return numPerm;
-  }
-
-  public Double getMaxPvalue() {
-    return maxPvalue;
   }
 
   public String[] getUpGenes() {

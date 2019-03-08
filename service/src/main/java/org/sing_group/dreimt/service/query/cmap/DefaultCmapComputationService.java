@@ -57,11 +57,9 @@ public class DefaultCmapComputationService implements CmapComputationService {
   public void computeCmap(
     @Observes(during = TransactionPhase.AFTER_SUCCESS) DefaultCmapComputationRequestEvent event
   ) {
-    System.out.println("LAUNCHING PIPELINE");
-    
     final CmapPipelineConfiguration configuration =
       new DefaultCmapPipelineConfiguration(
-        event.getWorkId(), event.getWorkId(), 
+        event.getWorkId(), event.getWorkId(),
         event.getCmapServiceConfiguration(),
         event.getUpGenes(),
         event.getDownGenes()

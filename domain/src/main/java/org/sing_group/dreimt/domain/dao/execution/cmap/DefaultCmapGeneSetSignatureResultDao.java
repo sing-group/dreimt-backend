@@ -76,14 +76,13 @@ public class DefaultCmapGeneSetSignatureResultDao implements CmapGeneSetSignatur
     String description,
     Function<String, String> resultReferenceBuilder,
     Set<String> genes,
-    int numPerm,
-    double maxPvalue
+    int numPerm
   ) {
     return this.dh.persist(
       new CmapGeneSetSignatureResult(
         name, description, resultReferenceBuilder,
         this.geneDao.getGenes(genes, true),
-        numPerm, maxPvalue
+        numPerm
       )
     );
   }

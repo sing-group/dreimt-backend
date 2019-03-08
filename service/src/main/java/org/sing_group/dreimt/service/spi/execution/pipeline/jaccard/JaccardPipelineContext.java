@@ -22,7 +22,6 @@
  */
 package org.sing_group.dreimt.service.spi.execution.pipeline.jaccard;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -41,13 +40,7 @@ extends PipelineContext<
 
   Optional<Stream<String>> getTargetSignatureIds();
 
-  Optional<Map<String, List<GeneOverlapData>>> getTargetSignatureOverlaps();
-  
-  default Optional<List<GeneOverlapData>> getOverlapsForSignature(String signatureId) {
-    return getTargetSignatureOverlaps().map(
-      overlaps -> overlaps.get(signatureId)
-    );
-  }
+  Optional<Stream<GeneOverlapData>> getGeneOverlapResultsData();
 
   Optional<Map<GeneOverlapData, Double>> getCorrectedPvaluesMap();
 }

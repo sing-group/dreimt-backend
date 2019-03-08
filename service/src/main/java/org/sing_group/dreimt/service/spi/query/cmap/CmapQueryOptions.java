@@ -36,7 +36,5 @@ public interface CmapQueryOptions {
 
   Function<String, String> getResultUriBuilder();
 
-  Double getMaxPvalue();
-
   Integer getNumPerm();
 }

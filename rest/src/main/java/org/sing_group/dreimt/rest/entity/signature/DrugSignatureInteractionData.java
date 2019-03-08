@@ -24,27 +24,33 @@ package org.sing_group.dreimt.rest.entity.signature;
 
 import java.io.Serializable;
 
+import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
+
 public class DrugSignatureInteractionData implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private DrugData drug;
   private SignatureData signature;
 
-  private double tes;
-  private double pValue;
-  private double fdr;
+  private DrugSignatureInteractionType interactionType;
+
+  private double tau;
+  private Double upFdr;
+  private Double downFdr;
 
   DrugSignatureInteractionData() {}
 
   public DrugSignatureInteractionData(
-    DrugData drug, SignatureData signature, double tes, double pValue, double fdr
+    DrugData drug, SignatureData signature, DrugSignatureInteractionType interactionType, double tau, Double upFdr,
+    Double downFdr
   ) {
     super();
     this.drug = drug;
     this.signature = signature;
-    this.tes = tes;
-    this.pValue = pValue;
-    this.fdr = fdr;
+    this.interactionType = interactionType;
+    this.tau = tau;
+    this.upFdr = upFdr;
+    this.downFdr = downFdr;
   }
 
   public DrugData getDrug() {
@@ -55,15 +61,19 @@ public class DrugSignatureInteractionData implements Serializable {
     return signature;
   }
 
-  public double getTes() {
-    return tes;
+  public DrugSignatureInteractionType getInteractionType() {
+    return interactionType;
   }
 
-  public double getpValue() {
-    return pValue;
+  public double getTau() {
+    return tau;
   }
 
-  public double getFdr() {
-    return fdr;
+  public Double getUpFdr() {
+    return upFdr;
+  }
+
+  public Double getDownFdr() {
+    return downFdr;
   }
 }

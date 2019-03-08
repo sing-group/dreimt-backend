@@ -24,19 +24,23 @@ package org.sing_group.dreimt.service.execution.pipeline.jaccard;
 
 import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
 import org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.JaccardPipelineConfiguration;
+import org.sing_group.dreimt.service.spi.query.jaccard.JaccardServiceConfiguration;
 
 public class DefaultJaccardPipelineConfiguration implements JaccardPipelineConfiguration {
 
   private String workId;
   private String resultId;
   private SignatureListingOptions signatureListingOptions;
+  private JaccardServiceConfiguration jaccardServiceConfiguration;
 
   public DefaultJaccardPipelineConfiguration(
-    String workId, String resultId, SignatureListingOptions signatureListingOptions
+    String workId, String resultId, SignatureListingOptions signatureListingOptions,
+    JaccardServiceConfiguration jaccardServiceConfiguration
   ) {
     this.workId = workId;
     this.resultId = resultId;
     this.signatureListingOptions = signatureListingOptions;
+    this.jaccardServiceConfiguration = jaccardServiceConfiguration;
   }
 
   @Override
@@ -52,5 +56,10 @@ public class DefaultJaccardPipelineConfiguration implements JaccardPipelineConfi
   @Override
   public SignatureListingOptions getSignatureListingOptions() {
     return this.signatureListingOptions;
+  }
+
+  @Override
+  public JaccardServiceConfiguration getJaccardServiceConfiguration() {
+    return jaccardServiceConfiguration;
   }
 }

@@ -105,12 +105,12 @@ public class RetrieveSignaturesStep implements SingleJaccardPipelineStep {
 
     Stream<Signature> signatures =
       this.signatureDao.list(context.getConfiguration().getSignatureListingOptions().withMandatoryGenes(inputGenes));
+
     Set<String> targetSignatureIds = signatures.map(Signature::getSignatureName).collect(toSet());
 
     final JaccardPipelineContextBuilder builder = this.jaccardPipelineContextBuilderFactory.createBuilderFor(context);
-    builder.addTargetSignatureIds(targetSignatureIds);
 
-    return builder.build();
+    return builder.addTargetSignatureIds(targetSignatureIds).build();
   }
 
   private Set<String> getInputGenes(JaccardResult jaccardResult) {

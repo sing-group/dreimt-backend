@@ -28,8 +28,8 @@ import javax.ejb.Local;
 
 import org.sing_group.dreimt.domain.dao.signature.DrugSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
+import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
-import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 
 @Local
 public interface DrugSignatureInteractionService {
@@ -55,7 +55,7 @@ public interface DrugSignatureInteractionService {
 
   Stream<String> listSignatureSourceDbValues(DrugSignatureInteractionListingOptions listingOptions);
 
-  Stream<SignatureType> listSignatureTypeValues(DrugSignatureInteractionListingOptions listingOptions);
+  Stream<DrugSignatureInteractionType> listInteractionTypeValues(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<Integer> listSignaturePubMedIdValues(DrugSignatureInteractionListingOptions listingOptions);
 

@@ -36,12 +36,12 @@ public interface JaccardQueryResultsResource {
   Response jaccardQueryGenes(String resultId, boolean onlyUniverseGenes);
 
   Response jaccardQueryGeneOverlaps(
-    String resultId, Double maxJaccard, Double maxPvalue, Double maxFdr, Integer page, Integer pageSize,
+    String resultId, Double minJaccard, Double maxPvalue, Double maxFdr, Integer page, Integer pageSize,
     GeneOverlapField orderField, SortDirection sortDirection
   );
 
   Response jaccardQueryGeneOverlapsAsCsv(
-    String resultId, Double maxJaccard, Double maxPvalue, Double maxFdr, Integer page, Integer pageSize,
+    String resultId, Double minJaccard, Double maxPvalue, Double maxFdr, Integer page, Integer pageSize,
     GeneOverlapField orderField, SortDirection sortDirection
   );
 }

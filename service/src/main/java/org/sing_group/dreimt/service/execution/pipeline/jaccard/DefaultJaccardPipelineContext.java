@@ -44,7 +44,7 @@ public class DefaultJaccardPipelineContext implements JaccardPipelineContext, Se
   private final JaccardPipelineConfiguration configuration;
   private transient final JaccardPipelineEventManager eventManager;
   private final Set<String> targetSignatureIds;
-  private Map<String, List<GeneOverlapData>> targetSignatureOverlaps;
+  private List<GeneOverlapData> geneOverlaps;
   private Map<GeneOverlapData, Double> correctedPvaluesMap;
 
   DefaultJaccardPipelineContext(
@@ -52,14 +52,14 @@ public class DefaultJaccardPipelineContext implements JaccardPipelineContext, Se
     JaccardPipelineConfiguration configuration,
     JaccardPipelineEventManager eventManager,
     Set<String> targetSignatureIds,
-    Map<String, List<GeneOverlapData>> targetSignatureOverlaps,
+    List<GeneOverlapData> geneOverlaps,
     Map<GeneOverlapData, Double> correctedPvaluesMap
   ) {
     this.pipeline = pipeline;
     this.configuration = configuration;
     this.eventManager = eventManager;
     this.targetSignatureIds = targetSignatureIds;
-    this.targetSignatureOverlaps = targetSignatureOverlaps;
+    this.geneOverlaps = geneOverlaps;
     this.correctedPvaluesMap = correctedPvaluesMap;
   }
 
@@ -84,8 +84,8 @@ public class DefaultJaccardPipelineContext implements JaccardPipelineContext, Se
   }
 
   @Override
-  public Optional<Map<String, List<GeneOverlapData>>> getTargetSignatureOverlaps() {
-    return ofNullable(this.targetSignatureOverlaps);
+  public Optional<Stream<GeneOverlapData>> getGeneOverlapResultsData() {
+    return ofNullable(this.geneOverlaps).map(List::stream);
   }
 
   @Override

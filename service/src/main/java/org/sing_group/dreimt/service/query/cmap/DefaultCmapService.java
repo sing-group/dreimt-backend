@@ -24,28 +24,24 @@ package org.sing_group.dreimt.service.query.cmap;
 
 import static java.nio.file.Files.write;
 import static java.nio.file.StandardOpenOption.APPEND;
-import static java.util.stream.Collectors.joining;
 import static javax.transaction.Transactional.TxType.NEVER;
+import static org.sing_group.dreimt.service.query.ServiceUtils.deleteDirectory;
+import static org.sing_group.dreimt.service.query.ServiceUtils.generateCommand;
+import static org.sing_group.dreimt.service.query.ServiceUtils.toGmtRow;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.FileVisitResult;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.SimpleFileVisitor;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 import javax.enterprise.inject.Default;
 import javax.transaction.Transactional;
 
-import org.sing_group.dreimt.service.cmap.CmapScriptResultsParser;
 import org.sing_group.dreimt.service.spi.query.cmap.CmapResultData;
 import org.sing_group.dreimt.service.spi.query.cmap.CmapService;
 import org.sing_group.dreimt.service.spi.query.cmap.CmapServiceConfiguration;
@@ -77,9 +73,9 @@ public class DefaultCmapService implements CmapService {
     File dataDir = getDataDirectory(this.dataDirectory);
     File geneSetFile = new File(dataDir, "input-geneset.gmt");
     try {
-      write(geneSetFile.toPath(), toGmtRow("GENESET", genes).getBytes());
+      write(geneSetFile.toPath(), toGmtRow("GENESET_sig", genes).getBytes());
       
-      return cmap(configuration, geneSetFile, cmapGenesetScripCmd, dataDir);
+      return cmap(configuration, geneSetFile, cmapGenesetScripCmd, dataDir, this::parseGeneSetResults);
     } catch (IOException e) {
       throw e;
     } finally {
@@ -100,7 +96,7 @@ public class DefaultCmapService implements CmapService {
       write(signatureFile.toPath(), toGmtRow("SIGNATURE_UP", upGenes).getBytes());
       write(signatureFile.toPath(), toGmtRow("SIGNATURE_DN", downGenes).getBytes(), APPEND);
 
-      return cmap(configuration, signatureFile, cmapSignatureScripCmd, dataDir);
+      return cmap(configuration, signatureFile, cmapSignatureScripCmd, dataDir, this::parseSignatureResults);
     } catch (IOException e) {
       throw e;
     } finally {
@@ -121,10 +117,9 @@ public class DefaultCmapService implements CmapService {
     CmapServiceConfiguration configuration,
     File inputSignatureFile,
     String cmapCommand,
-    File dataDir
+    File dataDir,
+    Function<File, Stream<CmapResultData>> parseCmapResults
   ) throws IOException {
-    File resultsFile = new File(dataDir, "output.tsv");
-
     final Map<String, String> cmapCommandReplacements = new HashMap<>();
     cmapCommandReplacements.put(
       "[INPUT_FILE_NAME]",
@@ -132,10 +127,9 @@ public class DefaultCmapService implements CmapService {
     );
     cmapCommandReplacements.put(
       "[OUTPUT_FILE_NAME]", 
-      getEffectiveCommandFileName(resultsFile)
+      getEffectiveCommandFileName(new File(dataDir, "output"))
     );
     cmapCommandReplacements.put("[NPERM]", Integer.toString(configuration.getNumPermutations()));
-    cmapCommandReplacements.put("[MAX_PVALUE]", Double.toString(configuration.getMaxPvalue()));
     cmapCommandReplacements.put("[CORES]", Integer.toString(cores));
     
     final String[] cmap = generateCommand(cmapCommand, cmapCommandReplacements);
@@ -148,14 +142,14 @@ public class DefaultCmapService implements CmapService {
     try {
       int exitCode = process.waitFor();
       if (exitCode == 0) {
-        return parseCmapResults(resultsFile);
+        return parseCmapResults.apply(new File(dataDir, "output.tsv"));
       } else {
         throw new IOException(
           "An error ocurred running Cmap. Exit code: " + exitCode + ". Execution logs can be found at "
             + dataDir.getAbsolutePath()
         );
       }
-    } catch (InterruptedException e) {
+    } catch (InterruptedException | CmapParseResultsIOException e) {
       throw new IOException(
         "An error ocurred running Cmap Execution logs can be found at \"\n" +
           dataDir.getAbsolutePath(),
@@ -168,44 +162,27 @@ public class DefaultCmapService implements CmapService {
     return file.getAbsolutePath().replace(this.dataDirectory, "");
   }
 
-  private static String toGmtRow(String name, Set<String> genes) {
-    return genes.stream().collect(joining("\t", name + "\tNA\t", "\n"));
-  }
-
-  private static void deleteDirectory(Path directory) throws IOException {
-    if (Files.isDirectory(directory)) {
-      try {
-        Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
-          @Override
-          public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-            Files.delete(file);
-
-            return FileVisitResult.CONTINUE;
-          }
-
-          @Override
-          public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
-            Files.delete(dir);
-
-            return FileVisitResult.CONTINUE;
-          }
-        });
-      } catch (IOException ioe) {
-        ioe.printStackTrace();
-      }
-    } else {
-      throw new IllegalArgumentException("Path is not a directory: " + directory);
+  private Stream<CmapResultData> parseGeneSetResults(File resultsFile) throws CmapParseResultsIOException {
+    try {
+      return CmapScriptResultsParser.parseGeneSetResults(resultsFile);
+    } catch (IOException e) {
+      throw new CmapParseResultsIOException(e);
     }
   }
 
-  private static String[] generateCommand(String command, Map<String, String> replacements) {
-    for (Entry<String, String> entry : replacements.entrySet()) {
-      command = command.replace(entry.getKey(), entry.getValue());
+  private Stream<CmapResultData> parseSignatureResults(File resultsFile) throws CmapParseResultsIOException {
+    try {
+      return CmapScriptResultsParser.parseSignatureResults(resultsFile);
+    } catch (IOException e) {
+      throw new CmapParseResultsIOException(e);
     }
-    return command.split("\\s+");
   }
 
-  private Stream<CmapResultData> parseCmapResults(File resultsFile) throws IOException {
-    return CmapScriptResultsParser.parse(resultsFile);
+  private static class CmapParseResultsIOException extends RuntimeException {
+    private static final long serialVersionUID = 1L;
+
+    public CmapParseResultsIOException(IOException e) {
+      super(e);
+    }
   }
 }

@@ -191,10 +191,10 @@ public class DefaultGeneOverlapDao implements GeneOverlapDao {
       andPredicates.add(cb.lessThanOrEqualTo(fdr, listingOptions.getMaxFdr().get()));
     }
 
-    if (listingOptions.getMaxJaccard().isPresent()) {
+    if (listingOptions.getMinJaccard().isPresent()) {
       final Path<Double> tes = root.get("jaccard");
 
-      andPredicates.add(cb.lessThanOrEqualTo(tes, listingOptions.getMaxJaccard().get()));
+      andPredicates.add(cb.greaterThanOrEqualTo(tes, listingOptions.getMinJaccard().get()));
     }
 
     return andPredicates.toArray(new Predicate[andPredicates.size()]);

@@ -55,8 +55,8 @@ import org.sing_group.dreimt.domain.dao.signature.DrugSignatureInteractionListin
 import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
 import org.sing_group.dreimt.domain.entities.execution.WorkEntity;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionField;
+import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
-import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 import org.sing_group.dreimt.rest.entity.execution.WorkData;
 import org.sing_group.dreimt.rest.entity.query.ListingOptionsData;
 import org.sing_group.dreimt.rest.entity.query.cmap.CmapQueryParameters;
@@ -142,28 +142,27 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
     @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
     @QueryParam("signaturePubMedId") Integer signaturePubMedId,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("maxPvalue") Double maxPvalue,
-    @QueryParam("minTes") Double minTes, 
-    @QueryParam("maxTes") Double maxTes,
-    @QueryParam("maxFdr") Double maxFdr
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau, 
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signaturePubMedId
       );
 
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         listingOptionsMapper.toListingOptions(getListingOptions(page, pageSize, orderField, sortDirection)),
-        signatureListingOptions,
+        signatureListingOptions, interactionType,
         drugSourceName, drugSourceDb, drugCommonName,
-        maxPvalue, minTes, maxTes, maxFdr
+        minTau, maxUpFdr, maxDownFdr
       );
 
     final DrugSignatureInteractionData[] data =
@@ -211,27 +210,26 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
     @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
     @QueryParam("signaturePubMedId") Integer signaturePubMedId,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("maxPvalue") Double maxPvalue,
-    @QueryParam("minTes") Double minTes, 
-    @QueryParam("maxTes") Double maxTes,
-    @QueryParam("maxFdr") Double maxFdr
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau, 
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signaturePubMedId
       );
 
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions,
+        signatureListingOptions, interactionType,
         drugSourceName, drugSourceDb, drugCommonName,
-        maxPvalue, minTes, maxTes, maxFdr
+        minTau, maxUpFdr, maxDownFdr
       );
 
     final String[] data =
@@ -260,27 +258,26 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
     @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
     @QueryParam("signaturePubMedId") Integer signaturePubMedId,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("maxPvalue") Double maxPvalue,
-    @QueryParam("minTes") Double minTes, 
-    @QueryParam("maxTes") Double maxTes,
-    @QueryParam("maxFdr") Double maxFdr
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau, 
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signaturePubMedId
       );
 
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions,
+        signatureListingOptions, interactionType,
         drugSourceName, drugSourceDb, drugCommonName,
-        maxPvalue, minTes, maxTes, maxFdr
+        minTau, maxUpFdr, maxDownFdr
       );
 
     final String[] data =
@@ -309,27 +306,26 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
     @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
     @QueryParam("signaturePubMedId") Integer signaturePubMedId,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("maxPvalue") Double maxPvalue,
-    @QueryParam("minTes") Double minTes, 
-    @QueryParam("maxTes") Double maxTes,
-    @QueryParam("maxFdr") Double maxFdr
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau, 
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signaturePubMedId
       );
 
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions,
+        signatureListingOptions, interactionType,
         drugSourceName, drugSourceDb, drugCommonName,
-        maxPvalue, minTes, maxTes, maxFdr
+        minTau, maxUpFdr, maxDownFdr
       );
 
     final String[] data =
@@ -358,27 +354,26 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
     @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
     @QueryParam("signaturePubMedId") Integer signaturePubMedId,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("maxPvalue") Double maxPvalue,
-    @QueryParam("minTes") Double minTes, 
-    @QueryParam("maxTes") Double maxTes,
-    @QueryParam("maxFdr") Double maxFdr
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau, 
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signaturePubMedId
       );
 
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions,
+        signatureListingOptions, interactionType,
         drugSourceName, drugSourceDb, drugCommonName,
-        maxPvalue, minTes, maxTes, maxFdr
+        minTau, maxUpFdr, maxDownFdr
       );
 
     final String[] data =
@@ -407,27 +402,26 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
     @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
     @QueryParam("signaturePubMedId") Integer signaturePubMedId,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("maxPvalue") Double maxPvalue,
-    @QueryParam("minTes") Double minTes, 
-    @QueryParam("maxTes") Double maxTes,
-    @QueryParam("maxFdr") Double maxFdr
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau, 
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signaturePubMedId
       );
 
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions,
+        signatureListingOptions, interactionType,
         drugSourceName, drugSourceDb, drugCommonName,
-        maxPvalue, minTes, maxTes, maxFdr
+        minTau, maxUpFdr, maxDownFdr
       );
 
     final String[] data =
@@ -456,27 +450,26 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
     @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
     @QueryParam("signaturePubMedId") Integer signaturePubMedId,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("maxPvalue") Double maxPvalue,
-    @QueryParam("minTes") Double minTes, 
-    @QueryParam("maxTes") Double maxTes,
-    @QueryParam("maxFdr") Double maxFdr
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau, 
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signaturePubMedId
       );
 
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions,
+        signatureListingOptions, interactionType,
         drugSourceName, drugSourceDb, drugCommonName,
-        maxPvalue, minTes, maxTes, maxFdr
+        minTau, maxUpFdr, maxDownFdr
       );
 
     final ExperimentalDesign[] data =
@@ -505,27 +498,26 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
     @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
     @QueryParam("signaturePubMedId") Integer signaturePubMedId,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("maxPvalue") Double maxPvalue,
-    @QueryParam("minTes") Double minTes, 
-    @QueryParam("maxTes") Double maxTes,
-    @QueryParam("maxFdr") Double maxFdr
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau, 
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signaturePubMedId
       );
 
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions,
+        signatureListingOptions, interactionType,
         drugSourceName, drugSourceDb, drugCommonName,
-        maxPvalue, minTes, maxTes, maxFdr
+        minTau, maxUpFdr, maxDownFdr
       );
 
     final String[] data =
@@ -554,27 +546,26 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
     @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
     @QueryParam("signaturePubMedId") Integer signaturePubMedId,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("maxPvalue") Double maxPvalue,
-    @QueryParam("minTes") Double minTes, 
-    @QueryParam("maxTes") Double maxTes,
-    @QueryParam("maxFdr") Double maxFdr
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau, 
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signaturePubMedId
       );
 
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions,
+        signatureListingOptions, interactionType,
         drugSourceName, drugSourceDb, drugCommonName,
-        maxPvalue, minTes, maxTes, maxFdr
+        minTau, maxUpFdr, maxDownFdr
       );
 
     final String[] data =
@@ -603,27 +594,26 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
     @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
     @QueryParam("signaturePubMedId") Integer signaturePubMedId,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("maxPvalue") Double maxPvalue,
-    @QueryParam("minTes") Double minTes, 
-    @QueryParam("maxTes") Double maxTes,
-    @QueryParam("maxFdr") Double maxFdr
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau, 
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signaturePubMedId
       );
 
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions,
+        signatureListingOptions, interactionType,
         drugSourceName, drugSourceDb, drugCommonName,
-        maxPvalue, minTes, maxTes, maxFdr
+        minTau, maxUpFdr, maxDownFdr
       );
 
     final String[] data =
@@ -633,16 +623,16 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     return Response.ok(data).build();
   }
   
-  @Path("params/signature-type/values")
+  @Path("params/interaction-type/values")
   @GET
   @ApiOperation(
-    value = "Lists the possible signature type values in drug-signature interactions", 
+    value = "Lists the possible interaction type values in drug-signature interactions", 
     response = String.class,
     responseContainer = "list", 
     code = 200
   )
   @Override
-  public Response listSignatureTypeValues(
+  public Response listInteractionTypeValues(
     @QueryParam("signatureName") String signatureName,
     @QueryParam("cellTypeA") String cellTypeA,
     @QueryParam("cellSubTypeA") String cellSubTypeA,
@@ -652,32 +642,31 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
     @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
     @QueryParam("signaturePubMedId") Integer signaturePubMedId,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("maxPvalue") Double maxPvalue,
-    @QueryParam("minTes") Double minTes, 
-    @QueryParam("maxTes") Double maxTes,
-    @QueryParam("maxFdr") Double maxFdr
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau, 
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signaturePubMedId
       );
 
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions,
+        signatureListingOptions, interactionType,
         drugSourceName, drugSourceDb, drugCommonName,
-        maxPvalue, minTes, maxTes, maxFdr
+        minTau, maxUpFdr, maxDownFdr
       );
 
-    final SignatureType[] data =
-      service.listSignatureTypeValues(listingOptions)
-        .toArray(SignatureType[]::new);
+    final DrugSignatureInteractionType[] data =
+      service.listInteractionTypeValues(listingOptions)
+        .toArray(DrugSignatureInteractionType[]::new);
 
     return Response.ok(data).build();
   }
@@ -701,27 +690,26 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
     @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
     @QueryParam("signaturePubMedId") Integer signaturePubMedId,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("maxPvalue") Double maxPvalue,
-    @QueryParam("minTes") Double minTes, 
-    @QueryParam("maxTes") Double maxTes,
-    @QueryParam("maxFdr") Double maxFdr
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau, 
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signaturePubMedId
       );
 
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions,
+        signatureListingOptions, interactionType,
         drugSourceName, drugSourceDb, drugCommonName,
-        maxPvalue, minTes, maxTes, maxFdr
+        minTau, maxUpFdr, maxDownFdr
       );
 
     final Integer[] data =
@@ -750,27 +738,26 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
     @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
     @QueryParam("signaturePubMedId") Integer signaturePubMedId,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("maxPvalue") Double maxPvalue,
-    @QueryParam("minTes") Double minTes, 
-    @QueryParam("maxTes") Double maxTes,
-    @QueryParam("maxFdr") Double maxFdr
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau, 
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signaturePubMedId
       );
 
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions,
+        signatureListingOptions, interactionType,
         drugSourceName, drugSourceDb, drugCommonName,
-        maxPvalue, minTes, maxTes, maxFdr
+        minTau, maxUpFdr, maxDownFdr
       );
 
     final String[] data =
@@ -799,28 +786,27 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
     @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
     @QueryParam("signaturePubMedId") Integer signaturePubMedId,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("maxPvalue") Double maxPvalue,
-    @QueryParam("minTes") Double minTes, 
-    @QueryParam("maxTes") Double maxTes,
-    @QueryParam("maxFdr") Double maxFdr
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau, 
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signaturePubMedId
       );
 
 
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions,
+        signatureListingOptions, interactionType,
         drugSourceName, drugSourceDb, drugCommonName,
-        maxPvalue, minTes, maxTes, maxFdr
+        minTau, maxUpFdr, maxDownFdr
       );
 
     final String[] data =
@@ -849,27 +835,26 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
     @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
     @QueryParam("signaturePubMedId") Integer signaturePubMedId,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("drugSourceDb") String drugSourceDb,
-    @QueryParam("maxPvalue") Double maxPvalue,
-    @QueryParam("minTes") Double minTes, 
-    @QueryParam("maxTes") Double maxTes,
-    @QueryParam("maxFdr") Double maxFdr
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau, 
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signaturePubMedId
       );
 
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions,
+        signatureListingOptions, interactionType,
         drugSourceName, drugSourceDb, drugCommonName,
-        maxPvalue, minTes, maxTes, maxFdr
+        minTau, maxUpFdr, maxDownFdr
       );
 
     final String[] data =
@@ -1021,12 +1006,11 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final BaseRestPathBuilder pathBuilder = new BaseRestPathBuilder(uriBuilder);
 
     final Function<String, String> resultUriBuilder =
-      id -> pathBuilder.cmapResult(id).build().toString();
+      downGenes.isEmpty() ? id -> pathBuilder.cmapGeneSetSignatureResult(id).build().toString() : id -> pathBuilder.cmapUpDownSignatureResult(id).build().toString();
 
     CmapQueryOptions options =
       new DefaultCmapQueryOptions(
-        cmapQueryParameters.getQueryTitle(), upGenes, downGenes, resultUriBuilder, cmapQueryParameters.getNumPerm(),
-        cmapQueryParameters.getMaxPvalue()
+        cmapQueryParameters.getQueryTitle(), upGenes, downGenes, resultUriBuilder, cmapQueryParameters.getNumPerm()
       );
 
     final WorkEntity work = this.cmapQueryService.cmapQuery(options);

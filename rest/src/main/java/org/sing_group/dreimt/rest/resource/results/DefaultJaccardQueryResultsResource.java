@@ -163,7 +163,7 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
   @Override
   public Response jaccardQueryGeneOverlaps(
     @PathParam("id") String resultId,
-    @QueryParam("maxJaccard") Double maxJaccard,
+    @QueryParam("minJaccard") Double minJaccard,
     @QueryParam("maxPvalue") Double maxPvalue,
     @QueryParam("maxFdr") Double maxFdr,
     @QueryParam("page") Integer page,
@@ -172,7 +172,7 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
     @QueryParam("sortDirection") @DefaultValue("NONE") SortDirection sortDirection
   ) {
     return this.jaccardQueryResult(
-      resultId, maxJaccard, maxPvalue, maxFdr, page, pageSize, orderField, sortDirection,
+      resultId, minJaccard, maxPvalue, maxFdr, page, pageSize, orderField, sortDirection,
       (jaccardResult, overlaps) -> mapper.toGeneOverlapData(overlaps),
       APPLICATION_JSON, true
     );
@@ -192,7 +192,7 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
   @Override
   public Response jaccardQueryGeneOverlapsAsCsv(
     @PathParam("id") String resultId,
-    @QueryParam("maxJaccard") Double maxJaccard,
+    @QueryParam("minJaccard") Double minJaccard,
     @QueryParam("maxPvalue") Double maxPvalue,
     @QueryParam("maxFdr") Double maxFdr,
     @QueryParam("page") Integer page,
@@ -201,7 +201,7 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
     @QueryParam("sortDirection") @DefaultValue("NONE") SortDirection sortDirection
   ) {
     return this.jaccardQueryResult(
-      resultId, maxJaccard, maxPvalue, maxFdr, page, pageSize, orderField, sortDirection,
+      resultId, minJaccard, maxPvalue, maxFdr, page, pageSize, orderField, sortDirection,
       (jaccardResult, overlaps) -> mapper.toGeneOverlapCsvData(overlaps),
       "text/csv", false
     );
@@ -209,7 +209,7 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
 
   private Response jaccardQueryResult(
     String resultId,
-    Double maxJaccard, 
+    Double minJaccard, 
     Double maxPvalue, 
     Double maxFdr, 
     Integer page,
@@ -223,7 +223,7 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
     final ListingOptionsData options = ListingOptionsData.from(page, pageSize, orderField.name(), sortDirection);
     
     final GeneOverlapListingOptions geneOverlapListingOptions =
-      new GeneOverlapListingOptions(listingOptionsMapper.toListingOptions(options), maxJaccard, maxPvalue, maxFdr);
+      new GeneOverlapListingOptions(listingOptionsMapper.toListingOptions(options), minJaccard, maxPvalue, maxFdr);
 
     JaccardResult jaccardResult =
       jaccardQueryService.getResult(resultId)

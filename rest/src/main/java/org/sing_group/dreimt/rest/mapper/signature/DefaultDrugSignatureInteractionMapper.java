@@ -53,7 +53,8 @@ public class DefaultDrugSignatureInteractionMapper implements DrugSignatureInter
     return new DrugSignatureInteractionData(
       this.drugMapper.toDrugData(interaction.getDrug()),
       this.signatureMapper.toSignatureData(interaction.getSignature()),
-      interaction.getTes(), interaction.getpValue(), interaction.getFdr()
+      interaction.getInteractionType(), interaction.getTau(), 
+      interaction.getUpFdr(), interaction.getDownFdr()
     );
   }
 }

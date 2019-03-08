@@ -172,7 +172,7 @@ public abstract class JaccardResult extends WorkEntity {
   public GeneOverlap addGeneOverlapResult(
     JaccardComparisonType sourceComparisonType, Signature targetSignature,
     JaccardComparisonType targetComparisonType,
-    Double jaccard, Double pValue
+    Double jaccard, Double pValue, Double fdr
   ) {
     this.geneOverlapResultsLock.writeLock().lock();
 
@@ -181,7 +181,7 @@ public abstract class JaccardResult extends WorkEntity {
         new GeneOverlap(
           this, sourceComparisonType,
           targetSignature, targetComparisonType,
-          jaccard, pValue
+          jaccard, pValue, fdr
         );
       this.geneOverlapResults.add(geneOverlap);
 

@@ -36,7 +36,9 @@ import javax.transaction.Transactional;
 import org.sing_group.dreimt.domain.dao.spi.execution.cmap.CmapResultDao;
 import org.sing_group.dreimt.domain.dao.spi.signature.DrugDao;
 import org.sing_group.dreimt.domain.entities.execution.StepExecutionStatus;
+import org.sing_group.dreimt.domain.entities.execution.cmap.CmapGeneSetSignatureResult;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapResult;
+import org.sing_group.dreimt.domain.entities.execution.cmap.CmapUpDownSignatureResult;
 import org.sing_group.dreimt.domain.entities.signature.Drug;
 import org.sing_group.dreimt.service.spi.execution.pipeline.cmap.CmapPipelineContext;
 import org.sing_group.dreimt.service.spi.execution.pipeline.cmap.CmapPipelineEvent;
@@ -76,7 +78,20 @@ public class DefaultCmapPipelinePersistenceManager implements CmapPipelinePersis
               );
             }
 
-            result.addCmapDrugInteraction(drug.get(), r.getFdr(), r.getpValue(), r.getTes());
+            if (r.getDownFdr().isPresent()) {
+              if (result instanceof CmapUpDownSignatureResult) {
+                ((CmapUpDownSignatureResult) result)
+                  .addCmapDrugInteraction(drug.get(), r.getTau(), r.getUpFdr(), r.getDownFdr().get());
+              } else {
+                throw new IllegalArgumentException("GeneSet results can't have a DOWN FDR value");
+              }
+            } else {
+              if (result instanceof CmapGeneSetSignatureResult) {
+                ((CmapGeneSetSignatureResult) result).addCmapDrugInteraction(drug.get(), r.getTau(), r.getUpFdr());
+              } else {
+                throw new IllegalArgumentException("Up/Down Signature results must have a DOWN FDR value");
+              }
+            }
           });
           break;
       }

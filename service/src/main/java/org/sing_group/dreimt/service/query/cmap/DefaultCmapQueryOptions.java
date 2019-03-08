@@ -37,24 +37,21 @@ public class DefaultCmapQueryOptions implements CmapQueryOptions {
   private Set<String> downGenes;
   private Function<String, String> resultUriBuilder;
   private Integer numPerm;
-  private Double maxPvalue;
 
   public DefaultCmapQueryOptions(
     String title,
-    Set<String> upGenes, 
+    Set<String> upGenes,
     Set<String> downGenes,
     Function<String, String> resultUriBuilder,
-    Integer numPerm,
-    Double maxPvalue
+    Integer numPerm
   ) {
     this.title = title;
     this.upGenes = upGenes;
     this.downGenes = downGenes;
     this.resultUriBuilder = resultUriBuilder;
     this.numPerm = numPerm;
-    this.maxPvalue = maxPvalue;
   }
-  
+
   @Override
   public Optional<String> getTitle() {
     return ofNullable(this.title);
@@ -74,14 +71,9 @@ public class DefaultCmapQueryOptions implements CmapQueryOptions {
   public Function<String, String> getResultUriBuilder() {
     return resultUriBuilder;
   }
-  
+
   @Override
   public Integer getNumPerm() {
     return numPerm;
-  }
-
-  @Override
-  public Double getMaxPvalue() {
-    return maxPvalue;
   }
 }

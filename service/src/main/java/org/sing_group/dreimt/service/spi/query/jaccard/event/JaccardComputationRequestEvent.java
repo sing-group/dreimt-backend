@@ -23,6 +23,7 @@
 package org.sing_group.dreimt.service.spi.query.jaccard.event;
 
 import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
+import org.sing_group.dreimt.service.spi.query.jaccard.JaccardServiceConfiguration;
 
 public interface JaccardComputationRequestEvent {
 
@@ -30,5 +31,5 @@ public interface JaccardComputationRequestEvent {
 
   SignatureListingOptions getSignatureListingOptions();
 
-  boolean isOnlyUniverseGenes();
+  JaccardServiceConfiguration getJaccardServiceConfiguration();
 }

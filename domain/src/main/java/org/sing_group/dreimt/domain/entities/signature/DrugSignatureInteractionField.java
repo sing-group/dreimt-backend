@@ -23,24 +23,35 @@
 package org.sing_group.dreimt.domain.entities.signature;
 
 public enum DrugSignatureInteractionField {
-  NONE,
+  NONE(false),
 
-  CELL_TYPE_A,
-  CELL_SUBTYPE_A,
-  CELL_TYPE_B,
-  CELL_SUBTYPE_B,
-  SIGNATURE_NAME,
-  EXPERIMENTAL_DESIGN,
-  ORGANISM,
-  DISEASE,
-  SIGNATURE_SOURCE_DB,
-  SIGNATURE_TYPE,
+  CELL_TYPE_A(true),
+  CELL_SUBTYPE_A(true),
+  CELL_TYPE_B(true),
+  CELL_SUBTYPE_B(true),
+  SIGNATURE_NAME(false),
+  EXPERIMENTAL_DESIGN(false),
+  ORGANISM(false),
+  DISEASE(true),
+  SIGNATURE_SOURCE_DB(false),
+  SIGNATURE_TYPE(false),
 
-  DRUG_SOURCE_NAME,
-  DRUG_SOURCE_DB,
-  DRUG_COMMON_NAME,
+  DRUG_SOURCE_NAME(false),
+  DRUG_SOURCE_DB(false),
+  DRUG_COMMON_NAME(false),
 
-  TES,
-  P_VALUE,
-  FDR;
+  INTERACTION_TYPE(false),
+  TAU(false),
+  UP_FDR(false),
+  DOWN_FDR(false);
+
+  private boolean multivaluated;
+
+  DrugSignatureInteractionField(boolean multivaluated) {
+    this.multivaluated = multivaluated;
+  }
+
+  public boolean isMultivaluated() {
+    return multivaluated;
+  }
 }

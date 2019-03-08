@@ -48,8 +48,12 @@ public final class BaseRestPathBuilder implements RestPathBuilder {
     return new JaccardResultsPathBuilder(this.builder, resultId);
   }
   
-  public CmapResultsPathBuilder cmapResult(String resultId) {
-    return new CmapResultsPathBuilder(this.builder, resultId);
+  public CmapUpDownSignatureResultsPathBuilder cmapUpDownSignatureResult(String resultId) {
+    return new CmapUpDownSignatureResultsPathBuilder(this.builder, resultId);
+  }
+
+  public CmapGeneSetSignatureResultsPathBuilder cmapGeneSetSignatureResult(String resultId) {
+    return new CmapGeneSetSignatureResultsPathBuilder(this.builder, resultId);
   }
 
   public WorkRestPathBuilder work(String id) {

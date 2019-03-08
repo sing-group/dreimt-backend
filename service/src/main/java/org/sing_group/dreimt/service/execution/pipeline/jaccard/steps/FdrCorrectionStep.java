@@ -26,7 +26,6 @@ import static java.util.Objects.requireNonNull;
 import static javax.transaction.Transactional.TxType.REQUIRED;
 import static org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.JaccardPipeline.SINGLE_FDR_CORRECTION_STEP_ID;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -90,9 +89,9 @@ public class FdrCorrectionStep implements SingleJaccardPipelineStep {
     }
 
     Map<GeneOverlapData, Double> pValuesMap =
-      context.getTargetSignatureOverlaps()
+      context.getGeneOverlapResultsData()
         .orElseThrow(() -> new RuntimeException("Gene overlaps must be calculated before this step."))
-        .values().stream().flatMap(List::stream).collect(Collectors.toMap(Function.identity(), go -> go.getPvalue()));
+        .collect(Collectors.toMap(Function.identity(), go -> go.getPvalue()));
 
     try {
       Map<GeneOverlapData, Double> correctedPvaluesMap = StatisticsTestsUtils.correct(new FDRCorrection(), pValuesMap);

@@ -324,9 +324,16 @@
                 <simple name="java:global/dreimt/docker/cmap/dataDir/deleteOnFinish" value="false" type="boolean"/>
                 <simple name="java:global/dreimt/docker/cmap/configuration/cores" value="2" type="int"/>
                 <simple name="java:global/dreimt/docker/cmap/command/signature" 
-                  value="docker run --rm -i -v /opt/dreimt:/mnt/dreimt/scripts -v /tmp/dreimt/data:/mnt/dreimt/data singgroup/r-dreimt Rscript /mnt/dreimt/scripts/DrugRepositionCMapD1_parallel.R /mnt/dreimt/data/[INPUT_FILE_NAME] /mnt/dreimt/data/[OUTPUT_FILE_NAME] [NPERM] [MAX_PVALUE] [CORES]" type="java.lang.String"/>
+                  value="docker run --rm -v /tmp/dreimt/data:/mnt/dreimt/data singgroup/r-dreimt-scripts Rscript /opt/dreimt/dreimt/DrugPrediction/Dreimt_UPDN_tau_UserQuery.R /mnt/dreimt/data/[INPUT_FILE_NAME] /opt/dreimt/resources/D1_short_t_matrix_12434_4690_LINCS.rds /opt/dreimt/resources/sig_id_table_LINCS_short.tsv [NPERM] [CORES] /opt/dreimt/resources/DBprecalculated.Coordinated.ES.SIG_20190227.rds /opt/dreimt/resources/Normalized_ES_SIG_20190227.rds /mnt/dreimt/data/[OUTPUT_FILE_NAME]" type="java.lang.String"/>
                 <simple name="java:global/dreimt/docker/cmap/command/geneset" 
-                  value="docker run --rm -i -v /opt/dreimt:/mnt/dreimt/scripts -v /tmp/dreimt/data:/mnt/dreimt/data singgroup/r-dreimt Rscript /mnt/dreimt/scripts/DrugRepositionCMapD1singleGS_parallel.R /mnt/dreimt/data/[INPUT_FILE_NAME] /mnt/dreimt/data/[OUTPUT_FILE_NAME]  [NPERM] [MAX_PVALUE] [CORES]" type="java.lang.String"/>
+                  value="docker run --rm -v /tmp/dreimt/data:/mnt/dreimt/data singgroup/r-dreimt-scripts Rscript /opt/dreimt/dreimt/DrugPrediction/Dreimt_UP_tau_UserQuery.R /mnt/dreimt/data/[INPUT_FILE_NAME] /opt/dreimt/resources/D1_short_t_matrix_12434_4690_LINCS.rds /opt/dreimt/resources/sig_id_table_LINCS_short.tsv [NPERM] [CORES] /opt/dreimt/resources/DBprecalculated.Coordinated.ES.GS_20190227.rds /opt/dreimt/resources/Normalized_ES_GS_20190227.rds /mnt/dreimt/data/[OUTPUT_FILE_NAME]" type="java.lang.String"/>
+                
+                <simple name="java:global/dreimt/docker/jaccard/dataDir" value="/tmp/dreimt/data" type="java.lang.String"/>
+                <simple name="java:global/dreimt/docker/jaccard/dataDir/deleteOnFinish" value="false" type="boolean"/>
+                <simple name="java:global/dreimt/docker/jaccard/command/signature" 
+                  value="docker run --rm -v /tmp/dreimt/data:/mnt/dreimt/data singgroup/r-dreimt-scripts Rscript /opt/dreimt/dreimt/SignatureComparison/Hypergeom_Sig.R /mnt/dreimt/data/[INPUT_FILE_NAME] /opt/dreimt/resources/D1geneUniverse.rds /opt/dreimt/resources/Dreimt_Genesets_20190227_clean.gmt [ONLY_UNIVERSE_GENES] /mnt/dreimt/data/[OUTPUT_FILE_NAME]" type="java.lang.String"/>
+                <simple name="java:global/dreimt/docker/jaccard/command/geneset" 
+                  value="docker run --rm -v /tmp/dreimt/data:/mnt/dreimt/data singgroup/r-dreimt-scripts Rscript /opt/dreimt/dreimt/SignatureComparison/Hypergeom_GS.R /mnt/dreimt/data/[INPUT_FILE_NAME] /opt/dreimt/resources/D1geneUniverse.rds /opt/dreimt/resources/Dreimt_Genesets_20190227_clean.gmt [ONLY_UNIVERSE_GENES] /mnt/dreimt/data/[OUTPUT_FILE_NAME]" type="java.lang.String"/>
             </bindings>
             <remote-naming/>
         </subsystem>

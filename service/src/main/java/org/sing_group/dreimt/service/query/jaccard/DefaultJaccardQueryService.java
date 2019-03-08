@@ -43,6 +43,7 @@ import org.sing_group.dreimt.service.query.jaccard.event.DefaultJaccardComputati
 import org.sing_group.dreimt.service.spi.query.GeneListsValidationService;
 import org.sing_group.dreimt.service.spi.query.jaccard.JaccardQueryOptions;
 import org.sing_group.dreimt.service.spi.query.jaccard.JaccardQueryService;
+import org.sing_group.dreimt.service.spi.query.jaccard.JaccardServiceConfiguration;
 
 @Stateless
 @PermitAll
@@ -87,13 +88,31 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
       !options.getDownGenes().isEmpty() ? this.jaccardUpDownQuery(options) : this.jaccardGeneSetQuery(options);
 
     DefaultJaccardComputationRequestEvent event =
-      new DefaultJaccardComputationRequestEvent(result.getId(), options.getSignatureListingOptions(), options.isOnlyUniverseGenes());
+      new DefaultJaccardComputationRequestEvent(
+        result.getId(), options.getSignatureListingOptions(), createJaccardServiceConfiguration(result, options)
+      );
 
     this.jaccardComputationEvents.fire(event);
 
     result.setScheduled();
 
     return result;
+  }
+
+  private JaccardServiceConfiguration createJaccardServiceConfiguration(
+    JaccardResult result, JaccardQueryOptions options
+  ) {
+    if (result instanceof JaccardGeneSetSignatureResult) {
+      return new DefaultJaccardServiceConfiguration(
+        options.isOnlyUniverseGenes(), options.getUpGenes()
+      );
+    } else if (result instanceof JaccardUpDownSignatureResult) {
+      return new DefaultJaccardServiceConfiguration(
+        options.isOnlyUniverseGenes(), options.getUpGenes(), options.getDownGenes()
+      );
+    } else {
+      throw new RuntimeException("Unknown JaccardResul type");
+    }
   }
 
   private void validateGeneListsSizes(JaccardQueryOptions options) {

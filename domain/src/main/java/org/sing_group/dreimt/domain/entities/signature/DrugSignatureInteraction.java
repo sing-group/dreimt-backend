@@ -26,7 +26,10 @@ import static javax.persistence.GenerationType.IDENTITY;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -39,9 +42,9 @@ import javax.persistence.Table;
 @Table(
   name = "drug_signature_interaction",
   indexes = {
-    @Index(columnList = "tes"),
-    @Index(columnList = "pValue"),
-    @Index(columnList = "fdr")
+    @Index(columnList = "tau"),
+    @Index(columnList = "upFdr"),
+    @Index(columnList = "downFdr")
   }
 )
 public class DrugSignatureInteraction implements Serializable {
@@ -58,10 +61,17 @@ public class DrugSignatureInteraction implements Serializable {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "signature", referencedColumnName = "signatureName", nullable = false)
   private Signature signature;
+  
+  @Enumerated(EnumType.STRING)
+  private DrugSignatureInteractionType interactionType;
 
-  private double tes;
-  private double pValue;
-  private double fdr;
+  private double tau;
+  
+  @Column(nullable = true)
+  private Double upFdr;
+
+  @Column(nullable = true)
+  private Double downFdr;
 
   public DrugSignatureInteraction() {}
 
@@ -72,17 +82,21 @@ public class DrugSignatureInteraction implements Serializable {
   public Signature getSignature() {
     return signature;
   }
-
-  public double getTes() {
-    return tes;
+  
+  public DrugSignatureInteractionType getInteractionType() {
+    return interactionType;
   }
 
-  public double getpValue() {
-    return pValue;
+  public double getTau() {
+    return tau;
   }
 
-  public double getFdr() {
-    return fdr;
+  public Double getUpFdr() {
+    return upFdr;
+  }
+
+  public Double getDownFdr() {
+    return downFdr;
   }
 
   @Override

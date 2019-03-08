@@ -24,6 +24,7 @@ package org.sing_group.dreimt.service.spi.execution.pipeline.jaccard;
 
 import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
 import org.sing_group.dreimt.service.spi.execution.pipeline.PipelineConfiguration;
+import org.sing_group.dreimt.service.spi.query.jaccard.JaccardServiceConfiguration;
 
 public interface JaccardPipelineConfiguration extends PipelineConfiguration {
 
@@ -32,4 +33,6 @@ public interface JaccardPipelineConfiguration extends PipelineConfiguration {
   String getResultId();
 
   SignatureListingOptions getSignatureListingOptions();
+
+  JaccardServiceConfiguration getJaccardServiceConfiguration();
 }

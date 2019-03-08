@@ -52,15 +52,15 @@ public class DefaultSignatureMapper implements SignatureMapper {
 
     return new SignatureData(
       signature.getSignatureName(),
-      signature.getCellTypeA(), signature.getCellSubTypeA(), 
+      signature.getCellTypeA(), signature.getCellSubTypeA(),
       signature.getCellTypeB(), signature.getCellSubTypeB(),
       signature.getSourceDb(), signature.getExperimentalDesign(),
       signature.getOrganism(), signature.getDisease(),
-      signature.getArticleMetadata().getPubmedId(),
-      signature.getArticleMetadata().getTitle(),
+      signature.getArticleMetadata().isPresent() ? signature.getArticleMetadata().get().getPubmedId() : null,
+      signature.getArticleMetadata().isPresent() ? signature.getArticleMetadata().get().getTitle() : null,
       signature.getSignatureType(),
       pathBuilder.signatureGenes(signature).build(),
-      pathBuilder.articleMetadata(signature.getArticleMetadata()).build()
+      signature.getArticleMetadata().isPresent() ? pathBuilder.articleMetadata(signature.getArticleMetadata().get()).build() : null
     );
   }
   
@@ -71,7 +71,7 @@ public class DefaultSignatureMapper implements SignatureMapper {
     return new SignatureDataSummary(
       signature.getSignatureName(),
       pathBuilder.signatureGenes(signature).build(),
-      pathBuilder.articleMetadata(signature.getArticleMetadata()).build()
+      signature.getArticleMetadata().isPresent() ? pathBuilder.articleMetadata(signature.getArticleMetadata().get()).build() : null
     );
   }
 

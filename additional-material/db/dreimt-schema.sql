@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.24, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.25, for Linux (x86_64)
 --
 -- Host: localhost    Database: dreimt
 -- ------------------------------------------------------
--- Server version	5.7.24-0ubuntu0.18.04.1
+-- Server version	5.7.25-0ubuntu0.18.04.2
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -39,34 +39,11 @@ DROP TABLE IF EXISTS `cmap_result`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cmap_result` (
-  `maxPvalue` double NOT NULL,
   `numPerm` int(11) NOT NULL,
   `id` char(36) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FK4g4549cdbruc56dfa00bpc4t4` FOREIGN KEY (`id`) REFERENCES `work` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `cmap_result_drug_interactions`
---
-
-DROP TABLE IF EXISTS `cmap_result_drug_interactions`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `cmap_result_drug_interactions` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `fdr` double DEFAULT NULL,
-  `pValue` double DEFAULT NULL,
-  `tes` double DEFAULT NULL,
-  `cmapResultId` char(36) NOT NULL,
-  `drugId` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `UKe8t7f8fwbquttecdrfy41vi7d` (`cmapResultId`,`drugId`),
-  KEY `FK7s3cw6jwjf5lwv6kxbk5lu3vy` (`drugId`),
-  CONSTRAINT `FK7s3cw6jwjf5lwv6kxbk5lu3vy` FOREIGN KEY (`drugId`) REFERENCES `drug` (`id`),
-  CONSTRAINT `FK_cmap_result_cmap_result_drug_interactions` FOREIGN KEY (`cmapResultId`) REFERENCES `cmap_result` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14071 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -80,6 +57,27 @@ CREATE TABLE `cmap_result_geneset` (
   `id` char(36) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FKr3begj73oj3094nvwh4fyls2x` FOREIGN KEY (`id`) REFERENCES `cmap_result` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `cmap_result_geneset_drug_interactions`
+--
+
+DROP TABLE IF EXISTS `cmap_result_geneset_drug_interactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cmap_result_geneset_drug_interactions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fdr` double NOT NULL,
+  `tau` double NOT NULL,
+  `cmapResultId` char(36) NOT NULL,
+  `drugId` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UK86pu1bk7qsvr1gwbpq5h5jqxe` (`cmapResultId`,`drugId`),
+  KEY `FKq0xksuxwxxbt1fc62wr9m3luw` (`drugId`),
+  CONSTRAINT `FK_cmap_result_cmap_result_geneset_drug_interactions` FOREIGN KEY (`cmapResultId`) REFERENCES `cmap_result` (`id`),
+  CONSTRAINT `FKq0xksuxwxxbt1fc62wr9m3luw` FOREIGN KEY (`drugId`) REFERENCES `drug` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -111,6 +109,28 @@ CREATE TABLE `cmap_result_updown` (
   `id` char(36) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FKh8hc4swhsq5nwd7p0x7mie9mr` FOREIGN KEY (`id`) REFERENCES `cmap_result` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `cmap_result_updown_drug_interactions`
+--
+
+DROP TABLE IF EXISTS `cmap_result_updown_drug_interactions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `cmap_result_updown_drug_interactions` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `downFdr` double NOT NULL,
+  `tau` double NOT NULL,
+  `upFdr` double NOT NULL,
+  `cmapResultId` char(36) NOT NULL,
+  `drugId` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `UKra602d31ub2gyfnlh93cno1ln` (`cmapResultId`,`drugId`),
+  KEY `FK4ei64etv5i0bhxc3xrw4eo95v` (`drugId`),
+  CONSTRAINT `FK4ei64etv5i0bhxc3xrw4eo95v` FOREIGN KEY (`drugId`) REFERENCES `drug` (`id`),
+  CONSTRAINT `FK_cmap_result_cmap_result_updown_drug_interactions` FOREIGN KEY (`cmapResultId`) REFERENCES `cmap_result` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -173,17 +193,21 @@ DROP TABLE IF EXISTS `drug_signature_interaction`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `drug_signature_interaction` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `fdr` double DEFAULT NULL,
-  `pValue` double DEFAULT NULL,
-  `tes` double DEFAULT NULL,
+  `downFdr` double DEFAULT NULL,
+  `interactionType` varchar(255) DEFAULT NULL,
+  `tau` double NOT NULL,
+  `upFdr` double DEFAULT NULL,
   `drugId` int(11) DEFAULT NULL,
   `signature` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
+  KEY `IDXd7ua29ve0t7njdgk9grfjgco8` (`tau`),
+  KEY `IDXm0dqgruedycvnd9qmgd0uofv` (`upFdr`),
+  KEY `IDX1yof1axgl78po6ybou471t469` (`downFdr`),
   KEY `FKqv24iupckh17q8jhr5hnkaemu` (`drugId`),
   KEY `FKnsnnq5179w6clhenc6o6h8oov` (`signature`),
   CONSTRAINT `FKnsnnq5179w6clhenc6o6h8oov` FOREIGN KEY (`signature`) REFERENCES `signature` (`signatureName`),
   CONSTRAINT `FKqv24iupckh17q8jhr5hnkaemu` FOREIGN KEY (`drugId`) REFERENCES `drug` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=46901 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=37521 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -208,8 +232,16 @@ DROP TABLE IF EXISTS `jaccard_result`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jaccard_result` (
-  `id` char(36) NOT NULL,
+  `cellSubTypeA` varchar(255) DEFAULT NULL,
+  `cellSubTypeB` varchar(255) DEFAULT NULL,
+  `cellTypeA` varchar(255) DEFAULT NULL,
+  `cellTypeB` varchar(255) DEFAULT NULL,
+  `disease` varchar(255) DEFAULT NULL,
+  `experimentalDesign` varchar(255) DEFAULT NULL,
   `onlyUniverseGenes` varchar(255) NOT NULL,
+  `organism` varchar(255) DEFAULT NULL,
+  `signatureSourceDb` varchar(255) DEFAULT NULL,
+  `id` char(36) NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FK3vfegxa9spa1bjuc4jpsppm7y` FOREIGN KEY (`id`) REFERENCES `work` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -236,7 +268,7 @@ CREATE TABLE `jaccard_result_gene_overlap` (
   KEY `FK9v13mymrqag29wybo2seqqha` (`targetSignature`),
   CONSTRAINT `FK9v13mymrqag29wybo2seqqha` FOREIGN KEY (`targetSignature`) REFERENCES `signature` (`signatureName`),
   CONSTRAINT `FK_jaccard_result_jaccard_result_gene_overlap` FOREIGN KEY (`jaccardResultId`) REFERENCES `jaccard_result` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=447 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -328,7 +360,6 @@ DROP TABLE IF EXISTS `signature`;
 CREATE TABLE `signature` (
   `signatureType` varchar(31) NOT NULL,
   `signatureName` varchar(255) NOT NULL,
-  `disease` varchar(255) DEFAULT NULL,
   `experimentalDesign` varchar(255) DEFAULT NULL,
   `organism` varchar(255) DEFAULT NULL,
   `sourceDb` varchar(255) DEFAULT NULL,
@@ -400,6 +431,21 @@ CREATE TABLE `signature_cell_type_b` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `signature_disease`
+--
+
+DROP TABLE IF EXISTS `signature_disease`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `signature_disease` (
+  `signatureName` varchar(255) NOT NULL,
+  `disease` varchar(255) DEFAULT NULL,
+  UNIQUE KEY `UKmeecl07ojxsu7h7abkomqrojg` (`signatureName`,`disease`),
+  CONSTRAINT `FK2qk99ln9qpe1ypmv8uvrd1lvu` FOREIGN KEY (`signatureName`) REFERENCES `signature` (`signatureName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `signature_geneset_genes`
 --
 
@@ -424,11 +470,11 @@ DROP TABLE IF EXISTS `signature_updown_genes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `signature_updown_genes` (
-  `type` varchar(255) DEFAULT NULL,
-  `signature` varchar(255) NOT NULL,
   `gene` varchar(255) NOT NULL,
-  PRIMARY KEY (`signature`,`gene`),
-  KEY `FK71w1mvo2s9n99b51fmy9jwkdh` (`gene`),
+  `signature` varchar(255) NOT NULL,
+  `type` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`gene`,`signature`),
+  KEY `FKeyhnrum6i9llm8m55ncrh3avi` (`signature`),
   CONSTRAINT `FK71w1mvo2s9n99b51fmy9jwkdh` FOREIGN KEY (`gene`) REFERENCES `genes` (`gene`),
   CONSTRAINT `FKeyhnrum6i9llm8m55ncrh3avi` FOREIGN KEY (`signature`) REFERENCES `signature` (`signatureName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -499,4 +545,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-19 16:06:03
+-- Dump completed on 2019-03-08 10:57:48

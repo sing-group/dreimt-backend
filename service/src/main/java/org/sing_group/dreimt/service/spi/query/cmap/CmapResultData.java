@@ -22,13 +22,15 @@
  */
 package org.sing_group.dreimt.service.spi.query.cmap;
 
+import java.util.Optional;
+
 public interface CmapResultData {
 
-  double getTes();
+  double getTau();
 
-  double getpValue();
+  double getUpFdr();
 
-  double getFdr();
+  Optional<Double> getDownFdr();
 
   String getDrugCommonName();
 

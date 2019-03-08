@@ -22,7 +22,6 @@
  */
 package org.sing_group.dreimt.service.execution.pipeline.jaccard;
 
-import org.sing_group.dreimt.domain.entities.execution.jaccard.GeneOverlap;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardComparisonType;
 import org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.GeneOverlapData;
 
@@ -54,16 +53,6 @@ public class DefaultGeneOverlapData implements GeneOverlapData {
     this.fdr = fdr;
   }
 
-  public DefaultGeneOverlapData(GeneOverlap geneOverlapEntity) {
-    this(
-      geneOverlapEntity.getSourceComparisonType(),
-      geneOverlapEntity.getTargetSignature().getSignatureName(),
-      geneOverlapEntity.getTargetComparisonType(),
-      geneOverlapEntity.getJaccard(),
-      geneOverlapEntity.getPvalue()
-    );
-  }
-
   @Override
   public Double getJaccard() {
     return this.jaccard;
@@ -93,7 +82,7 @@ public class DefaultGeneOverlapData implements GeneOverlapData {
   public JaccardComparisonType getSourceComparisonType() {
     return this.sourceComparisonType;
   }
-  
+
   @Override
   public int hashCode() {
     final int prime = 31;

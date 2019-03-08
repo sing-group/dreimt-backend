@@ -22,14 +22,14 @@
  */
 package org.sing_group.dreimt.service.spi.execution.pipeline.jaccard;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 public interface JaccardPipelineContextBuilder {
   JaccardPipelineContextBuilder addTargetSignatureIds(Set<String> targetSignatureIds);
 
-  JaccardPipelineContextBuilder addGeneOverlaps(String signatureName, List<GeneOverlapData> geneOverlaps);
+  JaccardPipelineContextBuilder addJaccardResultDataStream(Stream<GeneOverlapData> geneOverlaps);
 
   JaccardPipelineContext build();
 

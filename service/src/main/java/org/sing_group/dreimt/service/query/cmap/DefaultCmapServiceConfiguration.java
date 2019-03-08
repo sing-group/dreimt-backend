@@ -27,20 +27,13 @@ import org.sing_group.dreimt.service.spi.query.cmap.CmapServiceConfiguration;
 public class DefaultCmapServiceConfiguration implements CmapServiceConfiguration {
 
   private int numPermutations;
-  private double maxPvalue;
 
-  public DefaultCmapServiceConfiguration(int numPermutations, double maxPvalue) {
+  public DefaultCmapServiceConfiguration(int numPermutations) {
     this.numPermutations = numPermutations;
-    this.maxPvalue = maxPvalue;
   }
 
   @Override
   public int getNumPermutations() {
     return this.numPermutations;
-  }
-
-  @Override
-  public double getMaxPvalue() {
-    return this.maxPvalue;
   }
 }

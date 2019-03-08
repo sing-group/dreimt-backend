@@ -29,60 +29,64 @@ import java.io.Serializable;
 import java.util.Optional;
 
 import org.sing_group.dreimt.domain.dao.ListingOptions;
+import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
 
 public class DrugSignatureInteractionListingOptions implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private final ListingOptions listingOptions;
   private final SignatureListingOptions signatureListingOptions;
+  private final DrugSignatureInteractionType interactionType;
   private final String drugSourceName;
   private final String drugSourceDb;
   private final String drugCommonName;
-  private final Double maxPvalue;
-  private final Double minTes;
-  private final Double maxTes;
-  private final Double maxFdr;
+  private final Double minTau;
+  private final Double maxUpFdr;
+  private final Double maxDownFdr;
 
   public DrugSignatureInteractionListingOptions(
     SignatureListingOptions signatureListingOptions,
+    DrugSignatureInteractionType interactionType,
     String drugSourceName, String drugSourceDb, String drugCommonName,
-    Double pValue, Double minTes, Double maxTes, Double maxFdr
+    Double minTau, Double maxUpFdr, Double maxDownFdr
   ) {
     this(
       noModification(),
       signatureListingOptions,
+      interactionType,
       drugSourceName, drugSourceDb, drugCommonName,
-      pValue, minTes, maxTes, maxFdr
+      minTau, maxUpFdr, maxDownFdr
     );
   }
 
   public DrugSignatureInteractionListingOptions(
     ListingOptions listingOptions,
     SignatureListingOptions signatureListingOptions,
+    DrugSignatureInteractionType interactionType,
     String drugSourceName, String drugSourceDb, String drugCommonName,
-    Double pValue, Double minTes, Double maxTes, Double maxFdr
+    Double minTau, Double maxUpFdr, Double maxDownFdr
   ) {
     this.listingOptions = listingOptions;
     this.signatureListingOptions = signatureListingOptions;
+    this.interactionType = interactionType;
     this.drugSourceName = drugSourceName;
     this.drugSourceDb = drugSourceDb;
     this.drugCommonName = drugCommonName;
-    this.maxPvalue = pValue;
-    this.minTes = minTes;
-    this.maxTes = maxTes;
-    this.maxFdr = maxFdr;
+    this.minTau = minTau;
+    this.maxUpFdr = maxUpFdr;
+    this.maxDownFdr = maxDownFdr;
   }
 
   public boolean hasAnyQueryModification() {
     return this.listingOptions.hasAnyQueryModification()
       || this.signatureListingOptions.hasAnyQueryModification()
+      || this.interactionType != null
       || this.drugSourceName != null
       || this.drugSourceDb != null
       || this.drugCommonName != null
-      || this.maxPvalue != null
-      || this.minTes != null
-      || this.maxTes != null
-      || this.maxFdr != null;
+      || this.minTau != null
+      || this.maxUpFdr != null
+      || this.maxDownFdr != null;
   }
 
   public ListingOptions getListingOptions() {
@@ -91,6 +95,10 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
 
   public SignatureListingOptions getSignatureListingOptions() {
     return signatureListingOptions;
+  }
+  
+  public Optional<DrugSignatureInteractionType> getInteractionType() {
+    return ofNullable(interactionType);
   }
 
   public Optional<String> getDrugSourceName() {
@@ -105,20 +113,16 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     return ofNullable(drugCommonName);
   }
 
-  public Optional<Double> getMaxPvalue() {
-    return ofNullable(maxPvalue);
+  public Optional<Double> getMinTau() {
+    return ofNullable(minTau);
   }
 
-  public Optional<Double> getMinTes() {
-    return ofNullable(minTes);
+  public Optional<Double> getMaxUpFdr() {
+    return ofNullable(maxUpFdr);
   }
 
-  public Optional<Double> getMaxTes() {
-    return ofNullable(maxTes);
-  }
-
-  public Optional<Double> getMaxFdr() {
-    return ofNullable(maxFdr);
+  public Optional<Double> getMaxDownFdr() {
+    return ofNullable(maxDownFdr);
   }
 
   @Override
@@ -128,11 +132,11 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     result = prime * result + ((drugCommonName == null) ? 0 : drugCommonName.hashCode());
     result = prime * result + ((drugSourceDb == null) ? 0 : drugSourceDb.hashCode());
     result = prime * result + ((drugSourceName == null) ? 0 : drugSourceName.hashCode());
+    result = prime * result + ((interactionType == null) ? 0 : interactionType.hashCode());
     result = prime * result + ((listingOptions == null) ? 0 : listingOptions.hashCode());
-    result = prime * result + ((maxFdr == null) ? 0 : maxFdr.hashCode());
-    result = prime * result + ((maxPvalue == null) ? 0 : maxPvalue.hashCode());
-    result = prime * result + ((maxTes == null) ? 0 : maxTes.hashCode());
-    result = prime * result + ((minTes == null) ? 0 : minTes.hashCode());
+    result = prime * result + ((maxDownFdr == null) ? 0 : maxDownFdr.hashCode());
+    result = prime * result + ((maxUpFdr == null) ? 0 : maxUpFdr.hashCode());
+    result = prime * result + ((minTau == null) ? 0 : minTau.hashCode());
     result = prime * result + ((signatureListingOptions == null) ? 0 : signatureListingOptions.hashCode());
     return result;
   }
@@ -161,30 +165,27 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
         return false;
     } else if (!drugSourceName.equals(other.drugSourceName))
       return false;
+    if (interactionType != other.interactionType)
+      return false;
     if (listingOptions == null) {
       if (other.listingOptions != null)
         return false;
     } else if (!listingOptions.equals(other.listingOptions))
       return false;
-    if (maxFdr == null) {
-      if (other.maxFdr != null)
+    if (maxDownFdr == null) {
+      if (other.maxDownFdr != null)
         return false;
-    } else if (!maxFdr.equals(other.maxFdr))
+    } else if (!maxDownFdr.equals(other.maxDownFdr))
       return false;
-    if (maxPvalue == null) {
-      if (other.maxPvalue != null)
+    if (maxUpFdr == null) {
+      if (other.maxUpFdr != null)
         return false;
-    } else if (!maxPvalue.equals(other.maxPvalue))
+    } else if (!maxUpFdr.equals(other.maxUpFdr))
       return false;
-    if (maxTes == null) {
-      if (other.maxTes != null)
+    if (minTau == null) {
+      if (other.minTau != null)
         return false;
-    } else if (!maxTes.equals(other.maxTes))
-      return false;
-    if (minTes == null) {
-      if (other.minTes != null)
-        return false;
-    } else if (!minTes.equals(other.minTes))
+    } else if (!minTau.equals(other.minTau))
       return false;
     if (signatureListingOptions == null) {
       if (other.signatureListingOptions != null)

@@ -32,7 +32,7 @@ import javax.persistence.Table;
 public class ArticleMetadata {
 
   @Id
-  private int pubmedId;
+  private Integer pubmedId;
 
   private String title;
 
@@ -44,7 +44,7 @@ public class ArticleMetadata {
 
   ArticleMetadata() {}
 
-  public int getPubmedId() {
+  public Integer getPubmedId() {
     return pubmedId;
   }
 

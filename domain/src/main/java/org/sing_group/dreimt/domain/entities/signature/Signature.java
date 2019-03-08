@@ -22,7 +22,10 @@
  */
 package org.sing_group.dreimt.domain.entities.signature;
 
+import static java.util.Optional.ofNullable;
+
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.CollectionTable;
@@ -97,8 +100,15 @@ public abstract class Signature implements Serializable {
   private ExperimentalDesign experimentalDesign;
 
   private String organism;
-  private String disease;
-  
+
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(
+    name = "signature_disease", 
+    joinColumns = @JoinColumn(name = "signatureName"), 
+    uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "disease"})
+  )
+  private Set<String> disease;
+
   @Column(name = "signatureType", insertable = false, updatable = false)
   private String signatureType;
 
@@ -126,8 +136,8 @@ public abstract class Signature implements Serializable {
     return cellSubTypeB;
   }
 
-  public ArticleMetadata getArticleMetadata() {
-    return articleMetadata;
+  public Optional<ArticleMetadata> getArticleMetadata() {
+    return ofNullable(articleMetadata);
   }
 
   public String getSourceDb() {
@@ -142,7 +152,7 @@ public abstract class Signature implements Serializable {
     return organism;
   }
 
-  public String getDisease() {
+  public Set<String> getDisease() {
     return disease;
   }
 

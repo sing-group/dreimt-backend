@@ -36,7 +36,6 @@ public interface CmapGeneSetSignatureResultDao {
     String description,
     Function<String, String> resultReferenceBuilder,
     Set<String> genes,
-    int numPerm,
-    double maxPvalue
+    int numPerm
   );
 }

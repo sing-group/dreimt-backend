@@ -22,15 +22,11 @@
  */
 package org.sing_group.dreimt.service.execution.pipeline.jaccard;
 
-import static java.util.stream.Collectors.toSet;
 import static javax.transaction.Transactional.TxType.REQUIRES_NEW;
 import static org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.JaccardPipeline.SINGLE_FDR_CORRECTION_STEP_ID;
-import static org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.JaccardPipeline.SINGLE_JACCARD_COMPUTATION_STEP_ID;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
@@ -55,10 +51,10 @@ public class DefaultJaccardPipelinePersistenceManager implements JaccardPipeline
 
   @Inject
   private JaccardQueryService jaccardService;
-  
+
   @Inject
   private SignatureDao signatureDao;
-  
+
   @Override
   public void manageEvent(@Observes JaccardPipelineEvent event) {
     final JaccardPipelineContext context = event.getContext();
@@ -72,37 +68,8 @@ public class DefaultJaccardPipelinePersistenceManager implements JaccardPipeline
 
     if (step.isPresent() && event.getRunningStepStatus().get().equals(StepExecutionStatus.FINISHED)) {
       switch (step.get()) {
-        case SINGLE_JACCARD_COMPUTATION_STEP_ID:
-
-          Set<String> completedTargetSignatures =
-            result.getGeneOverlapResults()
-              .map(e -> e.getTargetSignature().getSignatureName())
-              .collect(toSet());
-
-          context.getTargetSignatureOverlaps().orElseGet(HashMap::new)
-            .entrySet().stream()
-            .filter(e -> !completedTargetSignatures.contains(e.getKey()))
-            .forEach(e -> {
-              e.getValue().forEach(geneOverlapData -> {
-                
-                Signature targetSignature =
-                  signatureDao.get(geneOverlapData.getTargetSignatureName())
-                    .orElseThrow(
-                      () -> new RuntimeException("Signature ID not found: " + geneOverlapData.getTargetSignatureName())
-                    );
-
-                result.addGeneOverlapResult(
-                  geneOverlapData.getSourceComparisonType(),
-                  targetSignature,
-                  geneOverlapData.getTargetComparisonType(),
-                  geneOverlapData.getJaccard(),
-                  geneOverlapData.getPvalue()
-                );
-              });
-            });
-
-          break;
         case SINGLE_FDR_CORRECTION_STEP_ID:
+          System.err.println("FDR STEP FINISHED");
           long targetSignatureIdsCount =
             context.getTargetSignatureIds()
               .orElseThrow(() -> new RuntimeException("Target signature IDs must be set before this step."))
@@ -113,18 +80,35 @@ public class DefaultJaccardPipelinePersistenceManager implements JaccardPipeline
               context.getCorrectedPvaluesMap()
                 .orElseThrow(() -> new RuntimeException("Corrected p-values map is not available"));
 
-            result.getGeneOverlapResults().forEach(geneOverlapEntity -> {
-              GeneOverlapData geneOverlapData = new DefaultGeneOverlapData(geneOverlapEntity);
-              Double fdr = correctedPvaluesMap.get(geneOverlapData);
-              if (fdr != null) {
-                geneOverlapEntity.setFdr(fdr);
-              } else {
-                throw new RuntimeException("Gene Overlap not found in corrected p-values map " + geneOverlapEntity);
-              }
-            });
+            context.getGeneOverlapResultsData()
+              .orElseThrow(() -> new RuntimeException("Gene Overlaps must be calculated before this step"))
+              .forEach(geneOverlapEntity -> {
+
+                Signature targetSignature =
+                  this.signatureDao.get(geneOverlapEntity.getTargetSignatureName())
+                    .orElseThrow(
+                      () -> new RuntimeException("Signature ID not found: " + geneOverlapEntity.getTargetSignatureName())
+                    );
+
+                Double fdr = correctedPvaluesMap.get(geneOverlapEntity);
+
+                if (fdr != null) {
+                  result.addGeneOverlapResult(
+                    geneOverlapEntity.getSourceComparisonType(),
+                    targetSignature,
+                    geneOverlapEntity.getTargetComparisonType(),
+                    geneOverlapEntity.getJaccard(),
+                    geneOverlapEntity.getPvalue(),
+                    fdr
+                  );
+                } else {
+                  throw new RuntimeException("FDR is null for signature ID " + targetSignature.getSignatureName());
+                }
+              });
           }
           break;
         default:
+          break;
       }
     }
   }

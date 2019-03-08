@@ -22,12 +22,14 @@
  */
 package org.sing_group.dreimt.service.execution.pipeline.jaccard;
 
+import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.GeneOverlapData;
 import org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.JaccardPipeline;
@@ -42,14 +44,14 @@ public class DefaultJaccardPipelineContextBuilder implements JaccardPipelineCont
   private JaccardPipelineConfiguration configuration;
   private JaccardPipelineEventManager eventManager;
   private Set<String> targetSignatureIds;
-  private Map<String, List<GeneOverlapData>> targetSignatureOverlaps;
+  private List<GeneOverlapData> geneOverlaps;
   private Map<GeneOverlapData, Double> correctedPvaluesMap;
 
   public DefaultJaccardPipelineContextBuilder(JaccardPipelineContext context) {
     this(
       context.getPipeline(), context.getConfiguration(), context.getEventManager(),
       context.getTargetSignatureIds().map(signatures -> signatures.collect(toSet())).orElse(null),
-      context.getTargetSignatureOverlaps().map(HashMap::new).orElse(null),
+      context.getGeneOverlapResultsData().map(signatures -> signatures.collect(toList())).orElse(null),
       context.getCorrectedPvaluesMap().map(HashMap::new).orElse(null)
     );
   }
@@ -65,14 +67,14 @@ public class DefaultJaccardPipelineContextBuilder implements JaccardPipelineCont
     JaccardPipelineConfiguration configuration,
     JaccardPipelineEventManager eventManager,
     Set<String> targetSignatureIds,
-    Map<String, List<GeneOverlapData>> targetSignatureOverlaps,
+    List<GeneOverlapData> geneOverlaps,
     Map<GeneOverlapData, Double> correctedPvaluesMap
   ) {
     this.pipeline = pipeline;
     this.configuration = configuration;
     this.eventManager = eventManager;
     this.targetSignatureIds = targetSignatureIds;
-    this.targetSignatureOverlaps = targetSignatureOverlaps;
+    this.geneOverlaps = geneOverlaps;
     this.correctedPvaluesMap = correctedPvaluesMap;
   }
 
@@ -83,15 +85,11 @@ public class DefaultJaccardPipelineContextBuilder implements JaccardPipelineCont
   }
 
   @Override
-  public JaccardPipelineContextBuilder addGeneOverlaps(String signatureName, List<GeneOverlapData> geneOverlaps) {
-    if (this.targetSignatureOverlaps == null) {
-      this.targetSignatureOverlaps = new HashMap<>();
-    }
-    this.targetSignatureOverlaps.put(signatureName, geneOverlaps);
-
+  public JaccardPipelineContextBuilder addJaccardResultDataStream(Stream<GeneOverlapData> geneOverlaps) {
+    this.geneOverlaps = geneOverlaps.collect(toList());
     return this;
   }
-  
+
   @Override
   public JaccardPipelineContextBuilder addCorrectedPvalues(Map<GeneOverlapData, Double> correctedPvaluesMap) {
     this.correctedPvaluesMap = correctedPvaluesMap;
@@ -101,11 +99,11 @@ public class DefaultJaccardPipelineContextBuilder implements JaccardPipelineCont
   @Override
   public JaccardPipelineContext build() {
     return new DefaultJaccardPipelineContext(
-      pipeline, 
-      configuration, 
-      eventManager, 
-      targetSignatureIds, 
-      targetSignatureOverlaps,
+      pipeline,
+      configuration,
+      eventManager,
+      targetSignatureIds,
+      geneOverlaps,
       correctedPvaluesMap
     );
   }

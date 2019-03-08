@@ -93,11 +93,7 @@ public class DefaultCmapQueryService implements CmapQueryService {
     CmapResult result =
       !options.getDownGenes().isEmpty() ? this.cmapUpDownQuery(options) : this.cmapGeneSetQuery(options);
 
-    DefaultCmapServiceConfiguration configuration =
-      new DefaultCmapServiceConfiguration(
-        options.getNumPerm(),
-        options.getMaxPvalue()
-      );
+    DefaultCmapServiceConfiguration configuration = new DefaultCmapServiceConfiguration(options.getNumPerm());
 
     DefaultCmapComputationRequestEvent event = constructComputationRequestEvent(result, configuration);
 
@@ -146,8 +142,7 @@ public class DefaultCmapQueryService implements CmapQueryService {
         options.getResultUriBuilder(),
         options.getUpGenes(),
         options.getDownGenes(),
-        options.getNumPerm(),
-        options.getMaxPvalue()
+        options.getNumPerm()
       );
 
     return result;
@@ -160,8 +155,7 @@ public class DefaultCmapQueryService implements CmapQueryService {
         "Cmap GeneSet query",
         options.getResultUriBuilder(),
         options.getUpGenes(),
-        options.getNumPerm(),
-        options.getMaxPvalue()
+        options.getNumPerm()
       );
 
     return result;

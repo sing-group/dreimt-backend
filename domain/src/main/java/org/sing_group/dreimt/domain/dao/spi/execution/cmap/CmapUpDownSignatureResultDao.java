@@ -37,7 +37,6 @@ public interface CmapUpDownSignatureResultDao {
     Function<String, String> resultReferenceBuilder,
     Set<String> upGenes,
     Set<String> downGenes,
-    int numPerm,
-    double maxPvalue
+    int numPerm
   );
 }

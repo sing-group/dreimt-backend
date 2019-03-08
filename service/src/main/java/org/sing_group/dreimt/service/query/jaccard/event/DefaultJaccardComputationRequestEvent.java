@@ -25,6 +25,7 @@ package org.sing_group.dreimt.service.query.jaccard.event;
 import java.io.Serializable;
 
 import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
+import org.sing_group.dreimt.service.spi.query.jaccard.JaccardServiceConfiguration;
 import org.sing_group.dreimt.service.spi.query.jaccard.event.JaccardComputationRequestEvent;
 
 public class DefaultJaccardComputationRequestEvent implements JaccardComputationRequestEvent, Serializable {
@@ -32,14 +33,15 @@ public class DefaultJaccardComputationRequestEvent implements JaccardComputation
 
   private String workId;
   private SignatureListingOptions signatureListingOptions;
-  private boolean onlyUniverseGenes;
+  private JaccardServiceConfiguration jaccardServiceConfiguration;
 
   public DefaultJaccardComputationRequestEvent(
-    String workId, SignatureListingOptions signatureListingOptions, boolean onlyUniverseGenes
+    String workId, SignatureListingOptions signatureListingOptions,
+    JaccardServiceConfiguration jaccardServiceConfiguration
   ) {
     this.workId = workId;
     this.signatureListingOptions = signatureListingOptions;
-    this.onlyUniverseGenes = onlyUniverseGenes;
+    this.jaccardServiceConfiguration = jaccardServiceConfiguration;
   }
 
   @Override
@@ -53,41 +55,7 @@ public class DefaultJaccardComputationRequestEvent implements JaccardComputation
   }
 
   @Override
-  public boolean isOnlyUniverseGenes() {
-    return onlyUniverseGenes;
-  }
-
-  @Override
-  public int hashCode() {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + (onlyUniverseGenes ? 1231 : 1237);
-    result = prime * result + ((signatureListingOptions == null) ? 0 : signatureListingOptions.hashCode());
-    result = prime * result + ((workId == null) ? 0 : workId.hashCode());
-    return result;
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    DefaultJaccardComputationRequestEvent other = (DefaultJaccardComputationRequestEvent) obj;
-    if (onlyUniverseGenes != other.onlyUniverseGenes)
-      return false;
-    if (signatureListingOptions == null) {
-      if (other.signatureListingOptions != null)
-        return false;
-    } else if (!signatureListingOptions.equals(other.signatureListingOptions))
-      return false;
-    if (workId == null) {
-      if (other.workId != null)
-        return false;
-    } else if (!workId.equals(other.workId))
-      return false;
-    return true;
+  public JaccardServiceConfiguration getJaccardServiceConfiguration() {
+    return this.jaccardServiceConfiguration;
   }
 }

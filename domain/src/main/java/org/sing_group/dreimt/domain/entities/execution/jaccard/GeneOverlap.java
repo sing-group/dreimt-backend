@@ -93,7 +93,7 @@ public class GeneOverlap implements Serializable {
     JaccardComparisonType sourceComparisonType,
     Signature targetSignature,
     JaccardComparisonType targetComparisonType,
-    Double jaccard, Double pValue
+    Double jaccard, Double pValue, Double fdr
   ) {
     this.jaccardResult = jaccardResult;
     this.sourceComparisonType = sourceComparisonType;
@@ -101,6 +101,7 @@ public class GeneOverlap implements Serializable {
     this.targetComparisonType = targetComparisonType;
     this.jaccard = db(jaccard);
     this.pValue = db(pValue);
+    this.fdr = db(fdr);
   }
 
   private static Double db(Double value) {

@@ -24,21 +24,15 @@ package org.sing_group.dreimt.domain.entities.execution.cmap;
 
 import static java.util.stream.Collectors.toSet;
 
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Function;
-import java.util.stream.Stream;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.sing_group.dreimt.domain.entities.execution.WorkEntity;
-import org.sing_group.dreimt.domain.entities.signature.Drug;
 import org.sing_group.dreimt.domain.entities.signature.Gene;
 
 @Entity
@@ -46,66 +40,27 @@ import org.sing_group.dreimt.domain.entities.signature.Gene;
 public abstract class CmapResult extends WorkEntity {
   private static final long serialVersionUID = 1L;
 
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "cmapResult", cascade = CascadeType.ALL, orphanRemoval = true)
-  private List<CmapDrugInteraction> cmapDrugInteractions;
-  
   private int numPerm;
-  private double maxPvalue;
 
   @Transient
-  private final ReentrantReadWriteLock cmapResultsLock;
+  protected final ReentrantReadWriteLock cmapResultsLock;
 
   protected CmapResult() {
     this.cmapResultsLock = new ReentrantReadWriteLock();
   }
 
   protected CmapResult(
-    String name, String description, Function<String, String> resultReferenceBuilder, 
-    int numPerm, double maxPvalue
+    String name, String description,
+    Function<String, String> resultReferenceBuilder, int numPerm
   ) {
     super(name, description, resultReferenceBuilder);
 
     this.numPerm = numPerm;
-    this.maxPvalue = maxPvalue;
     this.cmapResultsLock = new ReentrantReadWriteLock();
   }
 
   public int getNumPerm() {
     return numPerm;
-  }
-  
-  public double getMaxPvalue() {
-    return maxPvalue;
-  }
-  
-  public Stream<CmapDrugInteraction> getDrugInteractions() {
-    this.cmapResultsLock.readLock().lock();
-    try {
-      return cmapDrugInteractions.stream();
-    } finally {
-      this.cmapResultsLock.readLock().unlock();
-    }
-  }
-
-  public CmapDrugInteraction addCmapDrugInteraction(
-    Drug drug,
-    double fdr,
-    double pValue,
-    double tes
-  ) {
-    this.cmapResultsLock.writeLock().lock();
-
-    try {
-      final CmapDrugInteraction drugInteraction =
-        new CmapDrugInteraction(
-          this, drug, fdr, pValue, tes
-        );
-      this.cmapDrugInteractions.add(drugInteraction);
-
-      return drugInteraction;
-    } finally {
-      this.cmapResultsLock.writeLock().unlock();
-    }
   }
 
   protected static Set<String> getGenes(Set<Gene> genes, boolean onlyUniverseGenes) {

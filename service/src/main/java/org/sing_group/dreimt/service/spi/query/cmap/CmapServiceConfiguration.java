@@ -24,6 +24,4 @@ package org.sing_group.dreimt.service.spi.query.cmap;
 
 public interface CmapServiceConfiguration {
   int getNumPermutations();
-
-  double getMaxPvalue();
 }

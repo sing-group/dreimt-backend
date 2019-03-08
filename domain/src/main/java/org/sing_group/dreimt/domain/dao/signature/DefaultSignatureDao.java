@@ -204,9 +204,9 @@ public class DefaultSignatureDao implements SignatureDao {
     }
     
     if (listingOptions.getDisease().isPresent()) {
-      final Path<String> disease = root.get("disease");
-      
-      andPredicates.add(cb.like(disease, "%" + listingOptions.getDisease().get() + "%"));
+      Join<Signature, String> joinSignatureDisease = root.join("disease", JoinType.LEFT);
+
+      andPredicates.add(cb.like(joinSignatureDisease, "%" + listingOptions.getDisease().get() + "%"));
     }
     
     if (listingOptions.getSourceDb().isPresent()) {
@@ -240,29 +240,34 @@ public class DefaultSignatureDao implements SignatureDao {
 
   @Override
   public Stream<String> listCellTypeAValues(SignatureListingOptions signatureListingOptions) {
-    return listCellTypeValues(signatureListingOptions, "cellTypeA");
+    return listElementCollectionValues(signatureListingOptions, "cellTypeA");
   }
 
   @Override
   public Stream<String> listCellSubTypeAValues(SignatureListingOptions signatureListingOptions) {
-    return listCellTypeValues(signatureListingOptions, "cellSubTypeA");
+    return listElementCollectionValues(signatureListingOptions, "cellSubTypeA");
   }
 
   @Override
   public Stream<String> listCellTypeBValues(SignatureListingOptions signatureListingOptions) {
-    return listCellTypeValues(signatureListingOptions, "cellTypeB");
+    return listElementCollectionValues(signatureListingOptions, "cellTypeB");
   }
 
   @Override
   public Stream<String> listCellSubTypeBValues(SignatureListingOptions signatureListingOptions) {
-    return listCellTypeValues(signatureListingOptions, "cellSubTypeB");
+    return listElementCollectionValues(signatureListingOptions, "cellSubTypeB");
+  }
+  
+  @Override
+  public Stream<String> listDiseaseValues(SignatureListingOptions signatureListingOptions) {
+    return listElementCollectionValues(signatureListingOptions, "disease");
   }
 
-  private Stream<String> listCellTypeValues(SignatureListingOptions signatureListingOptions, String cellTypeColumn) {
+  private Stream<String> listElementCollectionValues(SignatureListingOptions signatureListingOptions, String columnName) {
     final CriteriaBuilder cb = dh.cb();
     CriteriaQuery<String> query = cb.createQuery(String.class);
     final Root<Signature> root = query.from(dh.getEntityType());
-    final Join<Signature, ?> join = root.join(cellTypeColumn);
+    final Join<Signature, ?> join = root.join(columnName);
 
     query = query.multiselect(join.as(String.class)).distinct(true);
 
@@ -286,11 +291,6 @@ public class DefaultSignatureDao implements SignatureDao {
   @Override
   public Stream<String> listOrganismValues(SignatureListingOptions signatureListingOptions) {
     return listColumnValues("organism", String.class, signatureListingOptions);
-  }
-
-  @Override
-  public Stream<String> listDiseaseValues(SignatureListingOptions signatureListingOptions) {
-    return listColumnValues("disease", String.class, signatureListingOptions);
   }
 
   @Override

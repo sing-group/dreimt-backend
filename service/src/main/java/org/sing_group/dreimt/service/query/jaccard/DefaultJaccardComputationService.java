@@ -59,7 +59,7 @@ public class DefaultJaccardComputationService implements JaccardComputationServi
   ) {
     final JaccardPipelineConfiguration configuration =
       new DefaultJaccardPipelineConfiguration(
-        event.getWorkId(), event.getWorkId(), event.getSignatureListingOptions()
+        event.getWorkId(), event.getWorkId(), event.getSignatureListingOptions(), event.getJaccardServiceConfiguration()
       );
 
     this.executor.execute(pipeline, configuration);

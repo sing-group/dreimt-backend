@@ -50,7 +50,7 @@ public class SignatureListingOptions implements Serializable {
   private final String sourceDb;
   private final Integer signaturePubMedId;
   private final Set<String> mandatoryGenes;
-
+  
   public SignatureListingOptions(
     String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
     ExperimentalDesign experimentalDesign, String organism, String disease, String sourceDb,
@@ -59,12 +59,24 @@ public class SignatureListingOptions implements Serializable {
     this(
       noModification(), signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism,
       disease, sourceDb, signatureType, signaturePubMedId, emptySet()
+      );
+  }
+
+  public SignatureListingOptions(
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String sourceDb, Integer signaturePubMedId
+  ) {
+    this(
+      noModification(), signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism,
+      disease, sourceDb, null, signaturePubMedId, emptySet()
     );
   }
 
   public SignatureListingOptions(
-    ListingOptions listingOptions, String signatureName,  String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String sourceDb, SignatureType signatureType, Integer signaturePubMedId
+    ListingOptions listingOptions, String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB,
+    String cellSubTypeB,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String sourceDb,
+    SignatureType signatureType, Integer signaturePubMedId
   ) {
     this(
       listingOptions, signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease, sourceDb,
