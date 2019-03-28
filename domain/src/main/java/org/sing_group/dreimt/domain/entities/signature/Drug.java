@@ -42,6 +42,12 @@ public class Drug implements Serializable {
 
   Drug() {}
 
+  public Drug(String commonName, String sourceName, String sourceDb) {
+    this.commonName = commonName;
+    this.sourceName = sourceName;
+    this.sourceDb = sourceDb;
+  }
+
   public String getCommonName() {
     return commonName;
   }

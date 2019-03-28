@@ -75,6 +75,19 @@ public class DrugSignatureInteraction implements Serializable {
 
   public DrugSignatureInteraction() {}
 
+  public DrugSignatureInteraction(
+    Drug drug, Signature signature, DrugSignatureInteractionType interactionType,
+    double tau, Double upFdr, Double downFdr
+  ) {
+    super();
+    this.drug = drug;
+    this.signature = signature;
+    this.interactionType = interactionType;
+    this.tau = tau;
+    this.upFdr = upFdr;
+    this.downFdr = downFdr;
+  }
+
   public Drug getDrug() {
     return drug;
   }

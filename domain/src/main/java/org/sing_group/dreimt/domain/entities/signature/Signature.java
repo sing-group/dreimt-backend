@@ -113,6 +113,35 @@ public abstract class Signature implements Serializable {
   private String signatureType;
 
   Signature() {}
+  
+  public Signature(
+    String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA, Set<String> cellTypeB,
+    Set<String> cellSubTypeB, String sourceDb, ExperimentalDesign experimentalDesign,
+    String organism, Set<String> disease
+    ) {
+    this(signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, null, sourceDb, experimentalDesign, organism, disease);
+  }
+
+  public Signature(
+    String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA, Set<String> cellTypeB,
+    Set<String> cellSubTypeB, ArticleMetadata articleMetadata, String sourceDb, ExperimentalDesign experimentalDesign,
+    String organism, Set<String> disease
+  ) {
+    this.signatureName = signatureName;
+    this.cellTypeA = cellTypeA;
+    this.cellSubTypeA = cellSubTypeA;
+    this.cellTypeB = cellTypeB;
+    this.cellSubTypeB = cellSubTypeB;
+    this.articleMetadata = articleMetadata;
+    this.sourceDb = sourceDb;
+    this.experimentalDesign = experimentalDesign;
+    this.organism = organism;
+    this.disease = disease;
+  }
+
+  public Optional<ArticleMetadata> getArticleMetadata() {
+    return ofNullable(articleMetadata);
+  }
 
   public abstract SignatureType getSignatureType();
 
@@ -134,10 +163,6 @@ public abstract class Signature implements Serializable {
 
   public Set<String> getCellSubTypeB() {
     return cellSubTypeB;
-  }
-
-  public Optional<ArticleMetadata> getArticleMetadata() {
-    return ofNullable(articleMetadata);
   }
 
   public String getSourceDb() {

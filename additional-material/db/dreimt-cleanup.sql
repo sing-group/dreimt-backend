@@ -21,6 +21,7 @@ TRUNCATE TABLE `work_step`;
 TRUNCATE TABLE `work`;
 
 TRUNCATE TABLE `drug_signature_interaction`;
+TRUNCATE TABLE `full_drug_signature_interaction`;
 
 TRUNCATE TABLE `signature_updown_genes`;
 TRUNCATE TABLE `signature_geneset_genes`;
@@ -43,6 +44,7 @@ ALTER TABLE `work_step` AUTO_INCREMENT = 1;
 ALTER TABLE `article_metadata` AUTO_INCREMENT = 1;
 
 ALTER TABLE `drug_signature_interaction` AUTO_INCREMENT = 1;
+ALTER TABLE `full_drug_signature_interaction` AUTO_INCREMENT = 1;
 
 ALTER TABLE `jaccard_result_updown_genes_down` AUTO_INCREMENT = 1;
 ALTER TABLE `jaccard_result_updown_genes_up` AUTO_INCREMENT = 1;

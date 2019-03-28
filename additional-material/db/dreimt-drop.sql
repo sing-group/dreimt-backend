@@ -19,6 +19,7 @@ DROP TABLE `work_step`;
 DROP TABLE `work`;
 
 DROP TABLE `drug_signature_interaction`;
+DROP TABLE `full_drug_signature_interaction`;
 
 DROP TABLE `signature_updown_genes`;
 DROP TABLE `signature_geneset_genes`;

@@ -43,6 +43,28 @@ public class UpDownSignature extends Signature {
   private Set<UpDownSignatureGene> signatureGenes;
 
   UpDownSignature() {}
+  
+  public UpDownSignature(
+    String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA, Set<String> cellTypeB,
+    Set<String> cellSubTypeB, String sourceDb, ExperimentalDesign experimentalDesign,
+    String organism, Set<String> disease
+  ) {
+    super(
+      signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, sourceDb, experimentalDesign,
+      organism, disease
+    );
+  }
+
+  public UpDownSignature(
+    String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA, Set<String> cellTypeB,
+    Set<String> cellSubTypeB, ArticleMetadata articleMetadata, String sourceDb, ExperimentalDesign experimentalDesign,
+    String organism, Set<String> disease
+  ) {
+    super(
+      signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, articleMetadata, sourceDb, experimentalDesign,
+      organism, disease
+    );
+  }
 
   public Set<String> getUpGenes() {
     return getUpGenes(false);
