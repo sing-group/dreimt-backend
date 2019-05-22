@@ -9,12 +9,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -36,6 +36,7 @@ import java.util.function.Supplier;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.ws.rs.BadRequestException;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -90,13 +91,13 @@ import io.swagger.annotations.ApiResponses;
   @ApiResponse(code = 200, message = "successful operation")
 })
 public class DefaultDrugSignatureInteractionResource implements DrugSignatureInteractionResource {
-  
+
   @Inject
   private JaccardQueryService jaccardQueryService;
-  
+
   @Inject
   private CmapQueryService cmapQueryService;
-  
+
   @Inject
   private DrugSignatureInteractionService service;
 
@@ -105,26 +106,26 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
 
   @Inject
   private ListingOptionsMapper listingOptionsMapper;
-  
+
   @Inject
   private ExecutionMapper executionMapper;
-  
+
   @Context
   private UriInfo uriInfo;
 
   @PostConstruct
   public void postConstruct() {
     final UriBuilder uriBuilder = this.uriInfo.getBaseUriBuilder();
-    
+
     this.drugSignatureMapper.setUriBuilder(uriBuilder);
     this.executionMapper.setUriBuilder(uriBuilder);
   }
 
   @GET
   @ApiOperation(
-    value = "Lists the drug-signature interactions", 
-    response = DrugSignatureInteractionData.class, 
-    responseContainer = "list", 
+    value = "Lists the drug-signature interactions",
+    response = DrugSignatureInteractionData.class,
+    responseContainer = "list",
     code = 200
   )
   @Override
@@ -147,34 +148,58 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
-    @QueryParam("minTau") Double minTau, 
+    @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
-    @QueryParam("maxDownFdr") Double maxDownFdr
+    @QueryParam("maxDownFdr") Double maxDownFdr,
+    @QueryParam("freeText") String freeText
   ) {
-    final SignatureListingOptions signatureListingOptions =
-      new SignatureListingOptions(
-        signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
-        signatureSourceDb, signaturePubMedId
-      );
+    if (
+      freeText != null && (signatureName != null || cellTypeA != null || cellSubTypeA != null || cellTypeB != null
+        || cellSubTypeB != null || experimentalDesign != null || organism != null || disease != null
+        || signatureSourceDb != null || signaturePubMedId != null || drugSourceName != null || drugSourceDb != null
+        || drugCommonName != null || interactionType != null || minTau != null || maxUpFdr != null
+        || maxDownFdr != null)
+    ) {
+      throw new BadRequestException("freeText parameter is not compatible with other filters");
+    }
 
-    final DrugSignatureInteractionListingOptions listingOptions =
-      new DrugSignatureInteractionListingOptions(
-        listingOptionsMapper.toListingOptions(getListingOptions(page, pageSize, orderField, sortDirection)),
-        signatureListingOptions, interactionType,
-        drugSourceName, drugSourceDb, drugCommonName,
-        minTau, maxUpFdr, maxDownFdr
-      );
+    if(freeText == null) {
+      final SignatureListingOptions signatureListingOptions =
+        new SignatureListingOptions(
+          signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease,
+          signatureSourceDb, signaturePubMedId
+        );
 
-    final DrugSignatureInteractionData[] data =
-      service.list(listingOptions)
-        .map(this.drugSignatureMapper::toDrugSignatureInteractionData)
-        .toArray(DrugSignatureInteractionData[]::new);
+      final DrugSignatureInteractionListingOptions listingOptions =
+        new DrugSignatureInteractionListingOptions(
+          listingOptionsMapper.toListingOptions(getListingOptions(page, pageSize, orderField, sortDirection)),
+          signatureListingOptions, interactionType,
+          drugSourceName, drugSourceDb, drugCommonName,
+          minTau, maxUpFdr, maxDownFdr
+        );
 
-    final long count = service.count(listingOptions);
+      final DrugSignatureInteractionData[] data =
+        service.list(listingOptions)
+          .map(this.drugSignatureMapper::toDrugSignatureInteractionData)
+          .toArray(DrugSignatureInteractionData[]::new);
 
-    return Response.ok(data)
-      .header("X-Count", count)
-    .build();
+      final long count = service.count(listingOptions);
+
+      return Response.ok(data)
+        .header("X-Count", count)
+      .build();
+    } else {
+      final DrugSignatureInteractionData[] data =
+        service.list(listingOptionsMapper.toListingOptions(getListingOptions(page, pageSize, orderField, sortDirection)), freeText)
+          .map(this.drugSignatureMapper::toDrugSignatureInteractionData)
+          .toArray(DrugSignatureInteractionData[]::new);
+
+      final long count = service.count(freeText);
+
+      return Response.ok(data)
+        .header("X-Count", count)
+      .build();
+    }
   }
 
   private ListingOptionsData getListingOptions(
@@ -190,13 +215,13 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     }
     return listingOptions;
   }
-  
+
   @Path("params/signature-name/values")
   @GET
   @ApiOperation(
-    value = "Lists the possible signature name values in drug-signature interactions", 
+    value = "Lists the possible signature name values in drug-signature interactions",
     response = String.class,
-    responseContainer = "list", 
+    responseContainer = "list",
     code = 200
   )
   @Override
@@ -215,7 +240,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
-    @QueryParam("minTau") Double minTau, 
+    @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
     @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
@@ -237,14 +262,14 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         .toArray(String[]::new);
 
     return Response.ok(data).build();
-  } 
+  }
 
   @Path("params/cell-type-a/values")
   @GET
   @ApiOperation(
-    value = "Lists the possible cell type a values in drug-signature interactions", 
+    value = "Lists the possible cell type a values in drug-signature interactions",
     response = String.class,
-    responseContainer = "list", 
+    responseContainer = "list",
     code = 200
   )
   @Override
@@ -263,7 +288,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
-    @QueryParam("minTau") Double minTau, 
+    @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
     @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
@@ -286,13 +311,13 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
 
     return Response.ok(data).build();
   }
-  
+
   @Path("params/cell-subtype-a/values")
   @GET
   @ApiOperation(
-    value = "Lists the possible cell subtype a values in drug-signature interactions", 
+    value = "Lists the possible cell subtype a values in drug-signature interactions",
     response = String.class,
-    responseContainer = "list", 
+    responseContainer = "list",
     code = 200
   )
   @Override
@@ -311,7 +336,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
-    @QueryParam("minTau") Double minTau, 
+    @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
     @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
@@ -334,13 +359,13 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
 
     return Response.ok(data).build();
   }
-  
+
   @Path("params/cell-type-b/values")
   @GET
   @ApiOperation(
-    value = "Lists the possible cell type b values in drug-signature interactions", 
+    value = "Lists the possible cell type b values in drug-signature interactions",
     response = String.class,
-    responseContainer = "list", 
+    responseContainer = "list",
     code = 200
   )
   @Override
@@ -359,7 +384,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
-    @QueryParam("minTau") Double minTau, 
+    @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
     @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
@@ -382,13 +407,13 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
 
     return Response.ok(data).build();
   }
-  
+
   @Path("params/cell-subtype-b/values")
   @GET
   @ApiOperation(
-    value = "Lists the possible cell subtype b values in drug-signature interactions", 
+    value = "Lists the possible cell subtype b values in drug-signature interactions",
     response = String.class,
-    responseContainer = "list", 
+    responseContainer = "list",
     code = 200
   )
   @Override
@@ -407,7 +432,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
-    @QueryParam("minTau") Double minTau, 
+    @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
     @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
@@ -434,9 +459,9 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   @Path("params/experimental-design/values")
   @GET
   @ApiOperation(
-    value = "Lists the possible experimental design values in drug-signature interactions", 
+    value = "Lists the possible experimental design values in drug-signature interactions",
     response = ExperimentalDesign.class,
-    responseContainer = "list", 
+    responseContainer = "list",
     code = 200
   )
   @Override
@@ -455,7 +480,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
-    @QueryParam("minTau") Double minTau, 
+    @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
     @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
@@ -482,9 +507,9 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   @Path("params/organism/values")
   @GET
   @ApiOperation(
-    value = "Lists the possible organism values in drug-signature interactions", 
+    value = "Lists the possible organism values in drug-signature interactions",
     response = String.class,
-    responseContainer = "list", 
+    responseContainer = "list",
     code = 200
   )
   @Override
@@ -503,7 +528,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
-    @QueryParam("minTau") Double minTau, 
+    @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
     @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
@@ -530,9 +555,9 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   @Path("params/disease/values")
   @GET
   @ApiOperation(
-    value = "Lists the possible disease values in drug-signature interactions", 
+    value = "Lists the possible disease values in drug-signature interactions",
     response = String.class,
-    responseContainer = "list", 
+    responseContainer = "list",
     code = 200
   )
   @Override
@@ -551,7 +576,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
-    @QueryParam("minTau") Double minTau, 
+    @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
     @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
@@ -578,9 +603,9 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   @Path("params/signature-source-db/values")
   @GET
   @ApiOperation(
-    value = "Lists the possible signature source DB values in drug-signature interactions", 
+    value = "Lists the possible signature source DB values in drug-signature interactions",
     response = String.class,
-    responseContainer = "list", 
+    responseContainer = "list",
     code = 200
   )
   @Override
@@ -599,7 +624,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
-    @QueryParam("minTau") Double minTau, 
+    @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
     @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
@@ -622,13 +647,13 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
 
     return Response.ok(data).build();
   }
-  
+
   @Path("params/interaction-type/values")
   @GET
   @ApiOperation(
-    value = "Lists the possible interaction type values in drug-signature interactions", 
+    value = "Lists the possible interaction type values in drug-signature interactions",
     response = String.class,
-    responseContainer = "list", 
+    responseContainer = "list",
     code = 200
   )
   @Override
@@ -647,7 +672,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
-    @QueryParam("minTau") Double minTau, 
+    @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
     @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
@@ -674,9 +699,9 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   @Path("params/signature-pubmed-id/values")
   @GET
   @ApiOperation(
-    value = "Lists the possible signature article PubMed ID values in drug-signature interactions", 
+    value = "Lists the possible signature article PubMed ID values in drug-signature interactions",
     response = Integer.class,
-    responseContainer = "list", 
+    responseContainer = "list",
     code = 200
   )
   @Override
@@ -695,7 +720,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
-    @QueryParam("minTau") Double minTau, 
+    @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
     @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
@@ -722,9 +747,9 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   @Path("params/drug-source-name/values")
   @GET
   @ApiOperation(
-    value = "Lists the possible drug source name values in drug-signature interactions", 
+    value = "Lists the possible drug source name values in drug-signature interactions",
     response = String.class,
-    responseContainer = "list", 
+    responseContainer = "list",
     code = 200
   )
   @Override
@@ -743,7 +768,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
-    @QueryParam("minTau") Double minTau, 
+    @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
     @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
@@ -766,13 +791,13 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
 
     return Response.ok(data).build();
   }
-  
+
   @Path("params/drug-source-db/values")
   @GET
   @ApiOperation(
-    value = "Lists the possible drug source DB values in drug-signature interactions", 
+    value = "Lists the possible drug source DB values in drug-signature interactions",
     response = String.class,
-    responseContainer = "list", 
+    responseContainer = "list",
     code = 200
     )
   @Override
@@ -791,7 +816,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
-    @QueryParam("minTau") Double minTau, 
+    @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
     @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
@@ -815,13 +840,13 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
 
     return Response.ok(data).build();
   }
-  
+
   @Path("params/drug-common-name/values")
   @GET
   @ApiOperation(
-    value = "Lists the possible drug common name values in drug-signature interactions", 
+    value = "Lists the possible drug common name values in drug-signature interactions",
     response = String.class,
-    responseContainer = "list", 
+    responseContainer = "list",
     code = 200
   )
   @Override
@@ -840,7 +865,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
-    @QueryParam("minTau") Double minTau, 
+    @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
     @QueryParam("maxDownFdr") Double maxDownFdr
   ) {
@@ -977,7 +1002,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
 
     return downGenesSet;
   }
-  
+
   private static String onlyUniverseGenesWarning(boolean onlyUniverseGenes) {
     return onlyUniverseGenes ? " Note that genes must be in the genes universe." : "";
   }

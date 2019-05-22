@@ -24,6 +24,7 @@ package org.sing_group.dreimt.domain.dao.spi.signature;
 
 import java.util.stream.Stream;
 
+import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.dao.signature.DrugSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
@@ -33,6 +34,10 @@ public interface DrugSignatureInteractionDao {
   Stream<DrugSignatureInteraction> list(DrugSignatureInteractionListingOptions listingOptions);
 
   long count(DrugSignatureInteractionListingOptions listingOptions);
+  
+  Stream<DrugSignatureInteraction> list(ListingOptions listingOptions, String freeText);
+  
+  long count(String freeText);
 
   Stream<String> listSignatureNameValues(DrugSignatureInteractionListingOptions listingOptions);
 

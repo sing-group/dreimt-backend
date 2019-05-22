@@ -40,7 +40,8 @@ public interface DrugSignatureInteractionResource {
     String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
     ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
     Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName,
-    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    String freeText
   );
 
   Response jaccardQuery(JaccardQueryParameters jaccardQueryParameters);
