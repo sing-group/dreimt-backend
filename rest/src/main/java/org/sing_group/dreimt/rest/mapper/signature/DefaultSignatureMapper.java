@@ -58,6 +58,7 @@ public class DefaultSignatureMapper implements SignatureMapper {
       signature.getOrganism(), signature.getDisease(),
       signature.getArticleMetadata().isPresent() ? signature.getArticleMetadata().get().getPubmedId() : null,
       signature.getArticleMetadata().isPresent() ? signature.getArticleMetadata().get().getTitle() : null,
+      signature.getArticleMetadata().isPresent() ? signature.getArticleMetadata().get().getAuthors() : null,
       signature.getSignatureType(),
       pathBuilder.signatureGenes(signature).build(),
       signature.getArticleMetadata().isPresent() ? pathBuilder.articleMetadata(signature.getArticleMetadata().get()).build() : null
