@@ -153,7 +153,7 @@
                     </security>
                 </datasource>
                 <datasource jta="true" jndi-name="java:jboss/datasources/dreimt" pool-name="dreimt-mysql" enabled="true" use-ccm="true">
-                    <connection-url>jdbc:mysql://localhost:3306/dreimt?useUnicode=yes&amp;characterEncoding=UTF-8</connection-url>
+                    <connection-url>jdbc:mysql://localhost:3306/dreimt?useUnicode=yes&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC&amp;useLegacyDatetimeCode=false</connection-url>
                     <driver-class>com.mysql.jdbc.Driver</driver-class>
                     <driver>mysql-connector-java-5.1.21.jar</driver>
                     <security>

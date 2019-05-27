@@ -23,6 +23,9 @@
 package org.sing_group.dreimt.rest.entity;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.xml.bind.annotation.adapters.XmlAdapter;
@@ -31,11 +34,24 @@ public class LocalDateTimeToIsoStringAdapter extends XmlAdapter<String, LocalDat
 
   @Override
   public LocalDateTime unmarshal(String isoDateTime) throws Exception {
-    return LocalDateTime.parse(isoDateTime, DateTimeFormatter.ISO_DATE_TIME);
+    return LocalDateTime.parse(isoDateTime, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
   }
 
   @Override
   public String marshal(LocalDateTime date) throws Exception {
-    return date.format(DateTimeFormatter.ISO_DATE_TIME);
+    return toUtc(date).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
+  }
+
+  public static ZonedDateTime toZone(final LocalDateTime time, final ZoneId fromZone, final ZoneId toZone) {
+    final ZonedDateTime zonedtime = time.atZone(fromZone);
+    return zonedtime.withZoneSameInstant(toZone);
+  }
+
+  public static ZonedDateTime toUtc(final LocalDateTime time, final ZoneId fromZone) {
+    return toZone(time, fromZone, ZoneOffset.UTC);
+  }
+
+  public static ZonedDateTime toUtc(final LocalDateTime time) {
+    return toUtc(time, ZoneId.systemDefault());
   }
 }

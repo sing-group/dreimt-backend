@@ -36,6 +36,7 @@
 			<property name="hibernate.hbm2ddl.auto" value="update" />
 			<property name="hibernate.show_sql" value="false" />
 			<property name="hibernate.order_by.default_null_ordering" value="last" />
+			<property name="hibernate.jdbc.time_zone" value="UTC"/>
 		</properties>
 	</persistence-unit>
 </persistence>
