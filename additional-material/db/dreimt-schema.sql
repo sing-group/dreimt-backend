@@ -169,6 +169,20 @@ CREATE TABLE `cmap_result_updown_genes_up` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `database_versions`
+--
+
+DROP TABLE IF EXISTS `database_versions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `database_versions` (
+  `version` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `current` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`version`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `drug`
 --
 
@@ -207,7 +221,7 @@ CREATE TABLE `drug_signature_interaction` (
   KEY `FKnsnnq5179w6clhenc6o6h8oov` (`signature`),
   CONSTRAINT `FKnsnnq5179w6clhenc6o6h8oov` FOREIGN KEY (`signature`) REFERENCES `signature` (`signatureName`),
   CONSTRAINT `FKqv24iupckh17q8jhr5hnkaemu` FOREIGN KEY (`drugId`) REFERENCES `drug` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=51591 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -252,7 +266,7 @@ CREATE TABLE `full_drug_signature_interaction` (
   KEY `IDXghdkqt1s647y0d2prw8uwct37` (`signatureCellTypeB`),
   KEY `FKboll38t85j69hdb7uf9c5gvh4` (`signatureArticlePubmedId`),
   CONSTRAINT `FKboll38t85j69hdb7uf9c5gvh4` FOREIGN KEY (`signatureArticlePubmedId`) REFERENCES `article_metadata` (`pubmedId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=117126 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -590,4 +604,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-05-10 17:09:58
+-- Dump completed on 2019-06-21 11:43:09

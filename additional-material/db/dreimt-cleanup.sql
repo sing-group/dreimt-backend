@@ -36,12 +36,12 @@ TRUNCATE TABLE `genes`;
 TRUNCATE TABLE `drug`;
 TRUNCATE TABLE `article_metadata`;
 
+TRUNCATE TABLE `database_versions`;
+
 SET FOREIGN_KEY_CHECKS = 1;
 
 ALTER TABLE `work` AUTO_INCREMENT = 1;
 ALTER TABLE `work_step` AUTO_INCREMENT = 1;
-
-ALTER TABLE `article_metadata` AUTO_INCREMENT = 1;
 
 ALTER TABLE `drug_signature_interaction` AUTO_INCREMENT = 1;
 ALTER TABLE `full_drug_signature_interaction` AUTO_INCREMENT = 1;
@@ -70,5 +70,9 @@ ALTER TABLE `signature_cell_type_b` AUTO_INCREMENT = 1;
 ALTER TABLE `signature_cell_subtype_b` AUTO_INCREMENT = 1;
 ALTER TABLE `signature_disease` AUTO_INCREMENT = 1;
 ALTER TABLE `signature` AUTO_INCREMENT = 1;
+
 ALTER TABLE `genes` AUTO_INCREMENT = 1;
 ALTER TABLE `drug` AUTO_INCREMENT = 1;
+ALTER TABLE `article_metadata` AUTO_INCREMENT = 1;
+
+ALTER TABLE `database_versions` AUTO_INCREMENT = 1;

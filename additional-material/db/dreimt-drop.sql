@@ -33,3 +33,5 @@ DROP TABLE `signature`;
 DROP TABLE `genes`;
 DROP TABLE `drug`;
 DROP TABLE `article_metadata`;
+
+DROP TABLE `database_versions`;

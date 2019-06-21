@@ -39,15 +39,20 @@ import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 import javax.enterprise.inject.Default;
+import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 import org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.GeneOverlapData;
 import org.sing_group.dreimt.service.spi.query.jaccard.JaccardService;
 import org.sing_group.dreimt.service.spi.query.jaccard.JaccardServiceConfiguration;
+import org.sing_group.dreimt.service.util.DatabaseVersionSingleton;
 
 @Default
 @Transactional(NEVER)
 public class DefaultJaccardService implements JaccardService {
+  
+  @Inject
+  private DatabaseVersionSingleton databaseVersion;
 
   @Resource(name = "java:global/dreimt/docker/jaccard/dataDir")
   private String dataDirectory;
@@ -118,6 +123,17 @@ public class DefaultJaccardService implements JaccardService {
   ) throws IOException {
     final Map<String, String> jaccardCommandReplacements = new HashMap<>();
     final File resultsFile = new File(dataDir, "output.tsv");
+    
+    if(databaseVersion.getCurrentDatabaseVersion().isPresent()) {
+      jaccardCommandReplacements.put(
+        "[DATABASE_VERSION]",
+        databaseVersion.getCurrentDatabaseVersion().get().getVersion()
+      );
+    } else {
+      throw new IOException(
+        "The analysis cannot be run because the database version is not defined"
+      );
+    }
     
     jaccardCommandReplacements.put(
       "[INPUT_FILE_NAME]",

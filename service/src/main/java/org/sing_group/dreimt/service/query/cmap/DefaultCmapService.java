@@ -40,15 +40,20 @@ import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 import javax.enterprise.inject.Default;
+import javax.inject.Inject;
 import javax.transaction.Transactional;
 
 import org.sing_group.dreimt.service.spi.query.cmap.CmapResultData;
 import org.sing_group.dreimt.service.spi.query.cmap.CmapService;
 import org.sing_group.dreimt.service.spi.query.cmap.CmapServiceConfiguration;
+import org.sing_group.dreimt.service.util.DatabaseVersionSingleton;
 
 @Default
 @Transactional(NEVER)
 public class DefaultCmapService implements CmapService {
+  
+  @Inject
+  private DatabaseVersionSingleton databaseVersion;
 
   @Resource(name = "java:global/dreimt/docker/cmap/dataDir")
   private String dataDirectory;
@@ -121,6 +126,18 @@ public class DefaultCmapService implements CmapService {
     Function<File, Stream<CmapResultData>> parseCmapResults
   ) throws IOException {
     final Map<String, String> cmapCommandReplacements = new HashMap<>();
+    
+    if(databaseVersion.getCurrentDatabaseVersion().isPresent()) {
+      cmapCommandReplacements.put(
+        "[DATABASE_VERSION]",
+        databaseVersion.getCurrentDatabaseVersion().get().getVersion()
+      );
+    } else {
+      throw new IOException(
+        "The analysis cannot be run because the database version is not defined"
+      );
+    }
+    
     cmapCommandReplacements.put(
       "[INPUT_FILE_NAME]",
       getEffectiveCommandFileName(inputSignatureFile)
