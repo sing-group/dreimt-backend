@@ -548,7 +548,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
               orders.add(order.apply(root.get("interactionType")));
               break;
             case TAU:
-              orders.add(order.apply(root.get("tau")));
+              orders.add(order.apply(cb.abs(root.get("tau"))));
               break;
             case UP_FDR:
               orders.add(order.apply(root.get("upFdr")));
