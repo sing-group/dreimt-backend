@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.26, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.27, for Linux (x86_64)
 --
 -- Host: localhost    Database: dreimt
 -- ------------------------------------------------------
--- Server version	5.7.26-0ubuntu0.18.04.1
+-- Server version	5.7.27-0ubuntu0.18.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -221,7 +221,7 @@ CREATE TABLE `drug_signature_interaction` (
   KEY `FKnsnnq5179w6clhenc6o6h8oov` (`signature`),
   CONSTRAINT `FKnsnnq5179w6clhenc6o6h8oov` FOREIGN KEY (`signature`) REFERENCES `signature` (`signatureName`),
   CONSTRAINT `FKqv24iupckh17q8jhr5hnkaemu` FOREIGN KEY (`drugId`) REFERENCES `drug` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=51591 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -266,7 +266,7 @@ CREATE TABLE `full_drug_signature_interaction` (
   KEY `IDXghdkqt1s647y0d2prw8uwct37` (`signatureCellTypeB`),
   KEY `FKboll38t85j69hdb7uf9c5gvh4` (`signatureArticlePubmedId`),
   CONSTRAINT `FKboll38t85j69hdb7uf9c5gvh4` FOREIGN KEY (`signatureArticlePubmedId`) REFERENCES `article_metadata` (`pubmedId`)
-) ENGINE=InnoDB AUTO_INCREMENT=117126 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -406,6 +406,104 @@ CREATE TABLE `jaccard_result_updown_genes_up` (
   KEY `FKt6ni80wrxgncluma3qeuswudk` (`gene`),
   CONSTRAINT `FK3ersliln9hql4ucng052bkcue` FOREIGN KEY (`id`) REFERENCES `jaccard_result_updown` (`id`),
   CONSTRAINT `FKt6ni80wrxgncluma3qeuswudk` FOREIGN KEY (`gene`) REFERENCES `genes` (`gene`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `precalculated_example`
+--
+
+DROP TABLE IF EXISTS `precalculated_example`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `precalculated_example` (
+  `resultType` varchar(31) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `work` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`work`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `precalculated_example_cmap`
+--
+
+DROP TABLE IF EXISTS `precalculated_example_cmap`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `precalculated_example_cmap` (
+  `work` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`work`),
+  CONSTRAINT `FKny0lp9b7k9uh7kes939q97nsa` FOREIGN KEY (`work`) REFERENCES `precalculated_example` (`work`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `precalculated_example_cmap_geneset`
+--
+
+DROP TABLE IF EXISTS `precalculated_example_cmap_geneset`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `precalculated_example_cmap_geneset` (
+  `work` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`work`),
+  CONSTRAINT `FK4ni99igxnjyg6ic71n3qu6age` FOREIGN KEY (`work`) REFERENCES `precalculated_example_cmap` (`work`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `precalculated_example_cmap_updown`
+--
+
+DROP TABLE IF EXISTS `precalculated_example_cmap_updown`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `precalculated_example_cmap_updown` (
+  `work` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`work`),
+  CONSTRAINT `FKdlqn7c6jcxsmm62osft9259ni` FOREIGN KEY (`work`) REFERENCES `precalculated_example_cmap` (`work`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `precalculated_example_jaccard`
+--
+
+DROP TABLE IF EXISTS `precalculated_example_jaccard`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `precalculated_example_jaccard` (
+  `work` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`work`),
+  CONSTRAINT `FK7bfnnquu5tq1nph6jckfliats` FOREIGN KEY (`work`) REFERENCES `precalculated_example` (`work`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `precalculated_example_jaccard_geneset`
+--
+
+DROP TABLE IF EXISTS `precalculated_example_jaccard_geneset`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `precalculated_example_jaccard_geneset` (
+  `work` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`work`),
+  CONSTRAINT `FKtbs89pqf0ghlsyg6de9l11sp7` FOREIGN KEY (`work`) REFERENCES `precalculated_example_jaccard` (`work`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `precalculated_example_jaccard_updown`
+--
+
+DROP TABLE IF EXISTS `precalculated_example_jaccard_updown`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `precalculated_example_jaccard_updown` (
+  `work` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`work`),
+  CONSTRAINT `FK20qmw6b5j0g1ur6n1l3ngsa4o` FOREIGN KEY (`work`) REFERENCES `precalculated_example_jaccard` (`work`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -604,4 +702,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-06-21 11:43:09
+-- Dump completed on 2019-08-12 15:25:22

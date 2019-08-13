@@ -15,6 +15,14 @@ DROP TABLE `cmap_result_geneset`;
 DROP TABLE `cmap_result_updown`;
 DROP TABLE `cmap_result`;
 
+DROP TABLE `precalculated_example_jaccard_updown`;
+DROP TABLE `precalculated_example_jaccard_geneset`;
+DROP TABLE `precalculated_example_jaccard`;
+DROP TABLE `precalculated_example_cmap_updown`;
+DROP TABLE `precalculated_example_cmap_geneset`;
+DROP TABLE `precalculated_example_cmap`;
+DROP TABLE `precalculated_example`;
+
 DROP TABLE `work_step`;
 DROP TABLE `work`;
 

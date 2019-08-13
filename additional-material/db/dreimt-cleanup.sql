@@ -17,6 +17,14 @@ TRUNCATE TABLE `cmap_result_geneset`;
 TRUNCATE TABLE `cmap_result_updown`;
 TRUNCATE TABLE `cmap_result`;
 
+TRUNCATE TABLE `precalculated_example_jaccard_updown`;
+TRUNCATE TABLE `precalculated_example_jaccard_geneset`;
+TRUNCATE TABLE `precalculated_example_jaccard`;
+TRUNCATE TABLE `precalculated_example_cmap_updown`;
+TRUNCATE TABLE `precalculated_example_cmap_geneset`;
+TRUNCATE TABLE `precalculated_example_cmap`;
+TRUNCATE TABLE `precalculated_example`;
+
 TRUNCATE TABLE `work_step`;
 TRUNCATE TABLE `work`;
 
@@ -61,6 +69,14 @@ ALTER TABLE `cmap_result_updown_drug_interactions` AUTO_INCREMENT = 1;
 ALTER TABLE `cmap_result_geneset` AUTO_INCREMENT = 1;
 ALTER TABLE `cmap_result_updown` AUTO_INCREMENT = 1;
 ALTER TABLE `cmap_result` AUTO_INCREMENT = 1;
+
+ALTER TABLE `precalculated_example_jaccard_updown` AUTO_INCREMENT = 1;
+ALTER TABLE `precalculated_example_jaccard_geneset` AUTO_INCREMENT = 1;
+ALTER TABLE `precalculated_example_jaccard` AUTO_INCREMENT = 1;
+ALTER TABLE `precalculated_example_cmap_updown` AUTO_INCREMENT = 1;
+ALTER TABLE `precalculated_example_cmap_geneset` AUTO_INCREMENT = 1;
+ALTER TABLE `precalculated_example_cmap` AUTO_INCREMENT = 1;
+ALTER TABLE `precalculated_example` AUTO_INCREMENT = 1;
 
 ALTER TABLE `signature_updown_genes` AUTO_INCREMENT = 1;
 ALTER TABLE `signature_geneset_genes` AUTO_INCREMENT = 1;
