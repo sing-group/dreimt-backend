@@ -44,13 +44,13 @@ public interface DrugSignatureInteractionService {
 
   Stream<String> listSignatureNameValues(DrugSignatureInteractionListingOptions listingOptions);
 
-  Stream<String> listCellTypeAValues(DrugSignatureInteractionListingOptions listingOptions);
+  Stream<String> listCellType1Values(DrugSignatureInteractionListingOptions listingOptions);
 
-  Stream<String> listCellSubTypeAValues(DrugSignatureInteractionListingOptions listingOptions);
+  Stream<String> listCellSubType1Values(DrugSignatureInteractionListingOptions listingOptions);
 
-  Stream<String> listCellTypeBValues(DrugSignatureInteractionListingOptions listingOptions);
+  Stream<String> listCellType2Values(DrugSignatureInteractionListingOptions listingOptions);
 
-  Stream<String> listCellSubTypeBValues(DrugSignatureInteractionListingOptions listingOptions);
+  Stream<String> listCellSubType2Values(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<ExperimentalDesign> listExperimentalDesignValues(DrugSignatureInteractionListingOptions listingOptions);
 

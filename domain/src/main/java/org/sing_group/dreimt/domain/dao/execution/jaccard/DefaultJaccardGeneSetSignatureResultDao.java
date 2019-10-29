@@ -76,8 +76,8 @@ public class DefaultJaccardGeneSetSignatureResultDao implements JaccardGeneSetSi
     String name, String description,
     Function<String, String> resultReferenceBuilder,
     boolean onlyUniverseGenes,
-    String cellTypeA, String cellSubTypeA,
-    String cellTypeB, String cellSubTypeB,
+    String cellType1, String cellSubType1,
+    String cellType2, String cellSubType2,
     ExperimentalDesign experimentalDesign,
     String organism, String disease, String signatureSourceDb,
     Set<String> genes
@@ -87,8 +87,8 @@ public class DefaultJaccardGeneSetSignatureResultDao implements JaccardGeneSetSi
         name, description,
         resultReferenceBuilder,
         onlyUniverseGenes,
-        cellTypeA, cellSubTypeA,
-        cellTypeB, cellSubTypeB,
+        cellType1, cellSubType1,
+        cellType2, cellSubType2,
         experimentalDesign,
         organism, disease, signatureSourceDb,
         this.geneDao.getGenes(genes, true)

@@ -36,15 +36,17 @@ import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 public interface SignatureService {
   Optional<Signature> get(String signatureName);
 
+  Stream<Signature> list(SignatureListingOptions listingOptions);
+
   Stream<String> listSignatureNameValues(SignatureListingOptions listingOptions);
 
-  Stream<String> listCellTypeAValues(SignatureListingOptions signatureListingOptions);
-  
-  Stream<String> listCellSubTypeAValues(SignatureListingOptions signatureListingOptions);
+  Stream<String> listCellType1Values(SignatureListingOptions signatureListingOptions);
 
-  Stream<String> listCellTypeBValues(SignatureListingOptions signatureListingOptions);
-  
-  Stream<String> listCellSubTypeBValues(SignatureListingOptions signatureListingOptions);
+  Stream<String> listCellSubType1Values(SignatureListingOptions signatureListingOptions);
+
+  Stream<String> listCellType2Values(SignatureListingOptions signatureListingOptions);
+
+  Stream<String> listCellSubType2Values(SignatureListingOptions signatureListingOptions);
 
   Stream<ExperimentalDesign> listExperimentalDesignValues(SignatureListingOptions signatureListingOptions);
 

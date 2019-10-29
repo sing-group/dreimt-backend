@@ -32,70 +32,76 @@ import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 public interface SignatureResource {
   Response get(String signatureName);
 
+  Response list(
+    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, Integer signaturePubMedId
+  );
+
   Response getGenes(String signatureName, boolean onlyUniverseGenes);
 
   Response listSignatureNameValues(
-    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
     ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
     SignatureType signatureType, Integer signaturePubMedId
   );
 
-  Response listCellTypeAValues(
-    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+  Response listCellType1Values(
+    String signatureName, String cellType1, String cellSubType1, String cellSubType2,
     ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
     SignatureType signatureType, Integer signaturePubMedId
   );
 
-  Response listCellSubTypeAValues(
-    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+  Response listCellSubType1AValues(
+    String signatureName, String cellType1, String cellSubType1, String cellType2,
     ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
     SignatureType signatureType, Integer signaturePubMedId
   );
 
-  Response listCellTypeBValues(
-    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+  Response listCellType2Values(
+    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
     ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
     SignatureType signatureType, Integer signaturePubMedId
   );
 
-  Response listCellSubTypeBValues(
-    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+  Response listCellSubType2Values(
+    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
     ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
     SignatureType signatureType, Integer signaturePubMedId
   );
 
   Response listExperimentalDesignValues(
-    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
     ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
     SignatureType signatureType, Integer signaturePubMedId
   );
 
   Response listOrganismValues(
-    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
     ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
     SignatureType signatureType, Integer signaturePubMedId
   );
 
   Response listDiseaseValues(
-    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
     ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
     SignatureType signatureType, Integer signaturePubMedId
   );
 
   Response listSignatureSourceDbValues(
-    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
     ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
     SignatureType signatureType, Integer signaturePubMedId
   );
 
   Response listSignatureTypeValues(
-    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
     ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
     SignatureType signatureType, Integer signaturePubMedId
   );
 
   Response listSignaturePubMedIdValues(
-    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
     ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
     SignatureType signatureType, Integer signaturePubMedId
   );

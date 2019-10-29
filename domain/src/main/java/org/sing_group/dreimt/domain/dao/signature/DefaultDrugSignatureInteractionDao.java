@@ -29,6 +29,7 @@ import static javax.transaction.Transactional.TxType.MANDATORY;
 import static org.sing_group.dreimt.domain.dao.ListingOptions.noModification;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -40,6 +41,7 @@ import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Tuple;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -149,7 +151,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     }
   }
 
-  private Set<String> reconstructSet(String field) {
+  private static Set<String> reconstructSet(String field) {
     return field == null ? emptySet() : Stream.of(field.split("###")).map(String::trim).collect(toSet());
   }
 
@@ -235,10 +237,10 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   private DrugSignatureInteractionListingOptions createDrugSignatureListingOptionsFromFreeText(ListingOptions listingOptions, String freeText) {
     SignatureListingOptions signatureListingOptions = new SignatureListingOptions(
       freeText, // signatureName 
-      freeText, // cellTypeA
-      freeText, // cellSubTypeA 
-      freeText, // cellTypeB
-      freeText, // cellSubTypeB 
+      freeText, // cellType1
+      freeText, // cellSubType1
+      freeText, // cellType2
+      freeText, // cellSubType2
       null,     // experimentalDesign 
       freeText, // organism
       freeText, // disease 
@@ -279,27 +281,89 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       return this.em.createQuery(query).getSingleResult();
     }
   }
-  
+
   @Override
-  public Stream<String> listCellTypeAValues(DrugSignatureInteractionListingOptions listingOptions) {
-    return this.listSetColumnValues("signatureCellTypeA", listingOptions);
+  public Stream<String> listCellType1Values(DrugSignatureInteractionListingOptions listingOptions) {
+    return reconstructTupleSets(
+      this.listStringTuples(listingOptions, "signatureCellTypeA", "signatureCellTypeB")
+    );
   }
 
   @Override
-  public Stream<String> listCellSubTypeAValues(DrugSignatureInteractionListingOptions listingOptions) {
-    return this.listSetColumnValues("signatureCellSubTypeA", listingOptions);
+  public Stream<String> listCellSubType1Values(DrugSignatureInteractionListingOptions listingOptions) {
+    return reconstructTupleSets(
+      this.listStringTuples(listingOptions, "signatureCellSubTypeA", "signatureCellSubTypeB")
+    );
+  }
+
+  public Stream<String> reconstructTupleSets(Stream<Tuple> stream) {
+    return stream.map(tuple -> {
+      Set<String> set = new HashSet<>(reconstructSet(tuple.get(0).toString()));
+      set.addAll(reconstructSet(tuple.get(1).toString()));
+      return set;
+    })
+      .flatMap(Set::stream)
+      .distinct();
   }
 
   @Override
-  public Stream<String> listCellTypeBValues(DrugSignatureInteractionListingOptions listingOptions) {
-    return this.listSetColumnValues("signatureCellTypeB", listingOptions);
+  public Stream<String> listCellType2Values(DrugSignatureInteractionListingOptions listingOptions) {
+    if (!listingOptions.getSignatureListingOptions().getCellType1().isPresent()) {
+      throw new IllegalArgumentException("cellType1 must be defined in orter to list cellType2 values");
+    }
+
+    return this.listStringTuples(listingOptions, "signatureCellTypeA", "signatureCellTypeB")
+      .map(tuple -> getPairSets(tuple, listingOptions.getSignatureListingOptions().getCellType1().get()))
+      .flatMap(Set::stream)
+      .distinct();
   }
 
   @Override
-  public Stream<String> listCellSubTypeBValues(DrugSignatureInteractionListingOptions listingOptions) {
-    return this.listSetColumnValues("signatureCellSubTypeB", listingOptions);
+  public Stream<String> listCellSubType2Values(DrugSignatureInteractionListingOptions listingOptions) {
+    if (!listingOptions.getSignatureListingOptions().getCellSubType1().isPresent()) {
+      throw new IllegalArgumentException("cellSubType1 must be defined in orter to list cellSubType2 values");
+    }
+
+    return this.listStringTuples(listingOptions, "signatureCellSubTypeA", "signatureCellSubTypeB")
+      .map(tuple -> getPairSets(tuple, listingOptions.getSignatureListingOptions().getCellSubType1().get()))
+      .flatMap(Set::stream)
+      .distinct();
   }
-  
+
+  private Stream<Tuple> listStringTuples(
+    DrugSignatureInteractionListingOptions listingOptions,
+    String columnName1, String columnName2
+  ) {
+    final CriteriaBuilder cb = dh.cb();
+    CriteriaQuery<Tuple> query = cb.createTupleQuery();
+    final Root<FullDrugSignatureInteraction> root = query.from(dh.getEntityType());
+
+    query =
+      query
+        .multiselect(root.get(columnName1).as(String.class), root.get(columnName2).as(String.class))
+        .distinct(true);
+
+    if (listingOptions.hasAnyQueryModification()) {
+      query = query.where(createPredicates(listingOptions, root));
+    }
+
+    return this.em.createQuery(query).getResultList().stream();
+  }
+
+  private static Set<String> getPairSets(Tuple setFieldsTuple, String match) {
+    if (anySetValueContains(setFieldsTuple.get(0).toString(), match)) {
+      return reconstructSet(setFieldsTuple.get(1).toString());
+    } else if (anySetValueContains(setFieldsTuple.get(1).toString(), match)) {
+      return reconstructSet(setFieldsTuple.get(0).toString());
+    } else {
+      throw new IllegalArgumentException("Error processing match: " + match);
+    }
+  }
+
+  private static boolean anySetValueContains(String field, String match) {
+    return reconstructSet(field).stream().anyMatch(value -> value.contains(match));
+  }
+
   @Override
   public Stream<String> listDiseaseValues(DrugSignatureInteractionListingOptions listingOptions) {
     return this.listSetColumnValues("signatureDisease", listingOptions);
@@ -309,7 +373,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     String columnName, DrugSignatureInteractionListingOptions listingOptions
   ) {
     return this.listColumnValues(String.class, columnName, listingOptions)
-      .flatMap(v -> this.reconstructSet(v).stream()).distinct();
+      .flatMap(v -> reconstructSet(v).stream()).distinct();
   }
 
   @Override
@@ -453,10 +517,60 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     fieldLikeQueryBuilder.accept("signatureOrganism", true, signatureListingOptions.getOrganism());
     fieldLikeQueryBuilder.accept("signatureSourceDb", true, signatureListingOptions.getSourceDb());
     fieldLikeQueryBuilder.accept("signatureDisease", false, signatureListingOptions.getDisease());
-    fieldLikeQueryBuilder.accept("signatureCellTypeA", true, signatureListingOptions.getCellTypeA());
-    fieldLikeQueryBuilder.accept("signatureCellSubTypeA", false, signatureListingOptions.getCellSubTypeA());
-    fieldLikeQueryBuilder.accept("signatureCellTypeB", true, signatureListingOptions.getCellTypeB());
-    fieldLikeQueryBuilder.accept("signatureCellSubTypeB", false, signatureListingOptions.getCellSubTypeB());
+
+    if (signatureListingOptions.getCellType1().isPresent()) {
+      Path<String> cellTypeA = root.get("signatureCellTypeA");
+      Path<String> cellTypeB = root.get("signatureCellTypeB");
+
+      if (signatureListingOptions.getCellType2().isPresent()) {
+        andPredicates.add(
+          cb.or(
+            cb.and(
+              cb.like(cellTypeA, "%" + signatureListingOptions.getCellType1().get() + "%"),
+              cb.like(cellTypeB, "%" + signatureListingOptions.getCellType2().get() + "%")
+            ),
+            cb.and(
+              cb.like(cellTypeA, "%" + signatureListingOptions.getCellType2().get() + "%"),
+              cb.like(cellTypeB, "%" + signatureListingOptions.getCellType1().get() + "%")
+            )
+          )
+        );
+      } else {
+        andPredicates.add(
+          cb.or(
+            cb.like(cellTypeA, "%" + signatureListingOptions.getCellType1().get() + "%"),
+            cb.like(cellTypeB, "%" + signatureListingOptions.getCellType1().get() + "%")
+          )
+        );
+      }
+    }
+
+    if (signatureListingOptions.getCellSubType1().isPresent()) {
+      Path<String> cellSubTypeA = root.get("signatureCellSubTypeA");
+      Path<String> cellSubTypeB = root.get("signatureCellSubTypeB");
+
+      if (signatureListingOptions.getCellSubType2().isPresent()) {
+        andPredicates.add(
+          cb.or(
+            cb.and(
+              cb.like(cellSubTypeA, "%" + signatureListingOptions.getCellSubType1().get() + "%"),
+              cb.like(cellSubTypeB, "%" + signatureListingOptions.getCellSubType2().get() + "%")
+            ),
+            cb.and(
+              cb.like(cellSubTypeA, "%" + signatureListingOptions.getCellSubType2().get() + "%"),
+              cb.like(cellSubTypeB, "%" + signatureListingOptions.getCellSubType1().get() + "%")
+            )
+          )
+        );
+      } else {
+        andPredicates.add(
+          cb.or(
+            cb.like(cellSubTypeA, "%" + signatureListingOptions.getCellSubType1().get() + "%"),
+            cb.like(cellSubTypeB, "%" + signatureListingOptions.getCellSubType1().get() + "%")
+          )
+        );
+      }
+    }
 
     signatureListingOptions.getExperimentalDesign().ifPresent(experimentalDesign -> {
       final Path<ExperimentalDesign> experimentalDesignPath = root.get("signatureExperimentalDesign");

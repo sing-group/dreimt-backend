@@ -30,10 +30,10 @@ public class JaccardQueryParameters {
 
   private String queryTitle;
   private boolean onlyUniverseGenes = DEFAULT_ONLY_UNIVERSE_GENES;
-  private String cellTypeA;
-  private String cellSubTypeA;
-  private String cellTypeB;
-  private String cellSubTypeB;
+  private String cellType1;
+  private String cellSubType1;
+  private String cellType2;
+  private String cellSubType2;
   private ExperimentalDesign experimentalDesign;
   private String organism;
   private String disease;
@@ -44,16 +44,16 @@ public class JaccardQueryParameters {
   JaccardQueryParameters() {}
 
   public JaccardQueryParameters(
-    String queryTitle, boolean onlyUniverseGenes, String cellTypeA, String cellSubTypeA, String cellTypeB,
-    String cellSubTypeB, ExperimentalDesign experimentalDesign, String organism, String disease,
+    String queryTitle, boolean onlyUniverseGenes, String cellType1, String cellSubType1, String cellType2,
+    String cellSubType2, ExperimentalDesign experimentalDesign, String organism, String disease,
     String signatureSourceDb, String[] upGenes, String[] downGenes
   ) {
     this.queryTitle = queryTitle;
     this.onlyUniverseGenes = onlyUniverseGenes;
-    this.cellTypeA = cellTypeA;
-    this.cellSubTypeA = cellSubTypeA;
-    this.cellTypeB = cellTypeB;
-    this.cellSubTypeB = cellSubTypeB;
+    this.cellType1 = cellType1;
+    this.cellSubType1 = cellSubType1;
+    this.cellType2 = cellType2;
+    this.cellSubType2 = cellSubType2;
     this.experimentalDesign = experimentalDesign;
     this.organism = organism;
     this.disease = disease;
@@ -70,20 +70,20 @@ public class JaccardQueryParameters {
     return onlyUniverseGenes;
   }
 
-  public String getCellTypeA() {
-    return cellTypeA;
+  public String getCellType1() {
+    return cellType1;
   }
 
-  public String getCellSubTypeA() {
-    return cellSubTypeA;
+  public String getCellSubType1() {
+    return cellSubType1;
   }
 
-  public String getCellTypeB() {
-    return cellTypeB;
+  public String getCellType2() {
+    return cellType2;
   }
 
-  public String getCellSubTypeB() {
-    return cellSubTypeB;
+  public String getCellSubType2() {
+    return cellSubType2;
   }
 
   public ExperimentalDesign getExperimentalDesign() {

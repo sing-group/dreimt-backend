@@ -291,10 +291,10 @@ DROP TABLE IF EXISTS `jaccard_result`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jaccard_result` (
-  `cellSubTypeA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `cellSubTypeB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `cellTypeA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `cellTypeB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cellSubType1` varchar(225) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cellSubType2` varchar(225) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cellType1` varchar(225) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cellType2` varchar(225) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `disease` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `experimentalDesign` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `onlyUniverseGenes` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -702,4 +702,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-08-12 15:25:22
+-- Dump completed on 2019-10-29 16:11:00

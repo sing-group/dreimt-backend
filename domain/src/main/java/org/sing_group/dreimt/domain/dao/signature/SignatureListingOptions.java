@@ -39,10 +39,10 @@ public class SignatureListingOptions implements Serializable {
 
   private final ListingOptions listingOptions;
   private final String signatureName;
-  private final String cellTypeA;
-  private final String cellSubTypeA;
-  private final String cellTypeB;
-  private final String cellSubTypeB;
+  private final String cellType1;
+  private final String cellSubType1;
+  private final String cellType2;
+  private final String cellSubType2;
   private final ExperimentalDesign experimentalDesign;
   private final String organism;
   private final String disease;
@@ -52,49 +52,51 @@ public class SignatureListingOptions implements Serializable {
   private final Set<String> mandatoryGenes;
   
   public SignatureListingOptions(
-    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
     ExperimentalDesign experimentalDesign, String organism, String disease, String sourceDb,
     SignatureType signatureType, Integer signaturePubMedId
   ) {
     this(
-      noModification(), signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism,
+      noModification(), signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism,
       disease, sourceDb, signatureType, signaturePubMedId, emptySet()
       );
   }
 
   public SignatureListingOptions(
-    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
     ExperimentalDesign experimentalDesign, String organism, String disease, String sourceDb, Integer signaturePubMedId
   ) {
     this(
-      noModification(), signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism,
+      noModification(), signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism,
       disease, sourceDb, null, signaturePubMedId, emptySet()
     );
   }
 
   public SignatureListingOptions(
-    ListingOptions listingOptions, String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB,
-    String cellSubTypeB,
+    ListingOptions listingOptions, String signatureName, String cellType1, String cellSubType1, String cellType2,
+    String cellSubType2,
     ExperimentalDesign experimentalDesign, String organism, String disease, String sourceDb,
     SignatureType signatureType, Integer signaturePubMedId
   ) {
     this(
-      listingOptions, signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism, disease, sourceDb,
+      listingOptions, signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease, sourceDb,
       signatureType, signaturePubMedId, emptySet()
     );
   }
 
   public SignatureListingOptions(
-    ListingOptions listingOptions, String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB,
-    String cellSubTypeB, ExperimentalDesign experimentalDesign, String organism, String disease, String sourceDb,
+    ListingOptions listingOptions, String signatureName, String cellType1, String cellSubType1, String cellType2,
+    String cellSubType2, ExperimentalDesign experimentalDesign, String organism, String disease, String sourceDb,
     SignatureType signatureType, Integer signaturePubMedId, Set<String> mandatoryGenes
   ) {
+    validateCellTypes(cellType1, cellSubType1, cellType2, cellSubType2);
+
     this.listingOptions = listingOptions;
     this.signatureName = signatureName;
-    this.cellTypeA = cellTypeA;
-    this.cellSubTypeA = cellSubTypeA;
-    this.cellTypeB = cellTypeB;
-    this.cellSubTypeB = cellSubTypeB;
+    this.cellType1 = cellType1;
+    this.cellSubType1 = cellSubType1;
+    this.cellType2 = cellType2;
+    this.cellSubType2 = cellSubType2;
     this.experimentalDesign = experimentalDesign;
     this.organism = organism;
     this.disease = disease;
@@ -104,13 +106,22 @@ public class SignatureListingOptions implements Serializable {
     this.mandatoryGenes = mandatoryGenes;
   }
 
+  private static void validateCellTypes(String cellType1, String cellSubType1, String cellType2, String cellSubType2) {
+    if (cellType1 == null && cellType2 != null) {
+      throw new IllegalArgumentException("cellType1 is required when cellType2 is present");
+    }
+    if (cellSubType1 == null && cellSubType2 != null) {
+      throw new IllegalArgumentException("cellSubType1 is required when cellSubType2 is present");
+    }
+  }
+
   public boolean hasAnyQueryModification() {
     return this.listingOptions.hasAnyQueryModification()
       || this.signatureName != null
-      || this.cellTypeA != null
-      || this.cellSubTypeA != null
-      || this.cellTypeB != null
-      || this.cellSubTypeB != null
+      || this.cellType1 != null
+      || this.cellSubType1 != null
+      || this.cellType2 != null
+      || this.cellSubType2 != null
       || this.organism != null
       || this.disease != null
       || this.experimentalDesign != null
@@ -128,20 +139,20 @@ public class SignatureListingOptions implements Serializable {
     return ofNullable(signatureName);
   }
 
-  public Optional<String> getCellTypeA() {
-    return ofNullable(cellTypeA);
+  public Optional<String> getCellType1() {
+    return ofNullable(cellType1);
   }
 
-  public Optional<String> getCellSubTypeA() {
-    return ofNullable(cellSubTypeA);
+  public Optional<String> getCellSubType1() {
+    return ofNullable(cellSubType1);
   }
   
-  public Optional<String> getCellTypeB() {
-    return ofNullable(cellTypeB);
+  public Optional<String> getCellType2() {
+    return ofNullable(cellType2);
   }
   
-  public Optional<String> getCellSubTypeB() {
-    return ofNullable(cellSubTypeB);
+  public Optional<String> getCellSubType2() {
+    return ofNullable(cellSubType2);
   }
 
   public Optional<ExperimentalDesign> getExperimentalDesign() {
@@ -174,7 +185,7 @@ public class SignatureListingOptions implements Serializable {
 
   public SignatureListingOptions withMandatoryGenes(Set<String> mandatoryGenes) {
     return new SignatureListingOptions(
-      listingOptions, signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, experimentalDesign, organism,
+      listingOptions, signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism,
       disease, sourceDb, signatureType, signaturePubMedId, mandatoryGenes
     );
   }
@@ -183,10 +194,10 @@ public class SignatureListingOptions implements Serializable {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((cellSubTypeA == null) ? 0 : cellSubTypeA.hashCode());
-    result = prime * result + ((cellSubTypeB == null) ? 0 : cellSubTypeB.hashCode());
-    result = prime * result + ((cellTypeA == null) ? 0 : cellTypeA.hashCode());
-    result = prime * result + ((cellTypeB == null) ? 0 : cellTypeB.hashCode());
+    result = prime * result + ((cellSubType1 == null) ? 0 : cellSubType1.hashCode());
+    result = prime * result + ((cellSubType2 == null) ? 0 : cellSubType2.hashCode());
+    result = prime * result + ((cellType1 == null) ? 0 : cellType1.hashCode());
+    result = prime * result + ((cellType2 == null) ? 0 : cellType2.hashCode());
     result = prime * result + ((disease == null) ? 0 : disease.hashCode());
     result = prime * result + ((experimentalDesign == null) ? 0 : experimentalDesign.hashCode());
     result = prime * result + ((listingOptions == null) ? 0 : listingOptions.hashCode());
@@ -208,25 +219,25 @@ public class SignatureListingOptions implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     SignatureListingOptions other = (SignatureListingOptions) obj;
-    if (cellSubTypeA == null) {
-      if (other.cellSubTypeA != null)
+    if (cellSubType1 == null) {
+      if (other.cellSubType1 != null)
         return false;
-    } else if (!cellSubTypeA.equals(other.cellSubTypeA))
+    } else if (!cellSubType1.equals(other.cellSubType1))
       return false;
-    if (cellSubTypeB == null) {
-      if (other.cellSubTypeB != null)
+    if (cellSubType2 == null) {
+      if (other.cellSubType2 != null)
         return false;
-    } else if (!cellSubTypeB.equals(other.cellSubTypeB))
+    } else if (!cellSubType2.equals(other.cellSubType2))
       return false;
-    if (cellTypeA == null) {
-      if (other.cellTypeA != null)
+    if (cellType1 == null) {
+      if (other.cellType1 != null)
         return false;
-    } else if (!cellTypeA.equals(other.cellTypeA))
+    } else if (!cellType1.equals(other.cellType1))
       return false;
-    if (cellTypeB == null) {
-      if (other.cellTypeB != null)
+    if (cellType2 == null) {
+      if (other.cellType2 != null)
         return false;
-    } else if (!cellTypeB.equals(other.cellTypeB))
+    } else if (!cellType2.equals(other.cellType2))
       return false;
     if (disease == null) {
       if (other.disease != null)

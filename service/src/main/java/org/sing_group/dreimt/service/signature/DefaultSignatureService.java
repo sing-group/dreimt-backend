@@ -49,28 +49,33 @@ public class DefaultSignatureService implements SignatureService {
   }
 
   @Override
+  public Stream<Signature> list(SignatureListingOptions listingOptions) {
+    return this.dao.list(listingOptions);
+  }
+
+  @Override
   public Stream<String> listSignatureNameValues(SignatureListingOptions signatureListingOptions) {
     return this.dao.listSignatureNameValues(signatureListingOptions);
   }
 
   @Override
-  public Stream<String> listCellTypeAValues(SignatureListingOptions signatureListingOptions) {
-    return this.dao.listCellTypeAValues(signatureListingOptions);
+  public Stream<String> listCellType1Values(SignatureListingOptions signatureListingOptions) {
+    return this.dao.listCellType1Values(signatureListingOptions);
   }
 
   @Override
-  public Stream<String> listCellSubTypeAValues(SignatureListingOptions signatureListingOptions) {
-    return this.dao.listCellSubTypeAValues(signatureListingOptions);
+  public Stream<String> listCellSubType1Values(SignatureListingOptions signatureListingOptions) {
+    return this.dao.listCellSubType1Values(signatureListingOptions);
   }
 
   @Override
-  public Stream<String> listCellTypeBValues(SignatureListingOptions signatureListingOptions) {
-    return this.dao.listCellTypeBValues(signatureListingOptions);
+  public Stream<String> listCellType2Values(SignatureListingOptions signatureListingOptions) {
+    return this.dao.listCellType2Values(signatureListingOptions);
   }
 
   @Override
-  public Stream<String> listCellSubTypeBValues(SignatureListingOptions signatureListingOptions) {
-    return this.dao.listCellSubTypeBValues(signatureListingOptions);
+  public Stream<String> listCellSubType2Values(SignatureListingOptions signatureListingOptions) {
+    return this.dao.listCellSubType2Values(signatureListingOptions);
   }
 
   @Override
