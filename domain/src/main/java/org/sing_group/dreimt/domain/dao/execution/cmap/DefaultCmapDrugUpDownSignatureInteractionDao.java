@@ -128,7 +128,7 @@ public class DefaultCmapDrugUpDownSignatureInteractionDao implements CmapDrugUpD
             orders.add(order.apply(root.get("downFdr")));
             break;
           case TAU:
-            orders.add(order.apply(cb.abs(root.get("tau"))));
+            orders.add(order.apply(root.get("tau")));
             break;
 
           case NONE:
