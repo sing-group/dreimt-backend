@@ -233,31 +233,35 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       return reconstruct(typedQuery.getResultList().stream());
     }
   }
-  
-  private DrugSignatureInteractionListingOptions createDrugSignatureListingOptionsFromFreeText(ListingOptions listingOptions, String freeText) {
-    SignatureListingOptions signatureListingOptions = new SignatureListingOptions(
-      freeText, // signatureName 
-      freeText, // cellType1
-      freeText, // cellSubType1
-      freeText, // cellType2
-      freeText, // cellSubType2
-      null,     // experimentalDesign 
-      freeText, // organism
-      freeText, // disease 
-      null,     // sourceDb
-      null      // signaturePubMedId
-    );
-    DrugSignatureInteractionListingOptions drugSignatureListingOptions = new DrugSignatureInteractionListingOptions(
-      listingOptions, signatureListingOptions, 
-      null,     // interactionType 
-      freeText, // drugSourceName 
-      freeText, // drugSourceDb
-      freeText, // drugCommonName 
-      null,     // minTau
-      null,     // maxUpFdr 
-      null      // maxDownFdr
-    );
-      
+
+  private DrugSignatureInteractionListingOptions createDrugSignatureListingOptionsFromFreeText(
+    ListingOptions listingOptions, String freeText
+  ) {
+    SignatureListingOptions signatureListingOptions =
+      new SignatureListingOptions(
+        freeText, // signatureName
+        freeText, // cellType1
+        freeText, // cellSubType1
+        freeText, // cellType2
+        freeText, // cellSubType2
+        null, // experimentalDesign
+        freeText, // organism
+        freeText, // disease
+        null, // sourceDb
+        null // signaturePubMedId
+      );
+    DrugSignatureInteractionListingOptions drugSignatureListingOptions =
+      new DrugSignatureInteractionListingOptions(
+        listingOptions, signatureListingOptions,
+        null, // interactionType
+        freeText, // drugSourceName
+        freeText, // drugSourceDb
+        freeText, // drugCommonName
+        null, // minTau
+        null, // maxUpFdr
+        null // maxDownFdr
+      );
+
     return drugSignatureListingOptions;
   }
 
@@ -273,7 +277,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
       DrugSignatureInteractionListingOptions drugSignatureListingOptions =
         createDrugSignatureListingOptionsFromFreeText(noModification(), freeText);
-      
+
       final Predicate[] predicates = createPredicates(drugSignatureListingOptions, root);
 
       query = query.select(cb.count(root)).where(cb.or(predicates));
@@ -298,8 +302,13 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
   public Stream<String> reconstructTupleSets(Stream<Tuple> stream) {
     return stream.map(tuple -> {
-      Set<String> set = new HashSet<>(reconstructSet(tuple.get(0).toString()));
-      set.addAll(reconstructSet(tuple.get(1).toString()));
+      Set<String> set = new HashSet<>();
+      if (tuple.get(0) != null) {
+        set.addAll(reconstructSet(tuple.get(0).toString()));
+      }
+      if (tuple.get(1) != null) {
+        set.addAll(reconstructSet(tuple.get(1).toString()));
+      }
       return set;
     })
       .flatMap(Set::stream)
@@ -351,17 +360,29 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   }
 
   private static Set<String> getPairSets(Tuple setFieldsTuple, String match) {
-    if (anySetValueContains(setFieldsTuple.get(0).toString(), match)) {
-      return reconstructSet(setFieldsTuple.get(1).toString());
-    } else if (anySetValueContains(setFieldsTuple.get(1).toString(), match)) {
-      return reconstructSet(setFieldsTuple.get(0).toString());
+    if (anySetValueContains(setFieldsTuple.get(0), match)) {
+      return reconstructSetFromTuple(setFieldsTuple.get(1));
+    } else if (anySetValueContains(setFieldsTuple.get(1), match)) {
+      return reconstructSetFromTuple(setFieldsTuple.get(0));
     } else {
       throw new IllegalArgumentException("Error processing match: " + match);
     }
   }
 
-  private static boolean anySetValueContains(String field, String match) {
-    return reconstructSet(field).stream().anyMatch(value -> value.contains(match));
+  private static Set<String> reconstructSetFromTuple(Object tuple) {
+    if (tuple == null) {
+      return emptySet();
+    } else {
+      return reconstructSet(tuple.toString());
+    }
+  }
+
+  private static boolean anySetValueContains(Object field, String match) {
+    if (field == null) {
+      return false;
+    } else {
+      return reconstructSet(field.toString()).stream().anyMatch(value -> value.contains(match));
+    }
   }
 
   @Override
@@ -614,7 +635,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
           default:
             order = null;
         }
-        
+
         if (order != null) {
           switch (field) {
             case CELL_TYPE_A:

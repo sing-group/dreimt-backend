@@ -29,6 +29,7 @@ import static java.util.stream.Stream.concat;
 import static javax.transaction.Transactional.TxType.MANDATORY;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -233,16 +234,16 @@ public class DefaultSignatureDao implements SignatureDao {
 
       andPredicates.add(cb.like(organism, "%" + listingOptions.getOrganism().get() + "%"));
     }
-    
+
     if (listingOptions.getDisease().isPresent()) {
       Join<Signature, String> joinSignatureDisease = root.join("disease", JoinType.LEFT);
 
       andPredicates.add(cb.like(joinSignatureDisease, "%" + listingOptions.getDisease().get() + "%"));
     }
-    
+
     if (listingOptions.getSourceDb().isPresent()) {
       final Path<String> sourceDb = root.get("sourceDb");
-      
+
       andPredicates.add(cb.like(sourceDb, "%" + listingOptions.getSourceDb().get() + "%"));
     }
 
@@ -271,16 +272,29 @@ public class DefaultSignatureDao implements SignatureDao {
 
   @Override
   public Stream<String> listCellType1Values(SignatureListingOptions signatureListingOptions) {
-    return listTwoColumnCollectionValues(signatureListingOptions, "cellTypeA", "cellTypeB").flatMap(tuple -> {
-      return Stream.of(tuple.get(0).toString(), tuple.get(1).toString());
-    }).distinct();
+    return listTwoColumnCollectionValues(signatureListingOptions, "cellTypeA", "cellTypeB")
+      .map(DefaultSignatureDao::tupleToList)
+      .flatMap(List::stream)
+      .distinct();
   }
 
   @Override
   public Stream<String> listCellSubType1Values(SignatureListingOptions signatureListingOptions) {
-    return listTwoColumnCollectionValues(signatureListingOptions, "cellSubTypeA", "cellSubTypeB").flatMap(tuple -> {
-      return Stream.of(tuple.get(0).toString(), tuple.get(1).toString());
-    }).distinct();
+    return listTwoColumnCollectionValues(signatureListingOptions, "cellSubTypeA", "cellSubTypeB")
+      .map(DefaultSignatureDao::tupleToList)
+      .flatMap(List::stream)
+      .distinct();
+  }
+
+  private static List<String> tupleToList(Tuple tuple) {
+    List<String> toret = new LinkedList<String>();
+    if (tuple.get(0) != null) {
+      toret.add(tuple.get(0).toString());
+    }
+    if (tuple.get(1) != null) {
+      toret.add(tuple.get(1).toString());
+    }
+    return toret;
   }
 
   @Override
@@ -290,7 +304,9 @@ public class DefaultSignatureDao implements SignatureDao {
     }
 
     return listTwoColumnCollectionValues(signatureListingOptions, "cellTypeA", "cellTypeB")
-      .map(tuple -> getTuplePairs(tuple, signatureListingOptions.getCellType1().get()));
+      .map(tuple -> getTuplePairs(tuple, signatureListingOptions.getCellType1().get()))
+      .distinct()
+      .filter(DefaultSignatureDao::notEmpty);
   }
 
   @Override
@@ -300,20 +316,28 @@ public class DefaultSignatureDao implements SignatureDao {
     }
 
     return listTwoColumnCollectionValues(signatureListingOptions, "cellSubTypeA", "cellSubTypeB")
-      .map(tuple -> getTuplePairs(tuple, signatureListingOptions.getCellSubType1().get()));
+      .map(tuple -> getTuplePairs(tuple, signatureListingOptions.getCellSubType1().get()))
+      .distinct()
+      .filter(DefaultSignatureDao::notEmpty);
+  }
+
+  private static boolean notEmpty(String string) {
+    return !string.isEmpty();
   }
 
   private static String getTuplePairs(Tuple tuple, String match) {
-    if (tuple.get(0).toString().contains(match)) {
-      return tuple.get(1).toString();
-    } else if (tuple.get(1).toString().contains(match)) {
-      return tuple.get(0).toString();
+    if (tuple.get(0) != null && tuple.get(0).toString().contains(match)) {
+      return tuple.get(1) == null ? "" : tuple.get(1).toString();
+    } else if (tuple.get(1) != null && tuple.get(1).toString().contains(match)) {
+      return tuple.get(0) == null ? "" : tuple.get(0).toString();
     } else {
       throw new IllegalArgumentException("Error processing match: " + match);
     }
   }
 
-  private Stream<Tuple> listTwoColumnCollectionValues(SignatureListingOptions signatureListingOptions, String columnName1, String columnName2) {
+  private Stream<Tuple> listTwoColumnCollectionValues(
+    SignatureListingOptions signatureListingOptions, String columnName1, String columnName2
+  ) {
     final CriteriaBuilder cb = dh.cb();
     CriteriaQuery<Tuple> query = cb.createTupleQuery();
     final Root<Signature> root = query.from(dh.getEntityType());
@@ -328,13 +352,15 @@ public class DefaultSignatureDao implements SignatureDao {
 
     return this.em.createQuery(query).getResultList().stream();
   }
-  
+
   @Override
   public Stream<String> listDiseaseValues(SignatureListingOptions signatureListingOptions) {
     return listElementCollectionValues(signatureListingOptions, "disease");
   }
 
-  private Stream<String> listElementCollectionValues(SignatureListingOptions signatureListingOptions, String columnName) {
+  private Stream<String> listElementCollectionValues(
+    SignatureListingOptions signatureListingOptions, String columnName
+  ) {
     final CriteriaBuilder cb = dh.cb();
     CriteriaQuery<String> query = cb.createQuery(String.class);
     final Root<Signature> root = query.from(dh.getEntityType());
