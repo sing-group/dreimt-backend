@@ -122,6 +122,7 @@ public class DefaultCmapDrugGeneSetSignatureInteractionDao implements CmapDrugGe
             break;
           case TAU:
             orders.add(order.apply(root.get("tau")));
+            orders.add(cb.asc(root.get("fdr")));
             break;
 
           case NONE:

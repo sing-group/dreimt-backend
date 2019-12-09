@@ -684,6 +684,12 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
               break;
             case TAU:
               orders.add(order.apply(root.get("tau")));
+              Expression<Double> greatestPred =
+                cb.function(
+                  "least", Double.class,
+                  cb.coalesce(root.get("upFdr"), 1), cb.coalesce(root.get("downFdr"), 1)
+                );
+              orders.add(cb.asc(greatestPred));
               break;
             case UP_FDR:
               orders.add(order.apply(root.get("upFdr")));
@@ -691,6 +697,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
             case DOWN_FDR:
               orders.add(order.apply(root.get("downFdr")));
               break;
+
             case NONE:
               break;
             default:
