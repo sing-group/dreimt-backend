@@ -22,11 +22,13 @@
  */
 package org.sing_group.dreimt.domain.dao.signature;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static javax.transaction.Transactional.TxType.MANDATORY;
 import static org.sing_group.dreimt.domain.dao.ListingOptions.noModification;
+import static org.sing_group.dreimt.domain.dao.signature.DefaultSignatureDao.CELL_TYPE_AND_SUBTYPE_COMPARATOR;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -52,6 +54,7 @@ import javax.persistence.criteria.Order;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
 import javax.transaction.Transactional;
 
 import org.sing_group.dreimt.domain.dao.DaoHelper;
@@ -59,6 +62,7 @@ import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.dao.ListingOptions.SortField;
 import org.sing_group.dreimt.domain.dao.spi.signature.DrugSignatureInteractionDao;
 import org.sing_group.dreimt.domain.entities.signature.ArticleMetadata;
+import org.sing_group.dreimt.domain.entities.signature.CellTypeAndSubtype;
 import org.sing_group.dreimt.domain.entities.signature.Drug;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionField;
@@ -287,6 +291,135 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   }
 
   @Override
+  public Stream<CellTypeAndSubtype> listCellTypeAndSubtype1Values(
+    DrugSignatureInteractionListingOptions listingOptions
+  ) {
+    return listMultipleColumnCollectionValues(
+      listingOptions, "signatureCellTypeA", "signatureCellSubTypeA", "signatureCellTypeB", "signatureCellSubTypeB"
+    )
+      .map(tuple -> {
+        return asList(tupleToCellTypeAndSubtype(tuple, 0, 1), tupleToCellTypeAndSubtype(tuple, 2, 3));
+      })
+      .flatMap(List::stream)
+      .distinct()
+      .filter(value -> DefaultDrugSignatureInteractionDao.cellTypeAndSubTypeMatchesFilters(value, listingOptions.getSignatureListingOptions()))
+      .sorted(CELL_TYPE_AND_SUBTYPE_COMPARATOR);
+  }
+
+  private Stream<Tuple> listMultipleColumnCollectionValues(
+    DrugSignatureInteractionListingOptions listingOptions, String... columns
+  ) {
+    final CriteriaBuilder cb = dh.cb();
+    CriteriaQuery<Tuple> query = cb.createTupleQuery();
+    final Root<FullDrugSignatureInteraction> root = query.from(dh.getEntityType());
+
+    List<Selection<?>> joins = new LinkedList<>();
+
+    for (String column : columns) {
+      joins.add(root.get(column).as(String.class));
+    }
+
+    query = query.multiselect(joins).distinct(true);
+
+    if (listingOptions.hasAnyQueryModification()) {
+      query = query.where(createPredicates(listingOptions, root));
+    }
+
+    return this.em.createQuery(query).getResultList().stream();
+  }
+
+  private static boolean cellTypeAndSubTypeMatchesFilters(
+    CellTypeAndSubtype cellTypeAndSubType, SignatureListingOptions signatureListingOptions
+  ) {
+    if (signatureListingOptions.getCellType1().isPresent()) {
+      if (cellTypeAndSubType.getType() == null) {
+        return false;
+      } else {
+        if (
+          !cellTypeAndSubType.getType().toLowerCase()
+            .contains(signatureListingOptions.getCellType1().get().toLowerCase())
+        ) {
+          return false;
+        }
+      }
+    }
+
+    if (signatureListingOptions.getCellSubType1().isPresent()) {
+      if (cellTypeAndSubType.getSubType() == null) {
+        return false;
+      } else {
+        if (
+          !cellTypeAndSubType.getSubType().toLowerCase()
+            .contains(signatureListingOptions.getCellSubType1().get().toLowerCase())
+        ) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+  
+  private static CellTypeAndSubtype tupleToCellTypeAndSubtype(Tuple tuple, int typeIndex, int subTypeIndex) {
+    String type = null;
+    if (tuple.get(typeIndex) != null) {
+      type = tuple.get(typeIndex).toString();
+    }
+
+    String subType = null;
+    if (tuple.get(subTypeIndex) != null) {
+      subType = tuple.get(subTypeIndex).toString();
+    }
+
+    return new CellTypeAndSubtype(type, subType);
+  }
+
+  @Override
+  public Stream<CellTypeAndSubtype> listCellTypeAndSubtype2Values(DrugSignatureInteractionListingOptions listingOptions) {
+    SignatureListingOptions signatureListingOptions = listingOptions.getSignatureListingOptions();
+
+    if (!signatureListingOptions.getCellType1().isPresent()) {
+      throw new IllegalArgumentException("cellType1 must be defined in orter to list cellTypeAndSubType2 values");
+    }
+
+    return listMultipleColumnCollectionValues(
+      listingOptions, "signatureCellTypeA", "signatureCellSubTypeA", "signatureCellTypeB", "signatureCellSubTypeB"
+    )
+      .map(tuple -> getTuplePair(signatureListingOptions, tupleToCellTypeAndSubtype(tuple, 0, 1), tupleToCellTypeAndSubtype(tuple, 2, 3)))
+      .flatMap(List::stream)
+      .filter(DefaultDrugSignatureInteractionDao::notEmpty)
+      .distinct()
+      .sorted(CELL_TYPE_AND_SUBTYPE_COMPARATOR);
+  }
+
+  private static List<CellTypeAndSubtype> getTuplePair(
+    SignatureListingOptions signatureListingOptions, CellTypeAndSubtype a, CellTypeAndSubtype b
+  ) {
+    List<CellTypeAndSubtype> toret = new LinkedList<>();
+    if (DefaultDrugSignatureInteractionDao.cellTypeAndSubTypeMatchesFilters(a, signatureListingOptions)) {
+      toret.add(b);
+    }
+
+    if (DefaultDrugSignatureInteractionDao.cellTypeAndSubTypeMatchesFilters(b, signatureListingOptions)) {
+      toret.add(a);
+    }
+
+    if (!toret.isEmpty()) {
+      return toret;
+    }
+
+    throw new IllegalArgumentException(
+      "Error processing match against cellType1 = " +
+        signatureListingOptions.getCellType1().orElse("<undefined>") + " and cellSubType1 = " +
+        signatureListingOptions.getCellSubType1().orElse("<undefined>")
+    );
+  }
+
+  private static boolean notEmpty(CellTypeAndSubtype cellTypeAndSubType) {
+    return cellTypeAndSubType.getType() != null;
+  }
+
+  @Override
   public Stream<String> listCellType1Values(DrugSignatureInteractionListingOptions listingOptions) {
     return reconstructTupleSets(
       this.listStringTuples(listingOptions, "signatureCellTypeA", "signatureCellTypeB")
@@ -381,7 +514,8 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     if (field == null) {
       return false;
     } else {
-      return reconstructSet(field.toString()).stream().anyMatch(value -> value.contains(match));
+      return reconstructSet(field.toString()).stream()
+        .anyMatch(value -> value.toLowerCase().contains(match.toLowerCase()));
     }
   }
 

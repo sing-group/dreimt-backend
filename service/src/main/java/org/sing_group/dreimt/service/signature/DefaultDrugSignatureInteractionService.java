@@ -31,6 +31,7 @@ import javax.inject.Inject;
 import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.dao.signature.DrugSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.dao.spi.signature.DrugSignatureInteractionDao;
+import org.sing_group.dreimt.domain.entities.signature.CellTypeAndSubtype;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
@@ -66,6 +67,16 @@ public class DefaultDrugSignatureInteractionService implements DrugSignatureInte
   @Override
   public Stream<String> listSignatureNameValues(DrugSignatureInteractionListingOptions listingOptions) {
     return this.dao.listSignatureNameValues(listingOptions);
+  }
+
+  @Override
+  public Stream<CellTypeAndSubtype> listCellTypeAndSubtype1Values(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.dao.listCellTypeAndSubtype1Values(listingOptions);
+  }
+
+  @Override
+  public Stream<CellTypeAndSubtype> listCellTypeAndSubtype2Values(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.dao.listCellTypeAndSubtype2Values(listingOptions);
   }
 
   @Override

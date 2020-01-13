@@ -31,6 +31,7 @@ import javax.inject.Inject;
 
 import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
 import org.sing_group.dreimt.domain.dao.spi.signature.SignatureDao;
+import org.sing_group.dreimt.domain.entities.signature.CellTypeAndSubtype;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.Signature;
 import org.sing_group.dreimt.domain.entities.signature.SignatureType;
@@ -56,6 +57,16 @@ public class DefaultSignatureService implements SignatureService {
   @Override
   public Stream<String> listSignatureNameValues(SignatureListingOptions signatureListingOptions) {
     return this.dao.listSignatureNameValues(signatureListingOptions);
+  }
+
+  @Override
+  public Stream<CellTypeAndSubtype> listCellTypeAndSubtype1Values(SignatureListingOptions signatureListingOptions) {
+    return this.dao.listCellTypeAndSubtype1Values(signatureListingOptions);
+  }
+
+  @Override
+  public Stream<CellTypeAndSubtype> listCellTypeAndSubtype2Values(SignatureListingOptions signatureListingOptions) {
+    return this.dao.listCellTypeAndSubtype2Values(signatureListingOptions);
   }
 
   @Override
@@ -107,4 +118,5 @@ public class DefaultSignatureService implements SignatureService {
   public Stream<Integer> listSignaturePubMedIdValues(SignatureListingOptions signatureListingOptions) {
     return this.dao.listSignaturePubMedIdValues(signatureListingOptions);
   }
+
 }

@@ -46,6 +46,18 @@ public interface SignatureResource {
     SignatureType signatureType, Integer signaturePubMedId
   );
 
+  Response listCellTypeAndSubtype1Values(
+    String signatureName, String cellType1, String cellSubType1,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, Integer signaturePubMedId
+  );
+
+  Response listCellTypeAndSubtype2Values(
+    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    SignatureType signatureType, Integer signaturePubMedId
+  );
+
   Response listCellType1Values(
     String signatureName, String cellType1, String cellSubType1, String cellSubType2,
     ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,

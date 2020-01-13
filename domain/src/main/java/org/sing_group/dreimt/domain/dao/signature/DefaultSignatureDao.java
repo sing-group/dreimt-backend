@@ -22,6 +22,7 @@
  */
 package org.sing_group.dreimt.domain.dao.signature;
 
+import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
@@ -29,6 +30,7 @@ import static java.util.stream.Stream.concat;
 import static javax.transaction.Transactional.TxType.MANDATORY;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -50,12 +52,14 @@ import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
 import javax.transaction.Transactional;
 
 import org.sing_group.dreimt.domain.dao.DaoHelper;
 import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.dao.spi.signature.SignatureDao;
 import org.sing_group.dreimt.domain.entities.signature.ArticleMetadata;
+import org.sing_group.dreimt.domain.entities.signature.CellTypeAndSubtype;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.Gene;
 import org.sing_group.dreimt.domain.entities.signature.GeneSetSignature;
@@ -67,6 +71,44 @@ import org.sing_group.dreimt.domain.entities.signature.UpDownSignatureGene;
 @Default
 @Transactional(MANDATORY)
 public class DefaultSignatureDao implements SignatureDao {
+
+  public static final Comparator<? super CellTypeAndSubtype> CELL_TYPE_AND_SUBTYPE_COMPARATOR =
+    new Comparator<CellTypeAndSubtype>() {
+
+      @Override
+      public int compare(CellTypeAndSubtype o1, CellTypeAndSubtype o2) {
+        if (o2.getType() == null) {
+          if (o1.getType() == null) {
+            return 0;
+          } else {
+            return 1;
+          }
+        } else {
+          if (o1.getType() == null) {
+            return -1;
+          } else {
+            int compare = o1.getType().compareTo(o2.getType());
+            if (compare == 0) {
+              if (o2.getSubType() == null) {
+                if (o1.getSubType() == null) {
+                  return 0;
+                } else {
+                  return 1;
+                }
+              } else {
+                if (o1.getSubType() == null) {
+                  return -1;
+                } else {
+                  return o1.getSubType().compareTo(o2.getSubType());
+                }
+              }
+            } else {
+              return compare;
+            }
+          }
+        }
+      }
+    };
 
   @PersistenceContext
   private EntityManager em;
@@ -271,9 +313,130 @@ public class DefaultSignatureDao implements SignatureDao {
   }
 
   @Override
+  public Stream<CellTypeAndSubtype> listCellTypeAndSubtype1Values(SignatureListingOptions signatureListingOptions) {
+    return listMultipleColumnCollectionValues(
+      signatureListingOptions, "cellTypeA", "cellSubTypeA", "cellTypeB", "cellSubTypeB"
+    )
+      .map(tuple -> {
+        return asList(tupleToCellTypeAndSubtype(tuple, 0, 1), tupleToCellTypeAndSubtype(tuple, 2, 3));
+      })
+      .flatMap(List::stream)
+      .distinct()
+      .filter(value -> DefaultSignatureDao.cellTypeAndSubTypeMatchesFilters(value, signatureListingOptions))
+      .sorted(CELL_TYPE_AND_SUBTYPE_COMPARATOR);
+  }
+
+  private static boolean cellTypeAndSubTypeMatchesFilters(
+    CellTypeAndSubtype cellTypeAndSubType, SignatureListingOptions signatureListingOptions
+  ) {
+    if (signatureListingOptions.getCellType1().isPresent()) {
+      if (cellTypeAndSubType.getType() == null) {
+        return false;
+      } else {
+        if (
+          !cellTypeAndSubType.getType().toLowerCase()
+            .contains(signatureListingOptions.getCellType1().get().toLowerCase())
+        ) {
+          return false;
+        }
+      }
+    }
+
+    if (signatureListingOptions.getCellSubType1().isPresent()) {
+      if (cellTypeAndSubType.getSubType() == null) {
+        return false;
+      } else {
+        if (
+          !cellTypeAndSubType.getSubType().toLowerCase()
+            .contains(signatureListingOptions.getCellSubType1().get().toLowerCase())
+        ) {
+          return false;
+        }
+      }
+    }
+
+    return true;
+  }
+
+  private static CellTypeAndSubtype tupleToCellTypeAndSubtype(Tuple tuple, int typeIndex, int subTypeIndex) {
+    String type = null;
+    if (tuple.get(typeIndex) != null) {
+      type = tuple.get(typeIndex).toString();
+    }
+
+    String subType = null;
+    if (tuple.get(subTypeIndex) != null) {
+      subType = tuple.get(subTypeIndex).toString();
+    }
+
+    return new CellTypeAndSubtype(type, subType);
+  }
+
+  private Stream<Tuple> listMultipleColumnCollectionValues(
+    SignatureListingOptions signatureListingOptions, String... columns
+  ) {
+    final CriteriaBuilder cb = dh.cb();
+    CriteriaQuery<Tuple> query = cb.createTupleQuery();
+    final Root<Signature> root = query.from(dh.getEntityType());
+
+    List<Selection<?>> joins = new LinkedList<>();
+
+    for (String column : columns) {
+      joins.add(root.join(column).as(String.class));
+    }
+
+    query = query.multiselect(joins).distinct(true);
+
+    if (signatureListingOptions.hasAnyQueryModification()) {
+      query = query.where(createPredicates(signatureListingOptions, null, root));
+    }
+
+    return this.em.createQuery(query).getResultList().stream();
+  }
+
+  @Override
+  public Stream<CellTypeAndSubtype> listCellTypeAndSubtype2Values(SignatureListingOptions signatureListingOptions) {
+    if (!signatureListingOptions.getCellType1().isPresent()) {
+      throw new IllegalArgumentException("cellType1 must be defined in orter to list cellTypeAndSubType2 values");
+    }
+
+    return listMultipleColumnCollectionValues(
+      signatureListingOptions, "cellTypeA", "cellSubTypeA", "cellTypeB", "cellSubTypeB"
+    )
+      .map(tuple -> getTuplePair(signatureListingOptions, tupleToCellTypeAndSubtype(tuple, 0, 1), tupleToCellTypeAndSubtype(tuple, 2, 3)))
+      .flatMap(List::stream)
+      .filter(DefaultSignatureDao::notEmpty)
+      .distinct()
+      .sorted(CELL_TYPE_AND_SUBTYPE_COMPARATOR);
+  }
+
+  private static List<CellTypeAndSubtype> getTuplePair(
+    SignatureListingOptions signatureListingOptions, CellTypeAndSubtype a, CellTypeAndSubtype b
+  ) {
+    List<CellTypeAndSubtype> toret = new LinkedList<>();
+    if (DefaultSignatureDao.cellTypeAndSubTypeMatchesFilters(a, signatureListingOptions)) {
+      toret.add(b);
+    }
+
+    if (DefaultSignatureDao.cellTypeAndSubTypeMatchesFilters(b, signatureListingOptions)) {
+      toret.add(a);
+    }
+
+    if (!toret.isEmpty()) {
+      return toret;
+    }
+
+    throw new IllegalArgumentException(
+      "Error processing match against cellType1 = " +
+        signatureListingOptions.getCellType1().orElse("<undefined>") + " and cellSubType1 = " +
+        signatureListingOptions.getCellSubType1().orElse("<undefined>")
+    );
+  }
+
+  @Override
   public Stream<String> listCellType1Values(SignatureListingOptions signatureListingOptions) {
     return listTwoColumnCollectionValues(signatureListingOptions, "cellTypeA", "cellTypeB")
-      .map(DefaultSignatureDao::tupleToList)
+      .map(tuple -> DefaultSignatureDao.tupleToList(tuple, signatureListingOptions.getCellType1()))
       .flatMap(List::stream)
       .distinct();
   }
@@ -281,17 +444,17 @@ public class DefaultSignatureDao implements SignatureDao {
   @Override
   public Stream<String> listCellSubType1Values(SignatureListingOptions signatureListingOptions) {
     return listTwoColumnCollectionValues(signatureListingOptions, "cellSubTypeA", "cellSubTypeB")
-      .map(DefaultSignatureDao::tupleToList)
+      .map(tuple -> DefaultSignatureDao.tupleToList(tuple, signatureListingOptions.getCellSubType1()))
       .flatMap(List::stream)
       .distinct();
   }
 
-  private static List<String> tupleToList(Tuple tuple) {
+  private static List<String> tupleToList(Tuple tuple, Optional<String> filter) {
     List<String> toret = new LinkedList<String>();
-    if (tuple.get(0) != null) {
+    if (tuple.get(0) != null && tuple.get(0).toString().contains(filter.orElse(""))) {
       toret.add(tuple.get(0).toString());
     }
-    if (tuple.get(1) != null) {
+    if (tuple.get(1) != null && tuple.get(1).toString().contains(filter.orElse(""))) {
       toret.add(tuple.get(1).toString());
     }
     return toret;
@@ -325,10 +488,14 @@ public class DefaultSignatureDao implements SignatureDao {
     return !string.isEmpty();
   }
 
+  private static boolean notEmpty(CellTypeAndSubtype cellTypeAndSubType) {
+    return cellTypeAndSubType.getType() != null;
+  }
+
   private static String getTuplePairs(Tuple tuple, String match) {
-    if (tuple.get(0) != null && tuple.get(0).toString().contains(match)) {
+    if (tuple.get(0) != null && tuple.get(0).toString().toUpperCase().contains(match.toUpperCase())) {
       return tuple.get(1) == null ? "" : tuple.get(1).toString();
-    } else if (tuple.get(1) != null && tuple.get(1).toString().contains(match)) {
+    } else if (tuple.get(1) != null && tuple.get(1).toString().toUpperCase().contains(match.toUpperCase())) {
       return tuple.get(0) == null ? "" : tuple.get(0).toString();
     } else {
       throw new IllegalArgumentException("Error processing match: " + match);

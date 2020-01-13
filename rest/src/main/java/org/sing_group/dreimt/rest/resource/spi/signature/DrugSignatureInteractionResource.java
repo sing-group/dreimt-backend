@@ -55,6 +55,20 @@ public interface DrugSignatureInteractionResource {
     DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr
   );
 
+  Response listCellTypeAndSubtype1Values(
+    String signatureName, String cellType1, String cellSubType1, 
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr
+  );
+
+  Response listCellTypeAndSubtype1Values(
+    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr
+  );
+
   Response listCellType1Values(
     String signatureName, String cellType1, String cellSubType1, String cellSubType2,
     ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,

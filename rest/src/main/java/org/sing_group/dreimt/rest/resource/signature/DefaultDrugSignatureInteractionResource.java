@@ -55,6 +55,7 @@ import org.sing_group.dreimt.domain.dao.SortDirection;
 import org.sing_group.dreimt.domain.dao.signature.DrugSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
 import org.sing_group.dreimt.domain.entities.execution.WorkEntity;
+import org.sing_group.dreimt.domain.entities.signature.CellTypeAndSubtype;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionField;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
@@ -260,6 +261,100 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final String[] data =
       service.listSignatureNameValues(listingOptions)
         .toArray(String[]::new);
+
+    return Response.ok(data).build();
+  }
+
+  @Path("params/cell-type-and-subtype-1/values")
+  @GET
+  @ApiOperation(
+    value = "Lists the possible cell type and subtype 1 values in drug-signature interactions",
+    response = String.class,
+    responseContainer = "list",
+    code = 200
+  )
+  @Override
+  public Response listCellTypeAndSubtype1Values(
+    @QueryParam("signatureName") String signatureName,
+    @QueryParam("cellType1") String cellType1,
+    @QueryParam("cellSubType1") String cellSubType1,
+    @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
+    @QueryParam("organism") String organism,
+    @QueryParam("disease") String disease,
+    @QueryParam("signatureSourceDb") String signatureSourceDb,
+    @QueryParam("signaturePubMedId") Integer signaturePubMedId,
+    @QueryParam("drugSourceName") String drugSourceName,
+    @QueryParam("drugSourceDb") String drugSourceDb,
+    @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau,
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr
+  ) {
+    final SignatureListingOptions signatureListingOptions =
+      new SignatureListingOptions(
+        signatureName, cellType1, cellSubType1, null, null, experimentalDesign, organism, disease,
+        signatureSourceDb, signaturePubMedId
+      );
+
+    final DrugSignatureInteractionListingOptions listingOptions =
+      new DrugSignatureInteractionListingOptions(
+        signatureListingOptions, interactionType,
+        drugSourceName, drugSourceDb, drugCommonName,
+        minTau, maxUpFdr, maxDownFdr
+      );
+
+    final CellTypeAndSubtype[] data =
+      service.listCellTypeAndSubtype1Values(listingOptions)
+        .toArray(CellTypeAndSubtype[]::new);
+
+    return Response.ok(data).build();
+  }
+
+  @Path("params/cell-type-and-subtype-2/values")
+  @GET
+  @ApiOperation(
+    value = "Lists the possible cell type and subtype 2 values in drug-signature interactions",
+    response = String.class,
+    responseContainer = "list",
+    code = 200
+  )
+  @Override
+  public Response listCellTypeAndSubtype1Values(
+    @QueryParam("signatureName") String signatureName,
+    @QueryParam("cellType1") String cellType1,
+    @QueryParam("cellSubType1") String cellSubType1,
+    @QueryParam("cellType2") String cellType2,
+    @QueryParam("cellSubType2") String cellSubType2,
+    @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
+    @QueryParam("organism") String organism,
+    @QueryParam("disease") String disease,
+    @QueryParam("signatureSourceDb") String signatureSourceDb,
+    @QueryParam("signaturePubMedId") Integer signaturePubMedId,
+    @QueryParam("drugSourceName") String drugSourceName,
+    @QueryParam("drugSourceDb") String drugSourceDb,
+    @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau,
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr
+  ) {
+    final SignatureListingOptions signatureListingOptions =
+      new SignatureListingOptions(
+        signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
+        signatureSourceDb, signaturePubMedId
+      );
+
+    final DrugSignatureInteractionListingOptions listingOptions =
+      new DrugSignatureInteractionListingOptions(
+        signatureListingOptions, interactionType,
+        drugSourceName, drugSourceDb, drugCommonName,
+        minTau, maxUpFdr, maxDownFdr
+      );
+
+    final CellTypeAndSubtype[] data =
+      service.listCellTypeAndSubtype2Values(listingOptions)
+        .toArray(CellTypeAndSubtype[]::new);
 
     return Response.ok(data).build();
   }

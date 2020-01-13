@@ -26,6 +26,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
+import org.sing_group.dreimt.domain.entities.signature.CellTypeAndSubtype;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.Signature;
 import org.sing_group.dreimt.domain.entities.signature.SignatureType;
@@ -37,12 +38,16 @@ public interface SignatureDao {
 
   Stream<String> listSignatureNameValues(SignatureListingOptions signatureListingOptions);
 
-  Stream<String> listCellType1Values(SignatureListingOptions signatureListingOptions);
+  Stream<CellTypeAndSubtype> listCellTypeAndSubtype1Values(SignatureListingOptions signatureListingOptions);
   
+  Stream<CellTypeAndSubtype> listCellTypeAndSubtype2Values(SignatureListingOptions signatureListingOptions);
+
+  Stream<String> listCellType1Values(SignatureListingOptions signatureListingOptions);
+
   Stream<String> listCellSubType1Values(SignatureListingOptions signatureListingOptions);
 
   Stream<String> listCellType2Values(SignatureListingOptions signatureListingOptions);
-  
+
   Stream<String> listCellSubType2Values(SignatureListingOptions signatureListingOptions);
 
   Stream<ExperimentalDesign> listExperimentalDesignValues(SignatureListingOptions signatureListingOptions);

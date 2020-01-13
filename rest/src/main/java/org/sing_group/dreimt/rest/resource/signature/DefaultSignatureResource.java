@@ -41,6 +41,7 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.UriInfo;
 
 import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
+import org.sing_group.dreimt.domain.entities.signature.CellTypeAndSubtype;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.Signature;
 import org.sing_group.dreimt.domain.entities.signature.SignatureType;
@@ -194,6 +195,74 @@ public class DefaultSignatureResource implements SignatureResource {
     final String[] data =
       service.listSignatureNameValues(signatureListingOptions)
         .toArray(String[]::new);
+
+    return Response.ok(data).build();
+  }
+
+  @Path("params/cell-type-and-subtype-1/values")
+  @GET
+  @ApiOperation(
+    value = "Lists the possible cell type and subtype 1 values in signatures",
+    response = CellTypeAndSubtype.class,
+    responseContainer = "list",
+    code = 200
+  )
+  @Override
+  public Response listCellTypeAndSubtype1Values(
+    @QueryParam("signatureName") String signatureName,
+    @QueryParam("cellType1") String cellType1,
+    @QueryParam("cellSubType1") String cellSubType1,
+    @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
+    @QueryParam("organism") String organism,
+    @QueryParam("disease") String disease,
+    @QueryParam("signatureSourceDb") String signatureSourceDb,
+    @QueryParam("signatureType") SignatureType signatureType,
+    @QueryParam("signaturePubMedId") Integer signaturePubMedId
+    ) {
+    final SignatureListingOptions signatureListingOptions =
+      new SignatureListingOptions(
+        signatureName, cellType1, cellSubType1, null, null, experimentalDesign, organism, disease,
+        signatureSourceDb, signatureType, signaturePubMedId
+      );
+
+    final CellTypeAndSubtype[] data =
+      service.listCellTypeAndSubtype1Values(signatureListingOptions)
+        .toArray(CellTypeAndSubtype[]::new);
+
+    return Response.ok(data).build();
+  }
+
+  @Path("params/cell-type-and-subtype-2/values")
+  @GET
+  @ApiOperation(
+    value = "Lists the possible cell type and subtype 2 values in signatures",
+    response = CellTypeAndSubtype.class,
+    responseContainer = "list",
+    code = 200
+  )
+  @Override
+  public Response listCellTypeAndSubtype2Values(
+    @QueryParam("signatureName") String signatureName,
+    @QueryParam("cellType1") String cellType1,
+    @QueryParam("cellSubType1") String cellSubType1,
+    @QueryParam("cellType2") String cellType2,
+    @QueryParam("cellSubType2") String cellSubType2,
+    @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
+    @QueryParam("organism") String organism,
+    @QueryParam("disease") String disease,
+    @QueryParam("signatureSourceDb") String signatureSourceDb,
+    @QueryParam("signatureType") SignatureType signatureType,
+    @QueryParam("signaturePubMedId") Integer signaturePubMedId
+  ) {
+    final SignatureListingOptions signatureListingOptions =
+      new SignatureListingOptions(
+        signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
+        signatureSourceDb, signatureType, signaturePubMedId
+      );
+
+    final CellTypeAndSubtype[] data =
+      service.listCellTypeAndSubtype2Values(signatureListingOptions)
+        .toArray(CellTypeAndSubtype[]::new);
 
     return Response.ok(data).build();
   }

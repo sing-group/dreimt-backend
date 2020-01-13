@@ -28,6 +28,7 @@ import java.util.stream.Stream;
 import javax.ejb.Local;
 
 import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
+import org.sing_group.dreimt.domain.entities.signature.CellTypeAndSubtype;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.Signature;
 import org.sing_group.dreimt.domain.entities.signature.SignatureType;
@@ -39,6 +40,10 @@ public interface SignatureService {
   Stream<Signature> list(SignatureListingOptions listingOptions);
 
   Stream<String> listSignatureNameValues(SignatureListingOptions listingOptions);
+
+  Stream<CellTypeAndSubtype> listCellTypeAndSubtype1Values(SignatureListingOptions signatureListingOptions);
+
+  Stream<CellTypeAndSubtype> listCellTypeAndSubtype2Values(SignatureListingOptions signatureListingOptions);
 
   Stream<String> listCellType1Values(SignatureListingOptions signatureListingOptions);
 
