@@ -24,20 +24,26 @@ package org.sing_group.dreimt.rest.entity.signature;
 
 import java.io.Serializable;
 
+import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
+
 public class DrugData implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private String commonName;
   private String sourceName;
   private String sourceDb;
+  private DrugStatus status;
+  private String moa;
 
   DrugData() {}
 
-  public DrugData(String commonName, String sourceName, String sourceDb) {
+  public DrugData(String commonName, String sourceName, String sourceDb, DrugStatus status, String moa) {
     super();
     this.commonName = commonName;
     this.sourceName = sourceName;
     this.sourceDb = sourceDb;
+    this.status = status;
+    this.moa = moa;
   }
 
   public String getCommonName() {
@@ -50,5 +56,13 @@ public class DrugData implements Serializable {
 
   public String getSourceDb() {
     return sourceDb;
+  }
+
+  public DrugStatus getStatus() {
+    return status;
+  }
+
+  public String getMoa() {
+    return moa;
   }
 }

@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.27, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.28, for Linux (x86_64)
 --
 -- Host: localhost    Database: dreimt
 -- ------------------------------------------------------
--- Server version	5.7.27-0ubuntu0.18.04.1
+-- Server version	5.7.28-0ubuntu0.18.04.4
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -192,8 +192,10 @@ DROP TABLE IF EXISTS `drug`;
 CREATE TABLE `drug` (
   `id` int(11) NOT NULL,
   `commonName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `moa` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `sourceDb` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `sourceName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -251,6 +253,8 @@ CREATE TABLE `full_drug_signature_interaction` (
   `tau` double NOT NULL,
   `upFdr` double DEFAULT NULL,
   `signatureArticlePubmedId` int(11) DEFAULT NULL,
+  `drugMoa` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `drugStatus` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX4hkkniqx8jx0t74qcpqco6dit` (`tau`),
   KEY `IDXl2qoayrbw9v7uacqregtqpc3q` (`upFdr`),
@@ -265,6 +269,7 @@ CREATE TABLE `full_drug_signature_interaction` (
   KEY `IDXk9opwyikpvq3rae10815y3xau` (`signatureCellTypeA`),
   KEY `IDXghdkqt1s647y0d2prw8uwct37` (`signatureCellTypeB`),
   KEY `FKboll38t85j69hdb7uf9c5gvh4` (`signatureArticlePubmedId`),
+  KEY `IDX1508ma2bjjx77uahdqt6tqnp0` (`drugMoa`),
   CONSTRAINT `FKboll38t85j69hdb7uf9c5gvh4` FOREIGN KEY (`signatureArticlePubmedId`) REFERENCES `article_metadata` (`pubmedId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -702,4 +707,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-10-29 16:11:00
+-- Dump completed on 2020-01-14  9:47:52

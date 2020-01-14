@@ -98,7 +98,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   private Stream<DrugSignatureInteraction> reconstruct(Stream<FullDrugSignatureInteraction> stream) {
     return stream
       .map((fdsi) -> {
-        Drug drug = new Drug(fdsi.getDrugCommonName(), fdsi.getDrugSourceName(), fdsi.getDrugSourceDb());
+        Drug drug = new Drug(fdsi.getDrugCommonName(), fdsi.getDrugSourceName(), fdsi.getDrugSourceDb(), fdsi.getDrugStatus(), fdsi.getDrugMoa());
 
         Signature signature =
           buildSignature(

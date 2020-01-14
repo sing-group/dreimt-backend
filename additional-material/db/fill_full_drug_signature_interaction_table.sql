@@ -1,6 +1,6 @@
-INSERT INTO full_drug_signature_interaction (drugCommonName, drugSourceDb, drugSourceName, upFdr, downFdr, tau, interactionType, signatureType, signatureName, signatureExperimentalDesign, signatureOrganism, signatureSourceDb, signatureArticlePubmedId, signatureDisease, signatureCellTypeA, signatureCellSubTypeA, signatureCellTypeB, signatureCellSubTypeB)
+INSERT INTO full_drug_signature_interaction (drugCommonName, drugSourceDb, drugSourceName, drugStatus, drugMoa, upFdr, downFdr, tau, interactionType, signatureType, signatureName, signatureExperimentalDesign, signatureOrganism, signatureSourceDb, signatureArticlePubmedId, signatureDisease, signatureCellTypeA, signatureCellSubTypeA, signatureCellTypeB, signatureCellSubTypeB)
 SELECT
-  drug.commonName as drugCommonName, drug.sourceDb as drugSourceDb, drug.sourceName as drugSourceName,
+  drug.commonName as drugCommonName, drug.sourceDb as drugSourceDb, drug.sourceName as drugSourceName, drug.status as drugStatus, drug.moa as drugMoa,
   interactions.upFdr, interactions.downFdr, interactions.tau, interactions.interactionType, interactions.signatureType,
   interactions.signatureName, interactions.experimentalDesign as signatureExperimentalDesign, interactions.organism as signatureOrganism, interactions.sourceDb as signatureSourceDb, interactions.article_pubmedId as signatureArticlePubmedId, interactions.disease as signatureDisease, interactions.cellTypeA as signatureCellTypeA, interactions.cellSubTypeA as signatureCellSubTypeA, interactions.cellTypeB as signatureCellTypeB, interactions.cellSubTypeB as signatureCellSubTypeB
 FROM drug RIGHT JOIN (

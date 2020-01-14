@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DREIMT - REST
+ * DREIMT - Domain
  * %%
  * Copyright (C) 2018 Daniel Glez-Peña, Miguel Reboiro-Jato, Hugo López-Fernández,
  * 			Kevin Troulé, Gonzálo Gómez-López, Fátima Al-Shahrour
@@ -20,21 +20,8 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.rest.mapper.signature;
+package org.sing_group.dreimt.domain.entities.signature;
 
-import javax.enterprise.inject.Default;
-
-import org.sing_group.dreimt.domain.entities.signature.Drug;
-import org.sing_group.dreimt.rest.entity.signature.DrugData;
-import org.sing_group.dreimt.rest.mapper.spi.signature.DrugMapper;
-
-@Default
-public class DefaultDrugMapper implements DrugMapper {
-
-  @Override
-  public DrugData toDrugData(Drug drug) {
-    return new DrugData(
-      drug.getCommonName(), drug.getSourceName(), drug.getSourceDb(), drug.getStatus(), drug.getMoa()
-    );
-  }
+public enum DrugStatus {
+  APPROVED, EXPERIMENTAL, WITHDRAWN;
 }

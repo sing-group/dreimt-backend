@@ -25,6 +25,8 @@ package org.sing_group.dreimt.domain.entities.signature;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -40,12 +42,18 @@ public class Drug implements Serializable {
   private String sourceName;
   private String sourceDb;
 
+  @Enumerated(EnumType.STRING)
+  private DrugStatus status;
+  private String moa;
+
   Drug() {}
 
-  public Drug(String commonName, String sourceName, String sourceDb) {
+  public Drug(String commonName, String sourceName, String sourceDb, DrugStatus status, String moa) {
     this.commonName = commonName;
     this.sourceName = sourceName;
     this.sourceDb = sourceDb;
+    this.status = status;
+    this.moa = moa;
   }
 
   public String getCommonName() {
@@ -58,6 +66,14 @@ public class Drug implements Serializable {
 
   public String getSourceDb() {
     return sourceDb;
+  }
+
+  public DrugStatus getStatus() {
+    return status;
+  }
+
+  public String getMoa() {
+    return moa;
   }
 
   @Override
