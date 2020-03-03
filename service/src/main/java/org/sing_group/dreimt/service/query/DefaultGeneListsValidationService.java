@@ -88,7 +88,7 @@ public class DefaultGeneListsValidationService implements GeneListsValidationSer
 
   private Set<String> processGenes(Set<String> genes, boolean onlyUniverseGenes) {
     if (onlyUniverseGenes) {
-      return geneDao.getGenes(genes, false).stream().map(Gene::getGene).collect(toSet());
+      return geneDao.getGenes(genes, false).stream().filter(g -> g.isUniverseGene()).map(Gene::getGene).collect(toSet());
     } else {
       return genes;
     }

@@ -118,7 +118,6 @@ public class TransactionalPipelineExecutor implements PipelineExecutor {
       
       pac.increaseProgress(stepProgressSize);
       
-
       pac.setContext(newContext);
       
       eventManager.fireRunningStepEvent(step, pac.getContext(), step.getStepId(), StepExecutionStatus.FINISHED, pac.getProgress(), "Completed " + name);
