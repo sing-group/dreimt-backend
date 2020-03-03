@@ -42,7 +42,7 @@ public class CmapScriptResultsParser {
     
   private static CmapResultData mapGeneSetResultsLine(String line) {
     String[] fields = line.split("\t");
-    if (fields.length == 13) {
+    if (fields.length == 15) {
       int drugId = Integer.valueOf(fields[0].replaceAll("\"", "").replaceAll("sig_", ""));
       double upFdr = Double.valueOf(fields[2]);
       double tau = Double.valueOf(fields[5]);
@@ -55,7 +55,7 @@ public class CmapScriptResultsParser {
       );
     } else {
       throw new RuntimeException(
-        "Error, the following line does not have the expected number of fields (13): " + line
+        "Error reading the Cmap results file: one line does not have the expected number of fields (15)"
       );
     }
   }
@@ -68,7 +68,7 @@ public class CmapScriptResultsParser {
 
   private static CmapResultData mapSignatureResultsLine(String line) {
     String[] fields = line.split("\t");
-    if (fields.length == 16) {
+    if (fields.length == 18) {
       int drugId = Integer.valueOf(fields[0].replaceAll("\"", "").replaceAll("sig_", ""));
       double upFdr = Double.valueOf(fields[2]);
       double downFdr = Double.valueOf(fields[5]);
@@ -82,8 +82,7 @@ public class CmapScriptResultsParser {
       );
     } else {
       throw new RuntimeException(
-        "Error, the following line does not have the expected number of "
-          + "fields (16): " + line
+        "Error reading the Cmap results file: one line does not have the expected number of fields (18)"
       );
     }
   }
