@@ -1104,7 +1104,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   @Path("query/cmap")
   @Consumes(MediaType.APPLICATION_JSON)
   @ApiOperation(
-    value = "Calculates the Jaccard indexes between the introduced gene lists and all signatures in the database. "
+    value = "Makes the Cmap drug predictions for the gene lists introduced. "
       + "The calculus are done asynchronously, thus this method returns a work-data instance with information about "
       + "the asynchronous task doing the calculations.",
     response = WorkData.class,
