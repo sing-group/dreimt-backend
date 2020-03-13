@@ -43,7 +43,7 @@ public class DefaultDatabaseVersionDao implements DatabaseVersionDao {
   @PersistenceContext
   private EntityManager em;
 
-  private DaoHelper<Integer, DatabaseVersion> dh;
+  private DaoHelper<String, DatabaseVersion> dh;
 
   DefaultDatabaseVersionDao() {}
 
@@ -54,7 +54,7 @@ public class DefaultDatabaseVersionDao implements DatabaseVersionDao {
 
   @PostConstruct
   private void createDAOHelper() {
-    this.dh = DaoHelper.of(Integer.class, DatabaseVersion.class, this.em);
+    this.dh = DaoHelper.of(String.class, DatabaseVersion.class, this.em);
   }
 
   @Override
