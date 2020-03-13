@@ -20,7 +20,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.domain.dao.signature;
+package org.sing_group.dreimt.domain.dao.database;
 
 import static javax.transaction.Transactional.TxType.MANDATORY;
 
@@ -33,8 +33,8 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.sing_group.dreimt.domain.dao.DaoHelper;
-import org.sing_group.dreimt.domain.dao.spi.signature.DatabaseVersionDao;
-import org.sing_group.dreimt.domain.entities.signature.DatabaseVersion;
+import org.sing_group.dreimt.domain.dao.spi.database.DatabaseVersionDao;
+import org.sing_group.dreimt.domain.entities.database.DatabaseVersion;
 
 @Default
 @Transactional(MANDATORY)

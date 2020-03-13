@@ -20,7 +20,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.domain.entities.signature;
+package org.sing_group.dreimt.domain.entities.database;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

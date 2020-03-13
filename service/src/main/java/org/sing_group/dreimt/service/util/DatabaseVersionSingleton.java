@@ -30,8 +30,8 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
 
-import org.sing_group.dreimt.domain.entities.signature.DatabaseVersion;
-import org.sing_group.dreimt.service.spi.signature.DatabaseVersionService;
+import org.sing_group.dreimt.domain.entities.database.DatabaseVersion;
+import org.sing_group.dreimt.service.spi.database.DatabaseVersionService;
 
 @Singleton
 @Startup

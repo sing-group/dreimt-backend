@@ -1,8 +1,8 @@
 /*-
  * #%L
- * DREIMT - Domain
+ * DREIMT - REST
  * %%
- * Copyright (C) 2018 Daniel Glez-Peña, Miguel Reboiro-Jato, Hugo López-Fernández,
+ * Copyright (C) 2018 - 2019 Daniel Glez-Peña, Miguel Reboiro-Jato, Hugo López-Fernández,
  * 			Kevin Troulé, Gonzálo Gómez-López, Fátima Al-Shahrour
  * %%
  * This program is free software: you can redistribute it and/or modify
@@ -20,12 +20,12 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.domain.dao.spi.signature;
+package org.sing_group.dreimt.rest.resource.spi.database;
 
-import java.util.stream.Stream;
+import javax.ejb.Local;
+import javax.ws.rs.core.Response;
 
-import org.sing_group.dreimt.domain.entities.signature.DatabaseVersion;
-
-public interface DatabaseVersionDao {
-  Stream<DatabaseVersion> list();
+@Local
+public interface DatabaseVersionResource {
+  Response getCurrentVersion();
 }

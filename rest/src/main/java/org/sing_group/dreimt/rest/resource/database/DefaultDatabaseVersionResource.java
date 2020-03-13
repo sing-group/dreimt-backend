@@ -20,7 +20,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.rest.resource.signature;
+package org.sing_group.dreimt.rest.resource.database;
 
 import java.util.Optional;
 
@@ -31,11 +31,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import org.sing_group.dreimt.domain.entities.signature.DatabaseVersion;
+import org.sing_group.dreimt.domain.entities.database.DatabaseVersion;
 import org.sing_group.dreimt.rest.entity.signature.SignatureData;
 import org.sing_group.dreimt.rest.filter.CrossDomain;
-import org.sing_group.dreimt.rest.resource.spi.signature.DatabaseVersionResource;
-import org.sing_group.dreimt.service.spi.signature.DatabaseVersionService;
+import org.sing_group.dreimt.rest.resource.spi.database.DatabaseVersionResource;
+import org.sing_group.dreimt.service.spi.database.DatabaseVersionService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

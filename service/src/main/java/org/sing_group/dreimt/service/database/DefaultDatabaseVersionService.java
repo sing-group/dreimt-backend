@@ -20,7 +20,7 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.service.signature;
+package org.sing_group.dreimt.service.database;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -29,9 +29,9 @@ import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import org.sing_group.dreimt.domain.dao.spi.signature.DatabaseVersionDao;
-import org.sing_group.dreimt.domain.entities.signature.DatabaseVersion;
-import org.sing_group.dreimt.service.spi.signature.DatabaseVersionService;
+import org.sing_group.dreimt.domain.dao.spi.database.DatabaseVersionDao;
+import org.sing_group.dreimt.domain.entities.database.DatabaseVersion;
+import org.sing_group.dreimt.service.spi.database.DatabaseVersionService;
 
 @Stateless
 @PermitAll
