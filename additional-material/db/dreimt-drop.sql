@@ -43,3 +43,4 @@ DROP TABLE `drug`;
 DROP TABLE `article_metadata`;
 
 DROP TABLE `database_versions`;
+DROP TABLE `dreimt_information`;

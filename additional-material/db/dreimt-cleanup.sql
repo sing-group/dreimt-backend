@@ -45,6 +45,7 @@ TRUNCATE TABLE `drug`;
 TRUNCATE TABLE `article_metadata`;
 
 TRUNCATE TABLE `database_versions`;
+TRUNCATE TABLE `dreimt_information`;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -92,3 +93,4 @@ ALTER TABLE `drug` AUTO_INCREMENT = 1;
 ALTER TABLE `article_metadata` AUTO_INCREMENT = 1;
 
 ALTER TABLE `database_versions` AUTO_INCREMENT = 1;
+ALTER TABLE `dreimt_information` AUTO_INCREMENT = 1;

@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.7.28, for Linux (x86_64)
+-- MySQL dump 10.13  Distrib 5.7.29, for Linux (x86_64)
 --
 -- Host: localhost    Database: dreimt
 -- ------------------------------------------------------
--- Server version	5.7.28-0ubuntu0.18.04.4
+-- Server version	5.7.29-0ubuntu0.18.04.1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -183,6 +183,20 @@ CREATE TABLE `database_versions` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `dreimt_information`
+--
+
+DROP TABLE IF EXISTS `dreimt_information`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `dreimt_information` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tauThreshold` double NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `drug`
 --
 
@@ -237,8 +251,10 @@ CREATE TABLE `full_drug_signature_interaction` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `downFdr` double DEFAULT NULL,
   `drugCommonName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `drugMoa` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `drugSourceDb` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `drugSourceName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `drugStatus` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `interactionType` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureCellSubTypeA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureCellSubTypeB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -253,14 +269,13 @@ CREATE TABLE `full_drug_signature_interaction` (
   `tau` double NOT NULL,
   `upFdr` double DEFAULT NULL,
   `signatureArticlePubmedId` int(11) DEFAULT NULL,
-  `drugMoa` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `drugStatus` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX4hkkniqx8jx0t74qcpqco6dit` (`tau`),
   KEY `IDXl2qoayrbw9v7uacqregtqpc3q` (`upFdr`),
   KEY `IDXbc2mh9iwhk7eb2erlf57k1w8w` (`downFdr`),
   KEY `IDXjeyb6tx2m8w82apv673e6x4gy` (`drugCommonName`),
   KEY `IDXkua6pu0gkbql9gbcy9dddg5is` (`drugSourceName`),
+  KEY `IDX1508ma2bjjx77uahdqt6tqnp0` (`drugMoa`),
   KEY `IDXab8o6290f312y62e07v4y5r00` (`signatureName`),
   KEY `IDXc51wckwyvrmt1dny9fl4pnw9f` (`signatureType`),
   KEY `IDXffpxt44kp8ch04udpvr06l4f9` (`signatureExperimentalDesign`),
@@ -269,7 +284,6 @@ CREATE TABLE `full_drug_signature_interaction` (
   KEY `IDXk9opwyikpvq3rae10815y3xau` (`signatureCellTypeA`),
   KEY `IDXghdkqt1s647y0d2prw8uwct37` (`signatureCellTypeB`),
   KEY `FKboll38t85j69hdb7uf9c5gvh4` (`signatureArticlePubmedId`),
-  KEY `IDX1508ma2bjjx77uahdqt6tqnp0` (`drugMoa`),
   CONSTRAINT `FKboll38t85j69hdb7uf9c5gvh4` FOREIGN KEY (`signatureArticlePubmedId`) REFERENCES `article_metadata` (`pubmedId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -296,10 +310,10 @@ DROP TABLE IF EXISTS `jaccard_result`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jaccard_result` (
-  `cellSubType1` varchar(225) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `cellSubType2` varchar(225) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `cellType1` varchar(225) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `cellType2` varchar(225) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cellSubType1` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cellSubType2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cellType1` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cellType2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `disease` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `experimentalDesign` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `onlyUniverseGenes` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -643,21 +657,6 @@ CREATE TABLE `signature_updown_genes` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `user`
---
-
-DROP TABLE IF EXISTS `user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `user` (
-  `login` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `role` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`login`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Table structure for table `work`
 --
 
@@ -707,4 +706,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-01-14  9:47:52
+-- Dump completed on 2020-03-13 11:48:03
