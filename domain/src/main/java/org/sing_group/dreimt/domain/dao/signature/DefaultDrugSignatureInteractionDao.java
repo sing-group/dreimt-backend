@@ -3,7 +3,7 @@
  * DREIMT - Domain
  * %%
  * Copyright (C) 2018 Daniel Glez-Peña, Miguel Reboiro-Jato, Hugo López-Fernández,
- * 			Kevin Troulé, Gonzálo Gómez-López, Fátima Al-Shahrour
+ *      Kevin Troulé, Gonzálo Gómez-López, Fátima Al-Shahrour
  * %%
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as
@@ -22,7 +22,6 @@
  */
 package org.sing_group.dreimt.domain.dao.signature;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
@@ -98,7 +97,11 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   private Stream<DrugSignatureInteraction> reconstruct(Stream<FullDrugSignatureInteraction> stream) {
     return stream
       .map((fdsi) -> {
-        Drug drug = new Drug(fdsi.getDrugCommonName(), fdsi.getDrugSourceName(), fdsi.getDrugSourceDb(), fdsi.getDrugStatus(), fdsi.getDrugMoa());
+        Drug drug =
+          new Drug(
+            fdsi.getDrugCommonName(), fdsi.getDrugSourceName(), fdsi.getDrugSourceDb(), fdsi.getDrugStatus(),
+            fdsi.getDrugMoa()
+          );
 
         Signature signature =
           buildSignature(
@@ -298,11 +301,16 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       listingOptions, "signatureCellTypeA", "signatureCellSubTypeA", "signatureCellTypeB", "signatureCellSubTypeB"
     )
       .map(tuple -> {
-        return asList(tupleToCellTypeAndSubtype(tuple, 0, 1), tupleToCellTypeAndSubtype(tuple, 2, 3));
+        List<CellTypeAndSubtype> list = tupleToCellTypeAndSubtype(tuple, 0, 1);
+        list.addAll(tupleToCellTypeAndSubtype(tuple, 2, 3));
+        return list;
       })
       .flatMap(List::stream)
       .distinct()
-      .filter(value -> DefaultDrugSignatureInteractionDao.cellTypeAndSubTypeMatchesFilters(value, listingOptions.getSignatureListingOptions()))
+      .filter(
+        value -> DefaultDrugSignatureInteractionDao
+          .cellTypeAndSubTypeMatchesFilters(value, listingOptions.getSignatureListingOptions())
+      )
       .sorted(CELL_TYPE_AND_SUBTYPE_COMPARATOR);
   }
 
@@ -359,23 +367,36 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
     return true;
   }
-  
-  private static CellTypeAndSubtype tupleToCellTypeAndSubtype(Tuple tuple, int typeIndex, int subTypeIndex) {
-    String type = null;
+
+  private static List<CellTypeAndSubtype> tupleToCellTypeAndSubtype(Tuple tuple, int typeIndex, int subTypeIndex) {
+    Set<String> types = null;
     if (tuple.get(typeIndex) != null) {
-      type = tuple.get(typeIndex).toString();
+      types = reconstructSet(tuple.get(typeIndex).toString());
     }
 
-    String subType = null;
+    Set<String> subTypes = null;
     if (tuple.get(subTypeIndex) != null) {
-      subType = tuple.get(subTypeIndex).toString();
+      subTypes = reconstructSet(tuple.get(subTypeIndex).toString());
     }
 
-    return new CellTypeAndSubtype(type, subType);
+    List<CellTypeAndSubtype> toret = new LinkedList<>();
+    for (String type : types) {
+      if (subTypes.isEmpty()) {
+        toret.add(new CellTypeAndSubtype(type, null));
+      } else {
+        for (String subType : subTypes) {
+          toret.add(new CellTypeAndSubtype(type, subType));
+        }
+      }
+    }
+
+    return toret;
   }
 
   @Override
-  public Stream<CellTypeAndSubtype> listCellTypeAndSubtype2Values(DrugSignatureInteractionListingOptions listingOptions) {
+  public Stream<CellTypeAndSubtype> listCellTypeAndSubtype2Values(
+    DrugSignatureInteractionListingOptions listingOptions
+  ) {
     SignatureListingOptions signatureListingOptions = listingOptions.getSignatureListingOptions();
 
     if (!signatureListingOptions.getCellType1().isPresent()) {
@@ -385,7 +406,26 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     return listMultipleColumnCollectionValues(
       listingOptions, "signatureCellTypeA", "signatureCellSubTypeA", "signatureCellTypeB", "signatureCellSubTypeB"
     )
-      .map(tuple -> getTuplePair(signatureListingOptions, tupleToCellTypeAndSubtype(tuple, 0, 1), tupleToCellTypeAndSubtype(tuple, 2, 3)))
+      .map(tuple -> {
+        List<CellTypeAndSubtype> a = tupleToCellTypeAndSubtype(tuple, 0, 1);
+        List<CellTypeAndSubtype> b = tupleToCellTypeAndSubtype(tuple, 2, 3);
+
+        List<CellTypeAndSubtype> toret = new LinkedList<>();
+        for (CellTypeAndSubtype ctsa : a) {
+          for (CellTypeAndSubtype ctsb : b) {
+            toret.addAll(getTuplePair(signatureListingOptions, ctsa, ctsb));
+          }
+        }
+        if (toret.isEmpty()) {
+          throw new IllegalArgumentException(
+            "Error processing match against cellType1 = " +
+              signatureListingOptions.getCellType1().orElse("<undefined>") + " and cellSubType1 = " +
+              signatureListingOptions.getCellSubType1().orElse("<undefined>")
+          );
+        }
+
+        return toret;
+      })
       .flatMap(List::stream)
       .filter(DefaultDrugSignatureInteractionDao::notEmpty)
       .distinct()
@@ -404,15 +444,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       toret.add(a);
     }
 
-    if (!toret.isEmpty()) {
-      return toret;
-    }
-
-    throw new IllegalArgumentException(
-      "Error processing match against cellType1 = " +
-        signatureListingOptions.getCellType1().orElse("<undefined>") + " and cellSubType1 = " +
-        signatureListingOptions.getCellSubType1().orElse("<undefined>")
-    );
+    return toret;
   }
 
   private static boolean notEmpty(CellTypeAndSubtype cellTypeAndSubType) {
