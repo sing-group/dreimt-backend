@@ -154,6 +154,7 @@ public class DefaultCmapGeneSetSignatureQueryResultsResource implements CmapGene
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("page") Integer page,
     @QueryParam("pageSize") Integer pageSize,
     @QueryParam("orderField") @DefaultValue("NONE") CmapGeneSetSignatureDrugInteractionField orderField,
@@ -162,7 +163,7 @@ public class DefaultCmapGeneSetSignatureQueryResultsResource implements CmapGene
     return this.cmapSignatureQueryResult(
       resultId, 
       minTau, maxFdr, drugSourceName, drugSourceDb, 
-      drugCommonName, page, pageSize, orderField, sortDirection,
+      drugCommonName, drugMoa, page, pageSize, orderField, sortDirection,
       (cmapResult, interactions) -> mapper.toCmapDrugInteractionData(interactions),
       APPLICATION_JSON, true
     );
@@ -187,6 +188,7 @@ public class DefaultCmapGeneSetSignatureQueryResultsResource implements CmapGene
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("page") Integer page,
     @QueryParam("pageSize") Integer pageSize,
     @QueryParam("orderField") @DefaultValue("NONE") CmapGeneSetSignatureDrugInteractionField orderField,
@@ -195,7 +197,7 @@ public class DefaultCmapGeneSetSignatureQueryResultsResource implements CmapGene
     return this.cmapSignatureQueryResult(
       resultId, 
       minTau, maxFdr, drugSourceName, drugSourceDb, 
-      drugCommonName, page, pageSize, orderField, sortDirection,
+      drugCommonName, drugMoa, page, pageSize, orderField, sortDirection,
       (cmapResult, interactions) -> mapper.toCmapDrugInteractionCsvData(interactions), 
       "text/csv", false
     );
@@ -208,6 +210,7 @@ public class DefaultCmapGeneSetSignatureQueryResultsResource implements CmapGene
     String drugSourceName, 
     String drugSourceDb, 
     String drugCommonName,
+    String drugMoa,
     Integer page, 
     Integer pageSize,
     CmapGeneSetSignatureDrugInteractionField orderField, 
@@ -221,7 +224,7 @@ public class DefaultCmapGeneSetSignatureQueryResultsResource implements CmapGene
     final CmapDrugGeneSetSignatureInteractionListingOptions cmapListingOptions =
       new CmapDrugGeneSetSignatureInteractionListingOptions(
         listingOptionsMapper.toListingOptions(listingOptions),
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxFdr
       );
 
@@ -271,12 +274,13 @@ public class DefaultCmapGeneSetSignatureQueryResultsResource implements CmapGene
     @QueryParam("maxFdr") Double maxFdr,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
-    @QueryParam("drugCommonName") String drugCommonName
+    @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa
   ) {
     final CmapDrugGeneSetSignatureInteractionListingOptions cmapListingOptions =
       new CmapDrugGeneSetSignatureInteractionListingOptions(
         ListingOptions.noModification(),
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxFdr
       );
 
@@ -304,12 +308,13 @@ public class DefaultCmapGeneSetSignatureQueryResultsResource implements CmapGene
     @QueryParam("maxFdr") Double maxFdr,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
-    @QueryParam("drugCommonName") String drugCommonName
+    @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa
   ) {
     final CmapDrugGeneSetSignatureInteractionListingOptions cmapListingOptions =
       new CmapDrugGeneSetSignatureInteractionListingOptions(
         ListingOptions.noModification(),
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxFdr
       );
 
@@ -337,12 +342,13 @@ public class DefaultCmapGeneSetSignatureQueryResultsResource implements CmapGene
     @QueryParam("maxFdr") Double maxFdr,
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
-    @QueryParam("drugCommonName") String drugCommonName
+    @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa
   ) {
     final CmapDrugGeneSetSignatureInteractionListingOptions cmapListingOptions =
       new CmapDrugGeneSetSignatureInteractionListingOptions(
         ListingOptions.noModification(),
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxFdr
       );
 
@@ -350,6 +356,40 @@ public class DefaultCmapGeneSetSignatureQueryResultsResource implements CmapGene
 
     final String[] data =
       cmapDrugGeneSetInteractionService.listDrugCommonNameValues(cmapResult, cmapListingOptions)
+        .toArray(String[]::new);
+
+    return Response.ok(data).build();
+  }
+  
+  @GET
+  @Path("params/{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/drug-moa/values")
+  @Produces(APPLICATION_JSON)
+  @ApiOperation(
+    value = "Lists the possible drug MOA values for the specified Cmap result.",
+    response = String.class,
+    code = 200
+  )
+  @Override
+  public Response listDrugMoaValues(
+    @PathParam("id") String resultId,
+    @QueryParam("minTau") Double minTau, 
+    @QueryParam("maxFdr") Double maxFdr,
+    @QueryParam("drugSourceName") String drugSourceName,
+    @QueryParam("drugSourceDb") String drugSourceDb,
+    @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa
+    ) {
+    final CmapDrugGeneSetSignatureInteractionListingOptions cmapListingOptions =
+      new CmapDrugGeneSetSignatureInteractionListingOptions(
+        ListingOptions.noModification(),
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
+        minTau, maxFdr
+      );
+
+    CmapGeneSetSignatureResult cmapResult = findCmapGeneSetSignatureResult(resultId);
+
+    final String[] data =
+      cmapDrugGeneSetInteractionService.listDrugMoaValues(cmapResult, cmapListingOptions)
         .toArray(String[]::new);
 
     return Response.ok(data).build();

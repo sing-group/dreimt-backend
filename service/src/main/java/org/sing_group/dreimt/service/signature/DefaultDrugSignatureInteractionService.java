@@ -148,4 +148,8 @@ public class DefaultDrugSignatureInteractionService implements DrugSignatureInte
     return this.dao.listDrugCommonNameValues(listingOptions);
   }
 
+  @Override
+  public Stream<String> listDrugMoaValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.dao.listDrugMoaValues(listingOptions);
+  }
 }

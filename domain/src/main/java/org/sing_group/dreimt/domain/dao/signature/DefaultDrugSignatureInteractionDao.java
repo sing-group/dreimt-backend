@@ -264,6 +264,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
         freeText, // drugSourceName
         freeText, // drugSourceDb
         freeText, // drugCommonName
+        freeText, // drugMoa
         null, // minTau
         null, // maxUpFdr
         null // maxDownFdr
@@ -630,6 +631,13 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   }
 
   @Override
+  public Stream<String> listDrugMoaValues(
+    DrugSignatureInteractionListingOptions listingOptions
+  ) {
+    return this.listSetColumnValues("drugMoa", listingOptions);
+  }
+
+  @Override
   public Stream<Integer> listSignaturePubMedIdValues(DrugSignatureInteractionListingOptions listingOptions) {
     final CriteriaBuilder cb = dh.cb();
 
@@ -774,6 +782,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     fieldLikeQueryBuilder.accept("drugSourceName", true, listingOptions.getDrugSourceName());
     fieldLikeQueryBuilder.accept("drugSourceDb", true, listingOptions.getDrugSourceDb());
     fieldLikeQueryBuilder.accept("drugCommonName", true, listingOptions.getDrugCommonName());
+    fieldLikeQueryBuilder.accept("drugMoa", false, listingOptions.getDrugMoa());
 
     return andPredicates.toArray(new Predicate[andPredicates.size()]);
   }
@@ -843,6 +852,9 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
               break;
             case DRUG_COMMON_NAME:
               orders.add(order.apply(root.get("drugCommonName")));
+              break;
+            case DRUG_MOA:
+              orders.add(order.apply(root.get("drugMoa")));
               break;
 
             case INTERACTION_TYPE:

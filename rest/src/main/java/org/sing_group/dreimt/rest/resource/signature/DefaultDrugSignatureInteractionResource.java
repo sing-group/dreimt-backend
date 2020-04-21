@@ -148,6 +148,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
     @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
@@ -158,7 +159,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
       freeText != null && (signatureName != null || cellType1 != null || cellSubType1 != null || cellType2 != null
         || cellSubType2 != null || experimentalDesign != null || organism != null || disease != null
         || signatureSourceDb != null || signaturePubMedId != null || drugSourceName != null || drugSourceDb != null
-        || drugCommonName != null || interactionType != null || minTau != null || maxUpFdr != null
+        || drugCommonName != null || drugMoa != null || interactionType != null || minTau != null || maxUpFdr != null
         || maxDownFdr != null)
     ) {
       throw new BadRequestException("freeText parameter is not compatible with other filters");
@@ -175,7 +176,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         new DrugSignatureInteractionListingOptions(
           listingOptionsMapper.toListingOptions(getListingOptions(page, pageSize, orderField, sortDirection)),
           signatureListingOptions, interactionType,
-          drugSourceName, drugSourceDb, drugCommonName,
+          drugSourceName, drugSourceDb, drugCommonName, drugMoa,
           minTau, maxUpFdr, maxDownFdr
         );
 
@@ -240,6 +241,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
     @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
@@ -254,7 +256,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         signatureListingOptions, interactionType,
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxUpFdr, maxDownFdr
       );
 
@@ -286,6 +288,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
     @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
@@ -300,7 +303,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         signatureListingOptions, interactionType,
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxUpFdr, maxDownFdr
       );
 
@@ -334,6 +337,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
     @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
@@ -348,7 +352,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         signatureListingOptions, interactionType,
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxUpFdr, maxDownFdr
       );
 
@@ -381,6 +385,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
     @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
@@ -395,7 +400,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         signatureListingOptions, interactionType,
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxUpFdr, maxDownFdr
       );
 
@@ -428,6 +433,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
     @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
@@ -442,7 +448,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         signatureListingOptions, interactionType,
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxUpFdr, maxDownFdr
       );
 
@@ -476,6 +482,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
     @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
@@ -490,7 +497,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         signatureListingOptions, interactionType,
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxUpFdr, maxDownFdr
       );
 
@@ -524,6 +531,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
     @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
@@ -538,7 +546,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         signatureListingOptions, interactionType,
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxUpFdr, maxDownFdr
       );
 
@@ -572,6 +580,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
     @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
@@ -586,7 +595,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         signatureListingOptions, interactionType,
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxUpFdr, maxDownFdr
       );
 
@@ -620,6 +629,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
     @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
@@ -634,7 +644,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         signatureListingOptions, interactionType,
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxUpFdr, maxDownFdr
       );
 
@@ -668,6 +678,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
     @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
@@ -682,7 +693,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         signatureListingOptions, interactionType,
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxUpFdr, maxDownFdr
       );
 
@@ -716,6 +727,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
     @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
@@ -730,7 +742,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         signatureListingOptions, interactionType,
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxUpFdr, maxDownFdr
       );
 
@@ -764,6 +776,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
     @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
@@ -778,7 +791,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         signatureListingOptions, interactionType,
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxUpFdr, maxDownFdr
       );
 
@@ -812,6 +825,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
     @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
@@ -826,7 +840,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         signatureListingOptions, interactionType,
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxUpFdr, maxDownFdr
       );
 
@@ -860,6 +874,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
     @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
@@ -874,7 +889,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         signatureListingOptions, interactionType,
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxUpFdr, maxDownFdr
       );
 
@@ -908,6 +923,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
     @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
@@ -923,7 +939,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         signatureListingOptions, interactionType,
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxUpFdr, maxDownFdr
       );
 
@@ -955,8 +971,9 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("signatureSourceDb") String signatureSourceDb,
     @QueryParam("signaturePubMedId") Integer signaturePubMedId,
     @QueryParam("drugSourceName") String drugSourceName,
-    @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("drugSourceDb") String drugSourceDb,
+    @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
     @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
     @QueryParam("minTau") Double minTau,
     @QueryParam("maxUpFdr") Double maxUpFdr,
@@ -971,12 +988,61 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         signatureListingOptions, interactionType,
-        drugSourceName, drugSourceDb, drugCommonName,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
         minTau, maxUpFdr, maxDownFdr
       );
 
     final String[] data =
       service.listDrugCommonNameValues(listingOptions)
+        .toArray(String[]::new);
+
+    return Response.ok(data).build();
+  }
+  
+  @Path("params/drug-moa/values")
+  @GET
+  @ApiOperation(
+    value = "Lists the possible drug MOA values in drug-signature interactions",
+    response = String.class,
+    responseContainer = "list",
+    code = 200
+  )
+  @Override
+  public Response listDrugMoaValues(
+    @QueryParam("signatureName") String signatureName,
+    @QueryParam("cellType1") String cellType1,
+    @QueryParam("cellSubType1") String cellSubType1,
+    @QueryParam("cellType2") String cellType2,
+    @QueryParam("cellSubType2") String cellSubType2,
+    @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
+    @QueryParam("organism") String organism,
+    @QueryParam("disease") String disease,
+    @QueryParam("signatureSourceDb") String signatureSourceDb,
+    @QueryParam("signaturePubMedId") Integer signaturePubMedId,
+    @QueryParam("drugSourceName") String drugSourceName,
+    @QueryParam("drugSourceDb") String drugSourceDb,
+    @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau,
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr
+  ) {
+    final SignatureListingOptions signatureListingOptions =
+      new SignatureListingOptions(
+        signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
+        signatureSourceDb, signaturePubMedId
+      );
+
+    final DrugSignatureInteractionListingOptions listingOptions =
+      new DrugSignatureInteractionListingOptions(
+        signatureListingOptions, interactionType,
+        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
+        minTau, maxUpFdr, maxDownFdr
+      );
+
+    final String[] data =
+      service.listDrugMoaValues(listingOptions)
         .toArray(String[]::new);
 
     return Response.ok(data).build();

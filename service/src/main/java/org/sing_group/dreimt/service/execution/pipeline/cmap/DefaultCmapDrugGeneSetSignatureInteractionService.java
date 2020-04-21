@@ -80,4 +80,12 @@ public class DefaultCmapDrugGeneSetSignatureInteractionService implements CmapDr
   ) {
     return cmapDrugInteractionDao.listDrugCommonNameValues(CmapGeneSetSignatureResult, listingOptions);
   }
+
+  @Override
+  public Stream<String> listDrugMoaValues(
+    CmapGeneSetSignatureResult CmapGeneSetSignatureResult,
+    CmapDrugGeneSetSignatureInteractionListingOptions listingOptions
+  ) {
+    return cmapDrugInteractionDao.listDrugMoaValues(CmapGeneSetSignatureResult, listingOptions);
+  }
 }

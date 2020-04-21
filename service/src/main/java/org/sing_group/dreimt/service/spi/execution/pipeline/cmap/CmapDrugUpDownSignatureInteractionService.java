@@ -49,4 +49,8 @@ public interface CmapDrugUpDownSignatureInteractionService {
   Stream<String> listDrugCommonNameValues(
     CmapUpDownSignatureResult cmapResult, CmapDrugUpDownSignatureInteractionListingOptions listingOptions
   );
+
+  Stream<String> listDrugMoaValues(
+    CmapUpDownSignatureResult cmapResult, CmapDrugUpDownSignatureInteractionListingOptions listingOptions
+  );
 }

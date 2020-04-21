@@ -38,4 +38,6 @@ public interface CmapDrugUpDownSignatureInteractionDao {
   Stream<String> listDrugSourceDbValues(CmapUpDownSignatureResult cmapResult, CmapDrugUpDownSignatureInteractionListingOptions listingOptions);
 
   Stream<String> listDrugCommonNameValues(CmapUpDownSignatureResult cmapResult, CmapDrugUpDownSignatureInteractionListingOptions listingOptions);
+  
+  Stream<String> listDrugMoaValues(CmapUpDownSignatureResult cmapResult, CmapDrugUpDownSignatureInteractionListingOptions listingOptions);
 }

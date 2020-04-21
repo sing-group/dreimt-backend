@@ -75,4 +75,11 @@ public class DefaultCmapDrugUpDownSignatureInteractionService implements CmapDru
   ) {
     return cmapDrugInteractionDao.listDrugCommonNameValues(CmapUpDownSignatureResult, listingOptions);
   }
+
+  @Override
+  public Stream<String> listDrugMoaValues(
+    CmapUpDownSignatureResult CmapUpDownSignatureResult, CmapDrugUpDownSignatureInteractionListingOptions listingOptions
+  ) {
+    return cmapDrugInteractionDao.listDrugMoaValues(CmapUpDownSignatureResult, listingOptions);
+  }
 }

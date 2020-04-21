@@ -74,4 +74,6 @@ public interface DrugSignatureInteractionService {
   Stream<String> listDrugSourceDbValues(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<String> listDrugCommonNameValues(DrugSignatureInteractionListingOptions listingOptions);
+
+  Stream<String> listDrugMoaValues(DrugSignatureInteractionListingOptions listingOptions);
 }

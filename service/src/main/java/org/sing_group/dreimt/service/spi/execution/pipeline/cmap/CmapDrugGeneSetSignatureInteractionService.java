@@ -49,4 +49,8 @@ public interface CmapDrugGeneSetSignatureInteractionService {
   Stream<String> listDrugCommonNameValues(
     CmapGeneSetSignatureResult cmapResult, CmapDrugGeneSetSignatureInteractionListingOptions listingOptions
   );
+
+  Stream<String> listDrugMoaValues(
+    CmapGeneSetSignatureResult cmapResult, CmapDrugGeneSetSignatureInteractionListingOptions listingOptions
+  );
 }

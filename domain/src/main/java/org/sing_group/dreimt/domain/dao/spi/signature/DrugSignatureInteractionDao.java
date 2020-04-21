@@ -75,4 +75,6 @@ public interface DrugSignatureInteractionDao {
   Stream<String> listDrugSourceDbValues(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<String> listDrugCommonNameValues(DrugSignatureInteractionListingOptions listingOptions);
+  
+  Stream<String> listDrugMoaValues(DrugSignatureInteractionListingOptions listingOptions);
 }

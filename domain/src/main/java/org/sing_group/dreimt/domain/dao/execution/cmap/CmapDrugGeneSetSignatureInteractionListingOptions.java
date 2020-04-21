@@ -36,18 +36,19 @@ public class CmapDrugGeneSetSignatureInteractionListingOptions implements Serial
   private final String drugSourceName;
   private final String drugSourceDb;
   private final String drugCommonName;
+  private final String drugMoa;
   private final Double minTau;
   private final Double maxFdr;
 
   public CmapDrugGeneSetSignatureInteractionListingOptions(
-    ListingOptions listingOptions,
-    String drugSourceName, String drugSourceDb, String drugCommonName,
+    ListingOptions listingOptions, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
     Double minTau, Double maxFdr
   ) {
     this.listingOptions = listingOptions;
     this.drugSourceName = drugSourceName;
     this.drugSourceDb = drugSourceDb;
     this.drugCommonName = drugCommonName;
+    this.drugMoa = drugMoa;
     this.minTau = minTau;
     this.maxFdr = maxFdr;
   }
@@ -57,6 +58,7 @@ public class CmapDrugGeneSetSignatureInteractionListingOptions implements Serial
       || this.drugSourceName != null
       || this.drugSourceDb != null
       || this.drugCommonName != null
+      || this.drugMoa != null
       || this.minTau != null
       || this.maxFdr != null;
   }
@@ -77,6 +79,10 @@ public class CmapDrugGeneSetSignatureInteractionListingOptions implements Serial
     return ofNullable(drugCommonName);
   }
 
+  public Optional<String> getDrugMoa() {
+    return ofNullable(drugMoa);
+  }
+
   public Optional<Double> getMinTau() {
     return ofNullable(minTau);
   }
@@ -92,6 +98,7 @@ public class CmapDrugGeneSetSignatureInteractionListingOptions implements Serial
     result = prime * result + ((drugCommonName == null) ? 0 : drugCommonName.hashCode());
     result = prime * result + ((drugSourceDb == null) ? 0 : drugSourceDb.hashCode());
     result = prime * result + ((drugSourceName == null) ? 0 : drugSourceName.hashCode());
+    result = prime * result + ((drugMoa == null) ? 0 : drugMoa.hashCode());
     result = prime * result + ((listingOptions == null) ? 0 : listingOptions.hashCode());
     result = prime * result + ((maxFdr == null) ? 0 : maxFdr.hashCode());
     result = prime * result + ((minTau == null) ? 0 : minTau.hashCode());
@@ -121,6 +128,11 @@ public class CmapDrugGeneSetSignatureInteractionListingOptions implements Serial
       if (other.drugSourceName != null)
         return false;
     } else if (!drugSourceName.equals(other.drugSourceName))
+      return false;
+    if (drugMoa == null) {
+      if (other.drugMoa != null)
+        return false;
+    } else if (!drugMoa.equals(other.drugMoa))
       return false;
     if (listingOptions == null) {
       if (other.listingOptions != null)

@@ -39,6 +39,7 @@ public enum DrugSignatureInteractionField {
   DRUG_SOURCE_NAME,
   DRUG_SOURCE_DB,
   DRUG_COMMON_NAME,
+  DRUG_MOA,
 
   INTERACTION_TYPE,
   TAU,
