@@ -781,7 +781,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
     fieldLikeQueryBuilder.accept("drugSourceName", true, listingOptions.getDrugSourceName());
     fieldLikeQueryBuilder.accept("drugSourceDb", true, listingOptions.getDrugSourceDb());
-    fieldLikeQueryBuilder.accept("drugCommonName", true, listingOptions.getDrugCommonName());
+    fieldLikeQueryBuilder.accept("drugCommonName", false, listingOptions.getDrugCommonName());
     fieldLikeQueryBuilder.accept("drugMoa", false, listingOptions.getDrugMoa());
 
     return andPredicates.toArray(new Predicate[andPredicates.size()]);
