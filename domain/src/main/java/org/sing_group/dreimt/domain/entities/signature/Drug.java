@@ -23,12 +23,18 @@
 package org.sing_group.dreimt.domain.entities.signature;
 
 import java.io.Serializable;
+import java.util.Set;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
 @Table(name = "drug")
@@ -44,11 +50,18 @@ public class Drug implements Serializable {
 
   @Enumerated(EnumType.STRING)
   private DrugStatus status;
-  private String moa;
+  
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(
+    name = "drug_moa", 
+    joinColumns = @JoinColumn(name = "id"), 
+    uniqueConstraints = @UniqueConstraint(columnNames = {"id", "moa"})
+  )
+  private Set<String> moa;
 
   Drug() {}
 
-  public Drug(String commonName, String sourceName, String sourceDb, DrugStatus status, String moa) {
+  public Drug(String commonName, String sourceName, String sourceDb, DrugStatus status, Set<String> moa) {
     this.commonName = commonName;
     this.sourceName = sourceName;
     this.sourceDb = sourceDb;
@@ -72,7 +85,7 @@ public class Drug implements Serializable {
     return status;
   }
 
-  public String getMoa() {
+  public Set<String> getMoa() {
     return moa;
   }
 

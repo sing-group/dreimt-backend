@@ -23,6 +23,7 @@
 package org.sing_group.dreimt.rest.entity.signature;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
 
@@ -33,11 +34,11 @@ public class DrugData implements Serializable {
   private String sourceName;
   private String sourceDb;
   private DrugStatus status;
-  private String moa;
+  private Set<String> moa;
 
   DrugData() {}
 
-  public DrugData(String commonName, String sourceName, String sourceDb, DrugStatus status, String moa) {
+  public DrugData(String commonName, String sourceName, String sourceDb, DrugStatus status, Set<String> moa) {
     super();
     this.commonName = commonName;
     this.sourceName = sourceName;
@@ -62,7 +63,7 @@ public class DrugData implements Serializable {
     return status;
   }
 
-  public String getMoa() {
+  public Set<String> getMoa() {
     return moa;
   }
 }

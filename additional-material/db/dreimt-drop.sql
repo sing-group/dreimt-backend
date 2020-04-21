@@ -39,6 +39,7 @@ DROP TABLE `signature_disease`;
 DROP TABLE `signature`;
 
 DROP TABLE `genes`;
+DROP TABLE `drug_moa`;
 DROP TABLE `drug`;
 DROP TABLE `article_metadata`;
 

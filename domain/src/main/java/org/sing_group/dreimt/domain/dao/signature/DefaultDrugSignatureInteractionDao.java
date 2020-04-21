@@ -100,7 +100,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
         Drug drug =
           new Drug(
             fdsi.getDrugCommonName(), fdsi.getDrugSourceName(), fdsi.getDrugSourceDb(), fdsi.getDrugStatus(),
-            fdsi.getDrugMoa()
+            reconstructSet(fdsi.getDrugMoa())
           );
 
         Signature signature =

@@ -41,6 +41,7 @@ TRUNCATE TABLE `signature_disease`;
 TRUNCATE TABLE `signature`;
 
 TRUNCATE TABLE `genes`;
+TRUNCATE TABLE `drug_moa`;
 TRUNCATE TABLE `drug`;
 TRUNCATE TABLE `article_metadata`;
 
@@ -89,6 +90,7 @@ ALTER TABLE `signature_disease` AUTO_INCREMENT = 1;
 ALTER TABLE `signature` AUTO_INCREMENT = 1;
 
 ALTER TABLE `genes` AUTO_INCREMENT = 1;
+ALTER TABLE `drug_moa` AUTO_INCREMENT = 1;
 ALTER TABLE `drug` AUTO_INCREMENT = 1;
 ALTER TABLE `article_metadata` AUTO_INCREMENT = 1;
 
