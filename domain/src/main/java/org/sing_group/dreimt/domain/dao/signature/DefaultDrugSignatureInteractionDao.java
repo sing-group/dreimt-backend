@@ -375,7 +375,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       types = reconstructSet(tuple.get(typeIndex).toString());
     }
 
-    Set<String> subTypes = null;
+    Set<String> subTypes = emptySet();
     if (tuple.get(subTypeIndex) != null) {
       subTypes = reconstructSet(tuple.get(subTypeIndex).toString());
     }
