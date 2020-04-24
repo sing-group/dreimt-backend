@@ -40,6 +40,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
@@ -60,6 +61,7 @@ import org.sing_group.dreimt.domain.dao.DaoHelper;
 import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.dao.ListingOptions.SortField;
 import org.sing_group.dreimt.domain.dao.spi.signature.DrugSignatureInteractionDao;
+import org.sing_group.dreimt.domain.dao.spi.signature.GeneDao;
 import org.sing_group.dreimt.domain.entities.signature.ArticleMetadata;
 import org.sing_group.dreimt.domain.entities.signature.CellTypeAndSubtype;
 import org.sing_group.dreimt.domain.entities.signature.Drug;
@@ -82,6 +84,9 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
   private DaoHelper<Integer, FullDrugSignatureInteraction> dh;
 
+  @Inject
+  private GeneDao geneDao;
+
   DefaultDrugSignatureInteractionDao() {}
 
   public DefaultDrugSignatureInteractionDao(EntityManager em) {
@@ -100,7 +105,8 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
         Drug drug =
           new Drug(
             fdsi.getDrugCommonName(), fdsi.getDrugSourceName(), fdsi.getDrugSourceDb(), fdsi.getDrugStatus(),
-            reconstructSet(fdsi.getDrugMoa())
+            reconstructSet(fdsi.getDrugMoa()),
+            this.geneDao.getGenes(reconstructSet(fdsi.getDrugTargetGenes()), false)
           );
 
         Signature signature =
@@ -115,7 +121,15 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
             fdsi.getSignatureSourceDb(),
             fdsi.getSignatureExperimentalDesign(),
             fdsi.getSignatureOrganism(),
-            reconstructSet(fdsi.getSignatureDisease())
+            reconstructSet(fdsi.getSignatureDisease()),
+            reconstructSet(fdsi.getSignatureTreatmentA()),
+            reconstructSet(fdsi.getSignatureTreatmentB()),
+            reconstructSet(fdsi.getSignatureDiseaseA()),
+            reconstructSet(fdsi.getSignatureDiseaseB()),
+            fdsi.getSignatureLocalisationA(),
+            fdsi.getSignatureLocalisationB(),
+            fdsi.getSignatureStateA(),
+            fdsi.getSignatureStateB()
           );
 
         return new DrugSignatureInteraction(
@@ -126,40 +140,44 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
   private static Signature buildSignature(
     SignatureType signatureType, String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA,
-    Set<String> cellTypeB,
-    Set<String> cellSubTypeB, Optional<ArticleMetadata> articleMetadata, String sourceDb,
-    ExperimentalDesign experimentalDesign,
-    String organism, Set<String> disease
+    Set<String> cellTypeB, Set<String> cellSubTypeB, Optional<ArticleMetadata> articleMetadata, String sourceDb,
+    ExperimentalDesign experimentalDesign, String organism, Set<String> disease, Set<String> treatmentA,
+    Set<String> treatmentB, Set<String> diseaseA, Set<String> diseaseB, String localisationA, String localisationB,
+    String stateA, String stateB
   ) {
     if (signatureType.equals(SignatureType.GENESET)) {
       if (articleMetadata.isPresent()) {
         return new GeneSetSignature(
           signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, articleMetadata.get(), sourceDb,
-          experimentalDesign, organism, disease
+          experimentalDesign, organism, disease, treatmentA, treatmentB, diseaseA, diseaseB, localisationA,
+          localisationB, stateA, stateB
         );
       } else {
         return new GeneSetSignature(
           signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, sourceDb,
-          experimentalDesign, organism, disease
+          experimentalDesign, organism, disease, treatmentA, treatmentB, diseaseA, diseaseB, localisationA,
+          localisationB, stateA, stateB
         );
       }
     } else {
       if (articleMetadata.isPresent()) {
         return new UpDownSignature(
           signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, articleMetadata.get(), sourceDb,
-          experimentalDesign, organism, disease
+          experimentalDesign, organism, disease, treatmentA, treatmentB, diseaseA, diseaseB, localisationA,
+          localisationB, stateA, stateB
         );
       } else {
         return new UpDownSignature(
           signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, sourceDb,
-          experimentalDesign, organism, disease
+          experimentalDesign, organism, disease, treatmentA, treatmentB, diseaseA, diseaseB, localisationA,
+          localisationB, stateA, stateB
         );
       }
     }
   }
 
   private static Set<String> reconstructSet(String field) {
-    return field == null ? emptySet() : Stream.of(field.split("###")).map(String::trim).collect(toSet());
+    return field == null ? emptySet() : Stream.of(field.split("##")).map(String::trim).collect(toSet());
   }
 
   @Override

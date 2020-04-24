@@ -22,9 +22,12 @@
  */
 package org.sing_group.dreimt.domain.entities.signature;
 
+import static java.util.stream.Collectors.toSet;
+
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -33,6 +36,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -59,14 +64,26 @@ public class Drug implements Serializable {
   )
   private Set<String> moa;
 
+  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @JoinTable(
+    name = "drug_target_genes",
+    joinColumns = @JoinColumn(name = "id", referencedColumnName = "id"),
+    inverseJoinColumns = @JoinColumn(name = "gene", referencedColumnName = "gene"),
+    uniqueConstraints = @UniqueConstraint(columnNames = {"id", "gene"})
+  )
+  private Set<Gene> targetGenes;
+
   Drug() {}
 
-  public Drug(String commonName, String sourceName, String sourceDb, DrugStatus status, Set<String> moa) {
+  public Drug(
+    String commonName, String sourceName, String sourceDb, DrugStatus status, Set<String> moa, Set<Gene> genes
+  ) {
     this.commonName = commonName;
     this.sourceName = sourceName;
     this.sourceDb = sourceDb;
     this.status = status;
     this.moa = moa;
+    this.targetGenes = genes;
   }
 
   public String getCommonName() {
@@ -87,6 +104,10 @@ public class Drug implements Serializable {
 
   public Set<String> getMoa() {
     return moa;
+  }
+
+  public Set<String> getTargetGenes() {
+    return targetGenes.stream().map(Gene::getGene).collect(toSet());
   }
 
   @Override

@@ -35,16 +35,18 @@ public class DrugData implements Serializable {
   private String sourceDb;
   private DrugStatus status;
   private Set<String> moa;
+  private Set<String> targetGenes;
 
   DrugData() {}
 
-  public DrugData(String commonName, String sourceName, String sourceDb, DrugStatus status, Set<String> moa) {
+  public DrugData(String commonName, String sourceName, String sourceDb, DrugStatus status, Set<String> moa, Set<String> targetGenes) {
     super();
     this.commonName = commonName;
     this.sourceName = sourceName;
     this.sourceDb = sourceDb;
     this.status = status;
     this.moa = moa;
+    this.targetGenes = targetGenes;
   }
 
   public String getCommonName() {
@@ -65,5 +67,9 @@ public class DrugData implements Serializable {
 
   public Set<String> getMoa() {
     return moa;
+  }
+
+  public Set<String> getTargetGenes() {
+    return targetGenes;
   }
 }

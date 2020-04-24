@@ -255,6 +255,23 @@ CREATE TABLE `drug_signature_interaction` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `drug_target_genes`
+--
+
+DROP TABLE IF EXISTS `drug_target_genes`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `drug_target_genes` (
+  `id` int(11) NOT NULL,
+  `gene` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`,`gene`),
+  KEY `FKh74f9x833fssvhb68d0tsho5i` (`gene`),
+  CONSTRAINT `FKh74f9x833fssvhb68d0tsho5i` FOREIGN KEY (`gene`) REFERENCES `genes` (`gene`),
+  CONSTRAINT `FKo1a2ki6iv2kn5dtf2gi9gmiqk` FOREIGN KEY (`id`) REFERENCES `drug` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `full_drug_signature_interaction`
 --
 
@@ -269,16 +286,25 @@ CREATE TABLE `full_drug_signature_interaction` (
   `drugSourceDb` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `drugSourceName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `drugStatus` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `drugTargetGenes` varchar(450) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `interactionType` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureCellSubTypeA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureCellSubTypeB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureCellTypeA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureCellTypeB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureDisease` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `signatureDiseaseA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `signatureDiseaseB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureExperimentalDesign` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `signatureLocalisationA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `signatureLocalisationB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureOrganism` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureSourceDb` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `signatureStateA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `signatureStateB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `signatureTreatmentA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `signatureTreatmentB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureType` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tau` double NOT NULL,
   `upFdr` double DEFAULT NULL,
@@ -551,8 +577,12 @@ CREATE TABLE `signature` (
   `signatureType` varchar(31) COLLATE utf8mb4_unicode_ci NOT NULL,
   `signatureName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `experimentalDesign` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `localisationA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `localisationB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `organism` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `sourceDb` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stateA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stateB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `article_pubmedId` int(11) DEFAULT NULL,
   PRIMARY KEY (`signatureName`),
   KEY `FKob3uvde5er8oiayu91rowlcgm` (`article_pubmedId`),
@@ -636,6 +666,36 @@ CREATE TABLE `signature_disease` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `signature_disease_a`
+--
+
+DROP TABLE IF EXISTS `signature_disease_a`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `signature_disease_a` (
+  `signatureName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `diseaseA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  UNIQUE KEY `UK5l7cxcamgachdlhftt5w8up4c` (`signatureName`,`diseaseA`),
+  CONSTRAINT `FK9kg6rjl4mqi5jvuhq2xeo8727` FOREIGN KEY (`signatureName`) REFERENCES `signature` (`signatureName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `signature_disease_b`
+--
+
+DROP TABLE IF EXISTS `signature_disease_b`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `signature_disease_b` (
+  `signatureName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `diseaseB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  UNIQUE KEY `UKs688b13os4hgm5xyuf8qe4u7k` (`signatureName`,`diseaseB`),
+  CONSTRAINT `FKkqqdynv8wv5wdvh1cg65dracp` FOREIGN KEY (`signatureName`) REFERENCES `signature` (`signatureName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `signature_geneset_genes`
 --
 
@@ -649,6 +709,36 @@ CREATE TABLE `signature_geneset_genes` (
   KEY `FKrddj16bdtfbejiox2tvxvimif` (`gene`),
   CONSTRAINT `FKphu5u29cwlhygq5ihbasc7bsj` FOREIGN KEY (`signature`) REFERENCES `signature` (`signatureName`),
   CONSTRAINT `FKrddj16bdtfbejiox2tvxvimif` FOREIGN KEY (`gene`) REFERENCES `genes` (`gene`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `signature_treatment_a`
+--
+
+DROP TABLE IF EXISTS `signature_treatment_a`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `signature_treatment_a` (
+  `signatureName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `treatmentA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  UNIQUE KEY `UK9re42ueptpwx3pvwhoin2yifj` (`signatureName`,`treatmentA`),
+  CONSTRAINT `FK7lrm33u484vu6bmyp2fhf4nyb` FOREIGN KEY (`signatureName`) REFERENCES `signature` (`signatureName`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `signature_treatment_b`
+--
+
+DROP TABLE IF EXISTS `signature_treatment_b`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `signature_treatment_b` (
+  `signatureName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `treatmentB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  UNIQUE KEY `UKnq7bvll14xl4mqclcwbjp4llk` (`signatureName`,`treatmentB`),
+  CONSTRAINT `FKdpc2sb6wbjo937ium3vbimv7v` FOREIGN KEY (`signatureName`) REFERENCES `signature` (`signatureName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -735,4 +825,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-21 15:43:15
+-- Dump completed on 2020-04-24 15:46:33

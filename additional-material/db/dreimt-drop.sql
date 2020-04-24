@@ -36,11 +36,16 @@ DROP TABLE `signature_cell_subtype_a`;
 DROP TABLE `signature_cell_type_b`;
 DROP TABLE `signature_cell_subtype_b`;
 DROP TABLE `signature_disease`;
+DROP TABLE `signature_disease_a`;
+DROP TABLE `signature_disease_b`;
+DROP TABLE `signature_treatment_a`;
+DROP TABLE `signature_treatment_b`;
 DROP TABLE `signature`;
 
-DROP TABLE `genes`;
 DROP TABLE `drug_moa`;
+DROP TABLE `drug_target_genes`;
 DROP TABLE `drug`;
+DROP TABLE `genes`;
 DROP TABLE `article_metadata`;
 
 DROP TABLE `database_versions`;

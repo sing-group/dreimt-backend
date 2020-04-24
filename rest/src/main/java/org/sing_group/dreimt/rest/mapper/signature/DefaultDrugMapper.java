@@ -34,7 +34,8 @@ public class DefaultDrugMapper implements DrugMapper {
   @Override
   public DrugData toDrugData(Drug drug) {
     return new DrugData(
-      drug.getCommonName(), drug.getSourceName(), drug.getSourceDb(), drug.getStatus(), drug.getMoa()
+      drug.getCommonName(), drug.getSourceName(), drug.getSourceDb(), drug.getStatus(), drug.getMoa(),
+      drug.getTargetGenes()
     );
   }
 }

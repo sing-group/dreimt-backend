@@ -9,12 +9,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -71,19 +71,22 @@ public class FullDrugSignatureInteraction implements Serializable {
   private String drugCommonName;
   private String drugSourceName;
   private String drugSourceDb;
-  
+
   @Enumerated(EnumType.STRING)
   private DrugStatus drugStatus;
   private String drugMoa;
 
+  @Column(length = 450)
+  private String drugTargetGenes;
+
   private String signatureName;
-  
+
   @Enumerated(EnumType.STRING)
   private SignatureType signatureType;
 
   @Enumerated(EnumType.STRING)
   private ExperimentalDesign signatureExperimentalDesign;
-  
+
   private String signatureOrganism;
   private String signatureSourceDb;
 
@@ -96,12 +99,21 @@ public class FullDrugSignatureInteraction implements Serializable {
   private String signatureCellSubTypeA;
   private String signatureCellTypeB;
   private String signatureCellSubTypeB;
-  
+
+  private String signatureTreatmentA;
+  private String signatureTreatmentB;
+  private String signatureDiseaseA;
+  private String signatureDiseaseB;
+  private String signatureLocalisationA;
+  private String signatureLocalisationB;
+  private String signatureStateA;
+  private String signatureStateB;
+
   @Enumerated(EnumType.STRING)
   private DrugSignatureInteractionType interactionType;
 
   private double tau;
-  
+
   @Column(nullable = true)
   private Double upFdr;
 
@@ -109,7 +121,7 @@ public class FullDrugSignatureInteraction implements Serializable {
   private Double downFdr;
 
   public FullDrugSignatureInteraction() {}
-  
+
   public DrugSignatureInteractionType getInteractionType() {
     return interactionType;
   }
@@ -125,7 +137,7 @@ public class FullDrugSignatureInteraction implements Serializable {
   public Double getDownFdr() {
     return downFdr;
   }
-  
+
   public String getDrugCommonName() {
     return drugCommonName;
   }
@@ -144,6 +156,10 @@ public class FullDrugSignatureInteraction implements Serializable {
 
   public String getDrugMoa() {
     return drugMoa;
+  }
+
+  public String getDrugTargetGenes() {
+    return drugTargetGenes;
   }
 
   public String getSignatureName() {
@@ -188,6 +204,38 @@ public class FullDrugSignatureInteraction implements Serializable {
 
   public String getSignatureCellSubTypeB() {
     return signatureCellSubTypeB;
+  }
+
+  public String getSignatureDiseaseA() {
+    return signatureDiseaseA;
+  }
+
+  public String getSignatureDiseaseB() {
+    return signatureDiseaseB;
+  }
+
+  public String getSignatureTreatmentA() {
+    return signatureTreatmentA;
+  }
+
+  public String getSignatureTreatmentB() {
+    return signatureTreatmentB;
+  }
+
+  public String getSignatureLocalisationA() {
+    return signatureLocalisationA;
+  }
+
+  public String getSignatureLocalisationB() {
+    return signatureLocalisationB;
+  }
+
+  public String getSignatureStateA() {
+    return signatureStateA;
+  }
+
+  public String getSignatureStateB() {
+    return signatureStateB;
   }
 
   @Override

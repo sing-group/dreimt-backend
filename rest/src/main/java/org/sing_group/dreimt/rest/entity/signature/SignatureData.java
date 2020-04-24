@@ -41,6 +41,12 @@ public class SignatureData implements Serializable {
   private ExperimentalDesign experimentalDesign;
   private String organism;
   private Set<String> disease;
+  private Set<String> diseaseA;
+  private Set<String> diseaseB;
+  private Set<String> treatmentA;
+  private Set<String> treatmentB;
+  private String stateA;
+  private String stateB;
   private Integer articlePubMedId;
   private String articleTitle;
   private String articleAuthors;
@@ -53,8 +59,10 @@ public class SignatureData implements Serializable {
 
   public SignatureData(
     String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA, Set<String> cellTypeB,
-    Set<String> cellSubTypeB, String sourceDb, ExperimentalDesign experimentalDesign, String organism, Set<String> disease,
-    Integer articlePubMedId, String articleTitle, String articleAuthors, SignatureType signatureType, URI signatureGenesUri, URI articleMetadataUri
+    Set<String> cellSubTypeB, String sourceDb, ExperimentalDesign experimentalDesign, String organism,
+    Set<String> disease, Set<String> diseaseA, Set<String> diseaseB, Set<String> treatmentA, Set<String> treatmentB,
+    String stateA, String stateB, Integer articlePubMedId, String articleTitle, String articleAuthors,
+    SignatureType signatureType, URI signatureGenesUri, URI articleMetadataUri
   ) {
     super();
     this.signatureName = signatureName;
@@ -66,6 +74,12 @@ public class SignatureData implements Serializable {
     this.experimentalDesign = experimentalDesign;
     this.organism = organism;
     this.disease = disease;
+    this.diseaseA = diseaseA;
+    this.diseaseB = diseaseB;
+    this.treatmentA = treatmentA;
+    this.treatmentB = treatmentB;
+    this.stateA = stateA;
+    this.stateB = stateB;
     this.articlePubMedId = articlePubMedId;
     this.articleTitle = articleTitle;
     this.articleAuthors = articleAuthors;
@@ -121,6 +135,30 @@ public class SignatureData implements Serializable {
 
   public Set<String> getDisease() {
     return disease;
+  }
+
+  public Set<String> getDiseaseA() {
+    return diseaseA;
+  }
+
+  public Set<String> getDiseaseB() {
+    return diseaseB;
+  }
+
+  public Set<String> getTreatmentA() {
+    return treatmentA;
+  }
+
+  public Set<String> getTreatmentB() {
+    return treatmentB;
+  }
+
+  public String getStateA() {
+    return stateA;
+  }
+
+  public String getStateB() {
+    return stateB;
   }
 
   public URI getSignatureGenesUri() {

@@ -9,12 +9,12 @@
  * it under the terms of the GNU General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public
  * License along with this program.  If not, see
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
@@ -56,8 +56,8 @@ public abstract class Signature implements Serializable {
 
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(
-    name = "signature_cell_type_a", 
-    joinColumns = @JoinColumn(name = "signatureName"), 
+    name = "signature_cell_type_a",
+    joinColumns = @JoinColumn(name = "signatureName"),
     uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "cellType"})
   )
   @Column(name = "cellType", nullable = false)
@@ -65,26 +65,26 @@ public abstract class Signature implements Serializable {
 
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(
-    name = "signature_cell_subtype_a", 
-    joinColumns = @JoinColumn(name = "signatureName"), 
+    name = "signature_cell_subtype_a",
+    joinColumns = @JoinColumn(name = "signatureName"),
     uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "cellSubType"})
   )
   @Column(name = "cellSubType", nullable = false)
   private Set<String> cellSubTypeA;
-  
+
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(
-    name = "signature_cell_type_b", 
-    joinColumns = @JoinColumn(name = "signatureName"), 
+    name = "signature_cell_type_b",
+    joinColumns = @JoinColumn(name = "signatureName"),
     uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "cellType"})
   )
   @Column(name = "cellType", nullable = false)
   private Set<String> cellTypeB;
-  
+
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(
-    name = "signature_cell_subtype_b", 
-    joinColumns = @JoinColumn(name = "signatureName"), 
+    name = "signature_cell_subtype_b",
+    joinColumns = @JoinColumn(name = "signatureName"),
     uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "cellSubType"})
   )
   @Column(name = "cellSubType", nullable = false)
@@ -103,29 +103,71 @@ public abstract class Signature implements Serializable {
 
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(
-    name = "signature_disease", 
-    joinColumns = @JoinColumn(name = "signatureName"), 
+    name = "signature_disease",
+    joinColumns = @JoinColumn(name = "signatureName"),
     uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "disease"})
   )
   private Set<String> disease;
+
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(
+    name = "signature_treatment_a",
+    joinColumns = @JoinColumn(name = "signatureName"),
+    uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "treatmentA"})
+  )
+  private Set<String> treatmentA;
+
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(
+    name = "signature_treatment_b",
+    joinColumns = @JoinColumn(name = "signatureName"),
+    uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "treatmentB"})
+  )
+  private Set<String> treatmentB;
+
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(
+    name = "signature_disease_a",
+    joinColumns = @JoinColumn(name = "signatureName"),
+    uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "diseaseA"})
+  )
+  private Set<String> diseaseA;
+
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(
+    name = "signature_disease_b",
+    joinColumns = @JoinColumn(name = "signatureName"),
+    uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "diseaseB"})
+  )
+  private Set<String> diseaseB;
+
+  private String localisationA;
+  private String localisationB;
+  private String stateA;
+  private String stateB;
 
   @Column(name = "signatureType", insertable = false, updatable = false)
   private String signatureType;
 
   Signature() {}
-  
+
   public Signature(
     String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA, Set<String> cellTypeB,
     Set<String> cellSubTypeB, String sourceDb, ExperimentalDesign experimentalDesign,
-    String organism, Set<String> disease
-    ) {
-    this(signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, null, sourceDb, experimentalDesign, organism, disease);
+    String organism, Set<String> disease, Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA,
+    Set<String> diseaseB, String localisationA, String localisationB, String stateA, String stateB
+  ) {
+    this(
+      signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, null, sourceDb, experimentalDesign, organism,
+      disease, treatmentA, treatmentB, diseaseA, diseaseB, localisationA, localisationB, stateA, stateB
+    );
   }
 
   public Signature(
     String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA, Set<String> cellTypeB,
     Set<String> cellSubTypeB, ArticleMetadata articleMetadata, String sourceDb, ExperimentalDesign experimentalDesign,
-    String organism, Set<String> disease
+    String organism, Set<String> disease, Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA,
+    Set<String> diseaseB, String localisationA, String localisationB, String stateA, String stateB
   ) {
     this.signatureName = signatureName;
     this.cellTypeA = cellTypeA;
@@ -137,6 +179,14 @@ public abstract class Signature implements Serializable {
     this.experimentalDesign = experimentalDesign;
     this.organism = organism;
     this.disease = disease;
+    this.treatmentA = treatmentA;
+    this.treatmentB = treatmentB;
+    this.diseaseA = diseaseA;
+    this.diseaseB = diseaseB;
+    this.localisationA = localisationA;
+    this.localisationB = localisationB;
+    this.stateA = stateA;
+    this.stateB = stateB;
   }
 
   public Optional<ArticleMetadata> getArticleMetadata() {
@@ -179,6 +229,38 @@ public abstract class Signature implements Serializable {
 
   public Set<String> getDisease() {
     return disease;
+  }
+
+  public Set<String> getDiseaseA() {
+    return diseaseA;
+  }
+
+  public Set<String> getDiseaseB() {
+    return diseaseB;
+  }
+
+  public Set<String> getTreatmentA() {
+    return treatmentA;
+  }
+
+  public Set<String> getTreatmentB() {
+    return treatmentB;
+  }
+
+  public String getLocalisationA() {
+    return localisationA;
+  }
+
+  public String getLocalisationB() {
+    return localisationB;
+  }
+
+  public String getStateA() {
+    return stateA;
+  }
+
+  public String getStateB() {
+    return stateB;
   }
 
   @Override
