@@ -84,7 +84,7 @@ import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
 @Path("interactions")
-@Produces(APPLICATION_JSON)
+@Produces({APPLICATION_JSON, "text/csv"})
 @Stateless
 @CrossDomain(allowedHeaders = "X-Count")
 @Api("interactions")
@@ -123,6 +123,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @GET
+  @Produces(APPLICATION_JSON)
   @ApiOperation(
     value = "Lists the drug-signature interactions",
     response = DrugSignatureInteractionData.class,
@@ -182,26 +183,96 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         );
 
       final DrugSignatureInteractionData[] data =
-        service.list(listingOptions)
-          .map(this.drugSignatureMapper::toDrugSignatureInteractionData)
-          .toArray(DrugSignatureInteractionData[]::new);
+        this.drugSignatureMapper.toDrugSignatureInteractionData(service.list(listingOptions));
 
       final long count = service.count(listingOptions);
 
-      return Response.ok(data)
+      return Response.ok(data, APPLICATION_JSON)
         .header("X-Count", count)
       .build();
     } else {
       final DrugSignatureInteractionData[] data =
-        service.list(listingOptionsMapper.toListingOptions(getListingOptions(page, pageSize, orderField, sortDirection)), freeText)
-          .map(this.drugSignatureMapper::toDrugSignatureInteractionData)
-          .toArray(DrugSignatureInteractionData[]::new);
+        this.drugSignatureMapper.toDrugSignatureInteractionData(
+          service.list(listingOptionsMapper.toListingOptions(getListingOptions(page, pageSize, orderField, sortDirection)), freeText)
+        );
 
       final long count = service.count(freeText);
 
-      return Response.ok(data)
+      return Response.ok(data, APPLICATION_JSON)
         .header("X-Count", count)
       .build();
+    }
+  }
+  
+  @GET
+  @Produces("text/csv")
+  @ApiOperation(
+    value = "Lists the drug-signature interactions in CSV format",
+    response = String.class,
+    responseContainer = "list",
+    code = 200
+  )
+  @Override
+  public Response listAsCsv(
+    @QueryParam("page") Integer page,
+    @QueryParam("pageSize") Integer pageSize,
+    @QueryParam("orderField") @DefaultValue("NONE") DrugSignatureInteractionField orderField,
+    @QueryParam("sortDirection") @DefaultValue("NONE") SortDirection sortDirection,
+    @QueryParam("signatureName") String signatureName,
+    @QueryParam("cellType1") String cellType1,
+    @QueryParam("cellSubType1") String cellSubType1,
+    @QueryParam("cellType2") String cellType2,
+    @QueryParam("cellSubType2") String cellSubType2,
+    @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
+    @QueryParam("organism") String organism,
+    @QueryParam("disease") String disease,
+    @QueryParam("signatureSourceDb") String signatureSourceDb,
+    @QueryParam("signaturePubMedId") Integer signaturePubMedId,
+    @QueryParam("drugSourceName") String drugSourceName,
+    @QueryParam("drugSourceDb") String drugSourceDb,
+    @QueryParam("drugCommonName") String drugCommonName,
+    @QueryParam("drugMoa") String drugMoa,
+    @QueryParam("minDrugDss") Double minDrugDss,
+    @QueryParam("interactionType") DrugSignatureInteractionType interactionType,
+    @QueryParam("minTau") Double minTau,
+    @QueryParam("maxUpFdr") Double maxUpFdr,
+    @QueryParam("maxDownFdr") Double maxDownFdr,
+    @QueryParam("freeText") String freeText
+  ) {
+    if (
+      freeText != null && (signatureName != null || cellType1 != null || cellSubType1 != null || cellType2 != null
+        || cellSubType2 != null || experimentalDesign != null || organism != null || disease != null
+        || signatureSourceDb != null || signaturePubMedId != null || drugSourceName != null || drugSourceDb != null
+        || drugCommonName != null || drugMoa != null || minDrugDss != null || interactionType != null || minTau != null
+        || maxUpFdr != null || maxDownFdr != null)
+    ) {
+      throw new BadRequestException("freeText parameter is not compatible with other filters");
+    }
+    
+    if (freeText == null) {
+      final SignatureListingOptions signatureListingOptions =
+        new SignatureListingOptions(
+          signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
+          signatureSourceDb, signaturePubMedId
+        );
+
+      final DrugSignatureInteractionListingOptions listingOptions =
+        new DrugSignatureInteractionListingOptions(
+          listingOptionsMapper.toListingOptions(getListingOptions(page, pageSize, orderField, sortDirection)),
+          signatureListingOptions, interactionType, drugSourceName, drugSourceDb, drugCommonName, drugMoa, minDrugDss,
+          minTau, maxUpFdr, maxDownFdr
+        );
+
+      final String data = this.drugSignatureMapper.toDrugSignatureInteractionCsvData(service.list(listingOptions));
+
+      return Response.ok(data, "text/csv").build();
+    } else {
+      final String data =
+        this.drugSignatureMapper.toDrugSignatureInteractionCsvData(
+          service.list(listingOptionsMapper.toListingOptions(getListingOptions(page, pageSize, orderField, sortDirection)), freeText)
+        );      
+      
+      return Response.ok(data, "text/csv").build();
     }
   }
 
@@ -220,6 +291,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @Path("params/signature-name/values")
+  @Produces(APPLICATION_JSON)
   @GET
   @ApiOperation(
     value = "Lists the possible signature name values in drug-signature interactions",
@@ -270,6 +342,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @Path("params/cell-type-and-subtype-1/values")
+  @Produces(APPLICATION_JSON)
   @GET
   @ApiOperation(
     value = "Lists the possible cell type and subtype 1 values in drug-signature interactions",
@@ -318,6 +391,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @Path("params/cell-type-and-subtype-2/values")
+  @Produces(APPLICATION_JSON)
   @GET
   @ApiOperation(
     value = "Lists the possible cell type and subtype 2 values in drug-signature interactions",
@@ -368,6 +442,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @Path("params/cell-type-1/values")
+  @Produces(APPLICATION_JSON)
   @GET
   @ApiOperation(
     value = "Lists the possible cell type 1 values in drug-signature interactions",
@@ -417,6 +492,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @Path("params/cell-subtype-1/values")
+  @Produces(APPLICATION_JSON)
   @GET
   @ApiOperation(
     value = "Lists the possible cell subtype 1 values in drug-signature interactions",
@@ -466,6 +542,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @Path("params/cell-type-2/values")
+  @Produces(APPLICATION_JSON)
   @GET
   @ApiOperation(
     value = "Lists the possible cell type 2 values in drug-signature interactions",
@@ -516,6 +593,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @Path("params/cell-subtype-2/values")
+  @Produces(APPLICATION_JSON)
   @GET
   @ApiOperation(
     value = "Lists the possible cell subtype 2 values in drug-signature interactions",
@@ -566,6 +644,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @Path("params/experimental-design/values")
+  @Produces(APPLICATION_JSON)
   @GET
   @ApiOperation(
     value = "Lists the possible experimental design values in drug-signature interactions",
@@ -616,6 +695,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @Path("params/organism/values")
+  @Produces(APPLICATION_JSON)
   @GET
   @ApiOperation(
     value = "Lists the possible organism values in drug-signature interactions",
@@ -666,6 +746,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @Path("params/disease/values")
+  @Produces(APPLICATION_JSON)
   @GET
   @ApiOperation(
     value = "Lists the possible disease values in drug-signature interactions",
@@ -716,6 +797,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @Path("params/signature-source-db/values")
+  @Produces(APPLICATION_JSON)
   @GET
   @ApiOperation(
     value = "Lists the possible signature source DB values in drug-signature interactions",
@@ -766,6 +848,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @Path("params/interaction-type/values")
+  @Produces(APPLICATION_JSON)
   @GET
   @ApiOperation(
     value = "Lists the possible interaction type values in drug-signature interactions",
@@ -816,6 +899,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @Path("params/signature-pubmed-id/values")
+  @Produces(APPLICATION_JSON)
   @GET
   @ApiOperation(
     value = "Lists the possible signature article PubMed ID values in drug-signature interactions",
@@ -866,6 +950,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @Path("params/drug-source-name/values")
+  @Produces(APPLICATION_JSON)
   @GET
   @ApiOperation(
     value = "Lists the possible drug source name values in drug-signature interactions",
@@ -916,6 +1001,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @Path("params/drug-source-db/values")
+  @Produces(APPLICATION_JSON)
   @GET
   @ApiOperation(
     value = "Lists the possible drug source DB values in drug-signature interactions",
@@ -967,6 +1053,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @Path("params/drug-common-name/values")
+  @Produces(APPLICATION_JSON)
   @GET
   @ApiOperation(
     value = "Lists the possible drug common name values in drug-signature interactions",
@@ -1017,6 +1104,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
   
   @Path("params/drug-moa/values")
+  @Produces(APPLICATION_JSON)
   @GET
   @ApiOperation(
     value = "Lists the possible drug MOA values in drug-signature interactions",
@@ -1067,6 +1155,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @POST
+  @Produces(APPLICATION_JSON)
   @Path("query/jaccard")
   @Consumes(MediaType.APPLICATION_JSON)
   @ApiOperation(
@@ -1185,6 +1274,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   @POST
+  @Produces(APPLICATION_JSON)
   @Path("query/cmap")
   @Consumes(MediaType.APPLICATION_JSON)
   @ApiOperation(

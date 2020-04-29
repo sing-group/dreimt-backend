@@ -176,7 +176,7 @@ public class DefaultCmapDrugUpDownSignatureInteractionDao implements CmapDrugUpD
 
       andPredicates.add(cb.greaterThanOrEqualTo(cb.abs(tau), listingOptions.getMinTau().get()));
     }
-    
+
     if (listingOptions.getMaxUpFdr().isPresent()) {
       final Path<Double> upFdr = root.get("upFdr");
 

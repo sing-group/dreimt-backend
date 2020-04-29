@@ -23,6 +23,10 @@
 package org.sing_group.dreimt.rest.mapper.signature;
 
 import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.joining;
+
+import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -49,12 +53,60 @@ public class DefaultDrugSignatureInteractionMapper implements DrugSignatureInter
   }
 
   @Override
-  public DrugSignatureInteractionData toDrugSignatureInteractionData(DrugSignatureInteraction interaction) {
+  public DrugSignatureInteractionData[] toDrugSignatureInteractionData(Stream<DrugSignatureInteraction> interactions) {
+    return interactions.map(this::toDrugSignatureInteractionData).toArray(DrugSignatureInteractionData[]::new);
+  }
+
+  private DrugSignatureInteractionData toDrugSignatureInteractionData(DrugSignatureInteraction interaction) {
     return new DrugSignatureInteractionData(
       this.drugMapper.toDrugData(interaction.getDrug()),
       this.signatureMapper.toSignatureData(interaction.getSignature()),
-      interaction.getInteractionType(), interaction.getTau(), 
+      interaction.getInteractionType(), interaction.getTau(),
       interaction.getUpFdr(), interaction.getDownFdr()
     );
+  }
+
+  public String toDrugSignatureInteractionCsvData(Stream<DrugSignatureInteraction> interactions) {
+    SignatureSummaryGenerator signatureSummaryGenerator = new SignatureSummaryGenerator();
+    StringBuilder sb = new StringBuilder();
+    sb.append(
+      "drug_common_name,summary,"
+        + "case_cell_type,case_cell_subtype,reference_cell_type,reference_cell_subtype,"
+        + "signature_name,up_fdr,down_fdr,tau,"
+        + "drug_specificity_score,drug_status,drug_moa,"
+        + "prediction_type,organism,experimental_design\n"
+    );
+
+    interactions.forEach(i -> {
+      sb
+        .append("\"").append(i.getDrug().getCommonName()).append("\"").append(",")
+        .append("\"").append(signatureSummaryGenerator.interpretation(i)).append("\"").append(",")
+
+        .append("\"").append(setString(i.getSignature().getCellTypeA())).append("\"").append(",")
+        .append("\"").append(setString(i.getSignature().getCellSubTypeA())).append("\"").append(",")
+        .append("\"").append(setString(i.getSignature().getCellTypeB())).append("\"").append(",")
+        .append("\"").append(setString(i.getSignature().getCellSubTypeB())).append("\"").append(",")
+
+        .append("\"").append(i.getSignature().getSignatureName()).append("\"").append(",")
+
+        .append(i.getUpFdr() == null ? "" : i.getUpFdr()).append(",")
+        .append(i.getDownFdr() == null ? "" : i.getDownFdr()).append(",")
+        .append(i.getTau()).append(",")
+
+        .append(i.getDrug().getDss() == null ? "" : i.getDrug().getDss()).append(",")
+        .append("\"").append(i.getDrug().getStatus()).append("\"").append(",")
+        .append("\"").append(setString(i.getDrug().getMoa())).append("\"").append(",")
+
+        .append("\"").append(i.getInteractionType().toString()).append("\"").append(",")
+        .append("\"").append(i.getSignature().getOrganism()).append("\"").append(",")
+        .append("\"").append(i.getSignature().getExperimentalDesign()).append("\"")
+        .append("\n");
+    });
+
+    return sb.toString();
+  }
+
+  private static String setString(Set<String> elements) {
+    return elements.stream().collect(joining(", "));
   }
 }

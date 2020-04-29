@@ -22,6 +22,8 @@
  */
 package org.sing_group.dreimt.rest.mapper.spi.signature;
 
+import java.util.stream.Stream;
+
 import javax.ws.rs.core.UriBuilder;
 
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
@@ -31,5 +33,7 @@ public interface DrugSignatureInteractionMapper {
 
   void setUriBuilder(UriBuilder uriBuilder);
 
-  DrugSignatureInteractionData toDrugSignatureInteractionData(DrugSignatureInteraction signature);
+  DrugSignatureInteractionData[] toDrugSignatureInteractionData(Stream<DrugSignatureInteraction> interactions);
+
+  String toDrugSignatureInteractionCsvData(Stream<DrugSignatureInteraction> interactions);
 }

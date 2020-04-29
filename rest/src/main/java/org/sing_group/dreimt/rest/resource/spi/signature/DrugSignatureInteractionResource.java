@@ -43,6 +43,15 @@ public interface DrugSignatureInteractionResource {
     Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
     String freeText
   );
+  
+  Response listAsCsv(
+    Integer page, Integer pageSize, DrugSignatureInteractionField orderField, SortDirection sortDirection,
+    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
+    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
+    Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    String freeText
+  );
 
   Response jaccardQuery(JaccardQueryParameters jaccardQueryParameters);
 
