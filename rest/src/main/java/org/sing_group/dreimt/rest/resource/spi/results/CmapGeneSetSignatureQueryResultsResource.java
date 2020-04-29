@@ -37,35 +37,35 @@ public interface CmapGeneSetSignatureQueryResultsResource {
 
   Response queryInteractions(
     String resultId, Double minTau, Double maxFdr, String drugSourceName,
-    String drugSourceDb, String drugCommonName, String drugMoa,
+    String drugSourceDb, String drugCommonName, String drugMoa, Double minDrugDss,
     Integer page, Integer pageSize, CmapGeneSetSignatureDrugInteractionField orderField,
     SortDirection sortDirection
   );
 
   Response queryInteractionsAsCsv(
     String resultId, Double minTau, Double maxFdr, String drugSourceName,
-    String drugSourceDb, String drugCommonName, String drugMoa,
+    String drugSourceDb, String drugCommonName, String drugMoa, Double minDrugDss,
     Integer page, Integer pageSize, CmapGeneSetSignatureDrugInteractionField orderField,
     SortDirection sortDirection
   );
 
   Response listDrugSourceNameValues(
     String resultId, Double minTau, Double maxFdr, String drugSourceName,
-    String drugSourceDb, String drugCommonName, String drugMoa
+    String drugSourceDb, String drugCommonName, String drugMoa, Double minDrugDss
   );
 
   Response listDrugSourceDbValues(
     String resultId, Double minTau, Double maxFdr, String drugSourceName,
-    String drugSourceDb, String drugCommonName, String drugMoa
+    String drugSourceDb, String drugCommonName, String drugMoa, Double minDrugDss
   );
 
   Response listDrugCommonNameValues(
     String resultId, Double minTau, Double maxFdr, String drugSourceName,
-    String drugSourceDb, String drugCommonName, String drugMoa
+    String drugSourceDb, String drugCommonName, String drugMoa, Double minDrugDss
   );
 
   Response listDrugMoaValues(
     String resultId, Double minTau, Double maxFdr, String drugSourceName,
-    String drugSourceDb, String drugCommonName, String drugMoa
+    String drugSourceDb, String drugCommonName, String drugMoa, Double minDrugDss
   );
 }

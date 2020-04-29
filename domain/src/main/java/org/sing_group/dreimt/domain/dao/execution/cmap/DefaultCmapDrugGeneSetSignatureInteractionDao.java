@@ -116,6 +116,9 @@ public class DefaultCmapDrugGeneSetSignatureInteractionDao implements CmapDrugGe
           case DRUG_COMMON_NAME:
             orders.add(order.apply(root.join("drug").get("commonName")));
             break;
+          case DRUG_DSS:
+            orders.add(order.apply(root.join("drug").get("dss")));
+            break;
 
           case FDR:
             orders.add(order.apply(root.get("fdr")));
@@ -169,6 +172,13 @@ public class DefaultCmapDrugGeneSetSignatureInteractionDao implements CmapDrugGe
     }
 
     Join<CmapDrugGeneSetSignatureInteraction, Drug> joinDrug = root.join("drug", JoinType.LEFT);
+
+    if (listingOptions.getMinDrugDss().isPresent()) {
+      final Path<Double> drugDss = joinDrug.get("dss");
+
+      andPredicates.add(cb.greaterThanOrEqualTo(drugDss, listingOptions.getMinDrugDss().get()));
+    }
+
     if (listingOptions.getDrugSourceName().isPresent()) {
       final Path<String> sourceName = joinDrug.get("sourceName");
 

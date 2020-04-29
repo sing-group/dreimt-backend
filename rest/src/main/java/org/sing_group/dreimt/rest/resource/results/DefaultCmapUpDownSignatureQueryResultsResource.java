@@ -24,6 +24,7 @@ package org.sing_group.dreimt.rest.resource.results;
 
 import static java.util.stream.Collectors.toList;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
+import static org.sing_group.dreimt.domain.dao.ListingOptions.noModification;
 
 import java.util.List;
 import java.util.function.BiFunction;
@@ -40,16 +41,15 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
 
-import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.dao.SortDirection;
 import org.sing_group.dreimt.domain.dao.execution.cmap.CmapDrugUpDownSignatureInteractionListingOptions;
-import org.sing_group.dreimt.domain.entities.execution.cmap.CmapUpDownSignatureDrugInteractionField;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapDrugUpDownSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapResult;
+import org.sing_group.dreimt.domain.entities.execution.cmap.CmapUpDownSignatureDrugInteractionField;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapUpDownSignatureResult;
 import org.sing_group.dreimt.rest.entity.query.ListingOptionsData;
-import org.sing_group.dreimt.rest.entity.query.cmap.CmapUpDownSignatureDrugInteractionData;
 import org.sing_group.dreimt.rest.entity.query.cmap.CmapQueryUpDownSignatureMetadataData;
+import org.sing_group.dreimt.rest.entity.query.cmap.CmapUpDownSignatureDrugInteractionData;
 import org.sing_group.dreimt.rest.entity.signature.UpDownSignatureGeneData;
 import org.sing_group.dreimt.rest.filter.CrossDomain;
 import org.sing_group.dreimt.rest.mapper.spi.query.ListingOptionsMapper;
@@ -156,6 +156,7 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
     @QueryParam("drugMoa") String drugMoa,
+    @QueryParam("minDrugDss") Double minDrugDss,
     @QueryParam("page") Integer page,
     @QueryParam("pageSize") Integer pageSize,
     @QueryParam("orderField") @DefaultValue("NONE") CmapUpDownSignatureDrugInteractionField orderField,
@@ -164,7 +165,7 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
     return this.cmapSignatureQueryResult(
       resultId, 
       minTau, maxUpFdr, maxDownFdr, drugSourceName, drugSourceDb, 
-      drugCommonName, drugMoa, page, pageSize, orderField, sortDirection,
+      drugCommonName, drugMoa, minDrugDss, page, pageSize, orderField, sortDirection,
       (cmapResult, interactions) -> mapper.toCmapDrugInteractionData(interactions),
       APPLICATION_JSON, true
     );
@@ -191,6 +192,7 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugMoa") String drugCommonName,
     @QueryParam("drugCommonName") String drugMoa,
+    @QueryParam("minDrugDss") Double minDrugDss,
     @QueryParam("page") Integer page,
     @QueryParam("pageSize") Integer pageSize,
     @QueryParam("orderField") @DefaultValue("NONE") CmapUpDownSignatureDrugInteractionField orderField,
@@ -199,7 +201,7 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
     return this.cmapSignatureQueryResult(
       resultId, 
       minTau, maxUpFdr, maxDownFdr, drugSourceName, drugSourceDb, 
-      drugCommonName, drugMoa, page, pageSize, orderField, sortDirection,
+      drugCommonName, drugMoa, minDrugDss, page, pageSize, orderField, sortDirection,
       (cmapResult, interactions) -> mapper.toCmapDrugInteractionCsvData(interactions), 
       "text/csv", false
     );
@@ -214,6 +216,7 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
     String drugSourceDb, 
     String drugCommonName,
     String drugMoa,
+    Double minDrugDss,
     Integer page, 
     Integer pageSize,
     CmapUpDownSignatureDrugInteractionField orderField, 
@@ -228,7 +231,7 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
       new CmapDrugUpDownSignatureInteractionListingOptions(
         listingOptionsMapper.toListingOptions(listingOptions),
         drugSourceName, drugSourceDb, drugCommonName, drugMoa,
-        minTau, maxUpFdr, maxDownFdr
+        minDrugDss, minTau, maxUpFdr, maxDownFdr
       );
 
     CmapUpDownSignatureResult cmapResult = findCmapUpDownSignatureResult(resultId);
@@ -279,13 +282,12 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("drugMoa") String drugMoa
+    @QueryParam("drugMoa") String drugMoa,
+    @QueryParam("minDrugDss") Double minDrugDss
   ) {
     final CmapDrugUpDownSignatureInteractionListingOptions cmapListingOptions =
       new CmapDrugUpDownSignatureInteractionListingOptions(
-        ListingOptions.noModification(),
-        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
-        minTau, maxUpFdr, maxDownFdr
+        noModification(), drugSourceName, drugSourceDb, drugCommonName, drugMoa, minDrugDss, minTau, maxUpFdr, maxDownFdr
       );
 
     CmapUpDownSignatureResult cmapResult = findCmapUpDownSignatureResult(resultId);
@@ -314,13 +316,12 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("drugMoa") String drugMoa
+    @QueryParam("drugMoa") String drugMoa,
+    @QueryParam("minDrugDss") Double minDrugDss
   ) {
     final CmapDrugUpDownSignatureInteractionListingOptions cmapListingOptions =
       new CmapDrugUpDownSignatureInteractionListingOptions(
-        ListingOptions.noModification(),
-        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
-        minTau, maxUpFdr, maxDownFdr
+        noModification(), drugSourceName, drugSourceDb, drugCommonName, drugMoa, minDrugDss, minTau, maxUpFdr, maxDownFdr
       );
 
     CmapUpDownSignatureResult cmapResult = findCmapUpDownSignatureResult(resultId);
@@ -349,13 +350,12 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("drugMoa") String drugMoa
+    @QueryParam("drugMoa") String drugMoa,
+    @QueryParam("minDrugDss") Double minDrugDss
   ) {
     final CmapDrugUpDownSignatureInteractionListingOptions cmapListingOptions =
       new CmapDrugUpDownSignatureInteractionListingOptions(
-        ListingOptions.noModification(),
-        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
-        minTau, maxUpFdr, maxDownFdr
+        noModification(), drugSourceName, drugSourceDb, drugCommonName, drugMoa, minDrugDss, minTau, maxUpFdr, maxDownFdr
       );
 
     CmapUpDownSignatureResult cmapResult = findCmapUpDownSignatureResult(resultId);
@@ -384,13 +384,12 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
     @QueryParam("drugSourceName") String drugSourceName,
     @QueryParam("drugSourceDb") String drugSourceDb,
     @QueryParam("drugCommonName") String drugCommonName,
-    @QueryParam("drugMoa") String drugMoa
+    @QueryParam("drugMoa") String drugMoa,
+    @QueryParam("minDrugDss") Double minDrugDss
   ) {
     final CmapDrugUpDownSignatureInteractionListingOptions cmapListingOptions =
       new CmapDrugUpDownSignatureInteractionListingOptions(
-        ListingOptions.noModification(),
-        drugSourceName, drugSourceDb, drugCommonName, drugMoa,
-        minTau, maxUpFdr, maxDownFdr
+        noModification(), drugSourceName, drugSourceDb, drugCommonName, drugMoa, minDrugDss, minTau, maxUpFdr, maxDownFdr
       );
 
     CmapUpDownSignatureResult cmapResult = findCmapUpDownSignatureResult(resultId);

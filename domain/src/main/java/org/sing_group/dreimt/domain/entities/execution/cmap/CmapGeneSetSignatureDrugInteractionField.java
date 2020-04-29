@@ -27,6 +27,7 @@ public enum CmapGeneSetSignatureDrugInteractionField {
   DRUG_SOURCE_NAME,
   DRUG_SOURCE_DB,
   DRUG_COMMON_NAME,
+  DRUG_DSS,
   TAU,
   FDR
 }

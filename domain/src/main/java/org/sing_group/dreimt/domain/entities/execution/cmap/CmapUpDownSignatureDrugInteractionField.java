@@ -27,6 +27,7 @@ public enum CmapUpDownSignatureDrugInteractionField {
   DRUG_SOURCE_NAME,
   DRUG_SOURCE_DB,
   DRUG_COMMON_NAME,
+  DRUG_DSS,
   TAU,
   UP_FDR,
   DOWN_FDR

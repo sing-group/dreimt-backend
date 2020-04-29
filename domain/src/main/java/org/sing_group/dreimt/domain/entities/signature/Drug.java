@@ -29,6 +29,7 @@ import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -73,10 +74,13 @@ public class Drug implements Serializable {
   )
   private Set<Gene> targetGenes;
 
+  @Column(nullable = true)
+  private Double dss;
+
   Drug() {}
 
   public Drug(
-    String commonName, String sourceName, String sourceDb, DrugStatus status, Set<String> moa, Set<Gene> genes
+    String commonName, String sourceName, String sourceDb, DrugStatus status, Set<String> moa, Set<Gene> genes, Double dss
   ) {
     this.commonName = commonName;
     this.sourceName = sourceName;
@@ -84,6 +88,7 @@ public class Drug implements Serializable {
     this.status = status;
     this.moa = moa;
     this.targetGenes = genes;
+    this.dss = dss;
   }
 
   public String getCommonName() {
@@ -108,6 +113,10 @@ public class Drug implements Serializable {
 
   public Set<String> getTargetGenes() {
     return targetGenes.stream().map(Gene::getGene).collect(toSet());
+  }
+
+  public Double getDss() {
+    return dss;
   }
 
   @Override

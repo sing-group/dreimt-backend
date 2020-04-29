@@ -120,6 +120,9 @@ public class DefaultCmapDrugUpDownSignatureInteractionDao implements CmapDrugUpD
           case DRUG_COMMON_NAME:
             orders.add(order.apply(root.join("drug").get("commonName")));
             break;
+          case DRUG_DSS:
+            orders.add(order.apply(root.join("drug").get("dss")));
+            break;
 
           case UP_FDR:
             orders.add(order.apply(root.get("upFdr")));
@@ -173,7 +176,7 @@ public class DefaultCmapDrugUpDownSignatureInteractionDao implements CmapDrugUpD
 
       andPredicates.add(cb.greaterThanOrEqualTo(cb.abs(tau), listingOptions.getMinTau().get()));
     }
-
+    
     if (listingOptions.getMaxUpFdr().isPresent()) {
       final Path<Double> upFdr = root.get("upFdr");
 
@@ -187,6 +190,13 @@ public class DefaultCmapDrugUpDownSignatureInteractionDao implements CmapDrugUpD
     }
 
     Join<CmapDrugUpDownSignatureInteraction, Drug> joinDrug = root.join("drug", JoinType.LEFT);
+
+    if (listingOptions.getMinDrugDss().isPresent()) {
+      final Path<Double> drugDss = joinDrug.get("dss");
+      
+      andPredicates.add(cb.greaterThanOrEqualTo(drugDss, listingOptions.getMinDrugDss().get()));
+    }
+
     if (listingOptions.getDrugSourceName().isPresent()) {
       final Path<String> sourceName = joinDrug.get("sourceName");
 

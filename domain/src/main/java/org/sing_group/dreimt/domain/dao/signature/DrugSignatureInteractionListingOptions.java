@@ -41,19 +41,20 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
   private final String drugSourceDb;
   private final String drugCommonName;
   private final String drugMoa;
+  private final Double minDrugDss;
   private final Double minTau;
   private final Double maxUpFdr;
   private final Double maxDownFdr;
 
   public DrugSignatureInteractionListingOptions(
     SignatureListingOptions signatureListingOptions, DrugSignatureInteractionType interactionType,
-    String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa, Double minTau, Double maxUpFdr,
-    Double maxDownFdr
+    String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa, Double drugDss, 
+    Double minTau, Double maxUpFdr, Double maxDownFdr
   ) {
     this(
       noModification(),
       signatureListingOptions, interactionType,
-      drugSourceName, drugSourceDb, drugCommonName, drugMoa,
+      drugSourceName, drugSourceDb, drugCommonName, drugMoa, drugDss,
       minTau, maxUpFdr, maxDownFdr
     );
   }
@@ -61,7 +62,7 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
   public DrugSignatureInteractionListingOptions(
     ListingOptions listingOptions, SignatureListingOptions signatureListingOptions,
     DrugSignatureInteractionType interactionType, String drugSourceName, String drugSourceDb, String drugCommonName,
-    String drugMoa, Double minTau, Double maxUpFdr, Double maxDownFdr
+    String drugMoa, Double drugDss, Double minTau, Double maxUpFdr, Double maxDownFdr
   ) {
     this.listingOptions = listingOptions;
     this.signatureListingOptions = signatureListingOptions;
@@ -70,6 +71,7 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     this.drugSourceDb = drugSourceDb;
     this.drugCommonName = drugCommonName;
     this.drugMoa = drugMoa;
+    this.minDrugDss = drugDss;
     this.minTau = minTau;
     this.maxUpFdr = maxUpFdr;
     this.maxDownFdr = maxDownFdr;
@@ -83,6 +85,7 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
       || this.drugSourceDb != null
       || this.drugCommonName != null
       || this.drugMoa != null
+      || this.minDrugDss != null
       || this.minTau != null
       || this.maxUpFdr != null
       || this.maxDownFdr != null;
@@ -116,6 +119,10 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     return ofNullable(drugMoa);
   }
 
+  public Optional<Double> getMinDrugDss() {
+    return ofNullable(minDrugDss);
+  }
+
   public Optional<Double> getMinTau() {
     return ofNullable(minTau);
   }
@@ -136,6 +143,7 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     result = prime * result + ((drugSourceDb == null) ? 0 : drugSourceDb.hashCode());
     result = prime * result + ((drugSourceName == null) ? 0 : drugSourceName.hashCode());
     result = prime * result + ((drugMoa == null) ? 0 : drugMoa.hashCode());
+    result = prime * result + ((minDrugDss == null) ? 0 : minDrugDss.hashCode());
     result = prime * result + ((interactionType == null) ? 0 : interactionType.hashCode());
     result = prime * result + ((listingOptions == null) ? 0 : listingOptions.hashCode());
     result = prime * result + ((maxDownFdr == null) ? 0 : maxDownFdr.hashCode());
@@ -173,6 +181,11 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
       if (other.drugMoa != null)
         return false;
     } else if (!drugMoa.equals(other.drugMoa))
+      return false;
+    if (minDrugDss == null) {
+      if (other.minDrugDss != null)
+        return false;
+    } else if (!minDrugDss.equals(other.minDrugDss))
       return false;
     if (interactionType != other.interactionType)
       return false;

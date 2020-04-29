@@ -106,7 +106,8 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
           new Drug(
             fdsi.getDrugCommonName(), fdsi.getDrugSourceName(), fdsi.getDrugSourceDb(), fdsi.getDrugStatus(),
             reconstructSet(fdsi.getDrugMoa()),
-            this.geneDao.getGenes(reconstructSet(fdsi.getDrugTargetGenes()), false)
+            this.geneDao.getGenes(reconstructSet(fdsi.getDrugTargetGenes()), false),
+            fdsi.getDrugDss()
           );
 
         Signature signature =
@@ -283,6 +284,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
         freeText, // drugSourceDb
         freeText, // drugCommonName
         freeText, // drugMoa
+        null, //
         null, // minTau
         null, // maxUpFdr
         null // maxDownFdr
@@ -703,6 +705,12 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       andPredicates.add(cb.lessThanOrEqualTo(downFdr, listingOptions.getMaxDownFdr().get()));
     }
 
+    if (listingOptions.getMinDrugDss().isPresent()) {
+      final Path<Double> drugDss = root.get("drugDss");
+
+      andPredicates.add(cb.greaterThanOrEqualTo(drugDss, listingOptions.getMinDrugDss().get()));
+    }
+
     if (listingOptions.getInteractionType().isPresent()) {
       final Path<DrugSignatureInteractionType> interactionType = root.get("interactionType");
 
@@ -873,6 +881,9 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
               break;
             case DRUG_MOA:
               orders.add(order.apply(root.get("drugMoa")));
+              break;
+            case DRUG_DSS:
+              orders.add(order.apply(root.get("drugDss")));
               break;
 
             case INTERACTION_TYPE:

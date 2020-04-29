@@ -206,6 +206,7 @@ DROP TABLE IF EXISTS `drug`;
 CREATE TABLE `drug` (
   `id` int(11) NOT NULL,
   `commonName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `dss` double DEFAULT NULL,
   `sourceDb` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `sourceName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -282,6 +283,7 @@ CREATE TABLE `full_drug_signature_interaction` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `downFdr` double DEFAULT NULL,
   `drugCommonName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `drugDss` double DEFAULT NULL,
   `drugMoa` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `drugSourceDb` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `drugSourceName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -316,6 +318,7 @@ CREATE TABLE `full_drug_signature_interaction` (
   KEY `IDXjeyb6tx2m8w82apv673e6x4gy` (`drugCommonName`),
   KEY `IDXkua6pu0gkbql9gbcy9dddg5is` (`drugSourceName`),
   KEY `IDX1508ma2bjjx77uahdqt6tqnp0` (`drugMoa`),
+  KEY `IDXbrd94o0ah3jrh5erhp81lkv3m` (`drugDss`),
   KEY `IDXab8o6290f312y62e07v4y5r00` (`signatureName`),
   KEY `IDXc51wckwyvrmt1dny9fl4pnw9f` (`signatureType`),
   KEY `IDXffpxt44kp8ch04udpvr06l4f9` (`signatureExperimentalDesign`),
@@ -825,4 +828,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-24 15:46:33
+-- Dump completed on 2020-04-29 12:37:33

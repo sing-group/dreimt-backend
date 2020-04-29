@@ -51,6 +51,7 @@ import javax.persistence.Table;
     @Index(columnList = "drugCommonName"),
     @Index(columnList = "drugSourceName"),
     @Index(columnList = "drugMoa"),
+    @Index(columnList = "drugDss"),
 
     @Index(columnList = "signatureName"),
     @Index(columnList = "signatureType"),
@@ -78,6 +79,9 @@ public class FullDrugSignatureInteraction implements Serializable {
 
   @Column(length = 450)
   private String drugTargetGenes;
+
+  @Column(nullable = true)
+  private Double drugDss;
 
   private String signatureName;
 
@@ -160,6 +164,10 @@ public class FullDrugSignatureInteraction implements Serializable {
 
   public String getDrugTargetGenes() {
     return drugTargetGenes;
+  }
+
+  public Double getDrugDss() {
+    return drugDss;
   }
 
   public String getSignatureName() {
