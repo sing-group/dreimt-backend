@@ -55,6 +55,7 @@ DROP TABLE IF EXISTS `cmap_result_geneset`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cmap_result_geneset` (
   `id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `geneSetType` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FKr3begj73oj3094nvwh4fyls2x` FOREIGN KEY (`id`) REFERENCES `cmap_result` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -401,6 +402,7 @@ DROP TABLE IF EXISTS `jaccard_result_geneset`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jaccard_result_geneset` (
   `id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `geneSetType` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FK53ivtawgjjl8y4fckfpx3nqh7` FOREIGN KEY (`id`) REFERENCES `jaccard_result` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -828,4 +830,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-29 12:37:33
+-- Dump completed on 2020-04-30 15:35:54

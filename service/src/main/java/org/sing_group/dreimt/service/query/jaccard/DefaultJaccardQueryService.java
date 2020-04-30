@@ -22,6 +22,8 @@
  */
 package org.sing_group.dreimt.service.query.jaccard;
 
+import static org.sing_group.dreimt.domain.entities.signature.GeneSetType.DOWN;
+import static org.sing_group.dreimt.domain.entities.signature.GeneSetType.UP;
 import static org.sing_group.dreimt.service.spi.query.GeneListsValidationService.MAXIMUM_GENESET_SIZE;
 import static org.sing_group.dreimt.service.spi.query.GeneListsValidationService.MINIMUM_GENESET_SIZE;
 
@@ -39,6 +41,7 @@ import org.sing_group.dreimt.domain.dao.spi.execution.jaccard.JaccardUpDownSigna
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardGeneSetSignatureResult;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardUpDownSignatureResult;
+import org.sing_group.dreimt.domain.entities.signature.GeneSetType;
 import org.sing_group.dreimt.service.query.jaccard.event.DefaultJaccardComputationRequestEvent;
 import org.sing_group.dreimt.service.spi.query.GeneListsValidationService;
 import org.sing_group.dreimt.service.spi.query.jaccard.JaccardQueryOptions;
@@ -85,7 +88,7 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
     this.validateGeneListsSizes(options);
 
     JaccardResult result =
-      !options.getDownGenes().isEmpty() ? this.jaccardUpDownQuery(options) : this.jaccardGeneSetQuery(options);
+      (options.getDownGenes().isEmpty() || options.getUpGenes().isEmpty()) ? this.jaccardGeneSetQuery(options) : this.jaccardUpDownQuery(options);
 
     DefaultJaccardComputationRequestEvent event =
       new DefaultJaccardComputationRequestEvent(
@@ -148,6 +151,8 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
   }
 
   private JaccardResult jaccardGeneSetQuery(JaccardQueryOptions options) {
+    final GeneSetType type = options.getUpGenes().isEmpty() ? DOWN : UP;
+
     final JaccardGeneSetSignatureResult result =
       this.jaccardGeneSetDao.create(
         options.getTitle().orElse("Untitled Jaccard GeneSet query"),
@@ -162,7 +167,8 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
         options.getSignatureListingOptions().getOrganism().orElse(null),
         options.getSignatureListingOptions().getDisease().orElse(null),
         options.getSignatureListingOptions().getSourceDb().orElse(null),
-        options.getUpGenes()
+        options.getUpGenes().isEmpty() ? options.getDownGenes() : options.getUpGenes(),
+        type
       );
 
     return result;

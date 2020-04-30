@@ -1178,9 +1178,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         jaccardQueryParameters.getDownGenes(), jaccardQueryParameters.isOnlyUniverseGenes()
       );
 
-    if (!downGenes.isEmpty() && intersection(upGenes, downGenes).size() > 0) {
-      throw new IllegalArgumentException("Up and down gene lists cannot have genes in common");
-    }
+    validateQueryGenes(upGenes, downGenes);
 
     final UriBuilder uriBuilder = this.uriInfo.getBaseUriBuilder();
     final BaseRestPathBuilder pathBuilder = new BaseRestPathBuilder(uriBuilder);
@@ -1237,9 +1235,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     Set<String> upGenesSet =
       upGenes == null ? emptySet() : new HashSet<String>(asList(upGenes));
 
-    if (upGenesSet.isEmpty()) {
-      throw new IllegalArgumentException("Up (or geneset) genes list is always required.");
-    } else if (!isValidGeneSet.apply(upGenesSet, onlyUniverseGenes)) {
+    if (!upGenesSet.isEmpty() && !isValidGeneSet.apply(upGenesSet, onlyUniverseGenes)) {
       throw new IllegalArgumentException(
         "Invalid up (or geneset) genes list size. It must have at least " + minimumGeneSetSizeSupplier.get()
           + " and at most " + maximumGeneSetSizeSupplier.get() + " genes." + onlyUniverseGenesWarning(onlyUniverseGenes)
@@ -1270,7 +1266,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
   }
 
   private static String onlyUniverseGenesWarning(boolean onlyUniverseGenes) {
-    return onlyUniverseGenes ? " Note that genes must be in the genes universe." : "";
+    return onlyUniverseGenes ? " Note that genes must be in the DREIMT genes." : "";
   }
 
   @POST
@@ -1290,15 +1286,13 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     Set<String> upGenes = parseAndValidateCmapQueryUpGenes(cmapQueryParameters.getUpGenes());
     Set<String> downGenes = parseAndValidateCmapQueryDownGenes(cmapQueryParameters.getDownGenes());
 
-    if (!downGenes.isEmpty() && intersection(upGenes, downGenes).size() > 0) {
-      throw new IllegalArgumentException("Up and down gene lists cannot have genes in common");
-    }
+    validateQueryGenes(upGenes, downGenes);
 
     final UriBuilder uriBuilder = this.uriInfo.getBaseUriBuilder();
     final BaseRestPathBuilder pathBuilder = new BaseRestPathBuilder(uriBuilder);
 
     final Function<String, String> resultUriBuilder =
-      downGenes.isEmpty() ? id -> pathBuilder.cmapGeneSetSignatureResult(id).build().toString() : id -> pathBuilder.cmapUpDownSignatureResult(id).build().toString();
+      (downGenes.isEmpty() || upGenes.isEmpty()) ? id -> pathBuilder.cmapGeneSetSignatureResult(id).build().toString() : id -> pathBuilder.cmapUpDownSignatureResult(id).build().toString();
 
     CmapQueryOptions options =
       new DefaultCmapQueryOptions(
@@ -1308,6 +1302,16 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     final WorkEntity work = this.cmapQueryService.cmapQuery(options);
 
     return Response.ok(this.executionMapper.toWorkData(work)).build();
+  }
+
+  private static void validateQueryGenes(Set<String> upGenes, Set<String> downGenes) {
+    if (upGenes.isEmpty() && downGenes.isEmpty()) {
+      throw new IllegalArgumentException("Both genes lists can't be empty. At least one gene list must be provided.");
+    }
+
+    if (intersection(upGenes, downGenes).size() > 0) {
+      throw new IllegalArgumentException("Up and down gene lists cannot have genes in common");
+    }
   }
 
   private Set<String> parseAndValidateCmapQueryUpGenes(String[] upGenes) {

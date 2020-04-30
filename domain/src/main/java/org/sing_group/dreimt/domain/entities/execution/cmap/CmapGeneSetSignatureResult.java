@@ -32,6 +32,8 @@ import java.util.stream.Stream;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -42,6 +44,7 @@ import javax.persistence.UniqueConstraint;
 
 import org.sing_group.dreimt.domain.entities.signature.Drug;
 import org.sing_group.dreimt.domain.entities.signature.Gene;
+import org.sing_group.dreimt.domain.entities.signature.GeneSetType;
 
 @Entity
 @DiscriminatorValue("CMAP_GENESET")
@@ -61,17 +64,22 @@ public class CmapGeneSetSignatureResult extends CmapResult implements Serializab
   )
   private Set<Gene> genes;
 
+  @Enumerated(EnumType.STRING)
+  private GeneSetType geneSetType;
+
   protected CmapGeneSetSignatureResult() {
     super();
     this.genes = new HashSet<>();
   }
 
   public CmapGeneSetSignatureResult(
-    String name, String description, Function<String, String> resultReferenceBuilder, Set<Gene> genes, int numPerm
+    String name, String description, Function<String, String> resultReferenceBuilder, Set<Gene> genes, int numPerm,
+    GeneSetType geneSetType
   ) {
     super(name, description, resultReferenceBuilder, numPerm);
 
     this.genes = genes;
+    this.geneSetType = geneSetType;
   }
 
   public Set<String> getGenes() {
@@ -80,6 +88,10 @@ public class CmapGeneSetSignatureResult extends CmapResult implements Serializab
 
   public Set<String> getGenes(boolean onlyUniverseGenes) {
     return getGenes(genes, onlyUniverseGenes);
+  }
+
+  public GeneSetType getGeneSetType() {
+    return geneSetType;
   }
 
   public Stream<CmapDrugGeneSetSignatureInteraction> getDrugInteractions() {
@@ -94,14 +106,14 @@ public class CmapGeneSetSignatureResult extends CmapResult implements Serializab
   public CmapDrugGeneSetSignatureInteraction addCmapDrugInteraction(
     Drug drug,
     double tau,
-    double upFdr
+    double fdr
   ) {
     this.cmapResultsLock.writeLock().lock();
 
     try {
       final CmapDrugGeneSetSignatureInteraction drugInteraction =
         new CmapDrugGeneSetSignatureInteraction(
-          this, drug, tau, upFdr
+          this, drug, tau, fdr
         );
       this.cmapDrugInteractions.add(drugInteraction);
 

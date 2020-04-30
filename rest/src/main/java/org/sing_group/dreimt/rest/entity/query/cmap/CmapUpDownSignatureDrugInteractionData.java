@@ -30,14 +30,16 @@ public class CmapUpDownSignatureDrugInteractionData {
   private Double tau;
   private Double upFdr;
   private Double downFdr;
+  private String drugEffect;
 
   public CmapUpDownSignatureDrugInteractionData(
-    DrugData drugData, Double tau, Double upFdr, Double downFdr
+    DrugData drugData, Double tau, Double upFdr, Double downFdr, String drugEffect
   ) {
     this.drugData = drugData;
     this.tau = tau;
     this.upFdr = upFdr;
     this.downFdr = downFdr;
+    this.drugEffect = drugEffect;
   }
 
   public DrugData getDrug() {
@@ -54,5 +56,9 @@ public class CmapUpDownSignatureDrugInteractionData {
 
   public Double getDownFdr() {
     return downFdr;
+  }
+
+  public String getDrugEffect() {
+    return drugEffect;
   }
 }

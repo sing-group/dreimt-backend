@@ -30,6 +30,8 @@ import java.util.function.Function;
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -39,6 +41,7 @@ import javax.persistence.UniqueConstraint;
 
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.Gene;
+import org.sing_group.dreimt.domain.entities.signature.GeneSetType;
 
 @Entity
 @DiscriminatorValue("JACCARD_GENESET")
@@ -55,6 +58,9 @@ public class JaccardGeneSetSignatureResult extends JaccardResult implements Seri
   )
   private Set<Gene> genes;
 
+  @Enumerated(EnumType.STRING)
+  private GeneSetType geneSetType;
+
   protected JaccardGeneSetSignatureResult() {
     super();
     this.genes = new HashSet<>();
@@ -63,7 +69,7 @@ public class JaccardGeneSetSignatureResult extends JaccardResult implements Seri
   public JaccardGeneSetSignatureResult(
     String name, String description, Function<String, String> resultReferenceBuilder, boolean onlyUniverseGenes,
     String cellType1, String cellSubType1, String cellType2, String cellSubType2, ExperimentalDesign experimentalDesign,
-    String organism, String disease, String signatureSourceDb, Set<Gene> genes
+    String organism, String disease, String signatureSourceDb, Set<Gene> genes, GeneSetType geneSetType
   ) {
     super(
       name, description, resultReferenceBuilder, onlyUniverseGenes, cellType1, cellSubType1, cellType2, cellSubType2,
@@ -71,6 +77,7 @@ public class JaccardGeneSetSignatureResult extends JaccardResult implements Seri
     );
 
     this.genes = genes;
+    this.geneSetType = geneSetType;
   }
 
   public Set<String> getGenes() {
@@ -79,5 +86,9 @@ public class JaccardGeneSetSignatureResult extends JaccardResult implements Seri
 
   public Set<String> getGenes(boolean onlyUniverseGenes) {
     return getGenes(genes, onlyUniverseGenes);
+  }
+
+  public GeneSetType getGeneSetType() {
+    return geneSetType;
   }
 }

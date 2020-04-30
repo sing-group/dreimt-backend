@@ -40,6 +40,7 @@ import org.sing_group.dreimt.domain.dao.spi.execution.jaccard.JaccardGeneSetSign
 import org.sing_group.dreimt.domain.dao.spi.signature.GeneDao;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardGeneSetSignatureResult;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
+import org.sing_group.dreimt.domain.entities.signature.GeneSetType;
 
 @Default
 @Transactional(MANDATORY)
@@ -80,7 +81,7 @@ public class DefaultJaccardGeneSetSignatureResultDao implements JaccardGeneSetSi
     String cellType2, String cellSubType2,
     ExperimentalDesign experimentalDesign,
     String organism, String disease, String signatureSourceDb,
-    Set<String> genes
+    Set<String> genes, GeneSetType geneSetType
   ) {
     return this.dh.persist(
       new JaccardGeneSetSignatureResult(
@@ -91,7 +92,8 @@ public class DefaultJaccardGeneSetSignatureResultDao implements JaccardGeneSetSi
         cellType2, cellSubType2,
         experimentalDesign,
         organism, disease, signatureSourceDb,
-        this.geneDao.getGenes(genes, true)
+        this.geneDao.getGenes(genes, true),
+        geneSetType
       )
     );
   }

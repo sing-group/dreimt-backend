@@ -51,23 +51,25 @@ public class DefaultGeneListsValidationService implements GeneListsValidationSer
     Set<String> processedUpGenes = processGenes(upGenes, onlyUniverseGenes);
     Set<String> processedDownGenes = processGenes(downGenes, onlyUniverseGenes);
 
-    if (upGenes.isEmpty()) {
-      throw new IllegalArgumentException("Up (or geneset) genes list is always required.");
-    } else if (!this.isSetSizeInRange(processedUpGenes, minimumGeneSetSize, maximumGeneSetSize)) {
+    if (upGenes.isEmpty() && downGenes.isEmpty()) {
+      throw new IllegalArgumentException("Both genes lists can't be empty. At least one gene list must be provided.");
+    }
+
+    if (!processedUpGenes.isEmpty() && !this.isSetSizeInRange(processedUpGenes, minimumGeneSetSize, maximumGeneSetSize)) {
       throw new IllegalArgumentException(
         "Invalid up (or geneset) genes list size. It must have at least " + minimumGeneSetSize
           + " and at most " + maximumGeneSetSize + " genes." + onlyUniverseGenesWarning(onlyUniverseGenes)
       );
     }
 
-    if (!downGenes.isEmpty() && !this.isSetSizeInRange(processedDownGenes, minimumGeneSetSize, maximumGeneSetSize)) {
+    if (!processedDownGenes.isEmpty() && !this.isSetSizeInRange(processedDownGenes, minimumGeneSetSize, maximumGeneSetSize)) {
       throw new IllegalArgumentException(
         "Invalid down genes list size. It must have at least " + minimumGeneSetSize
           + " and at most " + maximumGeneSetSize + " genes." + onlyUniverseGenesWarning(onlyUniverseGenes)
       );
     }
 
-    if (!downGenes.isEmpty() && intersection(processedUpGenes, processedDownGenes).size() > 0) {
+    if (intersection(processedUpGenes, processedDownGenes).size() > 0) {
       throw new IllegalArgumentException("Up and down gene lists cannot have genes in common");
     }
   }
@@ -95,6 +97,6 @@ public class DefaultGeneListsValidationService implements GeneListsValidationSer
   }
 
   private String onlyUniverseGenesWarning(boolean onlyUniverseGenes) {
-    return onlyUniverseGenes ? " Note that genes must be in the genes universe." : "";
+    return onlyUniverseGenes ? " Note that genes must be in the DREIMT genes." : "";
   }
 }

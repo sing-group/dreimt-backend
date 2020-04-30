@@ -27,6 +27,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapGeneSetSignatureResult;
+import org.sing_group.dreimt.domain.entities.signature.GeneSetType;
 
 public interface CmapGeneSetSignatureResultDao {
   Optional<CmapGeneSetSignatureResult> get(String id);
@@ -36,6 +37,7 @@ public interface CmapGeneSetSignatureResultDao {
     String description,
     Function<String, String> resultReferenceBuilder,
     Set<String> genes,
-    int numPerm
+    int numPerm,
+    GeneSetType geneSetType
   );
 }

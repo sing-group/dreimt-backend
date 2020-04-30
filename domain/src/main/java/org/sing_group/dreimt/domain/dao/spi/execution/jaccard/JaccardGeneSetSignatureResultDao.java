@@ -28,6 +28,7 @@ import java.util.function.Function;
 
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardGeneSetSignatureResult;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
+import org.sing_group.dreimt.domain.entities.signature.GeneSetType;
 
 public interface JaccardGeneSetSignatureResultDao {
   Optional<JaccardGeneSetSignatureResult> get(String id);
@@ -45,6 +46,7 @@ public interface JaccardGeneSetSignatureResultDao {
     String organism,
     String disease,
     String signatureSourceDb,
-    Set<String> genes
+    Set<String> genes,
+    GeneSetType geneSetType
   );
 }

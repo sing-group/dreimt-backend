@@ -22,6 +22,8 @@
  */
 package org.sing_group.dreimt.service.query.cmap;
 
+import static org.sing_group.dreimt.domain.entities.signature.GeneSetType.DOWN;
+import static org.sing_group.dreimt.domain.entities.signature.GeneSetType.UP;
 import static org.sing_group.dreimt.service.spi.query.GeneListsValidationService.MAXIMUM_GENESET_SIZE;
 import static org.sing_group.dreimt.service.spi.query.GeneListsValidationService.MINIMUM_GENESET_SIZE;
 
@@ -39,6 +41,7 @@ import org.sing_group.dreimt.domain.dao.spi.execution.cmap.CmapUpDownSignatureRe
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapGeneSetSignatureResult;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapResult;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapUpDownSignatureResult;
+import org.sing_group.dreimt.domain.entities.signature.GeneSetType;
 import org.sing_group.dreimt.service.query.cmap.event.DefaultCmapComputationRequestEvent;
 import org.sing_group.dreimt.service.spi.query.GeneListsValidationService;
 import org.sing_group.dreimt.service.spi.query.cmap.CmapQueryOptions;
@@ -91,7 +94,7 @@ public class DefaultCmapQueryService implements CmapQueryService {
     this.validateGeneListsSizes(options);
 
     CmapResult result =
-      !options.getDownGenes().isEmpty() ? this.cmapUpDownQuery(options) : this.cmapGeneSetQuery(options);
+      (options.getDownGenes().isEmpty() || options.getUpGenes().isEmpty()) ? this.cmapGeneSetQuery(options) : this.cmapUpDownQuery(options);
 
     DefaultCmapServiceConfiguration configuration = new DefaultCmapServiceConfiguration(options.getNumPerm());
 
@@ -149,13 +152,16 @@ public class DefaultCmapQueryService implements CmapQueryService {
   }
 
   private CmapResult cmapGeneSetQuery(CmapQueryOptions options) {
+    final GeneSetType type = options.getUpGenes().isEmpty() ? DOWN : UP;
+
     final CmapGeneSetSignatureResult result =
       this.cmapGeneSetDao.create(
         options.getTitle().orElse("Untitled Cmap GeneSet query"),
         "Cmap GeneSet query",
         options.getResultUriBuilder(),
-        options.getUpGenes(),
-        options.getNumPerm()
+        options.getUpGenes().isEmpty() ? options.getDownGenes() : options.getUpGenes(),
+        options.getNumPerm(),
+        type
       );
 
     return result;

@@ -39,6 +39,7 @@ import org.sing_group.dreimt.domain.dao.DaoHelper;
 import org.sing_group.dreimt.domain.dao.spi.execution.cmap.CmapGeneSetSignatureResultDao;
 import org.sing_group.dreimt.domain.dao.spi.signature.GeneDao;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapGeneSetSignatureResult;
+import org.sing_group.dreimt.domain.entities.signature.GeneSetType;
 
 @Default
 @Transactional(MANDATORY)
@@ -76,13 +77,14 @@ public class DefaultCmapGeneSetSignatureResultDao implements CmapGeneSetSignatur
     String description,
     Function<String, String> resultReferenceBuilder,
     Set<String> genes,
-    int numPerm
+    int numPerm,
+    GeneSetType geneSetType
   ) {
     return this.dh.persist(
       new CmapGeneSetSignatureResult(
         name, description, resultReferenceBuilder,
         this.geneDao.getGenes(genes, true),
-        numPerm
+        numPerm, geneSetType
       )
     );
   }

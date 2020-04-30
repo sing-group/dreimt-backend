@@ -22,20 +22,24 @@
  */
 package org.sing_group.dreimt.rest.entity.query.cmap;
 
+import org.sing_group.dreimt.domain.entities.signature.GeneSetType;
+
 public class CmapQueryGeneSetSignatureMetadataData {
 
   private String queryTitle;
   private int numPerm;
   private Integer genesCount;
   private Integer universeGenesCount;
+  private GeneSetType geneSetType;
 
   public CmapQueryGeneSetSignatureMetadataData(
-    String queryTitle, int numPerm, Integer genesCount, Integer universeGenesCount
+    String queryTitle, int numPerm, Integer genesCount, Integer universeGenesCount, GeneSetType geneSetType
   ) {
     this.queryTitle = queryTitle;
     this.numPerm = numPerm;
     this.genesCount = genesCount;
     this.universeGenesCount = universeGenesCount;
+    this.geneSetType = geneSetType;
   }
 
   public String getQueryTitle() {
@@ -52,5 +56,9 @@ public class CmapQueryGeneSetSignatureMetadataData {
 
   public Integer getUniverseGenesCount() {
     return universeGenesCount;
+  }
+
+  public GeneSetType getGeneSetType() {
+    return geneSetType;
   }
 }
