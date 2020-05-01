@@ -107,7 +107,7 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
   ) {
     if (result instanceof JaccardGeneSetSignatureResult) {
       return new DefaultJaccardServiceConfiguration(
-        options.isOnlyUniverseGenes(), options.getUpGenes()
+        options.isOnlyUniverseGenes(), options.getUpGenes().isEmpty() ? options.getDownGenes() : options.getUpGenes()
       );
     } else if (result instanceof JaccardUpDownSignatureResult) {
       return new DefaultJaccardServiceConfiguration(
