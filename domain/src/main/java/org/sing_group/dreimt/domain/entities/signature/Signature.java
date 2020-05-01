@@ -95,6 +95,7 @@ public abstract class Signature implements Serializable {
   private ArticleMetadata articleMetadata;
 
   private String sourceDb;
+  private String sourceDbUrl;
 
   @Enumerated(EnumType.STRING)
   private ExperimentalDesign experimentalDesign;
@@ -153,21 +154,22 @@ public abstract class Signature implements Serializable {
 
   public Signature(
     String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA, Set<String> cellTypeB,
-    Set<String> cellSubTypeB, String sourceDb, ExperimentalDesign experimentalDesign,
+    Set<String> cellSubTypeB, String sourceDb, String sourceDbUrl, ExperimentalDesign experimentalDesign,
     String organism, Set<String> disease, Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA,
     Set<String> diseaseB, String localisationA, String localisationB, String stateA, String stateB
   ) {
     this(
-      signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, null, sourceDb, experimentalDesign, organism,
-      disease, treatmentA, treatmentB, diseaseA, diseaseB, localisationA, localisationB, stateA, stateB
+      signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, null, sourceDb, sourceDbUrl, experimentalDesign,
+      organism, disease, treatmentA, treatmentB, diseaseA, diseaseB, localisationA, localisationB, stateA, stateB
     );
   }
 
   public Signature(
     String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA, Set<String> cellTypeB,
-    Set<String> cellSubTypeB, ArticleMetadata articleMetadata, String sourceDb, ExperimentalDesign experimentalDesign,
-    String organism, Set<String> disease, Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA,
-    Set<String> diseaseB, String localisationA, String localisationB, String stateA, String stateB
+    Set<String> cellSubTypeB, ArticleMetadata articleMetadata, String sourceDb, String sourceDbUrl,
+    ExperimentalDesign experimentalDesign, String organism, Set<String> disease, Set<String> treatmentA,
+    Set<String> treatmentB, Set<String> diseaseA, Set<String> diseaseB, String localisationA, String localisationB,
+    String stateA, String stateB
   ) {
     this.signatureName = signatureName;
     this.cellTypeA = cellTypeA;
@@ -176,6 +178,7 @@ public abstract class Signature implements Serializable {
     this.cellSubTypeB = cellSubTypeB;
     this.articleMetadata = articleMetadata;
     this.sourceDb = sourceDb;
+    this.sourceDbUrl = sourceDbUrl;
     this.experimentalDesign = experimentalDesign;
     this.organism = organism;
     this.disease = disease;
@@ -217,6 +220,10 @@ public abstract class Signature implements Serializable {
 
   public String getSourceDb() {
     return sourceDb;
+  }
+  
+  public String getSourceDbUrl() {
+    return sourceDbUrl;
   }
 
   public ExperimentalDesign getExperimentalDesign() {

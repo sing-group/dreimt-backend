@@ -46,25 +46,27 @@ public class UpDownSignature extends Signature {
   
   public UpDownSignature(
     String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA, Set<String> cellTypeB,
-    Set<String> cellSubTypeB, String sourceDb, ExperimentalDesign experimentalDesign,
+    Set<String> cellSubTypeB, String sourceDb, String sourceDbUrl, ExperimentalDesign experimentalDesign,
     String organism, Set<String> disease, Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA,
     Set<String> diseaseB, String localisationA, String localisationB, String stateA, String stateB
   ) {
     super(
-      signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, sourceDb, experimentalDesign,
+      signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, sourceDb, sourceDbUrl, experimentalDesign,
       organism, disease, treatmentA, treatmentB, diseaseA, diseaseB, localisationA, localisationB, stateA, stateB
     );
   }
 
   public UpDownSignature(
     String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA, Set<String> cellTypeB,
-    Set<String> cellSubTypeB, ArticleMetadata articleMetadata, String sourceDb, ExperimentalDesign experimentalDesign,
-    String organism, Set<String> disease, Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA,
-    Set<String> diseaseB, String localisationA, String localisationB, String stateA, String stateB
+    Set<String> cellSubTypeB, ArticleMetadata articleMetadata, String sourceDb, String sourceDbUrl,
+    ExperimentalDesign experimentalDesign, String organism, Set<String> disease, Set<String> treatmentA,
+    Set<String> treatmentB, Set<String> diseaseA, Set<String> diseaseB, String localisationA, String localisationB,
+    String stateA, String stateB
   ) {
     super(
-      signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, articleMetadata, sourceDb, experimentalDesign,
-      organism, disease, treatmentA, treatmentB, diseaseA, diseaseB, localisationA, localisationB, stateA, stateB
+      signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, articleMetadata, sourceDb, sourceDbUrl,
+      experimentalDesign, organism, disease, treatmentA, treatmentB, diseaseA, diseaseB, localisationA, localisationB,
+      stateA, stateB
     );
   }
 

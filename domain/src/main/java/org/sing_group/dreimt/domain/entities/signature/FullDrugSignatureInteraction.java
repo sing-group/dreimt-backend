@@ -93,6 +93,7 @@ public class FullDrugSignatureInteraction implements Serializable {
 
   private String signatureOrganism;
   private String signatureSourceDb;
+  private String signatureSourceDbUrl;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "signatureArticlePubmedId", referencedColumnName = "pubmedId", nullable = true)
@@ -188,6 +189,10 @@ public class FullDrugSignatureInteraction implements Serializable {
 
   public String getSignatureSourceDb() {
     return signatureSourceDb;
+  }
+
+  public String getSignatureSourceDbUrl() {
+    return signatureSourceDbUrl;
   }
 
   public Optional<ArticleMetadata> getArticleMetadata() {

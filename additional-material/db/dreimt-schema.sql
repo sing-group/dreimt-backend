@@ -312,6 +312,7 @@ CREATE TABLE `full_drug_signature_interaction` (
   `tau` double NOT NULL,
   `upFdr` double DEFAULT NULL,
   `signatureArticlePubmedId` int(11) DEFAULT NULL,
+  `signatureSourceDbUrl` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX4hkkniqx8jx0t74qcpqco6dit` (`tau`),
   KEY `IDXl2qoayrbw9v7uacqregtqpc3q` (`upFdr`),
@@ -589,6 +590,7 @@ CREATE TABLE `signature` (
   `stateA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `stateB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `article_pubmedId` int(11) DEFAULT NULL,
+  `sourceDbUrl` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`signatureName`),
   KEY `FKob3uvde5er8oiayu91rowlcgm` (`article_pubmedId`),
   CONSTRAINT `FKob3uvde5er8oiayu91rowlcgm` FOREIGN KEY (`article_pubmedId`) REFERENCES `article_metadata` (`pubmedId`)
@@ -830,4 +832,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-04-30 15:35:54
+-- Dump completed on 2020-05-01 11:05:40

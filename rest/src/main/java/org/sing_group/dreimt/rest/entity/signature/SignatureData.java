@@ -38,6 +38,7 @@ public class SignatureData implements Serializable {
   private Set<String> cellTypeB;
   private Set<String> cellSubTypeB;
   private String sourceDb;
+  private String sourceDbUrl;
   private ExperimentalDesign experimentalDesign;
   private String organism;
   private Set<String> disease;
@@ -59,7 +60,7 @@ public class SignatureData implements Serializable {
 
   public SignatureData(
     String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA, Set<String> cellTypeB,
-    Set<String> cellSubTypeB, String sourceDb, ExperimentalDesign experimentalDesign, String organism,
+    Set<String> cellSubTypeB, String sourceDb, String sourceDbUrl, ExperimentalDesign experimentalDesign, String organism,
     Set<String> disease, Set<String> diseaseA, Set<String> diseaseB, Set<String> treatmentA, Set<String> treatmentB,
     String stateA, String stateB, Integer articlePubMedId, String articleTitle, String articleAuthors,
     SignatureType signatureType, URI signatureGenesUri, URI articleMetadataUri
@@ -71,6 +72,7 @@ public class SignatureData implements Serializable {
     this.cellTypeB = cellTypeB;
     this.cellSubTypeB = cellSubTypeB;
     this.sourceDb = sourceDb;
+    this.sourceDbUrl = sourceDbUrl;
     this.experimentalDesign = experimentalDesign;
     this.organism = organism;
     this.disease = disease;
@@ -123,6 +125,10 @@ public class SignatureData implements Serializable {
 
   public String getSourceDb() {
     return sourceDb;
+  }
+
+  public String getSourceDbUrl() {
+    return sourceDbUrl;
   }
 
   public ExperimentalDesign getExperimentalDesign() {
