@@ -29,6 +29,7 @@ import javax.ejb.Local;
 import org.sing_group.dreimt.domain.dao.execution.cmap.CmapDrugGeneSetSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapDrugGeneSetSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapGeneSetSignatureResult;
+import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
 
 @Local
 public interface CmapDrugGeneSetSignatureInteractionService {
@@ -51,6 +52,10 @@ public interface CmapDrugGeneSetSignatureInteractionService {
   );
 
   Stream<String> listDrugMoaValues(
+    CmapGeneSetSignatureResult cmapResult, CmapDrugGeneSetSignatureInteractionListingOptions listingOptions
+  );
+  
+  Stream<DrugStatus> listDrugStatusValues(
     CmapGeneSetSignatureResult cmapResult, CmapDrugGeneSetSignatureInteractionListingOptions listingOptions
   );
 }

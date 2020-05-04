@@ -28,6 +28,7 @@ import java.io.Serializable;
 import java.util.Optional;
 
 import org.sing_group.dreimt.domain.dao.ListingOptions;
+import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
 
 public class CmapDrugGeneSetSignatureInteractionListingOptions implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -37,19 +38,21 @@ public class CmapDrugGeneSetSignatureInteractionListingOptions implements Serial
   private final String drugSourceDb;
   private final String drugCommonName;
   private final String drugMoa;
+  private DrugStatus drugStatus;
   private final Double minDrugDss;
   private final Double minTau;
   private final Double maxFdr;
 
   public CmapDrugGeneSetSignatureInteractionListingOptions(
     ListingOptions listingOptions, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    Double minDrugDss, Double minTau, Double maxFdr
+    DrugStatus drugStatus, Double minDrugDss, Double minTau, Double maxFdr
   ) {
     this.listingOptions = listingOptions;
     this.drugSourceName = drugSourceName;
     this.drugSourceDb = drugSourceDb;
     this.drugCommonName = drugCommonName;
     this.drugMoa = drugMoa;
+    this.drugStatus = drugStatus;
     this.minDrugDss = minDrugDss;
     this.minTau = minTau;
     this.maxFdr = maxFdr;
@@ -61,6 +64,7 @@ public class CmapDrugGeneSetSignatureInteractionListingOptions implements Serial
       || this.drugSourceDb != null
       || this.drugCommonName != null
       || this.drugMoa != null
+      || this.drugStatus != null
       || this.minDrugDss != null
       || this.minTau != null
       || this.maxFdr != null;
@@ -84,6 +88,10 @@ public class CmapDrugGeneSetSignatureInteractionListingOptions implements Serial
 
   public Optional<String> getDrugMoa() {
     return ofNullable(drugMoa);
+  }
+  
+  public Optional<DrugStatus> getDrugStatus() {
+    return ofNullable(drugStatus);
   }
 
   public Optional<Double> getMinDrugDss() {

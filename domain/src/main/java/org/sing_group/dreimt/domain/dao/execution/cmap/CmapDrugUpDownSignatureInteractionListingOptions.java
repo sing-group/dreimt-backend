@@ -28,6 +28,7 @@ import java.io.Serializable;
 import java.util.Optional;
 
 import org.sing_group.dreimt.domain.dao.ListingOptions;
+import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
 
 public class CmapDrugUpDownSignatureInteractionListingOptions implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -37,6 +38,7 @@ public class CmapDrugUpDownSignatureInteractionListingOptions implements Seriali
   private final String drugSourceDb;
   private final String drugCommonName;
   private final String drugMoa;
+  private final DrugStatus drugStatus;
   private final Double minDrugDss;
   private final Double minTau;
   private final Double maxUpFdr;
@@ -44,13 +46,14 @@ public class CmapDrugUpDownSignatureInteractionListingOptions implements Seriali
 
   public CmapDrugUpDownSignatureInteractionListingOptions(
     ListingOptions listingOptions, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    Double minDrugDss, Double minTau, Double maxUpFdr, Double maxDownFdr
+    DrugStatus drugStatus, Double minDrugDss, Double minTau, Double maxUpFdr, Double maxDownFdr
   ) {
     this.listingOptions = listingOptions;
     this.drugSourceName = drugSourceName;
     this.drugSourceDb = drugSourceDb;
     this.drugCommonName = drugCommonName;
     this.drugMoa = drugMoa;
+    this.drugStatus = drugStatus;
     this.minDrugDss = minDrugDss;
     this.minTau = minTau;
     this.maxUpFdr = maxUpFdr;
@@ -63,6 +66,7 @@ public class CmapDrugUpDownSignatureInteractionListingOptions implements Seriali
       || this.drugSourceDb != null
       || this.drugCommonName != null
       || this.drugMoa != null
+      || this.drugStatus != null
       || this.minDrugDss != null
       || this.minTau != null
       || this.maxUpFdr != null
@@ -87,6 +91,10 @@ public class CmapDrugUpDownSignatureInteractionListingOptions implements Seriali
 
   public Optional<String> getDrugMoa() {
     return ofNullable(drugMoa);
+  }
+  
+  public Optional<DrugStatus> getDrugStatus() {
+    return ofNullable(drugStatus);
   }
 
   public Optional<Double> getMinDrugDss() {
@@ -113,6 +121,7 @@ public class CmapDrugUpDownSignatureInteractionListingOptions implements Seriali
     result = prime * result + ((drugSourceDb == null) ? 0 : drugSourceDb.hashCode());
     result = prime * result + ((drugSourceName == null) ? 0 : drugSourceName.hashCode());
     result = prime * result + ((drugMoa == null) ? 0 : drugMoa.hashCode());
+    result = prime * result + ((drugStatus == null) ? 0 : drugStatus.hashCode());
     result = prime * result + ((minDrugDss == null) ? 0 : minDrugDss.hashCode());
     result = prime * result + ((listingOptions == null) ? 0 : listingOptions.hashCode());
     result = prime * result + ((maxDownFdr == null) ? 0 : maxDownFdr.hashCode());
@@ -149,6 +158,11 @@ public class CmapDrugUpDownSignatureInteractionListingOptions implements Seriali
       if (other.drugMoa != null)
         return false;
     } else if (!drugMoa.equals(other.drugMoa))
+      return false;
+    if (drugStatus == null) {
+      if (other.drugStatus != null)
+        return false;
+    } else if (!drugStatus.equals(other.drugStatus))
       return false;
     if (minDrugDss == null) {
       if (other.minDrugDss != null)

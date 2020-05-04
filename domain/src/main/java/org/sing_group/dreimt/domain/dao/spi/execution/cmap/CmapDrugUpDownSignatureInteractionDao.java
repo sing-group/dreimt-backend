@@ -27,6 +27,7 @@ import java.util.stream.Stream;
 import org.sing_group.dreimt.domain.dao.execution.cmap.CmapDrugUpDownSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapDrugUpDownSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapUpDownSignatureResult;
+import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
 
 public interface CmapDrugUpDownSignatureInteractionDao {
   Stream<CmapDrugUpDownSignatureInteraction> list(CmapUpDownSignatureResult cmapResult, CmapDrugUpDownSignatureInteractionListingOptions listingOptions);
@@ -40,4 +41,6 @@ public interface CmapDrugUpDownSignatureInteractionDao {
   Stream<String> listDrugCommonNameValues(CmapUpDownSignatureResult cmapResult, CmapDrugUpDownSignatureInteractionListingOptions listingOptions);
   
   Stream<String> listDrugMoaValues(CmapUpDownSignatureResult cmapResult, CmapDrugUpDownSignatureInteractionListingOptions listingOptions);
+  
+  Stream<DrugStatus> listDrugStatusValues(CmapUpDownSignatureResult cmapResult, CmapDrugUpDownSignatureInteractionListingOptions listingOptions);
 }

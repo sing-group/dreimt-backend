@@ -27,6 +27,7 @@ import javax.ws.rs.core.Response;
 
 import org.sing_group.dreimt.domain.dao.SortDirection;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapGeneSetSignatureDrugInteractionField;
+import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
 
 @Local
 public interface CmapGeneSetSignatureQueryResultsResource {
@@ -36,36 +37,39 @@ public interface CmapGeneSetSignatureQueryResultsResource {
   Response cmapQueryGenes(String resultId, boolean onlyUniverseGenes);
 
   Response queryInteractions(
-    String resultId, Double minTau, Double maxFdr, String drugSourceName,
-    String drugSourceDb, String drugCommonName, String drugMoa, Double minDrugDss,
-    Integer page, Integer pageSize, CmapGeneSetSignatureDrugInteractionField orderField,
-    SortDirection sortDirection
+    String resultId, Double minTau, Double maxFdr, String drugSourceName, String drugSourceDb, String drugCommonName,
+    String drugMoa, DrugStatus drugStatus, Double minDrugDss, Integer page, Integer pageSize,
+    CmapGeneSetSignatureDrugInteractionField orderField, SortDirection sortDirection
   );
 
   Response queryInteractionsAsCsv(
-    String resultId, Double minTau, Double maxFdr, String drugSourceName,
-    String drugSourceDb, String drugCommonName, String drugMoa, Double minDrugDss,
-    Integer page, Integer pageSize, CmapGeneSetSignatureDrugInteractionField orderField,
-    SortDirection sortDirection
+    String resultId, Double minTau, Double maxFdr, String drugSourceName, String drugSourceDb, String drugCommonName,
+    String drugMoa, DrugStatus drugStatus, Double minDrugDss, Integer page, Integer pageSize,
+    CmapGeneSetSignatureDrugInteractionField orderField, SortDirection sortDirection
   );
 
   Response listDrugSourceNameValues(
-    String resultId, Double minTau, Double maxFdr, String drugSourceName,
-    String drugSourceDb, String drugCommonName, String drugMoa, Double minDrugDss
+    String resultId, Double minTau, Double maxFdr, String drugSourceName, String drugSourceDb, String drugCommonName,
+    String drugMoa, DrugStatus drugStatus, Double minDrugDss
   );
 
   Response listDrugSourceDbValues(
-    String resultId, Double minTau, Double maxFdr, String drugSourceName,
-    String drugSourceDb, String drugCommonName, String drugMoa, Double minDrugDss
+    String resultId, Double minTau, Double maxFdr, String drugSourceName, String drugSourceDb, String drugCommonName,
+    String drugMoa, DrugStatus drugStatus, Double minDrugDss
   );
 
   Response listDrugCommonNameValues(
-    String resultId, Double minTau, Double maxFdr, String drugSourceName,
-    String drugSourceDb, String drugCommonName, String drugMoa, Double minDrugDss
+    String resultId, Double minTau, Double maxFdr, String drugSourceName, String drugSourceDb, String drugCommonName,
+    String drugMoa, DrugStatus drugStatus, Double minDrugDss
   );
 
   Response listDrugMoaValues(
-    String resultId, Double minTau, Double maxFdr, String drugSourceName,
-    String drugSourceDb, String drugCommonName, String drugMoa, Double minDrugDss
+    String resultId, Double minTau, Double maxFdr, String drugSourceName, String drugSourceDb, String drugCommonName,
+    String drugMoa, DrugStatus drugStatus, Double minDrugDss
+  );
+
+  Response listDrugStatusValues(
+    String resultId, Double minTau, Double maxFdr, String drugSourceName, String drugSourceDb, String drugCommonName,
+    String drugMoa, DrugStatus drugStatus, Double minDrugDss
   );
 }

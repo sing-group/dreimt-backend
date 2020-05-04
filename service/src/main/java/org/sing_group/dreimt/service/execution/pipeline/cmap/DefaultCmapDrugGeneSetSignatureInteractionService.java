@@ -32,6 +32,7 @@ import org.sing_group.dreimt.domain.dao.execution.cmap.CmapDrugGeneSetSignatureI
 import org.sing_group.dreimt.domain.dao.spi.execution.cmap.CmapDrugGeneSetSignatureInteractionDao;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapDrugGeneSetSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapGeneSetSignatureResult;
+import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
 import org.sing_group.dreimt.service.spi.execution.pipeline.cmap.CmapDrugGeneSetSignatureInteractionService;
 
 @Stateless
@@ -87,5 +88,13 @@ public class DefaultCmapDrugGeneSetSignatureInteractionService implements CmapDr
     CmapDrugGeneSetSignatureInteractionListingOptions listingOptions
   ) {
     return cmapDrugInteractionDao.listDrugMoaValues(CmapGeneSetSignatureResult, listingOptions);
+  }
+
+  @Override
+  public Stream<DrugStatus> listDrugStatusValues(
+    CmapGeneSetSignatureResult CmapGeneSetSignatureResult,
+    CmapDrugGeneSetSignatureInteractionListingOptions listingOptions
+  ) {
+    return cmapDrugInteractionDao.listDrugStatusValues(CmapGeneSetSignatureResult, listingOptions);
   }
 }

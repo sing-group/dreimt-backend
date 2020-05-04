@@ -100,7 +100,7 @@ public class CmapDrugGeneSetSignatureInteraction implements Serializable {
     return fdr;
   }
 
-  public DrugInteractionEffect getEffect() {
+  public DrugInteractionEffect getDrugEffect() {
     DrugSignatureInteractionType interactionType =
       ((CmapGeneSetSignatureResult) this.cmapResult).getGeneSetType().equals(GeneSetType.UP) ? SIGNATURE_UP : SIGNATURE_DOWN;
 

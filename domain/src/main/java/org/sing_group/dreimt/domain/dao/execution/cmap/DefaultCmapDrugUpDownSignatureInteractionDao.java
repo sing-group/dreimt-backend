@@ -55,6 +55,7 @@ import org.sing_group.dreimt.domain.entities.execution.cmap.CmapDrugUpDownSignat
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapUpDownSignatureDrugInteractionField;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapUpDownSignatureResult;
 import org.sing_group.dreimt.domain.entities.signature.Drug;
+import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
 
 @Default
 @Transactional(MANDATORY)
@@ -122,6 +123,9 @@ public class DefaultCmapDrugUpDownSignatureInteractionDao implements CmapDrugUpD
             break;
           case DRUG_DSS:
             orders.add(order.apply(root.join("drug").get("dss")));
+            break;
+          case DRUG_STATUS:
+            orders.add(order.apply(root.join("drug").get("status")));
             break;
 
           case UP_FDR:
@@ -216,9 +220,15 @@ public class DefaultCmapDrugUpDownSignatureInteractionDao implements CmapDrugUpD
     }
 
     if (listingOptions.getDrugMoa().isPresent()) {
-      Join<Drug, String> joinDrugMoa = joinDrug.join("moa", JoinType.LEFT);
+      final Join<Drug, String> joinDrugMoa = joinDrug.join("moa", JoinType.LEFT);
 
       andPredicates.add(cb.like(joinDrugMoa, "%" + listingOptions.getDrugMoa().get() + "%"));
+    }
+
+    if (listingOptions.getDrugStatus().isPresent()) {
+      final Path<DrugStatus> joinDrugStatus = joinDrug.get("status");
+
+      andPredicates.add(cb.equal(joinDrugStatus, listingOptions.getDrugStatus().get()));
     }
 
     return andPredicates.toArray(new Predicate[andPredicates.size()]);
@@ -242,21 +252,21 @@ public class DefaultCmapDrugUpDownSignatureInteractionDao implements CmapDrugUpD
   public Stream<String> listDrugSourceNameValues(
     CmapUpDownSignatureResult cmapResult, CmapDrugUpDownSignatureInteractionListingOptions listingOptions
   ) {
-    return listDrugColumnValues(cmapResult, listingOptions, "sourceName");
+    return listDrugColumnValues(cmapResult, String.class, listingOptions, "sourceName");
   }
 
   @Override
   public Stream<String> listDrugSourceDbValues(
     CmapUpDownSignatureResult cmapResult, CmapDrugUpDownSignatureInteractionListingOptions listingOptions
   ) {
-    return listDrugColumnValues(cmapResult, listingOptions, "sourceDb");
+    return listDrugColumnValues(cmapResult, String.class, listingOptions, "sourceDb");
   }
 
   @Override
   public Stream<String> listDrugCommonNameValues(
     CmapUpDownSignatureResult cmapResult, CmapDrugUpDownSignatureInteractionListingOptions listingOptions
   ) {
-    return listDrugColumnValues(cmapResult, listingOptions, "commonName");
+    return listDrugColumnValues(cmapResult, String.class, listingOptions, "commonName");
   }
   
   @Override
@@ -266,6 +276,13 @@ public class DefaultCmapDrugUpDownSignatureInteractionDao implements CmapDrugUpD
     return listElementCollectionValues(cmapResult, listingOptions, "moa");
   }
 
+  @Override
+  public Stream<DrugStatus> listDrugStatusValues(
+    CmapUpDownSignatureResult cmapResult, CmapDrugUpDownSignatureInteractionListingOptions listingOptions
+  ) {
+    return listDrugColumnValues(cmapResult, DrugStatus.class, listingOptions, "status");
+  }
+  
   private Stream<String> listElementCollectionValues(
     CmapUpDownSignatureResult cmapResult, CmapDrugUpDownSignatureInteractionListingOptions listingOptions,
     String columnName
@@ -285,12 +302,14 @@ public class DefaultCmapDrugUpDownSignatureInteractionDao implements CmapDrugUpD
     return this.em.createQuery(query).getResultList().stream();
   }
 
-  public Stream<String> listDrugColumnValues(
-    CmapUpDownSignatureResult cmapResult, CmapDrugUpDownSignatureInteractionListingOptions listingOptions,
+  public <T> Stream<T> listDrugColumnValues(
+    CmapUpDownSignatureResult cmapResult, 
+    Class<T> targetClass,
+    CmapDrugUpDownSignatureInteractionListingOptions listingOptions,
     String columnName
   ) {
     final CriteriaBuilder cb = dh.cb();
-    CriteriaQuery<String> query = cb.createQuery(String.class);
+    CriteriaQuery<T> query = cb.createQuery(targetClass);
     final Root<CmapDrugUpDownSignatureInteraction> root = query.from(dh.getEntityType());
     final Join<CmapDrugUpDownSignatureInteraction, Drug> join = root.join("drug", JoinType.LEFT);
 

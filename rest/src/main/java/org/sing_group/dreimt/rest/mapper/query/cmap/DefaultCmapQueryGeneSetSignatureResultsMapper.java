@@ -22,6 +22,8 @@
  */
 package org.sing_group.dreimt.rest.mapper.query.cmap;
 
+import static java.util.stream.Collectors.joining;
+
 import java.util.List;
 
 import javax.enterprise.inject.Default;
@@ -74,7 +76,7 @@ public class DefaultCmapQueryGeneSetSignatureResultsMapper implements CmapQueryG
           drugMapper.toDrugData(c.getDrug()),
           c.getTau(),
           c.getFdr(),
-          c.getEffect().toString()
+          c.getDrugEffect().toString()
         )
       ).toArray(CmapGeneSetSignatureDrugInteractionData[]::new);
   }
@@ -82,11 +84,27 @@ public class DefaultCmapQueryGeneSetSignatureResultsMapper implements CmapQueryG
   @Override
   public String toCmapDrugInteractionCsvData(List<CmapDrugGeneSetSignatureInteraction> cmapDrugInteractions) {
     StringBuilder sb = new StringBuilder();
-    sb.append("drugSourceDb,drugSourceName,drugCommonName,tau,fdr\n");
+    sb.append(
+      "drug_name,effect,fdr,tau,drug_specificity_score,drug_source_db,drug_source_name,drug_status,drug_moa,\n"
+    );
     cmapDrugInteractions.stream()
       .forEach(c -> {
         Drug drug = c.getDrug();
         sb
+          .append("\"")
+          .append(drug.getCommonName())
+          .append("\"")
+          .append(",")
+          .append("\"")
+          .append(c.getDrugEffect().toString())
+          .append("\"")
+          .append(",")
+          .append(c.getFdr())
+          .append(",")
+          .append(c.getTau())
+          .append(",")
+          .append(drug.getDss() == null ? "" : drug.getDss())
+          .append(",")
           .append("\"")
           .append(drug.getSourceDb())
           .append("\"")
@@ -96,16 +114,12 @@ public class DefaultCmapQueryGeneSetSignatureResultsMapper implements CmapQueryG
           .append("\"")
           .append(",")
           .append("\"")
-          .append(drug.getCommonName())
+          .append(drug.getStatus())
           .append("\"")
           .append(",")
           .append("\"")
-          .append(c.getEffect().toString())
+          .append(drug.getMoa().stream().collect(joining(", ")))
           .append("\"")
-          .append(",")
-          .append(c.getTau())
-          .append(",")
-          .append(c.getFdr())
           .append("\n");
       });
 

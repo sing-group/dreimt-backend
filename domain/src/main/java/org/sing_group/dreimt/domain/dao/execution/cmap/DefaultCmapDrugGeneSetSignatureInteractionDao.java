@@ -55,6 +55,7 @@ import org.sing_group.dreimt.domain.entities.execution.cmap.CmapDrugGeneSetSigna
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapGeneSetSignatureDrugInteractionField;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapGeneSetSignatureResult;
 import org.sing_group.dreimt.domain.entities.signature.Drug;
+import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
 
 @Default
 @Transactional(MANDATORY)
@@ -118,6 +119,9 @@ public class DefaultCmapDrugGeneSetSignatureInteractionDao implements CmapDrugGe
             break;
           case DRUG_DSS:
             orders.add(order.apply(root.join("drug").get("dss")));
+            break;
+          case DRUG_STATUS:
+            orders.add(order.apply(root.join("drug").get("status")));
             break;
 
           case FDR:
@@ -203,6 +207,12 @@ public class DefaultCmapDrugGeneSetSignatureInteractionDao implements CmapDrugGe
       andPredicates.add(cb.like(joinDrugMoa, "%" + listingOptions.getDrugMoa().get() + "%"));
     }
 
+    if (listingOptions.getDrugStatus().isPresent()) {
+      final Path<DrugStatus> joinDrugStatus = joinDrug.get("status");
+
+      andPredicates.add(cb.equal(joinDrugStatus, listingOptions.getDrugStatus().get()));
+    }
+
     return andPredicates.toArray(new Predicate[andPredicates.size()]);
   }
 
@@ -222,21 +232,21 @@ public class DefaultCmapDrugGeneSetSignatureInteractionDao implements CmapDrugGe
   public Stream<String> listDrugSourceNameValues(
     CmapGeneSetSignatureResult cmapResult, CmapDrugGeneSetSignatureInteractionListingOptions listingOptions
   ) {
-    return listDrugColumnValues(cmapResult, listingOptions, "sourceName");
+    return listDrugColumnValues(cmapResult, String.class, listingOptions, "sourceName");
   }
 
   @Override
   public Stream<String> listDrugSourceDbValues(
     CmapGeneSetSignatureResult cmapResult, CmapDrugGeneSetSignatureInteractionListingOptions listingOptions
   ) {
-    return listDrugColumnValues(cmapResult, listingOptions, "sourceDb");
+    return listDrugColumnValues(cmapResult, String.class, listingOptions, "sourceDb");
   }
 
   @Override
   public Stream<String> listDrugCommonNameValues(
     CmapGeneSetSignatureResult cmapResult, CmapDrugGeneSetSignatureInteractionListingOptions listingOptions
   ) {
-    return listDrugColumnValues(cmapResult, listingOptions, "commonName");
+    return listDrugColumnValues(cmapResult, String.class, listingOptions, "commonName");
   }
   
   @Override
@@ -245,9 +255,17 @@ public class DefaultCmapDrugGeneSetSignatureInteractionDao implements CmapDrugGe
   ) {
     return listElementCollectionValues(cmapResult, listingOptions, "moa");
   }
+  
+  @Override
+  public Stream<DrugStatus> listDrugStatusValues(
+    CmapGeneSetSignatureResult cmapResult, CmapDrugGeneSetSignatureInteractionListingOptions listingOptions
+  ) {
+    return listDrugColumnValues(cmapResult, DrugStatus.class, listingOptions, "status");
+  }
 
   private Stream<String> listElementCollectionValues(
-    CmapGeneSetSignatureResult cmapResult, CmapDrugGeneSetSignatureInteractionListingOptions listingOptions,
+    CmapGeneSetSignatureResult cmapResult,
+    CmapDrugGeneSetSignatureInteractionListingOptions listingOptions,
     String columnName
   ) {
     final CriteriaBuilder cb = dh.cb();
@@ -265,11 +283,14 @@ public class DefaultCmapDrugGeneSetSignatureInteractionDao implements CmapDrugGe
     return this.em.createQuery(query).getResultList().stream();
   }
 
-  public Stream<String> listDrugColumnValues(
-    CmapGeneSetSignatureResult cmapResult, CmapDrugGeneSetSignatureInteractionListingOptions listingOptions, String columnName
+  public <T> Stream<T> listDrugColumnValues(
+    CmapGeneSetSignatureResult cmapResult,
+    Class<T> targetClass,
+    CmapDrugGeneSetSignatureInteractionListingOptions listingOptions,
+    String columnName
   ) {
     final CriteriaBuilder cb = dh.cb();
-    CriteriaQuery<String> query = cb.createQuery(String.class);
+    CriteriaQuery<T> query = cb.createQuery(targetClass);
     final Root<CmapDrugGeneSetSignatureInteraction> root = query.from(dh.getEntityType());
     final Join<CmapDrugGeneSetSignatureInteraction, Drug> join = root.join("drug", JoinType.LEFT);
 

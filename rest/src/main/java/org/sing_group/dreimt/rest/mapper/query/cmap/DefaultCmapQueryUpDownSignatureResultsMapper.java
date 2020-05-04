@@ -22,6 +22,8 @@
  */
 package org.sing_group.dreimt.rest.mapper.query.cmap;
 
+import static java.util.stream.Collectors.joining;
+
 import java.util.List;
 
 import javax.enterprise.inject.Default;
@@ -89,11 +91,29 @@ public class DefaultCmapQueryUpDownSignatureResultsMapper implements CmapQueryUp
   @Override
   public String toCmapDrugInteractionCsvData(List<CmapDrugUpDownSignatureInteraction> cmapDrugInteractions) {
     StringBuilder sb = new StringBuilder();
-    sb.append("drugSourceDb,drugSourceName,drugCommonName,drugEffect,tau,upFdr,downFdr\n");
+    sb.append(
+      "drug_name,effect,up_dr,down_fdr,tau,drug_specificity_score,drug_source_db,drug_source_name,drug_status,drug_moa,\n"
+    );
     cmapDrugInteractions.stream()
       .forEach(c -> {
         Drug drug = c.getDrug();
         sb
+          .append("\"")
+          .append(drug.getCommonName())
+          .append("\"")
+          .append(",")
+          .append("\"")
+          .append(c.getDrugEffect().toString())
+          .append("\"")
+          .append(",")
+          .append(c.getUpFdr())
+          .append(",")
+          .append(c.getDownFdr())
+          .append(",")
+          .append(c.getTau())
+          .append(",")
+          .append(drug.getDss() == null ? "" : drug.getDss())
+          .append(",")
           .append("\"")
           .append(drug.getSourceDb())
           .append("\"")
@@ -103,21 +123,14 @@ public class DefaultCmapQueryUpDownSignatureResultsMapper implements CmapQueryUp
           .append("\"")
           .append(",")
           .append("\"")
-          .append(drug.getCommonName())
+          .append(drug.getStatus())
           .append("\"")
           .append(",")
           .append("\"")
-          .append(c.getDrugEffect().toString())
+          .append(drug.getMoa().stream().collect(joining(", ")))
           .append("\"")
-          .append(",")
-          .append(c.getTau())
-          .append(",")
-          .append(c.getUpFdr())
-          .append(",")
-          .append(c.getDownFdr())
           .append("\n");
       });
-
     return sb.toString();
   }
 }
