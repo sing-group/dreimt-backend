@@ -29,6 +29,11 @@ public class SignatureDataSummary implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private String signatureName;
+  private String sourceDb;
+  private String sourceDbUrl;
+  private String articleTitle;
+  private String articleAuthors;
+  private Integer articlePubMedId;
 
   private URI signatureGenesUri;
   private URI articleMetadataUri;
@@ -36,10 +41,16 @@ public class SignatureDataSummary implements Serializable {
   SignatureDataSummary() {}
 
   public SignatureDataSummary(
-    String signatureName, URI signatureGenesUri, URI articleMetadataUri
+    String signatureName, String sourceDb, String sourceDbUrl, Integer articlePubMedId, String articleTitle,
+    String articleAuthors, URI signatureGenesUri, URI articleMetadataUri
   ) {
     super();
     this.signatureName = signatureName;
+    this.sourceDb = sourceDb;
+    this.sourceDbUrl = sourceDbUrl;
+    this.articleTitle = articleTitle;
+    this.articleAuthors = articleAuthors;
+    this.articlePubMedId = articlePubMedId;
 
     this.signatureGenesUri = signatureGenesUri;
     this.articleMetadataUri = articleMetadataUri;
@@ -47,6 +58,26 @@ public class SignatureDataSummary implements Serializable {
 
   public String getSignatureName() {
     return signatureName;
+  }
+
+  public String getSourceDb() {
+    return sourceDb;
+  }
+
+  public String getSourceDbUrl() {
+    return sourceDbUrl;
+  }
+
+  public Integer getArticlePubMedId() {
+    return articlePubMedId;
+  }
+
+  public String getArticleTitle() {
+    return articleTitle;
+  }
+
+  public String getArticleAuthors() {
+    return articleAuthors;
   }
 
   public URI getSignatureGenesUri() {

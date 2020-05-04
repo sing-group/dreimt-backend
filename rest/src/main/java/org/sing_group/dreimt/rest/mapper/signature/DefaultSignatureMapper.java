@@ -82,6 +82,11 @@ public class DefaultSignatureMapper implements SignatureMapper {
     
     return new SignatureDataSummary(
       signature.getSignatureName(),
+      signature.getSourceDb(),
+      signature.getSourceDbUrl(),
+      signature.getArticleMetadata().isPresent() ? signature.getArticleMetadata().get().getPubmedId() : null,
+      signature.getArticleMetadata().isPresent() ? signature.getArticleMetadata().get().getTitle() : null,
+      signature.getArticleMetadata().isPresent() ? signature.getArticleMetadata().get().getAuthors() : null,
       pathBuilder.signatureGenes(signature).build(),
       signature.getArticleMetadata().isPresent() ? pathBuilder.articleMetadata(signature.getArticleMetadata().get()).build() : null
     );
