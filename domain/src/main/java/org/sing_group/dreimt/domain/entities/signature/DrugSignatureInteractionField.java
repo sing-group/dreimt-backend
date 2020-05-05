@@ -41,6 +41,7 @@ public enum DrugSignatureInteractionField {
   DRUG_COMMON_NAME,
   DRUG_MOA,
   DRUG_DSS,
+  DRUG_STATUS,
 
   INTERACTION_TYPE,
   TAU,

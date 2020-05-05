@@ -31,6 +31,7 @@ import org.sing_group.dreimt.domain.dao.signature.DrugSignatureInteractionListin
 import org.sing_group.dreimt.domain.entities.signature.CellTypeAndSubtype;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
+import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 
 @Local
@@ -76,4 +77,6 @@ public interface DrugSignatureInteractionService {
   Stream<String> listDrugCommonNameValues(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<String> listDrugMoaValues(DrugSignatureInteractionListingOptions listingOptions);
+
+  Stream<DrugStatus> listDrugStatusValues(DrugSignatureInteractionListingOptions listingOptions);
 }

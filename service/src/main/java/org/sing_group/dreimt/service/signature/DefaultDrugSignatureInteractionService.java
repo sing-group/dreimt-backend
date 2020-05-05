@@ -34,6 +34,7 @@ import org.sing_group.dreimt.domain.dao.spi.signature.DrugSignatureInteractionDa
 import org.sing_group.dreimt.domain.entities.signature.CellTypeAndSubtype;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
+import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.service.spi.signature.DrugSignatureInteractionService;
 
@@ -151,5 +152,10 @@ public class DefaultDrugSignatureInteractionService implements DrugSignatureInte
   @Override
   public Stream<String> listDrugMoaValues(DrugSignatureInteractionListingOptions listingOptions) {
     return this.dao.listDrugMoaValues(listingOptions);
+  }
+  
+  @Override
+  public Stream<DrugStatus> listDrugStatusValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return this.dao.listDrugStatusValues(listingOptions);
   }
 }

@@ -68,6 +68,7 @@ import org.sing_group.dreimt.domain.entities.signature.Drug;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionField;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
+import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.FullDrugSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.signature.GeneSetSignature;
@@ -284,6 +285,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
         freeText, // drugSourceDb
         freeText, // drugCommonName
         freeText, // drugMoa
+        null, // drugStatus
         null, //
         null, // minTau
         null, // maxUpFdr
@@ -656,6 +658,14 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   ) {
     return this.listSetColumnValues("drugMoa", listingOptions);
   }
+  
+  @Override
+  public Stream<DrugStatus> listDrugStatusValues(
+    DrugSignatureInteractionListingOptions listingOptions
+  ) {
+    return this.listColumnValues(DrugStatus.class, "drugStatus", listingOptions);
+  }
+  
 
   @Override
   public Stream<Integer> listSignaturePubMedIdValues(DrugSignatureInteractionListingOptions listingOptions) {
@@ -810,6 +820,12 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     fieldLikeQueryBuilder.accept("drugCommonName", false, listingOptions.getDrugCommonName());
     fieldLikeQueryBuilder.accept("drugMoa", false, listingOptions.getDrugMoa());
 
+    listingOptions.getDrugStatus().ifPresent(drugStatus -> {
+      final Path<DrugStatus> drugStatusPath = root.get("drugStatus");
+
+      andPredicates.add(cb.equal(drugStatusPath, drugStatus));
+    });
+
     return andPredicates.toArray(new Predicate[andPredicates.size()]);
   }
 
@@ -884,6 +900,9 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
               break;
             case DRUG_DSS:
               orders.add(order.apply(root.get("drugDss")));
+              break;
+            case DRUG_STATUS:
+              orders.add(order.apply(root.get("drugStatus")));
               break;
 
             case INTERACTION_TYPE:

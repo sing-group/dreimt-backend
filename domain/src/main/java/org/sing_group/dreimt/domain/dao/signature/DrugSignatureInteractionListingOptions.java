@@ -30,6 +30,7 @@ import java.util.Optional;
 
 import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
+import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
 
 public class DrugSignatureInteractionListingOptions implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -41,6 +42,7 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
   private final String drugSourceDb;
   private final String drugCommonName;
   private final String drugMoa;
+  private final DrugStatus drugStatus;
   private final Double minDrugDss;
   private final Double minTau;
   private final Double maxUpFdr;
@@ -48,21 +50,19 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
 
   public DrugSignatureInteractionListingOptions(
     SignatureListingOptions signatureListingOptions, DrugSignatureInteractionType interactionType,
-    String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa, Double drugDss, 
+    String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss, 
     Double minTau, Double maxUpFdr, Double maxDownFdr
   ) {
     this(
-      noModification(),
-      signatureListingOptions, interactionType,
-      drugSourceName, drugSourceDb, drugCommonName, drugMoa, drugDss,
-      minTau, maxUpFdr, maxDownFdr
+      noModification(), signatureListingOptions, interactionType, drugSourceName, drugSourceDb, drugCommonName, drugMoa,
+      drugStatus, minDrugDss, minTau, maxUpFdr, maxDownFdr
     );
   }
 
   public DrugSignatureInteractionListingOptions(
     ListingOptions listingOptions, SignatureListingOptions signatureListingOptions,
     DrugSignatureInteractionType interactionType, String drugSourceName, String drugSourceDb, String drugCommonName,
-    String drugMoa, Double drugDss, Double minTau, Double maxUpFdr, Double maxDownFdr
+    String drugMoa, DrugStatus drugStatus, Double minDrugDss, Double minTau, Double maxUpFdr, Double maxDownFdr
   ) {
     this.listingOptions = listingOptions;
     this.signatureListingOptions = signatureListingOptions;
@@ -71,7 +71,8 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     this.drugSourceDb = drugSourceDb;
     this.drugCommonName = drugCommonName;
     this.drugMoa = drugMoa;
-    this.minDrugDss = drugDss;
+    this.drugStatus = drugStatus;
+    this.minDrugDss = minDrugDss;
     this.minTau = minTau;
     this.maxUpFdr = maxUpFdr;
     this.maxDownFdr = maxDownFdr;
@@ -85,6 +86,7 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
       || this.drugSourceDb != null
       || this.drugCommonName != null
       || this.drugMoa != null
+      || this.drugStatus != null
       || this.minDrugDss != null
       || this.minTau != null
       || this.maxUpFdr != null
@@ -119,6 +121,10 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     return ofNullable(drugMoa);
   }
 
+  public Optional<DrugStatus> getDrugStatus() {
+    return ofNullable(drugStatus);
+  }
+
   public Optional<Double> getMinDrugDss() {
     return ofNullable(minDrugDss);
   }
@@ -143,6 +149,7 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     result = prime * result + ((drugSourceDb == null) ? 0 : drugSourceDb.hashCode());
     result = prime * result + ((drugSourceName == null) ? 0 : drugSourceName.hashCode());
     result = prime * result + ((drugMoa == null) ? 0 : drugMoa.hashCode());
+    result = prime * result + ((drugStatus == null) ? 0 : drugStatus.hashCode());
     result = prime * result + ((minDrugDss == null) ? 0 : minDrugDss.hashCode());
     result = prime * result + ((interactionType == null) ? 0 : interactionType.hashCode());
     result = prime * result + ((listingOptions == null) ? 0 : listingOptions.hashCode());
@@ -181,6 +188,11 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
       if (other.drugMoa != null)
         return false;
     } else if (!drugMoa.equals(other.drugMoa))
+      return false;
+    if (drugStatus == null) {
+      if (other.drugStatus != null)
+        return false;
+    } else if (!drugStatus.equals(other.drugStatus))
       return false;
     if (minDrugDss == null) {
       if (other.minDrugDss != null)
