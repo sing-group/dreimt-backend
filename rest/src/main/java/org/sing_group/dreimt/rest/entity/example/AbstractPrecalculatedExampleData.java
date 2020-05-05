@@ -25,19 +25,39 @@ package org.sing_group.dreimt.rest.entity.example;
 import org.sing_group.dreimt.rest.entity.execution.WorkData;
 
 public abstract class AbstractPrecalculatedExampleData {
-  private String name;
+  private String title;
   private WorkData workData;
+  private String description;
+  private String reference;
+  private String url;
 
-  public AbstractPrecalculatedExampleData(String name, WorkData workData) {
-    this.name = name;
+  public AbstractPrecalculatedExampleData(
+    String title, String description, String reference, String url, WorkData workData
+  ) {
+    this.title = title;
+    this.description = description;
+    this.reference = reference;
+    this.url = url;
     this.workData = workData;
   }
 
-  public String getName() {
-    return name;
+  public String getTitle() {
+    return title;
   }
 
   public WorkData getWorkData() {
     return workData;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public String getReference() {
+    return reference;
+  }
+
+  public String getUrl() {
+    return url;
   }
 }

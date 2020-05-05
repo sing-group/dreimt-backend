@@ -26,7 +26,9 @@ import org.sing_group.dreimt.rest.entity.execution.WorkData;
 
 public class CmapPrecalculatedExampleData extends AbstractPrecalculatedExampleData {
 
-  public CmapPrecalculatedExampleData(String name, WorkData workData) {
-    super(name, workData);
+  public CmapPrecalculatedExampleData(
+    String title, String description, String reference, String url, WorkData workData
+  ) {
+    super(title, description, reference, url, workData);
   }
 }

@@ -26,7 +26,9 @@ import org.sing_group.dreimt.rest.entity.execution.WorkData;
 
 public class JaccardPrecalculatedExampleData extends AbstractPrecalculatedExampleData {
 
-  public JaccardPrecalculatedExampleData(String name, WorkData workData) {
-    super(name, workData);
+  public JaccardPrecalculatedExampleData(
+    String title, String description, String reference, String url, WorkData workData
+  ) {
+    super(title, description, reference, url, workData);
   }
 }

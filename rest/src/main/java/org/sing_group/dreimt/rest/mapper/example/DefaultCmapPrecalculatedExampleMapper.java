@@ -45,7 +45,11 @@ public class DefaultCmapPrecalculatedExampleMapper implements CmapPrecalculatedE
   @Override
   public CmapPrecalculatedExampleData toCmapPrecalculatedExampleData(CmapPrecalculatedExample example) {
     return new CmapPrecalculatedExampleData(
-      example.getWork().getName(), executionMapper.toWorkData(example.getWork())
+      example.getWork().getName(),
+      example.getWork().getDescription().orElse(null),
+      example.getReference(),
+      example.getUrl(),
+      executionMapper.toWorkData(example.getWork())
     );
   }
 }

@@ -45,7 +45,11 @@ public class DefaultJaccardPrecalculatedExampleMapper implements JaccardPrecalcu
   @Override
   public JaccardPrecalculatedExampleData toJaccardPrecalculatedExampleData(JaccardPrecalculatedExample example) {
     return new JaccardPrecalculatedExampleData(
-      example.getWork().getName(), executionMapper.toWorkData(example.getWork())
+      example.getWork().getName(),
+      example.getWork().getDescription().orElse(null),
+      example.getReference(),
+      example.getUrl(),
+      executionMapper.toWorkData(example.getWork())
     );
   }
 }

@@ -49,9 +49,20 @@ public abstract class PrecalculatedExample {
   @PrimaryKeyJoinColumn(name = "work", referencedColumnName = "id")
   private WorkEntity work;
 
+  private String reference;
+  private String url;
+
   protected PrecalculatedExample() {}
 
   public WorkEntity getWork() {
     return work;
+  }
+
+  public String getReference() {
+    return reference;
+  }
+
+  public String getUrl() {
+    return url;
   }
 }
