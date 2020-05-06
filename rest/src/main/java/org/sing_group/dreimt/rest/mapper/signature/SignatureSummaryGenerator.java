@@ -36,7 +36,7 @@ public class SignatureSummaryGenerator {
   private static final String[] COLLAPSE_TREATMENTS = new String[] {"Overexpression", "Knock-out model"};
   private final Map<String, List<String>> MAP_TREATMENT_A = new HashMap<>();
   private final Map<String, List<String>> MAP_TREATMENT_B = new HashMap<>();
-  
+
   public String interpretation(DrugSignatureInteraction interaction) {
     String effect = "boosts";
     if (interaction.getTau() < 0) {
@@ -48,27 +48,33 @@ public class SignatureSummaryGenerator {
         interaction.getSignature().getSignatureName(), effect, interaction.getDrug().getCommonName(),
         interaction.getSignature().getStateB(), interaction.getSignature().getCellSubTypeB(),
         interaction.getSignature().getTreatmentB(), interaction.getSignature().getDiseaseB(),
+        MAP_TREATMENT_B,
         interaction.getSignature().getStateA(), interaction.getSignature().getCellSubTypeA(),
-        interaction.getSignature().getTreatmentA(), interaction.getSignature().getDiseaseA()
+        interaction.getSignature().getTreatmentA(), interaction.getSignature().getDiseaseA(),
+        MAP_TREATMENT_A
       );
     } else {
       return interpretation(
         interaction.getSignature().getSignatureName(), effect, interaction.getDrug().getCommonName(),
         interaction.getSignature().getStateA(), interaction.getSignature().getCellSubTypeA(),
         interaction.getSignature().getTreatmentA(), interaction.getSignature().getDiseaseA(),
+        MAP_TREATMENT_A,
         interaction.getSignature().getStateB(), interaction.getSignature().getCellSubTypeB(),
-        interaction.getSignature().getTreatmentB(), interaction.getSignature().getDiseaseB()
+        interaction.getSignature().getTreatmentB(), interaction.getSignature().getDiseaseB(),
+        MAP_TREATMENT_B
       );
     }
   }
-    
-  private String interpretation(
-    String signatureName, String effect, String drugCommonName, String stateA, Set<String> cellSubTypeA,
-    Set<String> treatmentA, Set<String> diseaseA, String stateB, Set<String> cellSubTypeB, Set<String> treatmentB,
-    Set<String> diseaseB
+
+  private static String interpretation(
+    String signatureName, String effect, String drugCommonName,
+    String stateA, Set<String> cellSubTypeA, Set<String> treatmentA, Set<String> diseaseA,
+    Map<String, List<String>> mapTreatmentA,
+    String stateB, Set<String> cellSubTypeB, Set<String> treatmentB, Set<String> diseaseB,
+    Map<String, List<String>> mapTreatmentB
   ) {
-    String treatmentAStr = treatmentA.isEmpty() ? "" : concat(collapseTreatments(treatmentA, signatureName, MAP_TREATMENT_A));
-    String treatmentBStr = treatmentB.isEmpty() ? "" : concat(collapseTreatments(treatmentB, signatureName, MAP_TREATMENT_B));
+    String treatmentAStr = treatmentA.isEmpty() ? "" : concat(collapseTreatments(treatmentA, signatureName, mapTreatmentA));
+    String treatmentBStr = treatmentB.isEmpty() ? "" : concat(collapseTreatments(treatmentB, signatureName, mapTreatmentB));
     String diseaseAStr = diseaseA.isEmpty() ? "" : concat(new LinkedList<String>(diseaseA));
     String diseaseBStr = diseaseB.isEmpty() ? "" : concat(new LinkedList<String>(diseaseB));
 
@@ -152,7 +158,7 @@ public class SignatureSummaryGenerator {
     }
     return signatureTreatment.get(signatureName);
   }
-  
+
   private static String concat(List<String> data) {
     StringBuilder result = new StringBuilder();
     for (int i = 0; i < data.size(); i++) {
