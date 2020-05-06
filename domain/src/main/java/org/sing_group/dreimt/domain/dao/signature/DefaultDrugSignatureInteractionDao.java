@@ -916,6 +916,8 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
                   cb.coalesce(root.get("upFdr"), 1), cb.coalesce(root.get("downFdr"), 1)
                 );
               orders.add(cb.asc(greatestPred));
+              orders.add(cb.desc(root.get("drugDss")));
+              orders.add(cb.asc(root.get("drugStatus")));
               break;
             case UP_FDR:
               orders.add(order.apply(root.get("upFdr")));
