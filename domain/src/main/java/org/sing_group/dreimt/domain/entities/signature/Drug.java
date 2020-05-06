@@ -54,7 +54,7 @@ public class Drug implements Serializable {
   private String sourceName;
   private String sourceDb;
 
-  @Enumerated(EnumType.STRING)
+  @Enumerated(EnumType.ORDINAL) 
   private DrugStatus status;
   
   @ElementCollection(fetch = FetchType.EAGER)

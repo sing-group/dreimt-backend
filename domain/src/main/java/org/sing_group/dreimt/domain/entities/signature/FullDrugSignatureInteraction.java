@@ -73,7 +73,7 @@ public class FullDrugSignatureInteraction implements Serializable {
   private String drugSourceName;
   private String drugSourceDb;
 
-  @Enumerated(EnumType.STRING)
+  @Enumerated(EnumType.ORDINAL)
   private DrugStatus drugStatus;
   private String drugMoa;
 

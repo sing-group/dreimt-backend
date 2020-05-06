@@ -210,7 +210,7 @@ CREATE TABLE `drug` (
   `dss` double DEFAULT NULL,
   `sourceDb` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `sourceName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `status` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `status` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -288,7 +288,7 @@ CREATE TABLE `full_drug_signature_interaction` (
   `drugMoa` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `drugSourceDb` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `drugSourceName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `drugStatus` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `drugStatus` int(11) DEFAULT NULL,
   `drugTargetGenes` varchar(450) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `interactionType` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureCellSubTypeA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -304,6 +304,7 @@ CREATE TABLE `full_drug_signature_interaction` (
   `signatureName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureOrganism` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureSourceDb` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `signatureSourceDbUrl` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureStateA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureStateB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureTreatmentA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -312,7 +313,6 @@ CREATE TABLE `full_drug_signature_interaction` (
   `tau` double NOT NULL,
   `upFdr` double DEFAULT NULL,
   `signatureArticlePubmedId` int(11) DEFAULT NULL,
-  `signatureSourceDbUrl` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `IDX4hkkniqx8jx0t74qcpqco6dit` (`tau`),
   KEY `IDXl2qoayrbw9v7uacqregtqpc3q` (`upFdr`),
@@ -834,4 +834,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-05 15:26:27
+-- Dump completed on 2020-05-06 11:00:37
