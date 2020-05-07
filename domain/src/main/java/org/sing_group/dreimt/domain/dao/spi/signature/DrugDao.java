@@ -28,4 +28,6 @@ import org.sing_group.dreimt.domain.entities.signature.Drug;
 
 public interface DrugDao {
   Optional<Drug> get(int id);
+
+  long count();
 }

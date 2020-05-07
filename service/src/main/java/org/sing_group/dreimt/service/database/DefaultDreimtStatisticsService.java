@@ -1,6 +1,6 @@
 /*-
  * #%L
- * DREIMT - REST
+ * DREIMT - Service
  * %%
  * Copyright (C) 2018 - 2020 Daniel Glez-Peña, Miguel Reboiro-Jato, Hugo López-Fernández,
  * 			Kevin Troulé, Gonzálo Gómez-López, Fátima Al-Shahrour
@@ -20,14 +20,34 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.rest.resource.spi.database;
+package org.sing_group.dreimt.service.database;
 
-import javax.ejb.Local;
-import javax.ws.rs.core.Response;
+import javax.annotation.security.PermitAll;
+import javax.ejb.Stateless;
+import javax.inject.Inject;
 
-@Local
-public interface DreimtInformationResource {
-  Response getDreimtInformation();
+import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
+import org.sing_group.dreimt.domain.dao.spi.signature.DrugDao;
+import org.sing_group.dreimt.domain.dao.spi.signature.SignatureDao;
+import org.sing_group.dreimt.service.spi.database.DreimtStatisticsService;
 
-  Response getDreimtStatistics();
+@Stateless
+@PermitAll
+public class DefaultDreimtStatisticsService implements DreimtStatisticsService {
+
+  @Inject
+  private DrugDao drugDao;
+
+  @Inject
+  private SignatureDao signatureDao;
+
+  @Override
+  public long drugCount() {
+    return drugDao.count();
+  }
+
+  @Override
+  public long signaturesCount() {
+    return signatureDao.count(new SignatureListingOptions());
+  }
 }

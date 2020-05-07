@@ -37,7 +37,7 @@ import org.sing_group.dreimt.service.spi.database.DreimtInformationService;
 public class DefaultDreimtInformationService implements DreimtInformationService {
 
   @Inject
-  DreimtInformationDao dao;
+  private DreimtInformationDao dao;
 
   @Override
   public Optional<DreimtInformation> get() {

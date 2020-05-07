@@ -39,6 +39,8 @@ public interface SignatureService {
 
   Stream<Signature> list(SignatureListingOptions listingOptions);
 
+  long count(SignatureListingOptions listingOptions);
+
   Stream<String> listSignatureNameValues(SignatureListingOptions listingOptions);
 
   Stream<CellTypeAndSubtype> listCellTypeAndSubtype1Values(SignatureListingOptions signatureListingOptions);

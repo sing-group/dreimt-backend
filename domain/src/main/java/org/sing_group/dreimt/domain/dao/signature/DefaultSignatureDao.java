@@ -149,6 +149,7 @@ public class DefaultSignatureDao implements SignatureDao {
             return join.get("gene").in(geneSet);
           }
         );
+
       final Stream<Signature> upDownSignatures =
         this.listForSignature(
           UpDownSignature.class, listingOptions, (root, geneSet) -> {
@@ -195,6 +196,11 @@ public class DefaultSignatureDao implements SignatureDao {
       return typedQuery.getResultList().stream()
         .map(signature -> (Signature) signature);
     }
+  }
+
+  @Override
+  public long count(SignatureListingOptions listingOptions) {
+    return this.list(listingOptions).count();
   }
 
   private <T extends Signature> Predicate[] createPredicates(

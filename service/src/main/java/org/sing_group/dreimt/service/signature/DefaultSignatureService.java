@@ -53,6 +53,11 @@ public class DefaultSignatureService implements SignatureService {
   public Stream<Signature> list(SignatureListingOptions listingOptions) {
     return this.dao.list(listingOptions);
   }
+  
+  @Override
+  public long count(SignatureListingOptions listingOptions) {
+    return this.dao.count(listingOptions);
+  }
 
   @Override
   public Stream<String> listSignatureNameValues(SignatureListingOptions signatureListingOptions) {

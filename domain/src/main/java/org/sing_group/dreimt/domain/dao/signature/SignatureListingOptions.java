@@ -50,7 +50,11 @@ public class SignatureListingOptions implements Serializable {
   private final String sourceDb;
   private final Integer signaturePubMedId;
   private final Set<String> mandatoryGenes;
-  
+
+  public SignatureListingOptions() {
+    this(null, null, null, null, null, null, null, null, null, null, null);
+  }
+
   public SignatureListingOptions(
     String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
     ExperimentalDesign experimentalDesign, String organism, String disease, String sourceDb,

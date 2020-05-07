@@ -36,6 +36,8 @@ public interface SignatureDao {
 
   Stream<Signature> list(SignatureListingOptions listingOptions);
 
+  long count(SignatureListingOptions listingOptions);
+
   Stream<String> listSignatureNameValues(SignatureListingOptions signatureListingOptions);
 
   Stream<CellTypeAndSubtype> listCellTypeAndSubtype1Values(SignatureListingOptions signatureListingOptions);

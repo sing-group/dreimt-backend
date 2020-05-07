@@ -35,10 +35,12 @@ import javax.ws.rs.core.Response;
 
 import org.sing_group.dreimt.domain.entities.database.DreimtInformation;
 import org.sing_group.dreimt.rest.entity.database.DreimtInformationData;
+import org.sing_group.dreimt.rest.entity.database.DreimtStatistics;
 import org.sing_group.dreimt.rest.filter.CrossDomain;
 import org.sing_group.dreimt.rest.mapper.spi.database.DreimtInformationMapper;
 import org.sing_group.dreimt.rest.resource.spi.database.DreimtInformationResource;
 import org.sing_group.dreimt.service.spi.database.DreimtInformationService;
+import org.sing_group.dreimt.service.spi.database.DreimtStatisticsService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -56,7 +58,10 @@ import io.swagger.annotations.ApiResponses;
 public class DefaultDreimtInformationResource implements DreimtInformationResource {
 
   @Inject
-  private DreimtInformationService service;
+  private DreimtInformationService informationService;
+
+  @Inject
+  private DreimtStatisticsService statisticsService;
   
   @Inject
   private DreimtInformationMapper dreimtInformationMapper;
@@ -73,11 +78,26 @@ public class DefaultDreimtInformationResource implements DreimtInformationResour
   )
   @Override
   public Response getDreimtInformation() {
-    Optional<DreimtInformation> dreimtInformation = this.service.get();
+    Optional<DreimtInformation> dreimtInformation = this.informationService.get();
     if (dreimtInformation.isPresent()) {
       return Response.ok(this.dreimtInformationMapper.mapToDreimtInformationData(dreimtInformation.get())).build();
     } else {
       throw new IllegalArgumentException("Dreimt database information not available.");
     }
+  }
+
+  @GET
+  @Path("statistics")
+  @ApiOperation(
+    value = "Returns statistics about the Dreimt database (e.g. number of signatures and drugs)", 
+    response = DreimtStatistics.class, 
+    code = 200
+  )
+  @Override
+  public Response getDreimtStatistics() {
+    DreimtStatistics dreimtStatistics =
+      new DreimtStatistics(statisticsService.drugCount(), statisticsService.signaturesCount());
+
+    return Response.ok(dreimtStatistics).build();
   }
 }

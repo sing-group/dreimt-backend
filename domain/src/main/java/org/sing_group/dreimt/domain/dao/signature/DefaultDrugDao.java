@@ -62,4 +62,9 @@ public class DefaultDrugDao implements DrugDao {
   public Optional<Drug> get(int id) {
     return this.dh.get(id);
   }
+
+  @Override
+  public long count() {
+    return this.dh.count();
+  }
 }
