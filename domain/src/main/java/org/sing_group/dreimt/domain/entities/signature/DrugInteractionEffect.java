@@ -49,4 +49,12 @@ public enum DrugInteractionEffect {
       return tau > 0 ? BOOST : INHIBIT;
     }
   }
+
+  public DrugInteractionEffect opposite() {
+    if(this.equals(BOOST)) {
+      return INHIBIT;
+    } else {
+      return BOOST;
+    }
+  }
 }

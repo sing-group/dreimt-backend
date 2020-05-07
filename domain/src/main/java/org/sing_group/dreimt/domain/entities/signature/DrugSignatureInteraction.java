@@ -72,12 +72,19 @@ public class DrugSignatureInteraction implements Serializable {
 
   @Column(nullable = true)
   private Double downFdr;
+  
+  @Enumerated(EnumType.ORDINAL)
+  private DrugInteractionEffect cellTypeAEffect;
+
+  @Enumerated(EnumType.ORDINAL)
+  private DrugInteractionEffect cellTypeBEffect;
 
   public DrugSignatureInteraction() {}
 
   public DrugSignatureInteraction(
     Drug drug, Signature signature, DrugSignatureInteractionType interactionType,
-    double tau, Double upFdr, Double downFdr
+    double tau, Double upFdr, Double downFdr,
+    DrugInteractionEffect cellTypeAEffect, DrugInteractionEffect cellTypeBEffect
   ) {
     super();
     this.drug = drug;
@@ -86,6 +93,8 @@ public class DrugSignatureInteraction implements Serializable {
     this.tau = tau;
     this.upFdr = upFdr;
     this.downFdr = downFdr;
+    this.cellTypeAEffect = cellTypeAEffect;
+    this.cellTypeBEffect = cellTypeBEffect;
   }
 
   public Drug getDrug() {
@@ -110,6 +119,14 @@ public class DrugSignatureInteraction implements Serializable {
 
   public Double getDownFdr() {
     return downFdr;
+  }
+
+  public DrugInteractionEffect getCellTypeAEffect() {
+    return cellTypeAEffect;
+  }
+  
+  public DrugInteractionEffect getCellTypeABffect() {
+    return cellTypeBEffect;
   }
 
   @Override

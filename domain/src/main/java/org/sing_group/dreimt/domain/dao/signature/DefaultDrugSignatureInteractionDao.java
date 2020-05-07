@@ -65,6 +65,7 @@ import org.sing_group.dreimt.domain.dao.spi.signature.GeneDao;
 import org.sing_group.dreimt.domain.entities.signature.ArticleMetadata;
 import org.sing_group.dreimt.domain.entities.signature.CellTypeAndSubtype;
 import org.sing_group.dreimt.domain.entities.signature.Drug;
+import org.sing_group.dreimt.domain.entities.signature.DrugInteractionEffect;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionField;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
@@ -136,7 +137,8 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
           );
 
         return new DrugSignatureInteraction(
-          drug, signature, fdsi.getInteractionType(), fdsi.getTau(), fdsi.getUpFdr(), fdsi.getDownFdr()
+          drug, signature, fdsi.getInteractionType(), fdsi.getTau(), fdsi.getUpFdr(), fdsi.getDownFdr(),
+          fdsi.getCellTypeAEffect(), fdsi.getCellTypeBEffect()
         );
       });
   }
@@ -260,7 +262,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       return reconstruct(typedQuery.getResultList().stream());
     }
   }
-
+  
   private DrugSignatureInteractionListingOptions createDrugSignatureListingOptionsFromFreeText(
     ListingOptions listingOptions, String freeText
   ) {
@@ -289,7 +291,8 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
         null, //
         null, // minTau
         null, // maxUpFdr
-        null // maxDownFdr
+        null, // maxDownFdr
+        null  // cellType1Effect
       );
 
     return drugSignatureListingOptions;
@@ -825,6 +828,46 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
       andPredicates.add(cb.equal(drugStatusPath, drugStatus));
     });
+
+    if (signatureListingOptions.getCellType1().isPresent() && listingOptions.getCellType1Effect().isPresent()) {
+      Path<String> cellTypeA = root.get("signatureCellTypeA");
+      Path<String> cellTypeB = root.get("signatureCellTypeB");
+      Path<DrugInteractionEffect> cellTypeAEffect = root.get("cellTypeAEffect");
+      Path<DrugInteractionEffect> cellTypeBEffect = root.get("cellTypeBEffect");
+
+      if (signatureListingOptions.getCellSubType1().isPresent()) {
+        Path<String> cellSubTypeA = root.get("signatureCellSubTypeA");
+        Path<String> cellSubTypeB = root.get("signatureCellSubTypeB");
+
+        andPredicates.add(
+          cb.or(
+            cb.and(
+              cb.like(cellTypeA, "%" + signatureListingOptions.getCellType1().get() + "%"),
+              cb.like(cellSubTypeA, "%" + signatureListingOptions.getCellSubType1().get() + "%"),
+              cb.equal(cellTypeAEffect, listingOptions.getCellType1Effect().get())
+            ),
+            cb.and(
+              cb.like(cellTypeB, "%" + signatureListingOptions.getCellType1().get() + "%"),
+              cb.like(cellSubTypeB, "%" + signatureListingOptions.getCellSubType1().get() + "%"),
+              cb.equal(cellTypeBEffect, listingOptions.getCellType1Effect().get())
+            )
+          )
+        );
+      } else {
+        andPredicates.add(
+          cb.or(
+            cb.and(
+              cb.like(cellTypeA, "%" + signatureListingOptions.getCellType1().get() + "%"),
+              cb.equal(cellTypeAEffect, listingOptions.getCellType1Effect().get())
+            ),
+            cb.and(
+              cb.like(cellTypeB, "%" + signatureListingOptions.getCellType1().get() + "%"),
+              cb.equal(cellTypeBEffect, listingOptions.getCellType1Effect().get())
+            )
+          )
+        );
+      }
+    }
 
     return andPredicates.toArray(new Predicate[andPredicates.size()]);
   }

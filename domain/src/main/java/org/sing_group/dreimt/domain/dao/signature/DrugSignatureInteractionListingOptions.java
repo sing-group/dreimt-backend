@@ -29,6 +29,7 @@ import java.io.Serializable;
 import java.util.Optional;
 
 import org.sing_group.dreimt.domain.dao.ListingOptions;
+import org.sing_group.dreimt.domain.entities.signature.DrugInteractionEffect;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
 import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
 
@@ -47,23 +48,27 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
   private final Double minTau;
   private final Double maxUpFdr;
   private final Double maxDownFdr;
+  private final DrugInteractionEffect cellType1Effect;
 
   public DrugSignatureInteractionListingOptions(
     SignatureListingOptions signatureListingOptions, DrugSignatureInteractionType interactionType,
     String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss, 
-    Double minTau, Double maxUpFdr, Double maxDownFdr
+    Double minTau, Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect
   ) {
     this(
       noModification(), signatureListingOptions, interactionType, drugSourceName, drugSourceDb, drugCommonName, drugMoa,
-      drugStatus, minDrugDss, minTau, maxUpFdr, maxDownFdr
+      drugStatus, minDrugDss, minTau, maxUpFdr, maxDownFdr, cellType1Effect
     );
   }
 
   public DrugSignatureInteractionListingOptions(
     ListingOptions listingOptions, SignatureListingOptions signatureListingOptions,
     DrugSignatureInteractionType interactionType, String drugSourceName, String drugSourceDb, String drugCommonName,
-    String drugMoa, DrugStatus drugStatus, Double minDrugDss, Double minTau, Double maxUpFdr, Double maxDownFdr
+    String drugMoa, DrugStatus drugStatus, Double minDrugDss, 
+    Double minTau, Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect
   ) {
+    validateCellTypeAEffect(cellType1Effect,signatureListingOptions);
+    
     this.listingOptions = listingOptions;
     this.signatureListingOptions = signatureListingOptions;
     this.interactionType = interactionType;
@@ -76,6 +81,15 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     this.minTau = minTau;
     this.maxUpFdr = maxUpFdr;
     this.maxDownFdr = maxDownFdr;
+    this.cellType1Effect = cellType1Effect;
+  }
+
+  private static void validateCellTypeAEffect(
+    DrugInteractionEffect cellType1Effect, SignatureListingOptions signatureListingOptions
+  ) {
+    if (cellType1Effect != null && !signatureListingOptions.getCellType1().isPresent()) {
+      throw new IllegalArgumentException("cellType1 is required when cellTypeAEffect is present");
+    }
   }
 
   public boolean hasAnyQueryModification() {
@@ -90,7 +104,8 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
       || this.minDrugDss != null
       || this.minTau != null
       || this.maxUpFdr != null
-      || this.maxDownFdr != null;
+      || this.maxDownFdr != null
+      || this.cellType1Effect != null;
   }
 
   public ListingOptions getListingOptions() {
@@ -140,6 +155,10 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
   public Optional<Double> getMaxDownFdr() {
     return ofNullable(maxDownFdr);
   }
+  
+  public Optional<DrugInteractionEffect> getCellType1Effect() {
+    return ofNullable(cellType1Effect);
+  }
 
   @Override
   public int hashCode() {
@@ -156,6 +175,7 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     result = prime * result + ((maxDownFdr == null) ? 0 : maxDownFdr.hashCode());
     result = prime * result + ((maxUpFdr == null) ? 0 : maxUpFdr.hashCode());
     result = prime * result + ((minTau == null) ? 0 : minTau.hashCode());
+    result = prime * result + ((cellType1Effect == null) ? 0 : cellType1Effect.hashCode());
     result = prime * result + ((signatureListingOptions == null) ? 0 : signatureListingOptions.hashCode());
     return result;
   }
@@ -220,6 +240,11 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
       if (other.minTau != null)
         return false;
     } else if (!minTau.equals(other.minTau))
+      return false;
+    if (cellType1Effect == null) {
+      if (other.cellType1Effect != null)
+        return false;
+    } else if (!cellType1Effect.equals(other.cellType1Effect))
       return false;
     if (signatureListingOptions == null) {
       if (other.signatureListingOptions != null)

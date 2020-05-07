@@ -125,6 +125,12 @@ public class FullDrugSignatureInteraction implements Serializable {
   @Column(nullable = true)
   private Double downFdr;
 
+  @Enumerated(EnumType.ORDINAL)
+  private DrugInteractionEffect cellTypeAEffect;
+
+  @Enumerated(EnumType.ORDINAL)
+  private DrugInteractionEffect cellTypeBEffect;
+
   public FullDrugSignatureInteraction() {}
 
   public DrugSignatureInteractionType getInteractionType() {
@@ -141,6 +147,14 @@ public class FullDrugSignatureInteraction implements Serializable {
 
   public Double getDownFdr() {
     return downFdr;
+  }
+
+  public DrugInteractionEffect getCellTypeAEffect() {
+    return cellTypeAEffect;
+  }
+  
+  public DrugInteractionEffect getCellTypeBEffect() {
+    return cellTypeBEffect;
   }
 
   public String getDrugCommonName() {

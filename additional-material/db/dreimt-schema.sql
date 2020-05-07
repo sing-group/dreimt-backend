@@ -239,6 +239,8 @@ DROP TABLE IF EXISTS `drug_signature_interaction`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `drug_signature_interaction` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cellTypeAEffect` int(11) DEFAULT NULL,
+  `cellTypeBEffect` int(11) DEFAULT NULL,
   `downFdr` double DEFAULT NULL,
   `interactionType` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `tau` double NOT NULL,
@@ -282,6 +284,8 @@ DROP TABLE IF EXISTS `full_drug_signature_interaction`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `full_drug_signature_interaction` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `cellTypeAEffect` int(11) DEFAULT NULL,
+  `cellTypeBEffect` int(11) DEFAULT NULL,
   `downFdr` double DEFAULT NULL,
   `drugCommonName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `drugDss` double DEFAULT NULL,
@@ -834,4 +838,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-06 11:00:37
+-- Dump completed on 2020-05-07  9:54:11
