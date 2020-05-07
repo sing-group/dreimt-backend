@@ -127,9 +127,8 @@ public class DefaultJaccardQueryResultsMapper implements JaccardQueryResultsMapp
   @Override
   public String toGeneOverlapCsvData(List<GeneOverlap> geneOverlaps) {
     StringBuilder sb = new StringBuilder();
-    sb.append("source,target,target_signature,jaccard,pvalue,fdr\n");
+    sb.append("source_comparison_type,target_comparison_type,target_signature,pvalue,fdr,jaccard\n");
     geneOverlaps.forEach(o -> {
-
       sb
         .append(o.getSourceComparisonType())
         .append(",")
@@ -137,11 +136,11 @@ public class DefaultJaccardQueryResultsMapper implements JaccardQueryResultsMapp
         .append(",")
         .append(o.getTargetSignature().getSignatureName())
         .append(",")
-        .append(o.getJaccard())
-        .append(",")
         .append(o.getPvalue())
         .append(",")
         .append(o.getFdr())
+        .append(",")
+        .append(o.getJaccard())
         .append("\n");
     });
 
