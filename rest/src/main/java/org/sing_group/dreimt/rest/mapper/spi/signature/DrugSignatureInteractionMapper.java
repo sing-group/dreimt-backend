@@ -33,7 +33,7 @@ public interface DrugSignatureInteractionMapper {
 
   void setUriBuilder(UriBuilder uriBuilder);
 
-  DrugSignatureInteractionData[] toDrugSignatureInteractionData(Stream<DrugSignatureInteraction> interactions);
+  DrugSignatureInteractionData[] toDrugSignatureInteractionData(Stream<DrugSignatureInteraction> interactions, boolean includeSummary);
 
   String toDrugSignatureInteractionCsvData(Stream<DrugSignatureInteraction> interactions);
 }

@@ -159,7 +159,8 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("maxUpFdr") Double maxUpFdr,
     @QueryParam("maxDownFdr") Double maxDownFdr,
     @QueryParam("cellType1Effect") DrugInteractionEffect cellType1Effect,
-    @QueryParam("freeText") String freeText
+    @QueryParam("freeText") String freeText,
+    @QueryParam("includeSummary") @DefaultValue("false") boolean includeSummary
   ) {
     if (
       freeText != null && (signatureName != null || cellType1 != null || cellSubType1 != null || cellType2 != null
@@ -187,7 +188,7 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         );
 
       final DrugSignatureInteractionData[] data =
-        this.drugSignatureMapper.toDrugSignatureInteractionData(service.list(listingOptions));
+        this.drugSignatureMapper.toDrugSignatureInteractionData(service.list(listingOptions), includeSummary);
 
       final long count = service.count(listingOptions);
 
@@ -197,7 +198,8 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     } else {
       final DrugSignatureInteractionData[] data =
         this.drugSignatureMapper.toDrugSignatureInteractionData(
-          service.list(listingOptionsMapper.toListingOptions(getListingOptions(page, pageSize, orderField, sortDirection)), freeText)
+          service.list(listingOptionsMapper.toListingOptions(getListingOptions(page, pageSize, orderField, sortDirection)), freeText),
+          includeSummary
         );
 
       final long count = service.count(freeText);

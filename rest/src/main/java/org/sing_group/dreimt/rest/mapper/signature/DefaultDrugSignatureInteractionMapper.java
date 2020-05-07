@@ -41,6 +41,12 @@ import org.sing_group.dreimt.rest.mapper.spi.signature.SignatureMapper;
 @Default
 public class DefaultDrugSignatureInteractionMapper implements DrugSignatureInteractionMapper {
 
+  private static final PredictionSummaryGenerator NULL_PREDICTION_SUMMARY_GENERATOR = new PredictionSummaryGenerator() {
+    public String interpretation(DrugSignatureInteraction interaction) {
+      return "";
+    }
+  };
+
   @Inject
   private DrugMapper drugMapper;
 
@@ -53,23 +59,33 @@ public class DefaultDrugSignatureInteractionMapper implements DrugSignatureInter
   }
 
   @Override
-  public DrugSignatureInteractionData[] toDrugSignatureInteractionData(Stream<DrugSignatureInteraction> interactions) {
-    return interactions.map(this::toDrugSignatureInteractionData).toArray(DrugSignatureInteractionData[]::new);
+  public DrugSignatureInteractionData[] toDrugSignatureInteractionData(
+    Stream<DrugSignatureInteraction> interactions, boolean includeSummary
+  ) {
+    PredictionSummaryGenerator predictionSummaryGenerator =
+      includeSummary ? new PredictionSummaryGenerator() : NULL_PREDICTION_SUMMARY_GENERATOR;
+
+    return interactions
+      .map(i -> this.toDrugSignatureInteractionData(i, predictionSummaryGenerator))
+      .toArray(DrugSignatureInteractionData[]::new);
   }
 
-  private DrugSignatureInteractionData toDrugSignatureInteractionData(DrugSignatureInteraction interaction) {
+  private DrugSignatureInteractionData toDrugSignatureInteractionData(
+    DrugSignatureInteraction interaction, PredictionSummaryGenerator predictionSummaryGenerator
+  ) {
     return new DrugSignatureInteractionData(
       this.drugMapper.toDrugData(interaction.getDrug()),
       this.signatureMapper.toSignatureData(interaction.getSignature()),
       interaction.getInteractionType(),
       interaction.getTau(),
       interaction.getUpFdr(),
-      interaction.getDownFdr()
+      interaction.getDownFdr(),
+      predictionSummaryGenerator.interpretation(interaction)
     );
   }
 
   public String toDrugSignatureInteractionCsvData(Stream<DrugSignatureInteraction> interactions) {
-    SignatureSummaryGenerator signatureSummaryGenerator = new SignatureSummaryGenerator();
+    PredictionSummaryGenerator signatureSummaryGenerator = new PredictionSummaryGenerator();
     StringBuilder sb = new StringBuilder();
     sb.append(
       "drug_common_name,summary,"

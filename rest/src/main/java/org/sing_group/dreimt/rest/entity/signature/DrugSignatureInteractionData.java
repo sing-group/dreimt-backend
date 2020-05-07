@@ -38,11 +38,14 @@ public class DrugSignatureInteractionData implements Serializable {
   private Double upFdr;
   private Double downFdr;
 
+  private String predictionSummary;
+
   DrugSignatureInteractionData() {}
 
   public DrugSignatureInteractionData(
-    DrugData drug, SignatureData signature, DrugSignatureInteractionType interactionType, double tau, Double upFdr,
-    Double downFdr
+    DrugData drug, SignatureData signature, DrugSignatureInteractionType interactionType,
+    double tau, Double upFdr, Double downFdr,
+    String predictionSummary
   ) {
     super();
     this.drug = drug;
@@ -51,6 +54,7 @@ public class DrugSignatureInteractionData implements Serializable {
     this.tau = tau;
     this.upFdr = upFdr;
     this.downFdr = downFdr;
+    this.predictionSummary = predictionSummary;
   }
 
   public DrugData getDrug() {
@@ -75,5 +79,9 @@ public class DrugSignatureInteractionData implements Serializable {
 
   public Double getDownFdr() {
     return downFdr;
+  }
+
+  public String getPredictionSummary() {
+    return predictionSummary;
   }
 }

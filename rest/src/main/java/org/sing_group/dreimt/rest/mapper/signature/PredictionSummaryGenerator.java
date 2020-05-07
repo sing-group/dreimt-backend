@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
 
-public class SignatureSummaryGenerator {
+public class PredictionSummaryGenerator {
   private static final String[] COLLAPSE_TREATMENTS = new String[] {"Overexpression", "Knock-out model"};
   private final Map<String, List<String>> MAP_TREATMENT_A = new HashMap<>();
   private final Map<String, List<String>> MAP_TREATMENT_B = new HashMap<>();

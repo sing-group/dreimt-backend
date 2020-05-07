@@ -43,7 +43,8 @@ public interface DrugSignatureInteractionResource {
     ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
     Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
     DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String freeText
+    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String freeText,
+    boolean includeSummary
   );
   
   Response listAsCsv(
