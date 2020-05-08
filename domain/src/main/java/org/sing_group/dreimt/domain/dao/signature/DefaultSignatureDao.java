@@ -528,7 +528,13 @@ public class DefaultSignatureDao implements SignatureDao {
 
   @Override
   public Stream<String> listDiseaseValues(SignatureListingOptions signatureListingOptions) {
-    return listElementCollectionValues(signatureListingOptions, "disease");
+    Stream<String> diseaseValues = listElementCollectionValues(signatureListingOptions, "disease");
+    if (signatureListingOptions.getDisease().isPresent()) {
+      return diseaseValues
+        .filter(d -> d.contains(signatureListingOptions.getDisease().get()));
+    } else {
+      return diseaseValues;
+    }
   }
 
   private Stream<String> listElementCollectionValues(

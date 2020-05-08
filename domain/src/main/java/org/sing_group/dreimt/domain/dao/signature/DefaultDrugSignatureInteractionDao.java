@@ -579,14 +579,21 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
   @Override
   public Stream<String> listDiseaseValues(DrugSignatureInteractionListingOptions listingOptions) {
-    return this.listSetColumnValues("signatureDisease", listingOptions);
+    Stream<String> diseaseValues = this.listSetColumnValues("signatureDisease", listingOptions);
+    if (listingOptions.getSignatureListingOptions().getDisease().isPresent()) {
+      return diseaseValues
+        .filter(d -> d.contains(listingOptions.getSignatureListingOptions().getDisease().get()));
+    } else {
+      return diseaseValues;
+    }
   }
 
   private Stream<String> listSetColumnValues(
     String columnName, DrugSignatureInteractionListingOptions listingOptions
   ) {
     return this.listColumnValues(String.class, columnName, listingOptions)
-      .flatMap(v -> reconstructSet(v).stream()).distinct();
+      .flatMap(v -> reconstructSet(v).stream())
+      .distinct();
   }
 
   @Override
