@@ -79,4 +79,8 @@ public interface DrugSignatureInteractionService {
   Stream<String> listDrugMoaValues(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<DrugStatus> listDrugStatusValues(DrugSignatureInteractionListingOptions listingOptions);
+
+  Stream<String> listCellType1TreatmentValues(DrugSignatureInteractionListingOptions listingOptions);
+
+  Stream<String> listCellType1DiseaseValues(DrugSignatureInteractionListingOptions listingOptions);
 }

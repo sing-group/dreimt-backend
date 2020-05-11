@@ -128,7 +128,7 @@ public class DefaultSignatureResource implements SignatureResource {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final SignatureData[] data =
@@ -189,7 +189,7 @@ public class DefaultSignatureResource implements SignatureResource {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final String[] data =
@@ -222,7 +222,7 @@ public class DefaultSignatureResource implements SignatureResource {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellType1, cellSubType1, null, null, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final CellTypeAndSubtype[] data =
@@ -257,7 +257,7 @@ public class DefaultSignatureResource implements SignatureResource {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final CellTypeAndSubtype[] data =
@@ -291,7 +291,7 @@ public class DefaultSignatureResource implements SignatureResource {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellType1, cellSubType1, null, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final String[] data =
@@ -325,7 +325,7 @@ public class DefaultSignatureResource implements SignatureResource {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellType1, cellSubType1, cellType2, null, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final String[] data =
@@ -360,7 +360,7 @@ public class DefaultSignatureResource implements SignatureResource {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final String[] data =
@@ -395,7 +395,7 @@ public class DefaultSignatureResource implements SignatureResource {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final String[] data =
@@ -430,7 +430,7 @@ public class DefaultSignatureResource implements SignatureResource {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final ExperimentalDesign[] data =
@@ -465,7 +465,7 @@ public class DefaultSignatureResource implements SignatureResource {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final String[] data =
@@ -500,7 +500,7 @@ public class DefaultSignatureResource implements SignatureResource {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final String[] data =
@@ -535,7 +535,7 @@ public class DefaultSignatureResource implements SignatureResource {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final String[] data =
@@ -570,7 +570,7 @@ public class DefaultSignatureResource implements SignatureResource {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final SignatureType[] data =
@@ -605,7 +605,7 @@ public class DefaultSignatureResource implements SignatureResource {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId
+        signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final Integer[] data =

@@ -88,7 +88,7 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     DrugInteractionEffect cellType1Effect, SignatureListingOptions signatureListingOptions
   ) {
     if (cellType1Effect != null && !signatureListingOptions.getCellType1().isPresent()) {
-      throw new IllegalArgumentException("cellType1 is required when cellTypeAEffect is present");
+      throw new IllegalArgumentException("cellType1 is required when cellType1Effect is present");
     }
   }
 

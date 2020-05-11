@@ -277,8 +277,11 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
         freeText, // organism
         freeText, // disease
         null, // sourceDb
-        null // signaturePubMedId
+        null, // signaturePubMedId,
+        freeText, // cellType1Treatment
+        freeText // cellType1Disease
       );
+
     DrugSignatureInteractionListingOptions drugSignatureListingOptions =
       new DrugSignatureInteractionListingOptions(
         listingOptions, signatureListingOptions,
@@ -338,6 +341,75 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
           .cellTypeAndSubTypeMatchesFilters(value, listingOptions.getSignatureListingOptions())
       )
       .sorted(CELL_TYPE_AND_SUBTYPE_COMPARATOR);
+  }
+
+  @Override
+  public Stream<String> listCellType1DiseaseValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return listMultipleColumnCollectionValues(
+      listingOptions,
+      "signatureCellTypeA", "signatureCellSubTypeA", "signatureDiseaseA",
+      "signatureCellTypeB", "signatureCellSubTypeB", "signatureDiseaseB"
+    )
+      .map(tuple -> {
+        List<CellTypeAndSubtype> listA = tupleToCellTypeAndSubtype(tuple, 0, 1);
+        List<CellTypeAndSubtype> listB = tupleToCellTypeAndSubtype(tuple, 3, 4);
+
+        String additionalSetFieldFilter = listingOptions.getSignatureListingOptions().getCellType1Disease().orElse("");
+        List<CustomCellTypeAndSubtype> list = toCustomCellTypeAndSubtypeList(tuple.get(2), additionalSetFieldFilter, listA);
+        list.addAll(toCustomCellTypeAndSubtypeList(tuple.get(5), additionalSetFieldFilter, listB));
+
+        return list;
+      })
+      .flatMap(List::stream)
+      .distinct()
+      .filter(
+        value -> cellTypeAndSubTypeMatchesFilters(value, listingOptions.getSignatureListingOptions())
+      )
+      .map(CustomCellTypeAndSubtype::getAdditionalInfo)
+      .distinct();
+  }
+
+  @Override
+  public Stream<String> listCellType1TreatmentValues(DrugSignatureInteractionListingOptions listingOptions) {
+    return listMultipleColumnCollectionValues(
+      listingOptions,
+      "signatureCellTypeA", "signatureCellSubTypeA", "signatureTreatmentA",
+      "signatureCellTypeB", "signatureCellSubTypeB", "signatureTreatmentB"
+    )
+      .map(tuple -> {
+        List<CellTypeAndSubtype> listA = tupleToCellTypeAndSubtype(tuple, 0, 1);
+        List<CellTypeAndSubtype> listB = tupleToCellTypeAndSubtype(tuple, 3, 4);
+
+        String additionalSetFieldFilter = listingOptions.getSignatureListingOptions().getCellType1Treatment().orElse("");
+        List<CustomCellTypeAndSubtype> list = toCustomCellTypeAndSubtypeList(tuple.get(2), additionalSetFieldFilter, listA);
+        list.addAll(toCustomCellTypeAndSubtypeList(tuple.get(5), additionalSetFieldFilter, listB));
+
+        return list;
+      })
+      .flatMap(List::stream)
+      .distinct()
+      .filter(
+        value -> cellTypeAndSubTypeMatchesFilters(value, listingOptions.getSignatureListingOptions())
+      )
+      .map(CustomCellTypeAndSubtype::getAdditionalInfo)
+      .distinct();
+  }
+
+  private static List<CustomCellTypeAndSubtype> toCustomCellTypeAndSubtypeList(
+    Object additionalSetFieldValue, String additionalSetFieldFilter, List<CellTypeAndSubtype> list
+  ) {
+    List<CustomCellTypeAndSubtype> toret = new LinkedList<>();
+
+    if(additionalSetFieldValue != null) {
+      Set<String> fieldValues = reconstructSet(additionalSetFieldValue.toString());
+      for(String value : fieldValues) {
+        if(value.contains(additionalSetFieldFilter)) {
+          list.stream().map(t -> new CustomCellTypeAndSubtype(t, value)).forEach(toret::add);
+        }
+      }
+    }
+
+    return toret;
   }
 
   private Stream<Tuple> listMultipleColumnCollectionValues(
@@ -417,6 +489,48 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     }
 
     return toret;
+  }
+
+  private static class CustomCellTypeAndSubtype extends CellTypeAndSubtype {
+
+    private String additionalInfo;
+
+    public CustomCellTypeAndSubtype(CellTypeAndSubtype type, String additionalInfo) {
+      super(type.getType(), type.getSubType());
+      this.additionalInfo = additionalInfo;
+    }
+
+    public String getAdditionalInfo() {
+      return additionalInfo;
+    }
+
+    @Override
+    public int hashCode() {
+      final int prime = 31;
+      int result = super.hashCode();
+      result = prime * result + super.hashCode();
+      result = prime * result + ((additionalInfo == null) ? 0 : additionalInfo.hashCode());
+      return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+      if (this == obj)
+        return true;
+      if (!super.equals(obj))
+        return false;
+      if (getClass() != obj.getClass())
+        return false;
+      CustomCellTypeAndSubtype other = (CustomCellTypeAndSubtype) obj;
+      if (!super.equals(other))
+        return false;
+      if (additionalInfo == null) {
+        if (other.additionalInfo != null)
+          return false;
+      } else if (!additionalInfo.equals(other.additionalInfo))
+        return false;
+      return true;
+    }
   }
 
   @Override
@@ -836,28 +950,56 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       andPredicates.add(cb.equal(drugStatusPath, drugStatus));
     });
 
-    if (signatureListingOptions.getCellType1().isPresent() && listingOptions.getCellType1Effect().isPresent()) {
+    if (signatureListingOptions.getCellType1().isPresent() && (
+      listingOptions.getCellType1Effect().isPresent() ||
+      listingOptions.getSignatureListingOptions().getCellType1Disease().isPresent() ||
+      listingOptions.getSignatureListingOptions().getCellType1Treatment().isPresent()
+     )) {
       Path<String> cellTypeA = root.get("signatureCellTypeA");
       Path<String> cellTypeB = root.get("signatureCellTypeB");
-      Path<DrugInteractionEffect> cellTypeAEffect = root.get("cellTypeAEffect");
-      Path<DrugInteractionEffect> cellTypeBEffect = root.get("cellTypeBEffect");
-      
+
       List<Predicate> cellTypeAPredicates = new LinkedList<>();
       cellTypeAPredicates.add(cb.like(cellTypeA, "%" + signatureListingOptions.getCellType1().get() + "%"));
-      cellTypeAPredicates.add(cb.equal(cellTypeAEffect, listingOptions.getCellType1Effect().get()));
 
       List<Predicate> cellTypeBPredicates = new LinkedList<>();
       cellTypeBPredicates.add(cb.like(cellTypeB, "%" + signatureListingOptions.getCellType1().get() + "%"));
-      cellTypeBPredicates.add(cb.equal(cellTypeBEffect, listingOptions.getCellType1Effect().get()));
 
-      if (signatureListingOptions.getCellSubType1().isPresent()) {
+      Optional<DrugInteractionEffect> cellType1Effect = listingOptions.getCellType1Effect();
+      if(cellType1Effect.isPresent()) {
+        Path<DrugInteractionEffect> cellTypeAEffect = root.get("cellTypeAEffect");
+        Path<DrugInteractionEffect> cellTypeBEffect = root.get("cellTypeBEffect");
+
+        cellTypeAPredicates.add(cb.equal(cellTypeAEffect, cellType1Effect.get()));
+        cellTypeBPredicates.add(cb.equal(cellTypeBEffect, cellType1Effect.get()));
+      }
+
+      Optional<String> cellType1Treatment = listingOptions.getSignatureListingOptions().getCellType1Treatment();
+      if(cellType1Treatment.isPresent()) {
+        Path<String> signatureTreatmentA = root.get("signatureTreatmentA");
+        Path<String> signatureTreatmentB = root.get("signatureTreatmentB");
+
+        cellTypeAPredicates.add(cb.like(signatureTreatmentA, "%" + cellType1Treatment.get() + "%"));
+        cellTypeBPredicates.add(cb.like(signatureTreatmentB, "%" + cellType1Treatment.get() + "%"));
+      }
+
+      Optional<String> cellType1Disease = listingOptions.getSignatureListingOptions().getCellType1Disease();
+      if(cellType1Disease.isPresent()) {
+        Path<String> signatureDiseaseA = root.get("signatureDiseaseA");
+        Path<String> signatureDiseaseB = root.get("signatureDiseaseB");
+
+        cellTypeAPredicates.add(cb.like(signatureDiseaseA, "%" + cellType1Disease.get() + "%"));
+        cellTypeBPredicates.add(cb.like(signatureDiseaseB, "%" + cellType1Disease.get() + "%"));
+      }
+
+      Optional<String> cellSubType1 = signatureListingOptions.getCellSubType1();
+      if (cellSubType1.isPresent()) {
         Path<String> cellSubTypeA = root.get("signatureCellSubTypeA");
         Path<String> cellSubTypeB = root.get("signatureCellSubTypeB");
-        
-        cellTypeAPredicates.add(cb.like(cellSubTypeA, "%" + signatureListingOptions.getCellSubType1().get() + "%"));
-        cellTypeBPredicates.add(cb.like(cellSubTypeB, "%" + signatureListingOptions.getCellSubType1().get() + "%"));
+
+        cellTypeAPredicates.add(cb.like(cellSubTypeA, "%" + cellSubType1.get() + "%"));
+        cellTypeBPredicates.add(cb.like(cellSubTypeB, "%" + cellSubType1.get() + "%"));
       }
-      
+
       andPredicates.add(
         cb.or(
           cb.and(cellTypeAPredicates.toArray(new Predicate[cellTypeAPredicates.size()])),
