@@ -841,39 +841,29 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       Path<String> cellTypeB = root.get("signatureCellTypeB");
       Path<DrugInteractionEffect> cellTypeAEffect = root.get("cellTypeAEffect");
       Path<DrugInteractionEffect> cellTypeBEffect = root.get("cellTypeBEffect");
+      
+      List<Predicate> cellTypeAPredicates = new LinkedList<>();
+      cellTypeAPredicates.add(cb.like(cellTypeA, "%" + signatureListingOptions.getCellType1().get() + "%"));
+      cellTypeAPredicates.add(cb.equal(cellTypeAEffect, listingOptions.getCellType1Effect().get()));
+
+      List<Predicate> cellTypeBPredicates = new LinkedList<>();
+      cellTypeBPredicates.add(cb.like(cellTypeB, "%" + signatureListingOptions.getCellType1().get() + "%"));
+      cellTypeBPredicates.add(cb.equal(cellTypeBEffect, listingOptions.getCellType1Effect().get()));
 
       if (signatureListingOptions.getCellSubType1().isPresent()) {
         Path<String> cellSubTypeA = root.get("signatureCellSubTypeA");
         Path<String> cellSubTypeB = root.get("signatureCellSubTypeB");
-
-        andPredicates.add(
-          cb.or(
-            cb.and(
-              cb.like(cellTypeA, "%" + signatureListingOptions.getCellType1().get() + "%"),
-              cb.like(cellSubTypeA, "%" + signatureListingOptions.getCellSubType1().get() + "%"),
-              cb.equal(cellTypeAEffect, listingOptions.getCellType1Effect().get())
-            ),
-            cb.and(
-              cb.like(cellTypeB, "%" + signatureListingOptions.getCellType1().get() + "%"),
-              cb.like(cellSubTypeB, "%" + signatureListingOptions.getCellSubType1().get() + "%"),
-              cb.equal(cellTypeBEffect, listingOptions.getCellType1Effect().get())
-            )
-          )
-        );
-      } else {
-        andPredicates.add(
-          cb.or(
-            cb.and(
-              cb.like(cellTypeA, "%" + signatureListingOptions.getCellType1().get() + "%"),
-              cb.equal(cellTypeAEffect, listingOptions.getCellType1Effect().get())
-            ),
-            cb.and(
-              cb.like(cellTypeB, "%" + signatureListingOptions.getCellType1().get() + "%"),
-              cb.equal(cellTypeBEffect, listingOptions.getCellType1Effect().get())
-            )
-          )
-        );
+        
+        cellTypeAPredicates.add(cb.like(cellSubTypeA, "%" + signatureListingOptions.getCellSubType1().get() + "%"));
+        cellTypeBPredicates.add(cb.like(cellSubTypeB, "%" + signatureListingOptions.getCellSubType1().get() + "%"));
       }
+      
+      andPredicates.add(
+        cb.or(
+          cb.and(cellTypeAPredicates.toArray(new Predicate[cellTypeAPredicates.size()])),
+          cb.and(cellTypeBPredicates.toArray(new Predicate[cellTypeBPredicates.size()]))
+        )
+      );
     }
 
     return andPredicates.toArray(new Predicate[andPredicates.size()]);
