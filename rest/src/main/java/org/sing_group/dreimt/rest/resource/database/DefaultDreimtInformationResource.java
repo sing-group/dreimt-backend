@@ -33,12 +33,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
+import org.sing_group.dreimt.domain.entities.database.DatabaseVersion;
 import org.sing_group.dreimt.domain.entities.database.DreimtInformation;
 import org.sing_group.dreimt.rest.entity.database.DreimtInformationData;
 import org.sing_group.dreimt.rest.entity.database.DreimtStatistics;
 import org.sing_group.dreimt.rest.filter.CrossDomain;
 import org.sing_group.dreimt.rest.mapper.spi.database.DreimtInformationMapper;
 import org.sing_group.dreimt.rest.resource.spi.database.DreimtInformationResource;
+import org.sing_group.dreimt.service.spi.database.DatabaseVersionService;
 import org.sing_group.dreimt.service.spi.database.DreimtInformationService;
 import org.sing_group.dreimt.service.spi.database.DreimtStatisticsService;
 
@@ -62,14 +64,17 @@ public class DefaultDreimtInformationResource implements DreimtInformationResour
 
   @Inject
   private DreimtStatisticsService statisticsService;
-  
+
+  @Inject
+  private DatabaseVersionService databaseVersionService;
+
   @Inject
   private DreimtInformationMapper dreimtInformationMapper;
   
   @GET
   @Path("information")
   @ApiOperation(
-    value = "Returns the general information associated with the Dreimt database", 
+    value = "Returns general information associated with the DREIMT database", 
     response = DreimtInformationData.class, 
     code = 200
   )
@@ -89,7 +94,7 @@ public class DefaultDreimtInformationResource implements DreimtInformationResour
   @GET
   @Path("statistics")
   @ApiOperation(
-    value = "Returns statistics about the Dreimt database (e.g. number of signatures and drugs)", 
+    value = "Returns statistics about the DREIMT database (e.g. number of signatures and drugs)", 
     response = DreimtStatistics.class, 
     code = 200
   )
@@ -99,5 +104,27 @@ public class DefaultDreimtInformationResource implements DreimtInformationResour
       new DreimtStatistics(statisticsService.drugCount(), statisticsService.signaturesCount());
 
     return Response.ok(dreimtStatistics).build();
+  }
+  
+  
+  @GET
+  @Path("versions/current")
+  @Produces("text/plain")
+  @ApiOperation(
+    value = "Returns the name of the current DREIMT database version", 
+    response = String.class, 
+    code = 200
+  )
+  @ApiResponses(
+    @ApiResponse(code = 400, message = "The current database version is not defined.")
+  )
+  @Override
+  public Response getCurrentDatabaseVersion() {
+    Optional<DatabaseVersion> currentDatabaseVersion = this.databaseVersionService.getCurrentDatabaseVersion();
+    if (currentDatabaseVersion.isPresent()) {
+      return Response.ok(currentDatabaseVersion.get().getVersion()).build();
+    } else {
+      throw new IllegalArgumentException("The current database version is not defined.");
+    }
   }
 }

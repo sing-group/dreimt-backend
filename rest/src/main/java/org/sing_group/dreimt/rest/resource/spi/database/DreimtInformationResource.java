@@ -30,4 +30,6 @@ public interface DreimtInformationResource {
   Response getDreimtInformation();
 
   Response getDreimtStatistics();
+  
+  Response getCurrentDatabaseVersion();
 }
