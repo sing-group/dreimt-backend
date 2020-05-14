@@ -22,8 +22,11 @@
  */
 package org.sing_group.dreimt.rest.mapper.query.cmap;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.joining;
 
+import java.util.HashSet;
 import java.util.List;
 
 import javax.enterprise.inject.Default;
@@ -32,9 +35,12 @@ import javax.inject.Inject;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapDrugGeneSetSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapGeneSetSignatureResult;
 import org.sing_group.dreimt.domain.entities.signature.Drug;
+import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
 import org.sing_group.dreimt.rest.entity.query.cmap.CmapGeneSetSignatureDrugInteractionData;
 import org.sing_group.dreimt.rest.entity.query.cmap.CmapQueryGeneSetSignatureMetadataData;
 import org.sing_group.dreimt.rest.entity.signature.GeneSetSignatureGeneData;
+import org.sing_group.dreimt.rest.mapper.signature.EmptyPredictionSummaryGenerator;
+import org.sing_group.dreimt.rest.mapper.signature.PredictionSummaryGenerator;
 import org.sing_group.dreimt.rest.mapper.spi.query.cmap.CmapQueryGeneSetSignatureResultsMapper;
 import org.sing_group.dreimt.rest.mapper.spi.signature.DrugMapper;
 
@@ -51,7 +57,9 @@ public class DefaultCmapQueryGeneSetSignatureResultsMapper implements CmapQueryG
       cmapResult.getNumPerm(),
       getGenesCount(cmapResult, false),
       getGenesCount(cmapResult, true),
-      cmapResult.getGeneSetType()
+      cmapResult.getGeneSetType(),
+      cmapResult.getCaseType(),
+      cmapResult.getReferenceType()
     );
   }
 
@@ -68,35 +76,47 @@ public class DefaultCmapQueryGeneSetSignatureResultsMapper implements CmapQueryG
 
   @Override
   public CmapGeneSetSignatureDrugInteractionData[] toCmapDrugInteractionData(
-    List<CmapDrugGeneSetSignatureInteraction> cmapDrugInteractions
+    CmapGeneSetSignatureResult result,
+    List<CmapDrugGeneSetSignatureInteraction> cmapDrugInteractions,
+    boolean includeSummary
   ) {
+    PredictionSummaryGenerator summaryGenerator =
+      includeSummary ? new PredictionSummaryGenerator() : new EmptyPredictionSummaryGenerator();
+
     return cmapDrugInteractions.stream()
       .map(
         c -> new CmapGeneSetSignatureDrugInteractionData(
           drugMapper.toDrugData(c.getDrug()),
           c.getTau(),
           c.getFdr(),
-          c.getDrugEffect().toString()
+          summary(result, c, summaryGenerator)
         )
       ).toArray(CmapGeneSetSignatureDrugInteractionData[]::new);
   }
 
   @Override
-  public String toCmapDrugInteractionCsvData(List<CmapDrugGeneSetSignatureInteraction> cmapDrugInteractions) {
+  public String toCmapDrugInteractionCsvData(
+    CmapGeneSetSignatureResult result,
+    List<CmapDrugGeneSetSignatureInteraction> cmapDrugInteractions
+  ) {
+    PredictionSummaryGenerator summaryGenerator = new PredictionSummaryGenerator();
+
     StringBuilder sb = new StringBuilder();
     sb.append(
-      "drug_name,effect,fdr,tau,drug_specificity_score,drug_source_db,drug_source_name,drug_status,drug_moa,\n"
+      "drug_name,summary,fdr,tau,drug_specificity_score,drug_source_db,drug_source_name,drug_status,drug_moa,\n"
     );
+
     cmapDrugInteractions.stream()
       .forEach(c -> {
         Drug drug = c.getDrug();
+
         sb
           .append("\"")
           .append(drug.getCommonName())
           .append("\"")
           .append(",")
           .append("\"")
-          .append(c.getDrugEffect().toString())
+          .append(summary(result, c, summaryGenerator))
           .append("\"")
           .append(",")
           .append(c.getFdr())
@@ -124,5 +144,19 @@ public class DefaultCmapQueryGeneSetSignatureResultsMapper implements CmapQueryG
       });
 
     return sb.toString();
+  }
+
+  public static String summary(
+    CmapGeneSetSignatureResult result,
+    CmapDrugGeneSetSignatureInteraction interaction,
+    PredictionSummaryGenerator predictionSummaryGenerator
+  ) {
+    final DrugSignatureInteractionType interactionType = result.getGeneSetType().getInteractionType();
+
+    return predictionSummaryGenerator.interpretation(
+      "query-signature", interaction.getTau(), interactionType, interaction.getDrug().getCommonName(),
+      "", new HashSet<>(asList(result.getCaseType())), emptySet(), emptySet(),
+      "", new HashSet<>(asList(result.getReferenceType())), emptySet(), emptySet()
+    );
   }
 }

@@ -30,16 +30,16 @@ public class CmapUpDownSignatureDrugInteractionData {
   private Double tau;
   private Double upFdr;
   private Double downFdr;
-  private String drugEffect;
+  private String predictionSummary;
 
   public CmapUpDownSignatureDrugInteractionData(
-    DrugData drugData, Double tau, Double upFdr, Double downFdr, String drugEffect
+    DrugData drugData, Double tau, Double upFdr, Double downFdr, String predictionSummary
   ) {
     this.drugData = drugData;
     this.tau = tau;
     this.upFdr = upFdr;
     this.downFdr = downFdr;
-    this.drugEffect = drugEffect;
+    this.predictionSummary = predictionSummary;
   }
 
   public DrugData getDrug() {
@@ -58,7 +58,7 @@ public class CmapUpDownSignatureDrugInteractionData {
     return downFdr;
   }
 
-  public String getDrugEffect() {
-    return drugEffect;
+  public String getPredictionSummary() {
+    return predictionSummary;
   }
 }

@@ -23,5 +23,17 @@
 package org.sing_group.dreimt.domain.entities.signature;
 
 public enum GeneSetType {
-  UP, DOWN
+  UP, DOWN, GENESET;
+
+  public DrugSignatureInteractionType getInteractionType() {
+    switch (this) {
+      case DOWN:
+        return DrugSignatureInteractionType.SIGNATURE_DOWN;
+      case GENESET:
+        return DrugSignatureInteractionType.GENESET;
+      case UP:
+        return DrugSignatureInteractionType.SIGNATURE_UP;
+    }
+    throw new IllegalStateException("Unknown GeneSetType enum value");
+  }
 }

@@ -77,12 +77,10 @@ public class CmapUpDownSignatureResult extends CmapResult implements Serializabl
   }
 
   public CmapUpDownSignatureResult(
-    String name, String description,
-    Function<String, String> resultReferenceBuilder,
-    Set<Gene> upGenes, Set<Gene> downGenes,
-    int numPerm
+    String name, String description, Function<String, String> resultReferenceBuilder, Set<Gene> upGenes,
+    Set<Gene> downGenes, int numPerm, String caseType, String referenceType
   ) {
-    super(name, description, resultReferenceBuilder, numPerm);
+    super(name, description, resultReferenceBuilder, numPerm, caseType, referenceType);
 
     this.upGenes = upGenes;
     this.downGenes = downGenes;

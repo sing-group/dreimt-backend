@@ -22,8 +22,12 @@
  */
 package org.sing_group.dreimt.rest.mapper.query.cmap;
 
+import static java.util.Arrays.asList;
+import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.joining;
+import static org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType.SIGNATURE;
 
+import java.util.HashSet;
 import java.util.List;
 
 import javax.enterprise.inject.Default;
@@ -35,6 +39,8 @@ import org.sing_group.dreimt.domain.entities.signature.Drug;
 import org.sing_group.dreimt.rest.entity.query.cmap.CmapQueryUpDownSignatureMetadataData;
 import org.sing_group.dreimt.rest.entity.query.cmap.CmapUpDownSignatureDrugInteractionData;
 import org.sing_group.dreimt.rest.entity.signature.UpDownSignatureGeneData;
+import org.sing_group.dreimt.rest.mapper.signature.EmptyPredictionSummaryGenerator;
+import org.sing_group.dreimt.rest.mapper.signature.PredictionSummaryGenerator;
 import org.sing_group.dreimt.rest.mapper.spi.query.cmap.CmapQueryUpDownSignatureResultsMapper;
 import org.sing_group.dreimt.rest.mapper.spi.signature.DrugMapper;
 
@@ -43,7 +49,7 @@ public class DefaultCmapQueryUpDownSignatureResultsMapper implements CmapQueryUp
 
   @Inject
   private DrugMapper drugMapper;
-  
+
   @Override
   public CmapQueryUpDownSignatureMetadataData toCmapQueryMetadataData(CmapUpDownSignatureResult cmapResult) {
     return new CmapQueryUpDownSignatureMetadataData(
@@ -52,7 +58,9 @@ public class DefaultCmapQueryUpDownSignatureResultsMapper implements CmapQueryUp
       getUpGenesCount(cmapResult, false),
       getDownGenesCount(cmapResult, false),
       getUpGenesCount(cmapResult, true),
-      getDownGenesCount(cmapResult, true)
+      getDownGenesCount(cmapResult, true),
+      cmapResult.getCaseType(),
+      cmapResult.getReferenceType()
     );
   }
 
@@ -74,8 +82,12 @@ public class DefaultCmapQueryUpDownSignatureResultsMapper implements CmapQueryUp
 
   @Override
   public CmapUpDownSignatureDrugInteractionData[] toCmapDrugInteractionData(
-    List<CmapDrugUpDownSignatureInteraction> cmapDrugInteractions
+    CmapUpDownSignatureResult result,
+    List<CmapDrugUpDownSignatureInteraction> cmapDrugInteractions, boolean includeSummary
   ) {
+    PredictionSummaryGenerator summaryGenerator =
+      includeSummary ? new PredictionSummaryGenerator() : new EmptyPredictionSummaryGenerator();
+
     return cmapDrugInteractions.stream()
       .map(
         c -> new CmapUpDownSignatureDrugInteractionData(
@@ -83,27 +95,32 @@ public class DefaultCmapQueryUpDownSignatureResultsMapper implements CmapQueryUp
           c.getTau(),
           c.getUpFdr(),
           c.getDownFdr(),
-          c.getDrugEffect().toString()
+          summary(result, c, summaryGenerator)
         )
       ).toArray(CmapUpDownSignatureDrugInteractionData[]::new);
   }
 
   @Override
-  public String toCmapDrugInteractionCsvData(List<CmapDrugUpDownSignatureInteraction> cmapDrugInteractions) {
+  public String toCmapDrugInteractionCsvData(
+    CmapUpDownSignatureResult result,
+    List<CmapDrugUpDownSignatureInteraction> cmapDrugInteractions
+  ) {
+    PredictionSummaryGenerator summaryGenerator = new PredictionSummaryGenerator();
     StringBuilder sb = new StringBuilder();
     sb.append(
-      "drug_name,effect,up_dr,down_fdr,tau,drug_specificity_score,drug_source_db,drug_source_name,drug_status,drug_moa,\n"
+      "drug_name,summary,up_dr,down_fdr,tau,drug_specificity_score,drug_source_db,drug_source_name,drug_status,drug_moa,\n"
     );
     cmapDrugInteractions.stream()
       .forEach(c -> {
         Drug drug = c.getDrug();
+
         sb
           .append("\"")
           .append(drug.getCommonName())
           .append("\"")
           .append(",")
           .append("\"")
-          .append(c.getDrugEffect().toString())
+          .append(summary(result, c, summaryGenerator))
           .append("\"")
           .append(",")
           .append(c.getUpFdr())
@@ -132,5 +149,17 @@ public class DefaultCmapQueryUpDownSignatureResultsMapper implements CmapQueryUp
           .append("\n");
       });
     return sb.toString();
+  }
+
+  private static String summary(
+    CmapUpDownSignatureResult result,
+    CmapDrugUpDownSignatureInteraction interaction,
+    PredictionSummaryGenerator predictionSummaryGenerator
+  ) {
+    return predictionSummaryGenerator.interpretation(
+      "query-signature", interaction.getTau(), SIGNATURE, interaction.getDrug().getCommonName(),
+      "", new HashSet<>(asList(result.getCaseType())), emptySet(), emptySet(),
+      "", new HashSet<>(asList(result.getReferenceType())), emptySet(), emptySet()
+    );
   }
 }

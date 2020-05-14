@@ -39,7 +39,8 @@ public interface CmapUpDownSignatureQueryResultsResource {
   Response queryInteractions(
     String resultId, Double minTau, Double maxUpFdr, Double maxDownFdr, String drugSourceName, String drugSourceDb,
     String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss, Integer page, Integer pageSize,
-    CmapUpDownSignatureDrugInteractionField orderField, SortDirection sortDirection
+    CmapUpDownSignatureDrugInteractionField orderField, SortDirection sortDirection,
+    boolean includeSummary
   );
 
   Response queryInteractionsAsCsv(

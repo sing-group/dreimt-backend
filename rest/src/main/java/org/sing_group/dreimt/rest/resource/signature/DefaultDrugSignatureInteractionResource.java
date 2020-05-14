@@ -1533,7 +1533,8 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
 
     CmapQueryOptions options =
       new DefaultCmapQueryOptions(
-        cmapQueryParameters.getQueryTitle(), upGenes, downGenes, resultUriBuilder, cmapQueryParameters.getNumPerm()
+        cmapQueryParameters.getQueryTitle(), upGenes, downGenes, resultUriBuilder, cmapQueryParameters.getNumPerm(),
+        cmapQueryParameters.getCaseType(), cmapQueryParameters.getReferenceType()
       );
 
     final WorkEntity work = this.cmapQueryService.cmapQuery(options);

@@ -74,9 +74,9 @@ public class CmapGeneSetSignatureResult extends CmapResult implements Serializab
 
   public CmapGeneSetSignatureResult(
     String name, String description, Function<String, String> resultReferenceBuilder, Set<Gene> genes, int numPerm,
-    GeneSetType geneSetType
+    GeneSetType geneSetType, String caseType, String referenceType
   ) {
-    super(name, description, resultReferenceBuilder, numPerm);
+    super(name, description, resultReferenceBuilder, numPerm, caseType, referenceType);
 
     this.genes = genes;
     this.geneSetType = geneSetType;

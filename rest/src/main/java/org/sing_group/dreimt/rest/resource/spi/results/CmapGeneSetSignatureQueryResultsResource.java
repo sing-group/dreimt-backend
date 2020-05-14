@@ -39,7 +39,8 @@ public interface CmapGeneSetSignatureQueryResultsResource {
   Response queryInteractions(
     String resultId, Double minTau, Double maxFdr, String drugSourceName, String drugSourceDb, String drugCommonName,
     String drugMoa, DrugStatus drugStatus, Double minDrugDss, Integer page, Integer pageSize,
-    CmapGeneSetSignatureDrugInteractionField orderField, SortDirection sortDirection
+    CmapGeneSetSignatureDrugInteractionField orderField, SortDirection sortDirection,
+    boolean includeSummary
   );
 
   Response queryInteractionsAsCsv(

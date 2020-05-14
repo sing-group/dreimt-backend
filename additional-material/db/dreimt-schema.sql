@@ -39,7 +39,9 @@ DROP TABLE IF EXISTS `cmap_result`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cmap_result` (
+  `caseType` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `numPerm` int(11) NOT NULL,
+  `referenceType` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FK4g4549cdbruc56dfa00bpc4t4` FOREIGN KEY (`id`) REFERENCES `work` (`id`)
@@ -54,8 +56,8 @@ DROP TABLE IF EXISTS `cmap_result_geneset`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `cmap_result_geneset` (
-  `id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `geneSetType` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FKr3begj73oj3094nvwh4fyls2x` FOREIGN KEY (`id`) REFERENCES `cmap_result` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -406,8 +408,8 @@ DROP TABLE IF EXISTS `jaccard_result_geneset`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `jaccard_result_geneset` (
-  `id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   `geneSetType` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FK53ivtawgjjl8y4fckfpx3nqh7` FOREIGN KEY (`id`) REFERENCES `jaccard_result` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -593,10 +595,10 @@ CREATE TABLE `signature` (
   `localisationB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `organism` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `sourceDb` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `sourceDbUrl` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `stateA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `stateB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `article_pubmedId` int(11) DEFAULT NULL,
-  `sourceDbUrl` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`signatureName`),
   KEY `FKob3uvde5er8oiayu91rowlcgm` (`article_pubmedId`),
   CONSTRAINT `FKob3uvde5er8oiayu91rowlcgm` FOREIGN KEY (`article_pubmedId`) REFERENCES `article_metadata` (`pubmedId`)
@@ -823,4 +825,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-11 16:08:10
+-- Dump completed on 2020-05-14 17:27:10

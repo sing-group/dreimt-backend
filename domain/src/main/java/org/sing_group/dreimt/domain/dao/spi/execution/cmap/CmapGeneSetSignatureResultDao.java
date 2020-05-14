@@ -33,11 +33,7 @@ public interface CmapGeneSetSignatureResultDao {
   Optional<CmapGeneSetSignatureResult> get(String id);
 
   CmapGeneSetSignatureResult create(
-    String name,
-    String description,
-    Function<String, String> resultReferenceBuilder,
-    Set<String> genes,
-    int numPerm,
-    GeneSetType geneSetType
+    String name, String description, Function<String, String> resultReferenceBuilder, Set<String> genes, int numPerm,
+    GeneSetType geneSetType, String caseType, String referenceType
   );
 }

@@ -26,8 +26,8 @@ import java.util.List;
 
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapDrugUpDownSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapUpDownSignatureResult;
-import org.sing_group.dreimt.rest.entity.query.cmap.CmapUpDownSignatureDrugInteractionData;
 import org.sing_group.dreimt.rest.entity.query.cmap.CmapQueryUpDownSignatureMetadataData;
+import org.sing_group.dreimt.rest.entity.query.cmap.CmapUpDownSignatureDrugInteractionData;
 import org.sing_group.dreimt.rest.entity.signature.UpDownSignatureGeneData;
 
 public interface CmapQueryUpDownSignatureResultsMapper {
@@ -36,7 +36,12 @@ public interface CmapQueryUpDownSignatureResultsMapper {
 
   UpDownSignatureGeneData toGeneData(CmapUpDownSignatureResult cmapResult, boolean onlyUniverseGenes);
 
-  CmapUpDownSignatureDrugInteractionData[] toCmapDrugInteractionData(List<CmapDrugUpDownSignatureInteraction> cmapDrugInteractions);
+  CmapUpDownSignatureDrugInteractionData[] toCmapDrugInteractionData(
+    CmapUpDownSignatureResult result, List<CmapDrugUpDownSignatureInteraction> cmapDrugInteractions,
+    boolean includeSummary
+  );
 
-  String toCmapDrugInteractionCsvData(List<CmapDrugUpDownSignatureInteraction> cmapDrugInteractions);
+  String toCmapDrugInteractionCsvData(
+    CmapUpDownSignatureResult result, List<CmapDrugUpDownSignatureInteraction> cmapDrugInteractions
+  );
 }

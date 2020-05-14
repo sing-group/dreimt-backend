@@ -31,15 +31,20 @@ public class CmapQueryGeneSetSignatureMetadataData {
   private Integer genesCount;
   private Integer universeGenesCount;
   private GeneSetType geneSetType;
+  private String caseType;
+  private String referenceType;
 
   public CmapQueryGeneSetSignatureMetadataData(
-    String queryTitle, int numPerm, Integer genesCount, Integer universeGenesCount, GeneSetType geneSetType
+    String queryTitle, int numPerm, Integer genesCount, Integer universeGenesCount, GeneSetType geneSetType,
+    String caseType, String referenceType
   ) {
     this.queryTitle = queryTitle;
     this.numPerm = numPerm;
     this.genesCount = genesCount;
     this.universeGenesCount = universeGenesCount;
     this.geneSetType = geneSetType;
+    this.caseType = caseType;
+    this.referenceType = referenceType;
   }
 
   public String getQueryTitle() {
@@ -60,5 +65,13 @@ public class CmapQueryGeneSetSignatureMetadataData {
 
   public GeneSetType getGeneSetType() {
     return geneSetType;
+  }
+
+  public String getCaseType() {
+    return caseType;
+  }
+
+  public String getReferenceType() {
+    return referenceType;
   }
 }

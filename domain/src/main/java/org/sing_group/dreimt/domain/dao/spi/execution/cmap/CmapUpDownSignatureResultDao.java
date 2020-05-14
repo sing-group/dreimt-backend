@@ -32,11 +32,7 @@ public interface CmapUpDownSignatureResultDao {
   Optional<CmapUpDownSignatureResult> get(String id);
 
   CmapUpDownSignatureResult create(
-    String name,
-    String description,
-    Function<String, String> resultReferenceBuilder,
-    Set<String> upGenes,
-    Set<String> downGenes,
-    int numPerm
+    String name, String description, Function<String, String> resultReferenceBuilder, Set<String> upGenes,
+    Set<String> downGenes, int numPerm, String caseType, String referenceType
   );
 }

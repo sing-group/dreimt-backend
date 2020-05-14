@@ -30,10 +30,13 @@ public class CmapQueryUpDownSignatureMetadataData {
   private Integer downGenesCount;
   private Integer upUniverseGenesCount;
   private Integer downUniverseGenesCount;
+  private String caseType;
+  private String referenceType;
 
   public CmapQueryUpDownSignatureMetadataData(
     String queryTitle, int numPerm, Integer upGenesCount, Integer downGenesCount,
-    Integer upUniverseGenesCount, Integer downUniverseGenesCount
+    Integer upUniverseGenesCount, Integer downUniverseGenesCount,
+    String caseType, String referenceType
   ) {
     this.queryTitle = queryTitle;
     this.numPerm = numPerm;
@@ -41,6 +44,8 @@ public class CmapQueryUpDownSignatureMetadataData {
     this.downGenesCount = downGenesCount;
     this.upUniverseGenesCount = upUniverseGenesCount;
     this.downUniverseGenesCount = downUniverseGenesCount;
+    this.caseType = caseType;
+    this.referenceType = referenceType;
   }
 
   public String getQueryTitle() {
@@ -65,5 +70,13 @@ public class CmapQueryUpDownSignatureMetadataData {
 
   public Integer getDownUniverseGenesCount() {
     return downUniverseGenesCount;
+  }
+
+  public String getCaseType() {
+    return caseType;
+  }
+
+  public String getReferenceType() {
+    return referenceType;
   }
 }

@@ -36,7 +36,12 @@ public interface CmapQueryGeneSetSignatureResultsMapper {
 
   GeneSetSignatureGeneData toGeneData(CmapGeneSetSignatureResult cmapResult, boolean onlyUniverseGenes);
 
-  CmapGeneSetSignatureDrugInteractionData[] toCmapDrugInteractionData(List<CmapDrugGeneSetSignatureInteraction> cmapDrugInteractions);
+  CmapGeneSetSignatureDrugInteractionData[] toCmapDrugInteractionData(
+    CmapGeneSetSignatureResult result, List<CmapDrugGeneSetSignatureInteraction> cmapDrugInteractions,
+    boolean includeSummary
+  );
 
-  String toCmapDrugInteractionCsvData(List<CmapDrugGeneSetSignatureInteraction> cmapDrugInteractions);
+  String toCmapDrugInteractionCsvData(
+    CmapGeneSetSignatureResult result, List<CmapDrugGeneSetSignatureInteraction> cmapDrugInteractions
+  );
 }

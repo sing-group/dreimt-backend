@@ -73,18 +73,14 @@ public class DefaultCmapGeneSetSignatureResultDao implements CmapGeneSetSignatur
 
   @Override
   public CmapGeneSetSignatureResult create(
-    String name,
-    String description,
-    Function<String, String> resultReferenceBuilder,
-    Set<String> genes,
-    int numPerm,
-    GeneSetType geneSetType
+    String name, String description, Function<String, String> resultReferenceBuilder, Set<String> genes, int numPerm,
+    GeneSetType geneSetType, String caseType, String referenceType
   ) {
     return this.dh.persist(
       new CmapGeneSetSignatureResult(
         name, description, resultReferenceBuilder,
         this.geneDao.getGenes(genes, true),
-        numPerm, geneSetType
+        numPerm, geneSetType, caseType, referenceType
       )
     );
   }

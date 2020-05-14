@@ -145,14 +145,22 @@ public class DefaultCmapQueryService implements CmapQueryService {
         options.getResultUriBuilder(),
         options.getUpGenes(),
         options.getDownGenes(),
-        options.getNumPerm()
+        options.getNumPerm(),
+        options.getCaseType(),
+        options.getReferenceType()
+          .orElseThrow(() -> new IllegalArgumentException("referenceType must be provided in signature queries"))
       );
 
     return result;
   }
 
   private CmapResult cmapGeneSetQuery(CmapQueryOptions options) {
-    final GeneSetType type = options.getUpGenes().isEmpty() ? DOWN : UP;
+    GeneSetType type = GeneSetType.GENESET;
+    String referenceType = null;
+    if (options.getReferenceType().isPresent()) {
+      type = options.getUpGenes().isEmpty() ? DOWN : UP;
+      referenceType = options.getReferenceType().get();
+    }
 
     final CmapGeneSetSignatureResult result =
       this.cmapGeneSetDao.create(
@@ -161,7 +169,9 @@ public class DefaultCmapQueryService implements CmapQueryService {
         options.getResultUriBuilder(),
         options.getUpGenes().isEmpty() ? options.getDownGenes() : options.getUpGenes(),
         options.getNumPerm(),
-        type
+        type,
+        options.getCaseType(),
+        referenceType
       );
 
     return result;

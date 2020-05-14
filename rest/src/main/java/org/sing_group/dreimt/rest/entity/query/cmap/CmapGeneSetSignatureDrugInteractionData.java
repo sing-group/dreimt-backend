@@ -29,15 +29,15 @@ public class CmapGeneSetSignatureDrugInteractionData {
   private DrugData drugData;
   private Double tau;
   private Double fdr;
-  private String drugEffect;
+  private String predictionSummary;
 
   public CmapGeneSetSignatureDrugInteractionData(
-    DrugData drugData, Double tau, Double fdr, String drugEffect
+    DrugData drugData, Double tau, Double fdr, String predictionSummary
   ) {
     this.drugData = drugData;
     this.tau = tau;
     this.fdr = fdr;
-    this.drugEffect = drugEffect;
+    this.predictionSummary = predictionSummary;
   }
 
   public DrugData getDrug() {
@@ -52,7 +52,7 @@ public class CmapGeneSetSignatureDrugInteractionData {
     return fdr;
   }
 
-  public String getDrugEffect() {
-    return drugEffect;
+  public String getPredictionSummary() {
+    return predictionSummary;
   }
 }

@@ -41,6 +41,8 @@ public abstract class CmapResult extends WorkEntity {
   private static final long serialVersionUID = 1L;
 
   private int numPerm;
+  private String caseType;
+  private String referenceType;
 
   @Transient
   protected final ReentrantReadWriteLock cmapResultsLock;
@@ -51,16 +53,27 @@ public abstract class CmapResult extends WorkEntity {
 
   protected CmapResult(
     String name, String description,
-    Function<String, String> resultReferenceBuilder, int numPerm
+    Function<String, String> resultReferenceBuilder, int numPerm,
+    String caseType, String referenceType
   ) {
     super(name, description, resultReferenceBuilder);
 
     this.numPerm = numPerm;
+    this.caseType = caseType;
+    this.referenceType = referenceType;
     this.cmapResultsLock = new ReentrantReadWriteLock();
   }
 
   public int getNumPerm() {
     return numPerm;
+  }
+
+  public String getCaseType() {
+    return caseType;
+  }
+
+  public String getReferenceType() {
+    return referenceType;
   }
 
   protected static Set<String> getGenes(Set<Gene> genes, boolean onlyUniverseGenes) {

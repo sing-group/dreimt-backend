@@ -72,19 +72,15 @@ public class DefaultCmapUpDownSignatureResultDao implements CmapUpDownSignatureR
 
   @Override
   public CmapUpDownSignatureResult create(
-    String name,
-    String description,
-    Function<String, String> resultReferenceBuilder,
-    Set<String> upGenes,
-    Set<String> downGenes,
-    int numPerm
+    String name, String description, Function<String, String> resultReferenceBuilder, Set<String> upGenes,
+    Set<String> downGenes, int numPerm, String caseType, String referenceType
   ) {
     return this.dh.persist(
       new CmapUpDownSignatureResult(
         name, description, resultReferenceBuilder,
         this.geneDao.getGenes(upGenes, true),
         this.geneDao.getGenes(downGenes, true),
-        numPerm
+        numPerm, caseType, referenceType
       )
     );
   }

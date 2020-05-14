@@ -37,19 +37,20 @@ public class DefaultCmapQueryOptions implements CmapQueryOptions {
   private Set<String> downGenes;
   private Function<String, String> resultUriBuilder;
   private Integer numPerm;
+  private String caseType;
+  private String referenceType;
 
   public DefaultCmapQueryOptions(
-    String title,
-    Set<String> upGenes,
-    Set<String> downGenes,
-    Function<String, String> resultUriBuilder,
-    Integer numPerm
+    String title, Set<String> upGenes, Set<String> downGenes, Function<String, String> resultUriBuilder,
+    Integer numPerm, String caseType, String referenceType
   ) {
     this.title = title;
     this.upGenes = upGenes;
     this.downGenes = downGenes;
     this.resultUriBuilder = resultUriBuilder;
     this.numPerm = numPerm;
+    this.caseType = caseType;
+    this.referenceType = referenceType;
   }
 
   @Override
@@ -75,5 +76,15 @@ public class DefaultCmapQueryOptions implements CmapQueryOptions {
   @Override
   public Integer getNumPerm() {
     return numPerm;
+  }
+
+  @Override
+  public String getCaseType() {
+    return this.caseType;
+  }
+
+  @Override
+  public Optional<String> getReferenceType() {
+    return ofNullable(this.referenceType);
   }
 }

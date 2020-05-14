@@ -162,14 +162,15 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
     @QueryParam("page") Integer page,
     @QueryParam("pageSize") Integer pageSize,
     @QueryParam("orderField") @DefaultValue("NONE") CmapUpDownSignatureDrugInteractionField orderField,
-    @QueryParam("sortDirection") @DefaultValue("NONE") SortDirection sortDirection
+    @QueryParam("sortDirection") @DefaultValue("NONE") SortDirection sortDirection,
+    @QueryParam("includeSummary") @DefaultValue("false") boolean includeSummary
   ) {
     return this.cmapSignatureQueryResult(
       resultId, 
       minTau, maxUpFdr, maxDownFdr, drugSourceName, drugSourceDb, 
       drugCommonName, drugMoa, drugStatus, minDrugDss, 
       page, pageSize, orderField, sortDirection,
-      (cmapResult, interactions) -> mapper.toCmapDrugInteractionData(interactions),
+      (cmapResult, interactions) -> mapper.toCmapDrugInteractionData(cmapResult, interactions, includeSummary),
       APPLICATION_JSON, true
     );
   }
@@ -207,7 +208,7 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
       minTau, maxUpFdr, maxDownFdr, drugSourceName, drugSourceDb, 
       drugCommonName, drugMoa, drugStatus, minDrugDss, 
       page, pageSize, orderField, sortDirection,
-      (cmapResult, interactions) -> mapper.toCmapDrugInteractionCsvData(interactions), 
+      (cmapResult, interactions) -> mapper.toCmapDrugInteractionCsvData(cmapResult, interactions), 
       "text/csv", false
     );
   }
@@ -227,7 +228,7 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
     Integer pageSize,
     CmapUpDownSignatureDrugInteractionField orderField, 
     SortDirection sortDirection,
-    BiFunction<CmapResult, List<CmapDrugUpDownSignatureInteraction>, Object> cmapDrugInteractionMapper,
+    BiFunction<CmapUpDownSignatureResult, List<CmapDrugUpDownSignatureInteraction>, Object> cmapDrugInteractionMapper,
     String responseContentType,
     boolean includeCountHeader
   ) {

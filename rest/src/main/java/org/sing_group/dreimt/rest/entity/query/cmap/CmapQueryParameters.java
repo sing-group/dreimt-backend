@@ -29,16 +29,22 @@ public class CmapQueryParameters {
   private Integer numPerm = DEFAULT_NUM_PERM;
   private String[] upGenes;
   private String[] downGenes;
+  private String caseType;
+  private String referenceType;
 
   CmapQueryParameters() {}
 
   public CmapQueryParameters(
-    String queryTitle, Integer numPerm, String[] upGenes, String[] downGenes
+    String queryTitle, Integer numPerm, String[] upGenes, String[] downGenes, String caseType, String referenceType
   ) {
     this.queryTitle = queryTitle;
     this.numPerm = numPerm;
     this.upGenes = upGenes;
     this.downGenes = downGenes;
+    this.caseType = caseType;
+    this.referenceType = referenceType;
+
+    this.validateParameters();
   }
 
   public String getQueryTitle() {
@@ -55,5 +61,33 @@ public class CmapQueryParameters {
 
   public String[] getDownGenes() {
     return downGenes;
+  }
+
+  public String getCaseType() {
+    return caseType;
+  }
+
+  public String getReferenceType() {
+    return referenceType;
+  }
+
+  public void validateParameters() {
+    if (this.caseType == null) {
+      throw new IllegalArgumentException("caseType must be always provided");
+    }
+
+    if (this.referenceType == null) {
+      if (this.downGenes != null) {
+        if (this.upGenes != null) {
+          throw new IllegalArgumentException(
+            "referenceType must be provided when both up and down gene lists are provided"
+          );
+        }
+      } else {
+        if (this.upGenes == null) {
+          throw new IllegalArgumentException("upGenes must provided for genesets (only caseType)");
+        }
+      }
+    }
   }
 }

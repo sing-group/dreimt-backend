@@ -22,8 +22,6 @@
  */
 package org.sing_group.dreimt.domain.entities.execution.cmap;
 
-import static org.sing_group.dreimt.domain.entities.signature.DrugInteractionEffect.computeEffect;
-
 import java.io.Serializable;
 
 import javax.persistence.Entity;
@@ -38,8 +36,6 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.sing_group.dreimt.domain.entities.signature.Drug;
-import org.sing_group.dreimt.domain.entities.signature.DrugInteractionEffect;
-import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
 
 @Entity
 @Table(
@@ -102,10 +98,6 @@ public class CmapDrugUpDownSignatureInteraction implements Serializable {
 
   public double getDownFdr() {
     return downFdr;
-  }
-
-  public DrugInteractionEffect getDrugEffect() {
-    return computeEffect(tau, DrugSignatureInteractionType.SIGNATURE);
   }
 
   public void setFdr(Double downFdr) {

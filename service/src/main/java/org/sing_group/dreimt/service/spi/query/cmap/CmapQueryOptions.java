@@ -37,4 +37,8 @@ public interface CmapQueryOptions {
   Function<String, String> getResultUriBuilder();
 
   Integer getNumPerm();
+
+  String getCaseType();
+
+  Optional<String> getReferenceType();
 }

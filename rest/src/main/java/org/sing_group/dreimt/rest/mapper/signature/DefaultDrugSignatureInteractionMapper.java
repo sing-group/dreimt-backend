@@ -41,12 +41,6 @@ import org.sing_group.dreimt.rest.mapper.spi.signature.SignatureMapper;
 @Default
 public class DefaultDrugSignatureInteractionMapper implements DrugSignatureInteractionMapper {
 
-  private static final PredictionSummaryGenerator NULL_PREDICTION_SUMMARY_GENERATOR = new PredictionSummaryGenerator() {
-    public String interpretation(DrugSignatureInteraction interaction) {
-      return "";
-    }
-  };
-
   @Inject
   private DrugMapper drugMapper;
 
@@ -63,7 +57,7 @@ public class DefaultDrugSignatureInteractionMapper implements DrugSignatureInter
     Stream<DrugSignatureInteraction> interactions, boolean includeSummary
   ) {
     PredictionSummaryGenerator predictionSummaryGenerator =
-      includeSummary ? new PredictionSummaryGenerator() : NULL_PREDICTION_SUMMARY_GENERATOR;
+      includeSummary ? new PredictionSummaryGenerator() : new EmptyPredictionSummaryGenerator();
 
     return interactions
       .map(i -> this.toDrugSignatureInteractionData(i, predictionSummaryGenerator))

@@ -161,13 +161,14 @@ public class DefaultCmapGeneSetSignatureQueryResultsResource implements CmapGene
     @QueryParam("page") Integer page,
     @QueryParam("pageSize") Integer pageSize,
     @QueryParam("orderField") @DefaultValue("NONE") CmapGeneSetSignatureDrugInteractionField orderField,
-    @QueryParam("sortDirection") @DefaultValue("NONE") SortDirection sortDirection
+    @QueryParam("sortDirection") @DefaultValue("NONE") SortDirection sortDirection,
+    @QueryParam("includeSummary") @DefaultValue("false") boolean includeSummary
   ) {
     return this.cmapSignatureQueryResult(
       resultId, 
       minTau, maxFdr, drugSourceName, drugSourceDb, drugCommonName, drugMoa, 
       drugStatus, minDrugDss, page, pageSize, orderField, sortDirection,
-      (cmapResult, interactions) -> mapper.toCmapDrugInteractionData(interactions),
+      (cmapResult, interactions) -> mapper.toCmapDrugInteractionData(cmapResult, interactions, includeSummary),
       APPLICATION_JSON, true
     );
   }
@@ -203,7 +204,7 @@ public class DefaultCmapGeneSetSignatureQueryResultsResource implements CmapGene
       resultId, 
       minTau, maxFdr, drugSourceName, drugSourceDb, drugCommonName, drugMoa, 
       drugStatus, minDrugDss, page, pageSize, orderField, sortDirection,
-      (cmapResult, interactions) -> mapper.toCmapDrugInteractionCsvData(interactions), 
+      (cmapResult, interactions) -> mapper.toCmapDrugInteractionCsvData(cmapResult, interactions), 
       "text/csv", false
     );
   }
@@ -222,7 +223,7 @@ public class DefaultCmapGeneSetSignatureQueryResultsResource implements CmapGene
     Integer pageSize,
     CmapGeneSetSignatureDrugInteractionField orderField, 
     SortDirection sortDirection,
-    BiFunction<CmapResult, List<CmapDrugGeneSetSignatureInteraction>, Object> cmapDrugInteractionMapper,
+    BiFunction<CmapGeneSetSignatureResult, List<CmapDrugGeneSetSignatureInteraction>, Object> cmapDrugInteractionMapper,
     String responseContentType,
     boolean includeCountHeader
   ) {
