@@ -217,58 +217,19 @@ public class DefaultSignatureDao implements SignatureDao {
       andPredicates.add(cb.like(signatureName, "%" + listingOptions.getSignatureName().get() + "%"));
     }
 
-    if (listingOptions.getCellType1().isPresent()) {
+    if (listingOptions.getCellTypeAndSubType1Filter().isApplicable()) {
       Join<Signature, String> joinSignatureCellTypeA = root.join("cellTypeA", JoinType.LEFT);
       Join<Signature, String> joinSignatureCellTypeB = root.join("cellTypeB", JoinType.LEFT);
-
-      if (listingOptions.getCellType2().isPresent()) {
-        andPredicates.add(
-          cb.or(
-            cb.and(
-              cb.like(joinSignatureCellTypeA, "%" + listingOptions.getCellType1().get() + "%"),
-              cb.like(joinSignatureCellTypeB, "%" + listingOptions.getCellType2().get() + "%")
-            ),
-            cb.and(
-              cb.like(joinSignatureCellTypeA, "%" + listingOptions.getCellType2().get() + "%"),
-              cb.like(joinSignatureCellTypeB, "%" + listingOptions.getCellType1().get() + "%")
-            )
-          )
-        );
-      } else {
-        andPredicates.add(
-          cb.or(
-            cb.like(joinSignatureCellTypeA, "%" + listingOptions.getCellType1().get() + "%"),
-            cb.like(joinSignatureCellTypeB, "%" + listingOptions.getCellType1().get() + "%")
-          )
-        );
-      }
-    }
-
-    if (listingOptions.getCellSubType1().isPresent()) {
       Join<Signature, String> joinSignatureCellSubTypeA = root.join("cellSubTypeA", JoinType.LEFT);
       Join<Signature, String> joinSignatureCellSubTypeB = root.join("cellSubTypeB", JoinType.LEFT);
 
-      if (listingOptions.getCellSubType2().isPresent()) {
-        andPredicates.add(
-          cb.or(
-            cb.and(
-              cb.like(joinSignatureCellSubTypeA, "%" + listingOptions.getCellSubType1().get() + "%"),
-              cb.like(joinSignatureCellSubTypeB, "%" + listingOptions.getCellSubType2().get() + "%")
-            ),
-            cb.and(
-              cb.like(joinSignatureCellSubTypeA, "%" + listingOptions.getCellSubType2().get() + "%"),
-              cb.like(joinSignatureCellSubTypeB, "%" + listingOptions.getCellSubType1().get() + "%")
-            )
-          )
-        );
-      } else {
-        andPredicates.add(
-          cb.or(
-            cb.like(joinSignatureCellSubTypeA, "%" + listingOptions.getCellSubType1().get() + "%"),
-            cb.like(joinSignatureCellSubTypeB, "%" + listingOptions.getCellSubType1().get() + "%")
-          )
-        );
-      }
+      andPredicates.add(
+        listingOptions.getCellTypeAndSubType1Filter().getPredicate(
+          cb, listingOptions.getCellTypeAndSubType2Filter(),
+          joinSignatureCellTypeA, joinSignatureCellSubTypeA,
+          joinSignatureCellTypeB, joinSignatureCellSubTypeB
+        )
+      );
     }
 
     if (listingOptions.getExperimentalDesign().isPresent()) {
@@ -328,40 +289,8 @@ public class DefaultSignatureDao implements SignatureDao {
       })
       .flatMap(List::stream)
       .distinct()
-      .filter(value -> DefaultSignatureDao.cellTypeAndSubTypeMatchesFilters(value, signatureListingOptions))
+      .filter(value -> signatureListingOptions.getCellTypeAndSubType1Filter().matchesFilter(value))
       .sorted(CELL_TYPE_AND_SUBTYPE_COMPARATOR);
-  }
-
-  private static boolean cellTypeAndSubTypeMatchesFilters(
-    CellTypeAndSubtype cellTypeAndSubType, SignatureListingOptions signatureListingOptions
-  ) {
-    if (signatureListingOptions.getCellType1().isPresent()) {
-      if (cellTypeAndSubType.getType() == null) {
-        return false;
-      } else {
-        if (
-          !cellTypeAndSubType.getType().toLowerCase()
-            .contains(signatureListingOptions.getCellType1().get().toLowerCase())
-        ) {
-          return false;
-        }
-      }
-    }
-
-    if (signatureListingOptions.getCellSubType1().isPresent()) {
-      if (cellTypeAndSubType.getSubType() == null) {
-        return false;
-      } else {
-        if (
-          !cellTypeAndSubType.getSubType().toLowerCase()
-            .contains(signatureListingOptions.getCellSubType1().get().toLowerCase())
-        ) {
-          return false;
-        }
-      }
-    }
-
-    return true;
   }
 
   private static CellTypeAndSubtype tupleToCellTypeAndSubtype(Tuple tuple, int typeIndex, int subTypeIndex) {
@@ -402,8 +331,10 @@ public class DefaultSignatureDao implements SignatureDao {
 
   @Override
   public Stream<CellTypeAndSubtype> listCellTypeAndSubtype2Values(SignatureListingOptions signatureListingOptions) {
-    if (!signatureListingOptions.getCellType1().isPresent()) {
-      throw new IllegalArgumentException("cellType1 must be defined in orter to list cellTypeAndSubType2 values");
+    if (!signatureListingOptions.getCellTypeAndSubType1Filter().isApplicable()) {
+      throw new IllegalArgumentException(
+        "A cellType1 filter must be defined in orter to list cellTypeAndSubType2 values"
+      );
     }
 
     return listMultipleColumnCollectionValues(
@@ -420,11 +351,11 @@ public class DefaultSignatureDao implements SignatureDao {
     SignatureListingOptions signatureListingOptions, CellTypeAndSubtype a, CellTypeAndSubtype b
   ) {
     List<CellTypeAndSubtype> toret = new LinkedList<>();
-    if (DefaultSignatureDao.cellTypeAndSubTypeMatchesFilters(a, signatureListingOptions)) {
+    if (signatureListingOptions.getCellTypeAndSubType1Filter().matchesFilter(a)) {
       toret.add(b);
     }
 
-    if (DefaultSignatureDao.cellTypeAndSubTypeMatchesFilters(b, signatureListingOptions)) {
+    if (signatureListingOptions.getCellTypeAndSubType1Filter().matchesFilter(b)) {
       toret.add(a);
     }
 
@@ -433,97 +364,13 @@ public class DefaultSignatureDao implements SignatureDao {
     }
 
     throw new IllegalArgumentException(
-      "Error processing match against cellType1 = " +
-        signatureListingOptions.getCellType1().orElse("<undefined>") + " and cellSubType1 = " +
-        signatureListingOptions.getCellSubType1().orElse("<undefined>")
+      "Error processing match against cellType1 filter: "
+        + signatureListingOptions.getCellTypeAndSubType1Filter().toString()
     );
-  }
-
-  @Override
-  public Stream<String> listCellType1Values(SignatureListingOptions signatureListingOptions) {
-    return listTwoColumnCollectionValues(signatureListingOptions, "cellTypeA", "cellTypeB")
-      .map(tuple -> DefaultSignatureDao.tupleToList(tuple, signatureListingOptions.getCellType1()))
-      .flatMap(List::stream)
-      .distinct();
-  }
-
-  @Override
-  public Stream<String> listCellSubType1Values(SignatureListingOptions signatureListingOptions) {
-    return listTwoColumnCollectionValues(signatureListingOptions, "cellSubTypeA", "cellSubTypeB")
-      .map(tuple -> DefaultSignatureDao.tupleToList(tuple, signatureListingOptions.getCellSubType1()))
-      .flatMap(List::stream)
-      .distinct();
-  }
-
-  private static List<String> tupleToList(Tuple tuple, Optional<String> filter) {
-    List<String> toret = new LinkedList<String>();
-    if (tuple.get(0) != null && tuple.get(0).toString().contains(filter.orElse(""))) {
-      toret.add(tuple.get(0).toString());
-    }
-    if (tuple.get(1) != null && tuple.get(1).toString().contains(filter.orElse(""))) {
-      toret.add(tuple.get(1).toString());
-    }
-    return toret;
-  }
-
-  @Override
-  public Stream<String> listCellType2Values(SignatureListingOptions signatureListingOptions) {
-    if (!signatureListingOptions.getCellType1().isPresent()) {
-      throw new IllegalArgumentException("cellType1 must be defined in orter to list cellType2 values");
-    }
-
-    return listTwoColumnCollectionValues(signatureListingOptions, "cellTypeA", "cellTypeB")
-      .map(tuple -> getTuplePairs(tuple, signatureListingOptions.getCellType1().get()))
-      .distinct()
-      .filter(DefaultSignatureDao::notEmpty);
-  }
-
-  @Override
-  public Stream<String> listCellSubType2Values(SignatureListingOptions signatureListingOptions) {
-    if (!signatureListingOptions.getCellSubType1().isPresent()) {
-      throw new IllegalArgumentException("cellSubType1 must be defined in orter to list cellSubType2 values");
-    }
-
-    return listTwoColumnCollectionValues(signatureListingOptions, "cellSubTypeA", "cellSubTypeB")
-      .map(tuple -> getTuplePairs(tuple, signatureListingOptions.getCellSubType1().get()))
-      .distinct()
-      .filter(DefaultSignatureDao::notEmpty);
-  }
-
-  private static boolean notEmpty(String string) {
-    return !string.isEmpty();
   }
 
   private static boolean notEmpty(CellTypeAndSubtype cellTypeAndSubType) {
     return cellTypeAndSubType.getType() != null;
-  }
-
-  private static String getTuplePairs(Tuple tuple, String match) {
-    if (tuple.get(0) != null && tuple.get(0).toString().toUpperCase().contains(match.toUpperCase())) {
-      return tuple.get(1) == null ? "" : tuple.get(1).toString();
-    } else if (tuple.get(1) != null && tuple.get(1).toString().toUpperCase().contains(match.toUpperCase())) {
-      return tuple.get(0) == null ? "" : tuple.get(0).toString();
-    } else {
-      throw new IllegalArgumentException("Error processing match: " + match);
-    }
-  }
-
-  private Stream<Tuple> listTwoColumnCollectionValues(
-    SignatureListingOptions signatureListingOptions, String columnName1, String columnName2
-  ) {
-    final CriteriaBuilder cb = dh.cb();
-    CriteriaQuery<Tuple> query = cb.createTupleQuery();
-    final Root<Signature> root = query.from(dh.getEntityType());
-    final Join<Signature, ?> join1 = root.join(columnName1);
-    final Join<Signature, ?> join2 = root.join(columnName2);
-
-    query = query.multiselect(join1.as(String.class), join2.as(String.class)).distinct(true);
-
-    if (signatureListingOptions.hasAnyQueryModification()) {
-      query = query.where(createPredicates(signatureListingOptions, null, root));
-    }
-
-    return this.em.createQuery(query).getResultList().stream();
   }
 
   @Override

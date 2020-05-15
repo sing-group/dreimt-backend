@@ -41,8 +41,12 @@ public class SignatureListingOptions implements Serializable {
   private final String signatureName;
   private final String cellType1;
   private final String cellSubType1;
+  private final String cellTypeOrSubType1;
   private final String cellType2;
   private final String cellSubType2;
+  private final String cellTypeOrSubType2;
+  private final CellTypeAndSubTypeFilter cellTypeAndSubType1Filter;
+  private final CellTypeAndSubTypeFilter cellTypeAndSubType2Filter;
   private final ExperimentalDesign experimentalDesign;
   private final String organism;
   private final String disease;
@@ -54,57 +58,65 @@ public class SignatureListingOptions implements Serializable {
   private final String cellType1Disease;
 
   public SignatureListingOptions() {
-    this(null, null, null, null, null, null, null, null, null, null, null, null, null);
+    this(null, null, null, null, null, null, null, null, null, null, null, null, null, null);
   }
 
   public SignatureListingOptions(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String sourceDb, SignatureType signatureType, Integer signaturePubMedId, String cellType1Treatment,
+    String cellType1Disease
+  ) {
+    this(
+      noModification(), signatureName, cellType1, cellSubType1, cellTypeOrSubType1, cellType2, cellSubType2,
+      cellTypeOrSubType2, experimentalDesign, organism, disease, sourceDb, signatureType, signaturePubMedId, emptySet(),
+      cellType1Treatment, cellType1Disease
+    );
+  }
+
+  public SignatureListingOptions(
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String sourceDb, Integer signaturePubMedId, String cellType1Treatment, String cellType1Disease
+  ) {
+    this(
+      noModification(), signatureName, cellType1, cellSubType1, cellTypeOrSubType1, cellType2, cellSubType2,
+      cellTypeOrSubType2, experimentalDesign, organism, disease, sourceDb, null, signaturePubMedId, emptySet(),
+      cellType1Treatment, cellType1Disease
+    );
+  }
+
+  public SignatureListingOptions(
+    ListingOptions listingOptions, String signatureName, String cellType1, String cellSubType1,
+    String cellTypeOrSubType1, String cellType2, String cellSubType2, String cellTypeOrSubType2,
     ExperimentalDesign experimentalDesign, String organism, String disease, String sourceDb,
     SignatureType signatureType, Integer signaturePubMedId, String cellType1Treatment, String cellType1Disease
   ) {
     this(
-      noModification(), signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism,
-      disease, sourceDb, signatureType, signaturePubMedId, emptySet(), cellType1Treatment, cellType1Disease
+      listingOptions, signatureName, cellType1, cellSubType1, cellTypeOrSubType1, cellType2, cellSubType2,
+      cellTypeOrSubType2, experimentalDesign, organism, disease, sourceDb, signatureType, signaturePubMedId, emptySet(),
+      cellType1Treatment, cellType1Disease
     );
   }
 
   public SignatureListingOptions(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String sourceDb, Integer signaturePubMedId,
-    String cellType1Treatment, String cellType1Disease
-  ) {
-    this(
-      noModification(), signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism,
-      disease, sourceDb, null, signaturePubMedId, emptySet(), cellType1Treatment, cellType1Disease
-    );
-  }
-
-  public SignatureListingOptions(
-    ListingOptions listingOptions, String signatureName, String cellType1, String cellSubType1, String cellType2,
-    String cellSubType2, ExperimentalDesign experimentalDesign, String organism, String disease, String sourceDb,
-    SignatureType signatureType, Integer signaturePubMedId, String cellType1Treatment, String cellType1Disease
-  ) {
-    this(
-      listingOptions, signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism,
-      disease, sourceDb, signatureType, signaturePubMedId, emptySet(), cellType1Treatment, cellType1Disease
-    );
-  }
-
-  public SignatureListingOptions(
-    ListingOptions listingOptions, String signatureName, String cellType1, String cellSubType1, String cellType2,
-    String cellSubType2, ExperimentalDesign experimentalDesign, String organism, String disease, String sourceDb,
+    ListingOptions listingOptions, String signatureName, String cellType1, String cellSubType1,
+    String cellTypeOrSubType1, String cellType2, String cellSubType2, String cellTypeOrSubType2,
+    ExperimentalDesign experimentalDesign, String organism, String disease, String sourceDb,
     SignatureType signatureType, Integer signaturePubMedId, Set<String> mandatoryGenes, String cellType1Treatment,
     String cellType1Disease
   ) {
-    validateCellTypes(cellType1, cellSubType1, cellType2, cellSubType2);
-    validCellType1Modifiers(cellType1, cellType1Treatment, cellType1Disease);
+    validateCellTypes(cellType1, cellSubType1, cellTypeOrSubType1, cellType2, cellSubType2, cellTypeOrSubType2);
+    validCellType1Modifiers(cellType1, cellTypeOrSubType1, cellType1Treatment, cellType1Disease);
 
     this.listingOptions = listingOptions;
     this.signatureName = signatureName;
     this.cellType1 = cellType1;
     this.cellSubType1 = cellSubType1;
+    this.cellTypeOrSubType1 = cellTypeOrSubType1;
     this.cellType2 = cellType2;
     this.cellSubType2 = cellSubType2;
+    this.cellTypeOrSubType2 = cellTypeOrSubType2;
     this.experimentalDesign = experimentalDesign;
     this.organism = organism;
     this.disease = disease;
@@ -114,24 +126,54 @@ public class SignatureListingOptions implements Serializable {
     this.mandatoryGenes = mandatoryGenes;
     this.cellType1Treatment = cellType1Treatment;
     this.cellType1Disease = cellType1Disease;
+
+    if (cellTypeOrSubType1 != null) {
+      this.cellTypeAndSubType1Filter = new CellTypeAndSubTypeFilter(cellTypeOrSubType1);
+    } else {
+      this.cellTypeAndSubType1Filter = new CellTypeAndSubTypeFilter(cellType1, cellSubType1);
+    }
+    if (cellTypeOrSubType2 != null) {
+      this.cellTypeAndSubType2Filter = new CellTypeAndSubTypeFilter(cellTypeOrSubType2);
+    } else {
+      this.cellTypeAndSubType2Filter = new CellTypeAndSubTypeFilter(cellType2, cellSubType2);
+    }
   }
 
-  private static void validateCellTypes(String cellType1, String cellSubType1, String cellType2, String cellSubType2) {
-    if (cellType1 == null && cellType2 != null) {
-      throw new IllegalArgumentException("cellType1 is required when cellType2 is present");
+  private static void validateCellTypes(
+    String cellType1, String cellSubType1, String cellTypeOrSubType1,
+    String cellType2, String cellSubType2, String cellTypeOrSubType2
+  ) {
+    if (cellTypeOrSubType1 != null && cellType1 != null) {
+      throw new IllegalArgumentException("cellType1 is not compatible with cellTypeOrSubType1");
     }
-    if (cellSubType1 == null && cellSubType2 != null) {
-      throw new IllegalArgumentException("cellSubType1 is required when cellSubType2 is present");
+    if (cellTypeOrSubType2 != null && cellType2 != null) {
+      throw new IllegalArgumentException("cellType2 is not compatible with cellTypeOrSubType2");
+    }
+    if (cellType1 == null && cellTypeOrSubType1 == null && cellType2 != null) {
+      throw new IllegalArgumentException(
+        "Either cellType1 or cellTypeOrSubType1 are required when cellType2 is present"
+      );
+    }
+    if (cellType1 == null && cellTypeOrSubType1 == null && cellSubType2 != null) {
+      throw new IllegalArgumentException(
+        "Either cellType1 or cellTypeOrSubType1 are required when cellSubType2 is present"
+      );
     }
   }
 
-  private static void validCellType1Modifiers(String cellType1, String cellType1Treatment, String cellType1Disease) {
-    if (cellType1 == null && cellType1Disease != null) {
-      throw new IllegalArgumentException("cellType1 is required when cellType1Disease is present");
+  private static void validCellType1Modifiers(
+    String cellType1, String cellTypeOrSubType1, String cellType1Treatment, String cellType1Disease
+  ) {
+    if (cellType1 == null && cellTypeOrSubType1 == null && cellType1Treatment != null) {
+      throw new IllegalArgumentException(
+        "Either cellType1 or cellTypeOrSubType1 are required when cellType1Disease is present"
+      );
     }
 
-    if (cellType1 == null && cellType1Treatment != null) {
-      throw new IllegalArgumentException("cellType1 is required when cellType1Treatment is present");
+    if (cellType1 == null && cellTypeOrSubType1 == null && cellType1Treatment != null) {
+      throw new IllegalArgumentException(
+        "Either cellType1 or cellTypeOrSubType1 are required when cellType1Treatment is present"
+      );
     }
   }
 
@@ -140,8 +182,10 @@ public class SignatureListingOptions implements Serializable {
       || this.signatureName != null
       || this.cellType1 != null
       || this.cellSubType1 != null
+      || this.cellTypeOrSubType1 != null
       || this.cellType2 != null
       || this.cellSubType2 != null
+      || this.cellTypeOrSubType2 != null
       || this.organism != null
       || this.disease != null
       || this.experimentalDesign != null
@@ -161,20 +205,12 @@ public class SignatureListingOptions implements Serializable {
     return ofNullable(signatureName);
   }
 
-  public Optional<String> getCellType1() {
-    return ofNullable(cellType1);
+  public CellTypeAndSubTypeFilter getCellTypeAndSubType1Filter() {
+    return cellTypeAndSubType1Filter;
   }
 
-  public Optional<String> getCellSubType1() {
-    return ofNullable(cellSubType1);
-  }
-  
-  public Optional<String> getCellType2() {
-    return ofNullable(cellType2);
-  }
-  
-  public Optional<String> getCellSubType2() {
-    return ofNullable(cellSubType2);
+  public CellTypeAndSubTypeFilter getCellTypeAndSubType2Filter() {
+    return cellTypeAndSubType2Filter;
   }
 
   public Optional<ExperimentalDesign> getExperimentalDesign() {
@@ -200,23 +236,24 @@ public class SignatureListingOptions implements Serializable {
   public Optional<Set<String>> getMandatoryGenes() {
     return ofNullable(mandatoryGenes);
   }
-  
+
   public Optional<Integer> getSignaturePubMedId() {
     return ofNullable(signaturePubMedId);
   }
-  
+
   public Optional<String> getCellType1Disease() {
     return ofNullable(cellType1Disease);
   }
-  
+
   public Optional<String> getCellType1Treatment() {
     return ofNullable(cellType1Treatment);
   }
 
   public SignatureListingOptions withMandatoryGenes(Set<String> mandatoryGenes) {
     return new SignatureListingOptions(
-      listingOptions, signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism,
-      disease, sourceDb, signatureType, signaturePubMedId, mandatoryGenes, cellType1Treatment, cellType1Disease
+      listingOptions, signatureName, cellType1, cellSubType1, cellTypeOrSubType1, cellType2, cellSubType2,
+      cellTypeOrSubType2, experimentalDesign, organism, disease, sourceDb, signatureType, signaturePubMedId,
+      mandatoryGenes, cellType1Treatment, cellType1Disease
     );
   }
 
@@ -228,6 +265,8 @@ public class SignatureListingOptions implements Serializable {
     result = prime * result + ((cellSubType2 == null) ? 0 : cellSubType2.hashCode());
     result = prime * result + ((cellType1 == null) ? 0 : cellType1.hashCode());
     result = prime * result + ((cellType2 == null) ? 0 : cellType2.hashCode());
+    result = prime * result + ((cellTypeOrSubType1 == null) ? 0 : cellTypeOrSubType1.hashCode());
+    result = prime * result + ((cellTypeOrSubType2 == null) ? 0 : cellTypeOrSubType2.hashCode());
     result = prime * result + ((cellType1Treatment == null) ? 0 : cellType1.hashCode());
     result = prime * result + ((cellType1Disease == null) ? 0 : cellType2.hashCode());
     result = prime * result + ((disease == null) ? 0 : disease.hashCode());
@@ -270,6 +309,16 @@ public class SignatureListingOptions implements Serializable {
       if (other.cellType2 != null)
         return false;
     } else if (!cellType2.equals(other.cellType2))
+      return false;
+    if (cellTypeOrSubType1 == null) {
+      if (other.cellTypeOrSubType1 != null)
+        return false;
+    } else if (!cellTypeOrSubType1.equals(other.cellTypeOrSubType1))
+      return false;
+    if (cellTypeOrSubType2 == null) {
+      if (other.cellTypeOrSubType2 != null)
+        return false;
+    } else if (!cellTypeOrSubType2.equals(other.cellTypeOrSubType2))
       return false;
     if (cellType1Treatment == null) {
       if (other.cellType1Treatment != null)

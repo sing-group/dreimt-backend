@@ -56,8 +56,10 @@ public abstract class JaccardResult extends WorkEntity {
 
   private String cellType1;
   private String cellSubType1;
+  private String cellTypeOrSubType1;
   private String cellType2;
   private String cellSubType2;
+  private String cellTypeOrSubType2;
   
   @Enumerated(EnumType.STRING)
   private ExperimentalDesign experimentalDesign;
@@ -75,16 +77,19 @@ public abstract class JaccardResult extends WorkEntity {
 
   protected JaccardResult(
     String name, String description, Function<String, String> resultReferenceBuilder, boolean onlyUniverseGenes,
-    String cellType1, String cellSubType1, String cellType2, String cellSubType2, ExperimentalDesign experimentalDesign,
-    String organism, String disease, String signatureSourceDb
+    String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2, String cellSubType2,
+    String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism, String disease,
+    String signatureSourceDb
   ) {
     super(name, description, resultReferenceBuilder);
 
     this.onlyUniverseGenes = onlyUniverseGenes;
     this.cellType1 = cellType1;
     this.cellSubType1 = cellSubType1;
+    this.cellTypeOrSubType1 = cellTypeOrSubType1;
     this.cellType2 = cellType2;
     this.cellSubType2 = cellSubType2;
+    this.cellTypeOrSubType2 = cellTypeOrSubType2;
     this.experimentalDesign = experimentalDesign;
     this.organism = organism;
     this.disease = disease;
@@ -111,6 +116,14 @@ public abstract class JaccardResult extends WorkEntity {
   public void setCellSubType1(String cellSubType1) {
     this.cellSubType1 = cellSubType1;
   }
+  
+  public String getCellTypeOrSubType1() {
+    return cellTypeOrSubType1;
+  }
+  
+  public void setCellTypeOrSubType1(String cellTypeOrSubType1) {
+    this.cellTypeOrSubType1 = cellTypeOrSubType1;
+  }
 
   public String getCellType2() {
     return cellType2;
@@ -126,6 +139,14 @@ public abstract class JaccardResult extends WorkEntity {
 
   public void setCellSubType2(String cellSubType2) {
     this.cellSubType2 = cellSubType2;
+  }
+  
+  public String getCellTypeOrSubType2() {
+    return cellTypeOrSubType2;
+  }
+
+  public void setCellTypeOrSubType2(String cellTypeOrSubType2) {
+    this.cellTypeOrSubType2 = cellTypeOrSubType2;
   }
 
   public ExperimentalDesign getExperimentalDesign() {

@@ -76,8 +76,8 @@ public class DefaultJaccardUpDownSignatureResultDao implements JaccardUpDownSign
     String name, String description,
     Function<String, String> resultReferenceBuilder,
     boolean onlyUniverseGenes,
-    String cellType1, String cellSubType1,
-    String cellType2, String cellSubType2,
+    String cellType1, String cellSubType1, String cellTypeOrSubType1,
+    String cellType2, String cellSubType2, String cellTypeOrSubType2,
     ExperimentalDesign experimentalDesign,
     String organism, String disease, String signatureSourceDb,
     Set<String> upGenes, Set<String> downGenes
@@ -86,8 +86,8 @@ public class DefaultJaccardUpDownSignatureResultDao implements JaccardUpDownSign
       new JaccardUpDownSignatureResult(
         name, description, resultReferenceBuilder,
         onlyUniverseGenes, 
-        cellType1, cellSubType1,
-        cellType2, cellSubType2,
+        cellType1, cellSubType1, cellTypeOrSubType1,
+        cellType2, cellSubType2, cellTypeOrSubType2,
         experimentalDesign, 
         organism, disease, signatureSourceDb, 
         this.geneDao.getGenes(upGenes, true),

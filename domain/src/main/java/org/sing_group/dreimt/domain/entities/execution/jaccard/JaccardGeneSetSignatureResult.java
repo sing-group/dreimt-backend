@@ -68,12 +68,13 @@ public class JaccardGeneSetSignatureResult extends JaccardResult implements Seri
 
   public JaccardGeneSetSignatureResult(
     String name, String description, Function<String, String> resultReferenceBuilder, boolean onlyUniverseGenes,
-    String cellType1, String cellSubType1, String cellType2, String cellSubType2, ExperimentalDesign experimentalDesign,
-    String organism, String disease, String signatureSourceDb, Set<Gene> genes, GeneSetType geneSetType
+    String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2, String cellSubType2,
+    String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism, String disease,
+    String signatureSourceDb, Set<Gene> genes, GeneSetType geneSetType
   ) {
     super(
-      name, description, resultReferenceBuilder, onlyUniverseGenes, cellType1, cellSubType1, cellType2, cellSubType2,
-      experimentalDesign, organism, disease, signatureSourceDb
+      name, description, resultReferenceBuilder, onlyUniverseGenes, cellType1, cellSubType1, cellTypeOrSubType1,
+      cellType2, cellSubType2, cellTypeOrSubType2, experimentalDesign, organism, disease, signatureSourceDb
     );
 
     this.genes = genes;

@@ -116,8 +116,10 @@ public class DefaultSignatureResource implements SignatureResource {
     @QueryParam("signatureName") String signatureName,
     @QueryParam("cellType1") String cellType1,
     @QueryParam("cellSubType1") String cellSubType1,
+    @QueryParam("cellTypeOrSubType1") String cellTypeOrSubType1,
     @QueryParam("cellType2") String cellType2,
     @QueryParam("cellSubType2") String cellSubType2,
+    @QueryParam("cellTypeOrSubType2") String cellTypeOrSubType2,
     @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
@@ -127,8 +129,8 @@ public class DefaultSignatureResource implements SignatureResource {
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
-        signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId, null, null
+        signatureName, cellType1, cellSubType1, cellTypeOrSubType1, cellType2, cellSubType2, cellTypeOrSubType2,
+        experimentalDesign, organism, disease, signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final SignatureData[] data =
@@ -177,8 +179,10 @@ public class DefaultSignatureResource implements SignatureResource {
     @QueryParam("signatureName") String signatureName,
     @QueryParam("cellType1") String cellType1,
     @QueryParam("cellSubType1") String cellSubType1,
+    @QueryParam("cellTypeOrSubType1") String cellTypeOrSubType1,
     @QueryParam("cellType2") String cellType2,
     @QueryParam("cellSubType2") String cellSubType2,
+    @QueryParam("cellTypeOrSubType2") String cellTypeOrSubType2,
     @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
@@ -188,8 +192,8 @@ public class DefaultSignatureResource implements SignatureResource {
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
-        signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId, null, null
+        signatureName, cellType1, cellSubType1, cellTypeOrSubType1, cellType2, cellSubType2, cellTypeOrSubType2,
+        experimentalDesign, organism, disease, signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final String[] data =
@@ -212,6 +216,7 @@ public class DefaultSignatureResource implements SignatureResource {
     @QueryParam("signatureName") String signatureName,
     @QueryParam("cellType1") String cellType1,
     @QueryParam("cellSubType1") String cellSubType1,
+    @QueryParam("cellTypeOrSubType1") String cellTypeOrSubType1,
     @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
@@ -221,8 +226,8 @@ public class DefaultSignatureResource implements SignatureResource {
     ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
-        signatureName, cellType1, cellSubType1, null, null, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId, null, null
+        signatureName, cellType1, cellSubType1, cellTypeOrSubType1, null, null, null,
+        experimentalDesign, organism, disease, signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final CellTypeAndSubtype[] data =
@@ -245,8 +250,10 @@ public class DefaultSignatureResource implements SignatureResource {
     @QueryParam("signatureName") String signatureName,
     @QueryParam("cellType1") String cellType1,
     @QueryParam("cellSubType1") String cellSubType1,
+    @QueryParam("cellTypeOrSubType1") String cellTypeOrSubType1,
     @QueryParam("cellType2") String cellType2,
     @QueryParam("cellSubType2") String cellSubType2,
+    @QueryParam("cellTypeOrSubType2") String cellTypeOrSubType2,
     @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
@@ -256,8 +263,8 @@ public class DefaultSignatureResource implements SignatureResource {
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
-        signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId, null, null
+        signatureName, cellType1, cellSubType1, cellTypeOrSubType1, cellType2, cellSubType2, cellTypeOrSubType2,
+        experimentalDesign, organism, disease, signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final CellTypeAndSubtype[] data =
@@ -267,144 +274,6 @@ public class DefaultSignatureResource implements SignatureResource {
     return Response.ok(data).build();
   }
 
-  @Path("params/cell-type-1/values")
-  @GET
-  @ApiOperation(
-    value = "Lists the possible cell type 1 values in signatures",
-    response = String.class,
-    responseContainer = "list", 
-    code = 200
-  )
-  @Override
-  public Response listCellType1Values(
-    @QueryParam("signatureName") String signatureName,
-    @QueryParam("cellType1") String cellType1,
-    @QueryParam("cellSubType1") String cellSubType1,
-    @QueryParam("cellSubType2") String cellSubType2,
-    @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
-    @QueryParam("organism") String organism,
-    @QueryParam("disease") String disease,
-    @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
-    @QueryParam("signaturePubMedId") Integer signaturePubMedId
-  ) {
-    final SignatureListingOptions signatureListingOptions =
-      new SignatureListingOptions(
-        signatureName, cellType1, cellSubType1, null, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId, null, null
-      );
-
-    final String[] data =
-      service.listCellType1Values(signatureListingOptions)
-        .toArray(String[]::new);
-
-    return Response.ok(data).build();
-  }
-  
-  @Path("params/cell-subtype-1/values")
-  @GET
-  @ApiOperation(
-    value = "Lists the possible cell subtype 1 values in signatures",
-    response = String.class,
-    responseContainer = "list", 
-    code = 200
-  )
-  @Override
-  public Response listCellSubType1AValues(
-    @QueryParam("signatureName") String signatureName,
-    @QueryParam("cellType1") String cellType1,
-    @QueryParam("cellSubType1") String cellSubType1,
-    @QueryParam("cellType2") String cellType2,
-    @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
-    @QueryParam("organism") String organism,
-    @QueryParam("disease") String disease,
-    @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
-    @QueryParam("signaturePubMedId") Integer signaturePubMedId
-  ) {
-    final SignatureListingOptions signatureListingOptions =
-      new SignatureListingOptions(
-        signatureName, cellType1, cellSubType1, cellType2, null, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId, null, null
-      );
-
-    final String[] data =
-      service.listCellSubType1Values(signatureListingOptions)
-        .toArray(String[]::new);
-
-    return Response.ok(data).build();
-  }
-
-  @Path("params/cell-type-2/values")
-  @GET
-  @ApiOperation(
-    value = "Lists the possible cell type 2 values in signatures",
-    response = String.class,
-    responseContainer = "list", 
-    code = 200
-  )
-  @Override
-  public Response listCellType2Values(
-    @QueryParam("signatureName") String signatureName,
-    @QueryParam("cellType1") String cellType1,
-    @QueryParam("cellSubType1") String cellSubType1,
-    @QueryParam("cellType2") String cellType2,
-    @QueryParam("cellSubType2") String cellSubType2,
-    @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
-    @QueryParam("organism") String organism,
-    @QueryParam("disease") String disease,
-    @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
-    @QueryParam("signaturePubMedId") Integer signaturePubMedId
-  ) {
-    final SignatureListingOptions signatureListingOptions =
-      new SignatureListingOptions(
-        signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId, null, null
-      );
-
-    final String[] data =
-      service.listCellType2Values(signatureListingOptions)
-        .toArray(String[]::new);
-
-    return Response.ok(data).build();
-  }
-
-  @Path("params/cell-subtype-2/values")
-  @GET
-  @ApiOperation(
-    value = "Lists the possible cell subtype 2 values in signatures",
-    response = String.class,
-    responseContainer = "list", 
-    code = 200
-  )
-  @Override
-  public Response listCellSubType2Values(
-    @QueryParam("signatureName") String signatureName,
-    @QueryParam("cellType1") String cellType1,
-    @QueryParam("cellSubType1") String cellSubType1,
-    @QueryParam("cellType2") String cellType2,
-    @QueryParam("cellSubType2") String cellSubType2,
-    @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
-    @QueryParam("organism") String organism,
-    @QueryParam("disease") String disease,
-    @QueryParam("signatureSourceDb") String signatureSourceDb,
-    @QueryParam("signatureType") SignatureType signatureType,
-    @QueryParam("signaturePubMedId") Integer signaturePubMedId
-  ) {
-    final SignatureListingOptions signatureListingOptions =
-      new SignatureListingOptions(
-        signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId, null, null
-      );
-
-    final String[] data =
-      service.listCellSubType2Values(signatureListingOptions)
-        .toArray(String[]::new);
-
-    return Response.ok(data).build();
-  }
-  
   @Path("params/experimental-design/values")
   @GET
   @ApiOperation(
@@ -418,8 +287,10 @@ public class DefaultSignatureResource implements SignatureResource {
     @QueryParam("signatureName") String signatureName,
     @QueryParam("cellType1") String cellType1,
     @QueryParam("cellSubType1") String cellSubType1,
+    @QueryParam("cellTypeOrSubType1") String cellTypeOrSubType1,
     @QueryParam("cellType2") String cellType2,
     @QueryParam("cellSubType2") String cellSubType2,
+    @QueryParam("cellTypeOrSubType2") String cellTypeOrSubType2,
     @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
@@ -429,8 +300,8 @@ public class DefaultSignatureResource implements SignatureResource {
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
-        signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId, null, null
+        signatureName, cellType1, cellSubType1, cellTypeOrSubType1, cellType2, cellSubType2, cellTypeOrSubType2,
+        experimentalDesign, organism, disease, signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final ExperimentalDesign[] data =
@@ -453,8 +324,10 @@ public class DefaultSignatureResource implements SignatureResource {
     @QueryParam("signatureName") String signatureName,
     @QueryParam("cellType1") String cellType1,
     @QueryParam("cellSubType1") String cellSubType1,
+    @QueryParam("cellTypeOrSubType1") String cellTypeOrSubType1,
     @QueryParam("cellType2") String cellType2,
     @QueryParam("cellSubType2") String cellSubType2,
+    @QueryParam("cellTypeOrSubType2") String cellTypeOrSubType2,
     @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
@@ -464,8 +337,8 @@ public class DefaultSignatureResource implements SignatureResource {
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
-        signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId, null, null
+        signatureName, cellType1, cellSubType1, cellTypeOrSubType1, cellType2, cellSubType2, cellTypeOrSubType2,
+        experimentalDesign, organism, disease, signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final String[] data =
@@ -488,8 +361,10 @@ public class DefaultSignatureResource implements SignatureResource {
     @QueryParam("signatureName") String signatureName,
     @QueryParam("cellType1") String cellType1,
     @QueryParam("cellSubType1") String cellSubType1,
+    @QueryParam("cellTypeOrSubType1") String cellTypeOrSubType1,
     @QueryParam("cellType2") String cellType2,
     @QueryParam("cellSubType2") String cellSubType2,
+    @QueryParam("cellTypeOrSubType2") String cellTypeOrSubType2,
     @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
@@ -499,8 +374,8 @@ public class DefaultSignatureResource implements SignatureResource {
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
-        signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId, null, null
+        signatureName, cellType1, cellSubType1, cellTypeOrSubType1, cellType2, cellSubType2, cellTypeOrSubType2,
+        experimentalDesign, organism, disease, signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final String[] data =
@@ -523,8 +398,10 @@ public class DefaultSignatureResource implements SignatureResource {
     @QueryParam("signatureName") String signatureName,
     @QueryParam("cellType1") String cellType1,
     @QueryParam("cellSubType1") String cellSubType1,
+    @QueryParam("cellTypeOrSubType1") String cellTypeOrSubType1,
     @QueryParam("cellType2") String cellType2,
     @QueryParam("cellSubType2") String cellSubType2,
+    @QueryParam("cellTypeOrSubType2") String cellTypeOrSubType2,
     @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
@@ -534,8 +411,8 @@ public class DefaultSignatureResource implements SignatureResource {
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
-        signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId, null, null
+        signatureName, cellType1, cellSubType1, cellTypeOrSubType1, cellType2, cellSubType2, cellTypeOrSubType2,
+        experimentalDesign, organism, disease, signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final String[] data =
@@ -558,8 +435,10 @@ public class DefaultSignatureResource implements SignatureResource {
     @QueryParam("signatureName") String signatureName,
     @QueryParam("cellType1") String cellType1,
     @QueryParam("cellSubType1") String cellSubType1,
+    @QueryParam("cellTypeOrSubType1") String cellTypeOrSubType1,
     @QueryParam("cellType2") String cellType2,
     @QueryParam("cellSubType2") String cellSubType2,
+    @QueryParam("cellTypeOrSubType2") String cellTypeOrSubType2,
     @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
@@ -569,8 +448,8 @@ public class DefaultSignatureResource implements SignatureResource {
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
-        signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId, null, null
+        signatureName, cellType1, cellSubType1, cellTypeOrSubType1, cellType2, cellSubType2, cellTypeOrSubType2,
+        experimentalDesign, organism, disease, signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final SignatureType[] data =
@@ -593,8 +472,10 @@ public class DefaultSignatureResource implements SignatureResource {
     @QueryParam("signatureName") String signatureName,
     @QueryParam("cellType1") String cellType1,
     @QueryParam("cellSubType1") String cellSubType1,
+    @QueryParam("cellTypeOrSubType1") String cellTypeOrSubType1,
     @QueryParam("cellType2") String cellType2,
     @QueryParam("cellSubType2") String cellSubType2,
+    @QueryParam("cellTypeOrSubType2") String cellTypeOrSubType2,
     @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
     @QueryParam("organism") String organism,
     @QueryParam("disease") String disease,
@@ -604,8 +485,8 @@ public class DefaultSignatureResource implements SignatureResource {
   ) {
     final SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
-        signatureName, cellType1, cellSubType1, cellType2, cellSubType2, experimentalDesign, organism, disease,
-        signatureSourceDb, signatureType, signaturePubMedId, null, null
+        signatureName, cellType1, cellSubType1, cellTypeOrSubType1, cellType2, cellSubType2, cellTypeOrSubType2,
+        experimentalDesign, organism, disease, signatureSourceDb, signatureType, signaturePubMedId, null, null
       );
 
     final Integer[] data =

@@ -50,14 +50,6 @@ public interface DrugSignatureInteractionService {
 
   Stream<CellTypeAndSubtype> listCellTypeAndSubtype2Values(DrugSignatureInteractionListingOptions listingOptions);
 
-  Stream<String> listCellType1Values(DrugSignatureInteractionListingOptions listingOptions);
-
-  Stream<String> listCellSubType1Values(DrugSignatureInteractionListingOptions listingOptions);
-
-  Stream<String> listCellType2Values(DrugSignatureInteractionListingOptions listingOptions);
-
-  Stream<String> listCellSubType2Values(DrugSignatureInteractionListingOptions listingOptions);
-
   Stream<ExperimentalDesign> listExperimentalDesignValues(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<String> listOrganismValues(DrugSignatureInteractionListingOptions listingOptions);

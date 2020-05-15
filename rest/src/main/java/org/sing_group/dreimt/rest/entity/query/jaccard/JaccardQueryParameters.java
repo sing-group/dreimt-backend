@@ -32,8 +32,10 @@ public class JaccardQueryParameters {
   private boolean onlyUniverseGenes = DEFAULT_ONLY_UNIVERSE_GENES;
   private String cellType1;
   private String cellSubType1;
+  private String cellTypeOrSubType1;
   private String cellType2;
   private String cellSubType2;
+  private String cellTypeOrSubType2;
   private ExperimentalDesign experimentalDesign;
   private String organism;
   private String disease;
@@ -44,16 +46,18 @@ public class JaccardQueryParameters {
   JaccardQueryParameters() {}
 
   public JaccardQueryParameters(
-    String queryTitle, boolean onlyUniverseGenes, String cellType1, String cellSubType1, String cellType2,
-    String cellSubType2, ExperimentalDesign experimentalDesign, String organism, String disease,
-    String signatureSourceDb, String[] upGenes, String[] downGenes
+    String queryTitle, boolean onlyUniverseGenes, String cellType1, String cellSubType1, String cellTypeOrSubType1,
+    String cellType2, String cellTypeOrSubType2, String cellSubType2, ExperimentalDesign experimentalDesign,
+    String organism, String disease, String signatureSourceDb, String[] upGenes, String[] downGenes
   ) {
     this.queryTitle = queryTitle;
     this.onlyUniverseGenes = onlyUniverseGenes;
     this.cellType1 = cellType1;
     this.cellSubType1 = cellSubType1;
+    this.cellTypeOrSubType1 = cellTypeOrSubType1;
     this.cellType2 = cellType2;
     this.cellSubType2 = cellSubType2;
+    this.cellTypeOrSubType2 = cellTypeOrSubType2;
     this.experimentalDesign = experimentalDesign;
     this.organism = organism;
     this.disease = disease;
@@ -78,12 +82,20 @@ public class JaccardQueryParameters {
     return cellSubType1;
   }
 
+  public String getCellTypeOrSubType1() {
+    return cellTypeOrSubType1;
+  }
+
   public String getCellType2() {
     return cellType2;
   }
 
   public String getCellSubType2() {
     return cellSubType2;
+  }
+
+  public String getCellTypeOrSubType2() {
+    return cellTypeOrSubType2;
   }
 
   public ExperimentalDesign getExperimentalDesign() {

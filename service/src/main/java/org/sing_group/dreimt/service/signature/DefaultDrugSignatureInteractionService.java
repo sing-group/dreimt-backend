@@ -54,12 +54,12 @@ public class DefaultDrugSignatureInteractionService implements DrugSignatureInte
   public long count(DrugSignatureInteractionListingOptions listingOptions) {
     return this.dao.count(listingOptions);
   }
-  
+
   @Override
   public Stream<DrugSignatureInteraction> list(ListingOptions listingOptions, String freeText) {
     return this.dao.list(listingOptions, freeText);
   }
-  
+
   @Override
   public long count(String freeText) {
     return this.dao.count(freeText);
@@ -71,33 +71,17 @@ public class DefaultDrugSignatureInteractionService implements DrugSignatureInte
   }
 
   @Override
-  public Stream<CellTypeAndSubtype> listCellTypeAndSubtype1Values(DrugSignatureInteractionListingOptions listingOptions) {
+  public Stream<CellTypeAndSubtype> listCellTypeAndSubtype1Values(
+    DrugSignatureInteractionListingOptions listingOptions
+  ) {
     return this.dao.listCellTypeAndSubtype1Values(listingOptions);
   }
 
   @Override
-  public Stream<CellTypeAndSubtype> listCellTypeAndSubtype2Values(DrugSignatureInteractionListingOptions listingOptions) {
+  public Stream<CellTypeAndSubtype> listCellTypeAndSubtype2Values(
+    DrugSignatureInteractionListingOptions listingOptions
+  ) {
     return this.dao.listCellTypeAndSubtype2Values(listingOptions);
-  }
-
-  @Override
-  public Stream<String> listCellType1Values(DrugSignatureInteractionListingOptions listingOptions) {
-    return this.dao.listCellType1Values(listingOptions);
-  }
-
-  @Override
-  public Stream<String> listCellSubType1Values(DrugSignatureInteractionListingOptions listingOptions) {
-    return this.dao.listCellSubType1Values(listingOptions);
-  }
-
-  @Override
-  public Stream<String> listCellType2Values(DrugSignatureInteractionListingOptions listingOptions) {
-    return this.dao.listCellType2Values(listingOptions);
-  }
-
-  @Override
-  public Stream<String> listCellSubType2Values(DrugSignatureInteractionListingOptions listingOptions) {
-    return this.dao.listCellSubType2Values(listingOptions);
   }
 
   @Override
@@ -153,7 +137,7 @@ public class DefaultDrugSignatureInteractionService implements DrugSignatureInte
   public Stream<String> listDrugMoaValues(DrugSignatureInteractionListingOptions listingOptions) {
     return this.dao.listDrugMoaValues(listingOptions);
   }
-  
+
   @Override
   public Stream<DrugStatus> listDrugStatusValues(DrugSignatureInteractionListingOptions listingOptions) {
     return this.dao.listDrugStatusValues(listingOptions);

@@ -39,22 +39,23 @@ public interface DrugSignatureInteractionResource {
 
   Response list(
     Integer page, Integer pageSize, DrugSignatureInteractionField orderField, SortDirection sortDirection,
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease, String freeText, boolean includeSummary
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease, String freeText,
+    boolean includeSummary
   );
   
   Response listAsCsv(
     Integer page, Integer pageSize, DrugSignatureInteractionField orderField, SortDirection sortDirection,
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease, String freeText
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease, String freeText
   );
 
   Response jaccardQuery(JaccardQueryParameters jaccardQueryParameters);
@@ -62,15 +63,16 @@ public interface DrugSignatureInteractionResource {
   Response cmapQuery(CmapQueryParameters cmapQueryParameters);
 
   Response listSignatureNameValues(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease
   );
 
   Response listCellTypeAndSubtype1Values(
-    String signatureName, String cellType1, String cellSubType1,
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1,
     ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
     Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
     DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
@@ -79,164 +81,128 @@ public interface DrugSignatureInteractionResource {
   );
 
   Response listCellTypeAndSubtype2Values(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease
-  );
-
-  Response listCellType1Values(
-    String signatureName, String cellType1, String cellSubType1, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease
-  );
-
-  Response listCellSubType1Values(
-    String signatureName, String cellType1, String cellSubType1, String cellType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease
-  );
-
-  Response listCellType2Values(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease
-  );
-
-  Response listCellSubType2Values(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease
   );
 
   Response listExperimentalDesignValues(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease
   );
 
   Response listOrganismValues(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease
   );
 
   Response listDiseaseValues(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease
   );
 
   Response listSignatureSourceDbValues(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease
   );
 
   Response listInteractionTypeValues(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease
   );
 
   Response listSignaturePubMedIdValues(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease
   );
 
   Response listDrugSourceNameValues(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease
   );
 
   Response listDrugSourceDbValues(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease
   );
 
   Response listDrugCommonNameValues(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease
   );
 
   Response listDrugMoaValues(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease
   );
 
   Response listDrugStatusValues(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease
   );
-  
+
   Response listCellType1TreatmentValues(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease
   );
   
   Response listCellType1DiseaseValues(
-    String signatureName, String cellType1, String cellSubType1, String cellType2, String cellSubType2,
-    ExperimentalDesign experimentalDesign, String organism, String disease, String signatureSourceDb,
-    Integer signaturePubMedId, String drugSourceName, String drugSourceDb, String drugCommonName, String drugMoa,
-    DrugStatus drugStatus, Double minDrugDss, DrugSignatureInteractionType interactionType, Double minTau,
-    Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect, String cellType1Treatment,
-    String cellType1Disease
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
+    String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease
   );
 }

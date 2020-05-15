@@ -371,6 +371,8 @@ CREATE TABLE `jaccard_result` (
   `organism` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureSourceDb` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `id` char(36) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cellTypeOrSubType1` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cellTypeOrSubType2` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   CONSTRAINT `FK3vfegxa9spa1bjuc4jpsppm7y` FOREIGN KEY (`id`) REFERENCES `work` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -825,4 +827,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-14 17:27:10
+-- Dump completed on 2020-05-15 19:14:37

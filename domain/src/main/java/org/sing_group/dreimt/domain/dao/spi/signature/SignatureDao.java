@@ -41,16 +41,8 @@ public interface SignatureDao {
   Stream<String> listSignatureNameValues(SignatureListingOptions signatureListingOptions);
 
   Stream<CellTypeAndSubtype> listCellTypeAndSubtype1Values(SignatureListingOptions signatureListingOptions);
-  
+
   Stream<CellTypeAndSubtype> listCellTypeAndSubtype2Values(SignatureListingOptions signatureListingOptions);
-
-  Stream<String> listCellType1Values(SignatureListingOptions signatureListingOptions);
-
-  Stream<String> listCellSubType1Values(SignatureListingOptions signatureListingOptions);
-
-  Stream<String> listCellType2Values(SignatureListingOptions signatureListingOptions);
-
-  Stream<String> listCellSubType2Values(SignatureListingOptions signatureListingOptions);
 
   Stream<ExperimentalDesign> listExperimentalDesignValues(SignatureListingOptions signatureListingOptions);
 

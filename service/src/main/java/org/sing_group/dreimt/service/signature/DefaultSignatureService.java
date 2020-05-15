@@ -75,26 +75,6 @@ public class DefaultSignatureService implements SignatureService {
   }
 
   @Override
-  public Stream<String> listCellType1Values(SignatureListingOptions signatureListingOptions) {
-    return this.dao.listCellType1Values(signatureListingOptions);
-  }
-
-  @Override
-  public Stream<String> listCellSubType1Values(SignatureListingOptions signatureListingOptions) {
-    return this.dao.listCellSubType1Values(signatureListingOptions);
-  }
-
-  @Override
-  public Stream<String> listCellType2Values(SignatureListingOptions signatureListingOptions) {
-    return this.dao.listCellType2Values(signatureListingOptions);
-  }
-
-  @Override
-  public Stream<String> listCellSubType2Values(SignatureListingOptions signatureListingOptions) {
-    return this.dao.listCellSubType2Values(signatureListingOptions);
-  }
-
-  @Override
   public Stream<ExperimentalDesign> listExperimentalDesignValues(SignatureListingOptions signatureListingOptions) {
     return this.dao.listExperimentalDesignValues(signatureListingOptions);
   }
