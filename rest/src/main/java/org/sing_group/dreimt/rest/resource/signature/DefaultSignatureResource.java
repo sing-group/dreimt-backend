@@ -140,6 +140,38 @@ public class DefaultSignatureResource implements SignatureResource {
 
     return Response.ok(data).build();
   }
+  
+  @Path("list/count")
+  @GET
+  @ApiOperation(
+    value = "Counts the signatures",
+    response = Integer.class,
+    code = 200
+  )
+  @Override
+  public Response count(
+    @QueryParam("signatureName") String signatureName,
+    @QueryParam("cellType1") String cellType1,
+    @QueryParam("cellSubType1") String cellSubType1,
+    @QueryParam("cellTypeOrSubType1") String cellTypeOrSubType1,
+    @QueryParam("cellType2") String cellType2,
+    @QueryParam("cellSubType2") String cellSubType2,
+    @QueryParam("cellTypeOrSubType2") String cellTypeOrSubType2,
+    @QueryParam("experimentalDesign") ExperimentalDesign experimentalDesign,
+    @QueryParam("organism") String organism,
+    @QueryParam("disease") String disease,
+    @QueryParam("signatureSourceDb") String signatureSourceDb,
+    @QueryParam("signatureType") SignatureType signatureType,
+    @QueryParam("signaturePubMedId") Integer signaturePubMedId
+  ) {
+    final SignatureListingOptions signatureListingOptions =
+      new SignatureListingOptions(
+        signatureName, cellType1, cellSubType1, cellTypeOrSubType1, cellType2, cellSubType2, cellTypeOrSubType2,
+        experimentalDesign, organism, disease, signatureSourceDb, signatureType, signaturePubMedId, null, null
+      );
+
+    return Response.ok(service.count(signatureListingOptions)).build();
+  }
 
   @GET
   @Path("{signatureName}/genes")

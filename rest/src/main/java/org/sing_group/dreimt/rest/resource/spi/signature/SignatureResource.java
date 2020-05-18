@@ -37,6 +37,12 @@ public interface SignatureResource {
     String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
     String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId
   );
+  
+  Response count(
+    String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,
+    String cellSubType2, String cellTypeOrSubType2, ExperimentalDesign experimentalDesign, String organism,
+    String disease, String signatureSourceDb, SignatureType signatureType, Integer signaturePubMedId
+  );
 
   Response getGenes(String signatureName, boolean onlyUniverseGenes);
 
