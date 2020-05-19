@@ -178,7 +178,7 @@ public class DefaultSignatureDao implements SignatureDao {
 
       Predicate[] predicates = createPredicates(listingOptions, geneFilterBuilder, root);
 
-      query = query.where(predicates);
+      query = query.where(predicates).distinct(true);
 
       ListingOptions generalListingOptions = listingOptions.getListingOptions();
 
