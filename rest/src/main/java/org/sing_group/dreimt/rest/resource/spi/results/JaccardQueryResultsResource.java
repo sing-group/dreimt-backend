@@ -27,6 +27,7 @@ import javax.ws.rs.core.Response;
 
 import org.sing_group.dreimt.domain.dao.SortDirection;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.GeneOverlapField;
+import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardComparisonType;
 
 @Local
 public interface JaccardQueryResultsResource {
@@ -34,6 +35,11 @@ public interface JaccardQueryResultsResource {
   Response jaccardQueryMetadata(String resultId);
 
   Response jaccardQueryGenes(String resultId, boolean onlyUniverseGenes);
+
+  Response jaccardIntersectionQueryGenes(
+    String resultId, String signatureName, 
+    JaccardComparisonType sourceComparisonType, JaccardComparisonType targetComparisonType
+  );
 
   Response jaccardQueryGeneOverlaps(
     String resultId, Double minJaccard, Double maxPvalue, Double maxFdr, Integer page, Integer pageSize,

@@ -22,6 +22,7 @@
  */
 package org.sing_group.dreimt.rest.resource.results;
 
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
@@ -48,6 +49,7 @@ import org.sing_group.dreimt.domain.dao.SortDirection;
 import org.sing_group.dreimt.domain.dao.execution.jaccard.GeneOverlapListingOptions;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.GeneOverlap;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.GeneOverlapField;
+import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardComparisonType;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult;
 import org.sing_group.dreimt.rest.entity.query.ListingOptionsData;
 import org.sing_group.dreimt.rest.entity.query.jaccard.GeneOverlapData;
@@ -138,10 +140,41 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
     );
   }
 
+  @GET
+  @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/genes/intersection/{signatureName}")
+  @Produces("text/plain")
+  @ApiOperation(
+    value = "Returns the query genes associated with the specified Jaccard result.",
+    response = String.class,
+    code = 200
+  )
+  @ApiResponses(
+    @ApiResponse(code = 400, message = "Unknown jaccard result: {id}")
+  )
+  @Override
+  public Response jaccardIntersectionQueryGenes(
+    @PathParam("id") String resultId,
+    @PathParam("signatureName") String signatureName,
+    @QueryParam("sourceComparisonType") JaccardComparisonType sourceComparisonType,
+    @QueryParam("targetComparisonType") JaccardComparisonType targetComparisonType 
+  ) {
+    if (sourceComparisonType == null || targetComparisonType == null) {
+      throw new IllegalArgumentException("sourceComparisonType and targetComparisonType are mandatory");
+    }
+
+    String result =
+      this.jaccardQueryService.jaccardIntersectionQueryGenes(
+        resultId, signatureName,
+        sourceComparisonType, targetComparisonType
+      ).stream().collect(joining("\n"));
+
+    return Response
+      .ok(result, APPLICATION_JSON)
+      .build();
+  }
+
   private Response jaccardQueryResult(String resultId, Function<JaccardResult, Object> resultMapper) {
-    JaccardResult jaccardResult =
-      jaccardQueryService.getResult(resultId)
-        .orElseThrow(() -> new IllegalArgumentException("Unknown jaccard result: " + resultId));
+    JaccardResult jaccardResult = getResult(resultId);
 
     return Response
       .ok(resultMapper.apply(jaccardResult), APPLICATION_JSON)
@@ -225,9 +258,7 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
     final GeneOverlapListingOptions geneOverlapListingOptions =
       new GeneOverlapListingOptions(listingOptionsMapper.toListingOptions(options), minJaccard, maxPvalue, maxFdr);
 
-    JaccardResult jaccardResult =
-      jaccardQueryService.getResult(resultId)
-        .orElseThrow(() -> new IllegalArgumentException("Unknown jaccard result: " + resultId));
+    JaccardResult jaccardResult = getResult(resultId);
 
     List<GeneOverlap> geneOverlaps =
       this.geneOverlapService
@@ -243,5 +274,10 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
     }
 
     return responseBuilder.build();
+  }
+  
+  private JaccardResult getResult(String resultId) {
+    return jaccardQueryService.getResult(resultId)
+      .orElseThrow(() -> new IllegalArgumentException("Unknown jaccard result: " + resultId));
   }
 }

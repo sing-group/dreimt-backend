@@ -27,6 +27,7 @@ import java.util.Set;
 
 import javax.ejb.Local;
 
+import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardComparisonType;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult;
 
 @Local
@@ -40,4 +41,9 @@ public interface JaccardQueryService {
   JaccardResult jaccardQuery(JaccardQueryOptions options);
 
   Optional<JaccardResult> getResult(String resultId);
+
+  Set<String> jaccardIntersectionQueryGenes(
+    String resultId, String signatureName,
+    JaccardComparisonType sourceComparisonType, JaccardComparisonType targetComparisonType
+  );
 }

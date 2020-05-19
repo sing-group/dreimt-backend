@@ -38,10 +38,16 @@ import javax.inject.Inject;
 import org.sing_group.dreimt.domain.dao.spi.execution.jaccard.JaccardGeneSetSignatureResultDao;
 import org.sing_group.dreimt.domain.dao.spi.execution.jaccard.JaccardResultDao;
 import org.sing_group.dreimt.domain.dao.spi.execution.jaccard.JaccardUpDownSignatureResultDao;
+import org.sing_group.dreimt.domain.dao.spi.signature.SignatureDao;
+import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardComparisonType;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardGeneSetSignatureResult;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardUpDownSignatureResult;
+import org.sing_group.dreimt.domain.entities.signature.GeneSetSignature;
 import org.sing_group.dreimt.domain.entities.signature.GeneSetType;
+import org.sing_group.dreimt.domain.entities.signature.Signature;
+import org.sing_group.dreimt.domain.entities.signature.SignatureType;
+import org.sing_group.dreimt.domain.entities.signature.UpDownSignature;
 import org.sing_group.dreimt.service.query.jaccard.event.DefaultJaccardComputationRequestEvent;
 import org.sing_group.dreimt.service.spi.query.GeneListsValidationService;
 import org.sing_group.dreimt.service.spi.query.jaccard.JaccardQueryOptions;
@@ -66,6 +72,9 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
 
   @Inject
   private JaccardUpDownSignatureResultDao jaccardUpDownSignatureDao;
+
+  @Inject
+  private SignatureDao signatureDao;
 
   @Override
   public boolean isValidGeneSet(Set<String> genes, boolean onlyUniverseGenes) {
@@ -181,5 +190,70 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
   @Override
   public Optional<JaccardResult> getResult(String resultId) {
     return this.jaccardResultDao.get(resultId);
+  }
+
+  @Override
+  public Set<String> jaccardIntersectionQueryGenes(
+    String resultId, String signatureName,
+    JaccardComparisonType sourceComparisonType, JaccardComparisonType targetComparisonType
+  ) {
+    JaccardResult jaccardResult =
+      this.getResult(resultId).orElseThrow(() -> new IllegalArgumentException("Unknown jaccard result: " + resultId));
+
+    boolean onlyUniverseGenes = jaccardResult.isOnlyUniverseGenes();
+
+    Signature signature =
+      this.signatureDao.get(signatureName).orElseThrow(() -> new IllegalArgumentException("Unknown signature: " + signatureName));
+
+    Set<String> sourceComparisonGenes = null;
+    Set<String> targetComparisonGenes = null;
+
+    if (jaccardResult instanceof JaccardGeneSetSignatureResult) {
+      if (sourceComparisonType.equals(JaccardComparisonType.GENESET)) {
+        sourceComparisonGenes = ((JaccardGeneSetSignatureResult) jaccardResult).getGenes(onlyUniverseGenes);
+      } else {
+        throw new IllegalArgumentException(
+          "The sourceComparisonType for a JaccardGeneSetSignatureResult must be " + JaccardComparisonType.GENESET
+        );
+      }
+    } else if (jaccardResult instanceof JaccardUpDownSignatureResult) {
+      if (sourceComparisonType.equals(JaccardComparisonType.GENESET)) {
+        throw new IllegalArgumentException(
+          "The sourceComparisonType for an JaccardUpDownSignatureResult must be " + JaccardComparisonType.SIGNATURE_UP
+            + " or " + JaccardComparisonType.SIGNATURE_DOWN
+        );
+      } else if (sourceComparisonType.equals(JaccardComparisonType.SIGNATURE_UP)) {
+        sourceComparisonGenes = ((JaccardUpDownSignatureResult) jaccardResult).getUpGenes(onlyUniverseGenes);
+      } else {
+        sourceComparisonGenes = ((JaccardUpDownSignatureResult) jaccardResult).getDownGenes(onlyUniverseGenes);
+      }
+    } else {
+      throw new IllegalArgumentException("Unknown JaccardResult type");
+    }
+
+    if (signature.getSignatureType().equals(SignatureType.GENESET)) {
+      if (targetComparisonType.equals(JaccardComparisonType.GENESET)) {
+        targetComparisonGenes = ((GeneSetSignature) signature).getSignatureGenes(onlyUniverseGenes);
+      } else {
+        throw new IllegalArgumentException(
+          "The targetComparisonType for a GeneSetSignature must be " + JaccardComparisonType.GENESET
+        );
+      }
+    } else {
+      if (targetComparisonType.equals(JaccardComparisonType.GENESET)) {
+        throw new IllegalArgumentException(
+          "The targetComparisonType for an UpDownSignature must be " + JaccardComparisonType.SIGNATURE_UP + " or "
+            + JaccardComparisonType.SIGNATURE_DOWN
+        );
+      } else if (targetComparisonType.equals(JaccardComparisonType.SIGNATURE_UP)) {
+        targetComparisonGenes = ((UpDownSignature) signature).getUpGenes(onlyUniverseGenes);
+      } else {
+        targetComparisonGenes = ((UpDownSignature) signature).getDownGenes(onlyUniverseGenes);
+      }
+    }
+
+    sourceComparisonGenes.retainAll(targetComparisonGenes);
+
+    return sourceComparisonGenes;
   }
 }

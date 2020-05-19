@@ -1260,7 +1260,8 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         jaccardQueryParameters.getCellTypeOrSubType1(), jaccardQueryParameters.getCellType2(),
         jaccardQueryParameters.getCellSubType2(), jaccardQueryParameters.getCellTypeOrSubType2(),
         jaccardQueryParameters.getExperimentalDesign(), jaccardQueryParameters.getOrganism(),
-        jaccardQueryParameters.getDisease(), jaccardQueryParameters.getSignatureSourceDb(), null, null, null, null
+        jaccardQueryParameters.getDisease(), jaccardQueryParameters.getSignatureSourceDb(),
+        null, null, null, null
       );
 
     JaccardQueryOptions options =
