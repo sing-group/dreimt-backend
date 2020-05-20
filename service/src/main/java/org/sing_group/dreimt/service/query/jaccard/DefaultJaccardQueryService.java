@@ -22,19 +22,25 @@
  */
 package org.sing_group.dreimt.service.query.jaccard;
 
+import static org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult.getInputGenes;
 import static org.sing_group.dreimt.domain.entities.signature.GeneSetType.DOWN;
 import static org.sing_group.dreimt.domain.entities.signature.GeneSetType.UP;
 import static org.sing_group.dreimt.service.spi.query.GeneListsValidationService.MAXIMUM_GENESET_SIZE;
 import static org.sing_group.dreimt.service.spi.query.GeneListsValidationService.MINIMUM_GENESET_SIZE;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 
+import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
 import org.sing_group.dreimt.domain.dao.spi.execution.jaccard.JaccardGeneSetSignatureResultDao;
 import org.sing_group.dreimt.domain.dao.spi.execution.jaccard.JaccardResultDao;
 import org.sing_group.dreimt.domain.dao.spi.execution.jaccard.JaccardUpDownSignatureResultDao;
@@ -48,8 +54,11 @@ import org.sing_group.dreimt.domain.entities.signature.GeneSetType;
 import org.sing_group.dreimt.domain.entities.signature.Signature;
 import org.sing_group.dreimt.domain.entities.signature.SignatureType;
 import org.sing_group.dreimt.domain.entities.signature.UpDownSignature;
+import org.sing_group.dreimt.service.query.DefaultValueDistribution;
+import org.sing_group.dreimt.service.query.DefaultValuesDistribution;
 import org.sing_group.dreimt.service.query.jaccard.event.DefaultJaccardComputationRequestEvent;
 import org.sing_group.dreimt.service.spi.query.GeneListsValidationService;
+import org.sing_group.dreimt.service.spi.query.ValuesDistribution;
 import org.sing_group.dreimt.service.spi.query.jaccard.JaccardQueryOptions;
 import org.sing_group.dreimt.service.spi.query.jaccard.JaccardQueryService;
 import org.sing_group.dreimt.service.spi.query.jaccard.JaccardServiceConfiguration;
@@ -255,5 +264,49 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
     sourceComparisonGenes.retainAll(targetComparisonGenes);
 
     return sourceComparisonGenes;
+  }
+
+  @Override
+  public ValuesDistribution cellTypeAndSubTypeDistribution(String resultId) {
+    JaccardResult jaccardResult =
+      this.getResult(resultId).orElseThrow(() -> new IllegalArgumentException("Unknown jaccard result: " + resultId));
+
+    Set<String> inputGenes = getInputGenes(jaccardResult);
+
+    SignatureListingOptions signatureListingOptions =
+      new SignatureListingOptions(
+        null, jaccardResult.getCellType1(), jaccardResult.getCellSubType1(),
+        jaccardResult.getCellTypeOrSubType1(), jaccardResult.getCellType2(),
+        jaccardResult.getCellSubType2(), jaccardResult.getCellTypeOrSubType2(),
+        jaccardResult.getExperimentalDesign(), jaccardResult.getOrganism(),
+        jaccardResult.getDisease(), jaccardResult.getSignatureSourceDb(),
+        null, null, null, null
+      );
+
+    Stream<Signature> signatures =
+      this.signatureDao.list(signatureListingOptions.withMandatoryGenes(inputGenes));
+
+    Map<String, Integer> cellType = new HashMap<String, Integer>();
+    Map<String, Integer> cellSubType = new HashMap<String, Integer>();
+    signatures.forEach(s -> {
+      Set<String> cellTypes = new HashSet<>(s.getCellTypeA());
+      cellTypes.addAll(s.getCellTypeB());
+
+      Set<String> cellSubTypes = new HashSet<>(s.getCellSubTypeA());
+      cellSubTypes.addAll(s.getCellSubTypeB());
+
+      cellTypes.forEach(cT -> {
+        cellType.put(cT, cellType.getOrDefault(cT, 0) + 1);
+      });
+      cellSubTypes.forEach(cST -> {
+        cellSubType.put(cST, cellSubType.getOrDefault(cST, 0) + 1);
+      });
+    });
+
+    ValuesDistribution distributions = new DefaultValuesDistribution();
+    distributions.addDistribution(new DefaultValueDistribution("cellType", cellType));
+    distributions.addDistribution(new DefaultValueDistribution("cellSubType", cellSubType));
+
+    return distributions;
   }
 }

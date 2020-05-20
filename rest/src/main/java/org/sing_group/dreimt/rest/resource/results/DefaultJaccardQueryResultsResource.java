@@ -27,6 +27,7 @@ import static java.util.stream.Collectors.toList;
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -57,9 +58,11 @@ import org.sing_group.dreimt.rest.entity.query.jaccard.JaccardQueryMetadataData;
 import org.sing_group.dreimt.rest.entity.signature.UpDownSignatureGeneData;
 import org.sing_group.dreimt.rest.filter.CrossDomain;
 import org.sing_group.dreimt.rest.mapper.spi.query.ListingOptionsMapper;
+import org.sing_group.dreimt.rest.mapper.spi.query.ValuesDistributionMapper;
 import org.sing_group.dreimt.rest.mapper.spi.query.jaccard.JaccardQueryResultsMapper;
 import org.sing_group.dreimt.rest.resource.spi.results.JaccardQueryResultsResource;
 import org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.GeneOverlapService;
+import org.sing_group.dreimt.service.spi.query.ValuesDistribution;
 import org.sing_group.dreimt.service.spi.query.jaccard.JaccardQueryService;
 
 import io.swagger.annotations.Api;
@@ -88,6 +91,9 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
   
   @Inject
   private ListingOptionsMapper listingOptionsMapper;
+  
+  @Inject
+  private ValuesDistributionMapper valuesDistributionMapper;
 
   @Context
   private UriInfo uriInfo;
@@ -178,6 +184,28 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
 
     return Response
       .ok(resultMapper.apply(jaccardResult), APPLICATION_JSON)
+      .build();
+  }
+
+  @GET
+  @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/distribution/cell-type-and-subtype")
+  @Produces(APPLICATION_JSON)
+  @ApiOperation(
+    value = "Returns the distribution of the cell type and the cell subtype values in the signatures associated to the specified Jaccard result.",
+    response = Map.class,
+    code = 200
+  )
+  @ApiResponses(
+    @ApiResponse(code = 400, message = "Unknown jaccard result: {id}")
+  )
+  @Override
+  public Response cellTypeAndSubTypeDistribution(
+    @PathParam("id") String resultId
+  ) {
+    ValuesDistribution cellTypeDistribution = this.jaccardQueryService.cellTypeAndSubTypeDistribution(resultId);
+
+    return Response
+      .ok(valuesDistributionMapper.toMap(cellTypeDistribution), APPLICATION_JSON)
       .build();
   }
 

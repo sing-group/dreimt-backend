@@ -136,7 +136,8 @@
 		<swagger.version>1.5.16</swagger.version>
 		<wildfly.arquillian.container.version>2.1.0.Final</wildfly.arquillian.container.version>
 		<wildfly.version>10.1.0.Final</wildfly.version>
-        <sing.math.version>0.1.1</sing.math.version>
+		<sing.math.version>0.1.1</sing.math.version>
+		<apache.commons-math3.version>3.6.1</apache.commons-math3.version>
 
 		<!-- Resteasy specific version required, as it fixes ResourceInfo injection bug -->
 		<resteasy.version>3.0.24.Final</resteasy.version>
@@ -239,6 +240,11 @@
 				<groupId>es.uvigo.ei.sing</groupId>
 				<artifactId>math</artifactId>
 				<version>${sing.math.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.commons</groupId>
+				<artifactId>commons-math3</artifactId>
+				<version>${apache.commons-math3.version}</version>
 			</dependency>
 
 			<!-- Testing -->

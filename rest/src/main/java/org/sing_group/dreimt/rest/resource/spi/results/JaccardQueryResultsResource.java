@@ -37,9 +37,11 @@ public interface JaccardQueryResultsResource {
   Response jaccardQueryGenes(String resultId, boolean onlyUniverseGenes);
 
   Response jaccardIntersectionQueryGenes(
-    String resultId, String signatureName, 
+    String resultId, String signatureName,
     JaccardComparisonType sourceComparisonType, JaccardComparisonType targetComparisonType
   );
+
+  Response cellTypeAndSubTypeDistribution(String resultId);
 
   Response jaccardQueryGeneOverlaps(
     String resultId, Double minJaccard, Double maxPvalue, Double maxFdr, Integer page, Integer pageSize,

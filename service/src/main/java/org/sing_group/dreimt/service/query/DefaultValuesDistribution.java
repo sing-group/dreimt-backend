@@ -2,7 +2,7 @@
  * #%L
  * DREIMT - Service
  * %%
- * Copyright (C) 2018 Daniel Glez-Peña, Miguel Reboiro-Jato, Hugo López-Fernández,
+ * Copyright (C) 2018 - 2020 Daniel Glez-Peña, Miguel Reboiro-Jato, Hugo López-Fernández,
  * 			Kevin Troulé, Gonzálo Gómez-López, Fátima Al-Shahrour
  * %%
  * This program is free software: you can redistribute it and/or modify
@@ -20,33 +20,34 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.service.spi.query.jaccard;
+package org.sing_group.dreimt.service.query;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.ejb.Local;
-
-import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardComparisonType;
-import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult;
+import org.sing_group.dreimt.service.spi.query.ValueDistribution;
 import org.sing_group.dreimt.service.spi.query.ValuesDistribution;
 
-@Local
-public interface JaccardQueryService {
-  boolean isValidGeneSet(Set<String> genes, boolean onlyUniverseGenes);
+public class DefaultValuesDistribution implements ValuesDistribution {
 
-  int getMinimumGeneSetSize();
+  private Map<String, ValueDistribution> map = new HashMap<>();
 
-  int getMaximumGeneSetSize();
+  public DefaultValuesDistribution() {}
 
-  JaccardResult jaccardQuery(JaccardQueryOptions options);
+  @Override
+  public void addDistribution(ValueDistribution distribution) {
+    this.map.put(distribution.getValueName(), distribution);
+  }
 
-  Optional<JaccardResult> getResult(String resultId);
+  @Override
+  public Optional<ValueDistribution> getDistribution(String valueName) {
+    return Optional.ofNullable(this.map.get(valueName));
+  }
 
-  Set<String> jaccardIntersectionQueryGenes(
-    String resultId, String signatureName,
-    JaccardComparisonType sourceComparisonType, JaccardComparisonType targetComparisonType
-  );
-
-  ValuesDistribution cellTypeAndSubTypeDistribution(String resultId);
+  @Override
+  public Set<String> getValueNames() {
+    return this.map.keySet();
+  }
 }

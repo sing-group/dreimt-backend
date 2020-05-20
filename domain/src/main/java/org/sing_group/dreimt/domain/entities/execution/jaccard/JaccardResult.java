@@ -24,6 +24,7 @@ package org.sing_group.dreimt.domain.entities.execution.jaccard;
 
 import static java.util.stream.Collectors.toSet;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -217,5 +218,21 @@ public abstract class JaccardResult extends WorkEntity {
       .filter((g -> !onlyUniverseGenes || g.isUniverseGene()))
       .map(Gene::getGene)
       .collect(toSet());
+  }
+
+  public static Set<String> getInputGenes(JaccardResult jaccardResult) {
+    Set<String> inputGenes = new HashSet<>();
+    boolean onlyUniverseGenes = jaccardResult.isOnlyUniverseGenes();
+
+    if (jaccardResult instanceof JaccardUpDownSignatureResult) {
+      JaccardUpDownSignatureResult result = (JaccardUpDownSignatureResult) jaccardResult;
+      inputGenes.addAll(result.getUpGenes(onlyUniverseGenes));
+      inputGenes.addAll(result.getDownGenes(onlyUniverseGenes));
+    } else if (jaccardResult instanceof JaccardGeneSetSignatureResult) {
+      JaccardGeneSetSignatureResult result = (JaccardGeneSetSignatureResult) jaccardResult;
+      inputGenes.addAll(result.getGenes(onlyUniverseGenes));
+    }
+
+    return inputGenes;
   }
 }

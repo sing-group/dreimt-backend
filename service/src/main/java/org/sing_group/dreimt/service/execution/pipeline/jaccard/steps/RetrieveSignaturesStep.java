@@ -25,9 +25,9 @@ package org.sing_group.dreimt.service.execution.pipeline.jaccard.steps;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toSet;
 import static javax.transaction.Transactional.TxType.REQUIRED;
+import static org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult.getInputGenes;
 import static org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.JaccardPipeline.SINGLE_RETRIEVE_SIGNATURES_STEP_ID;
 
-import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -37,9 +37,7 @@ import javax.transaction.Transactional;
 
 import org.sing_group.dreimt.domain.dao.spi.execution.jaccard.JaccardResultDao;
 import org.sing_group.dreimt.domain.dao.spi.signature.SignatureDao;
-import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardGeneSetSignatureResult;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult;
-import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardUpDownSignatureResult;
 import org.sing_group.dreimt.domain.entities.signature.Signature;
 import org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.JaccardPipelineContext;
 import org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.JaccardPipelineContextBuilder;
@@ -111,20 +109,5 @@ public class RetrieveSignaturesStep implements SingleJaccardPipelineStep {
     final JaccardPipelineContextBuilder builder = this.jaccardPipelineContextBuilderFactory.createBuilderFor(context);
 
     return builder.addTargetSignatureIds(targetSignatureIds).build();
-  }
-
-  private Set<String> getInputGenes(JaccardResult jaccardResult) {
-    Set<String> inputGenes = new HashSet<>();
-    boolean onlyUniverseGenes = jaccardResult.isOnlyUniverseGenes();
-    if (jaccardResult instanceof JaccardUpDownSignatureResult) {
-      JaccardUpDownSignatureResult result = (JaccardUpDownSignatureResult) jaccardResult;
-      inputGenes.addAll(result.getUpGenes(onlyUniverseGenes));
-      inputGenes.addAll(result.getDownGenes(onlyUniverseGenes));
-    } else if (jaccardResult instanceof JaccardGeneSetSignatureResult) {
-      JaccardGeneSetSignatureResult result = (JaccardGeneSetSignatureResult) jaccardResult;
-      inputGenes.addAll(result.getGenes(onlyUniverseGenes));
-    }
-
-    return inputGenes;
   }
 }
