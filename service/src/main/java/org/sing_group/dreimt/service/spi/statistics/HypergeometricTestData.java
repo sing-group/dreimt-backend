@@ -22,12 +22,15 @@
  */
 package org.sing_group.dreimt.service.spi.statistics;
 
+import org.sing_group.dreimt.service.statistics.OddsRatio;
+
 public class HypergeometricTestData {
   private String name;
   private int populationSize;
   private int populationSuccess;
   private int sampleSize;
   private int sampleSuccess;
+  private OddsRatio oddsRatio;
 
   public HypergeometricTestData() {}
 
@@ -59,5 +62,16 @@ public class HypergeometricTestData {
 
   public int getSampleSuccess() {
     return sampleSuccess;
+  }
+
+  public double getOddsRatio() {
+    if (this.oddsRatio == null) {
+      this.oddsRatio =
+        new OddsRatio(
+          this.sampleSuccess, this.sampleSize - this.sampleSuccess, this.populationSuccess - this.sampleSuccess,
+          this.populationSize - this.sampleSize - this.populationSuccess + this.sampleSuccess
+        );
+    }
+    return this.oddsRatio.get();
   }
 }

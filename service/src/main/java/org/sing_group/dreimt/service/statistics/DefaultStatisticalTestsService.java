@@ -25,6 +25,8 @@ package org.sing_group.dreimt.service.statistics;
 import static java.util.stream.Collectors.toList;
 
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
@@ -34,29 +36,38 @@ import org.sing_group.dreimt.service.spi.statistics.HypergeometricTestData;
 import org.sing_group.dreimt.service.spi.statistics.HypergeometricTestDataResult;
 import org.sing_group.dreimt.service.spi.statistics.StatisticalTestsService;
 
+import es.uvigo.ei.sing.math.statistical.StatisticsTestsUtils;
+import es.uvigo.ei.sing.math.statistical.corrections.FDRCorrection;
+
 @Stateless
 @PermitAll
 public class DefaultStatisticalTestsService implements StatisticalTestsService {
 
   @Override
   public double hypergeometricTest(int populationSize, int numberOfSuccesses, int sampleSize, int successes) {
-    
     return new HypergeometricDistribution(populationSize, numberOfSuccesses, sampleSize)
       .upperCumulativeProbability(successes);
   }
 
   @Override
   public List<HypergeometricTestDataResult> hypergeometricTest(List<HypergeometricTestData> data) {
-    return data
-      .stream()
-      .map(
+    Map<HypergeometricTestData, Double> pValuesMap = data.stream().collect(Collectors.toMap(d -> d, d -> {
+      return this.hypergeometricTest(
+        d.getPopulationSize(), d.getPopulationSuccess(), d.getSampleSize(), d.getSampleSuccess()
+      );
+    }));
+
+    try {
+      Map<HypergeometricTestData, Double> qValuesMap = StatisticsTestsUtils.correct(new FDRCorrection(), pValuesMap);
+      return qValuesMap.keySet().stream().map(
         d -> new HypergeometricTestDataResult(
-          d.getName(), d.getPopulationSize(), d.getPopulationSuccess(), d.getSampleSize(), d.getSampleSuccess(),
-          this.hypergeometricTest(
-            d.getPopulationSize(), d.getPopulationSuccess(), d.getSampleSize(), d.getSampleSuccess()
-          )
+          d.getName(), d.getPopulationSize(), d.getPopulationSuccess(),
+          d.getSampleSize(), d.getSampleSuccess(), pValuesMap.get(d), qValuesMap.get(d)
         )
       )
-      .collect(toList());
+        .collect(toList());
+    } catch (InterruptedException e) {
+      throw new RuntimeException("An error ocurred while calculating FDR correction");
+    }
   }
 }

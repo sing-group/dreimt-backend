@@ -20,28 +20,24 @@
  * <http://www.gnu.org/licenses/gpl-3.0.html>.
  * #L%
  */
-package org.sing_group.dreimt.service.spi.statistics;
+package org.sing_group.dreimt.service.statistics;
 
-public class HypergeometricTestDataResult extends HypergeometricTestData {
+public class OddsRatio {
+  private static final double MIN = 0.0000000000000000001d;
 
-  private double pValue;
-  private double qValue;
+  private double a;
+  private double b;
+  private double c;
+  private double d;
 
-  public HypergeometricTestDataResult(
-    String name, int populationSize, int populationSuccess, int sampleSize, int sampleSuccess, double pValue,
-    double qValue
-  ) {
-    super(name, populationSize, populationSuccess, sampleSize, sampleSuccess);
-
-    this.pValue = pValue;
-    this.qValue = qValue;
+  public OddsRatio(int a, int b, int c, int d) {
+    this.a = a == 0 ? MIN : a;
+    this.b = b == 0 ? MIN : b;
+    this.c = c == 0 ? MIN : c;
+    this.d = d == 0 ? MIN : d;
   }
 
-  public double getPvalue() {
-    return this.pValue;
-  }
-
-  public double getQvalue() {
-    return this.qValue;
+  public double get() {
+    return (a * d) / (b * c);
   }
 }

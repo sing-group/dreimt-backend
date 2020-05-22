@@ -34,7 +34,7 @@ import javax.ws.rs.core.Response;
 
 import org.sing_group.dreimt.rest.filter.CrossDomain;
 import org.sing_group.dreimt.rest.resource.spi.statistics.StatisticalTestsResource;
-import org.sing_group.dreimt.service.spi.statistics.HypergeometricTestData;
+import org.sing_group.dreimt.service.spi.statistics.HypergeometricTestDataResult;
 import org.sing_group.dreimt.service.spi.statistics.StatisticalTestsService;
 
 import io.swagger.annotations.Api;
@@ -63,7 +63,7 @@ public class DefaultStatisticalTestsResource implements StatisticalTestsResource
   @Consumes(APPLICATION_JSON)
   @ApiOperation(
     value = "Returns the p-value of the corresponding hypergeometric test.",
-    response = HypergeometricTestData.class,
+    response = HypergeometricTestDataResult.class,
     responseContainer = "list",
     code = 200
   )
