@@ -25,7 +25,6 @@ package org.sing_group.dreimt.service.execution.pipeline.jaccard.steps;
 import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.toSet;
 import static javax.transaction.Transactional.TxType.REQUIRED;
-import static org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult.getInputGenes;
 import static org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.JaccardPipeline.SINGLE_RETRIEVE_SIGNATURES_STEP_ID;
 
 import java.util.Set;
@@ -35,9 +34,7 @@ import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 
-import org.sing_group.dreimt.domain.dao.spi.execution.jaccard.JaccardResultDao;
 import org.sing_group.dreimt.domain.dao.spi.signature.SignatureDao;
-import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult;
 import org.sing_group.dreimt.domain.entities.signature.Signature;
 import org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.JaccardPipelineContext;
 import org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.JaccardPipelineContextBuilder;
@@ -47,18 +44,12 @@ import org.sing_group.dreimt.service.spi.execution.pipeline.jaccard.SingleJaccar
 @Default
 public class RetrieveSignaturesStep implements SingleJaccardPipelineStep {
 
-  private JaccardResultDao jaccardResultDao;
   private SignatureDao signatureDao;
   private JaccardPipelineContextBuilderFactory jaccardPipelineContextBuilderFactory;
 
   @Inject
   public void setSignatureDao(SignatureDao signatureDao) {
     this.signatureDao = requireNonNull(signatureDao);
-  }
-
-  @Inject
-  public void setJaccardResultDao(JaccardResultDao jaccardResultDao) {
-    this.jaccardResultDao = requireNonNull(jaccardResultDao);
   }
 
   @Inject
@@ -91,18 +82,7 @@ public class RetrieveSignaturesStep implements SingleJaccardPipelineStep {
   @Transactional(REQUIRED)
   @Override
   public JaccardPipelineContext execute(JaccardPipelineContext context) {
-    JaccardResult jaccardResult =
-      this.jaccardResultDao.get(context.getConfiguration().getResultId())
-        .orElseThrow(
-          () -> new RuntimeException(
-            "Jaccard Result must be created before this step. ID not found: " + context.getConfiguration().getResultId()
-          )
-        );
-
-    Set<String> inputGenes = getInputGenes(jaccardResult);
-
-    Stream<Signature> signatures =
-      this.signatureDao.list(context.getConfiguration().getSignatureListingOptions().withMandatoryGenes(inputGenes));
+    Stream<Signature> signatures = this.signatureDao.list(context.getConfiguration().getSignatureListingOptions());
 
     Set<String> targetSignatureIds = signatures.map(Signature::getSignatureName).collect(toSet());
 

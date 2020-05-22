@@ -22,7 +22,6 @@
  */
 package org.sing_group.dreimt.service.query.jaccard;
 
-import static org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult.getInputGenes;
 import static org.sing_group.dreimt.domain.entities.signature.GeneSetType.DOWN;
 import static org.sing_group.dreimt.domain.entities.signature.GeneSetType.UP;
 import static org.sing_group.dreimt.service.spi.query.GeneListsValidationService.MAXIMUM_GENESET_SIZE;
@@ -271,8 +270,6 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
     JaccardResult jaccardResult =
       this.getResult(resultId).orElseThrow(() -> new IllegalArgumentException("Unknown jaccard result: " + resultId));
 
-    Set<String> inputGenes = getInputGenes(jaccardResult);
-
     SignatureListingOptions signatureListingOptions =
       new SignatureListingOptions(
         null, jaccardResult.getCellType1(), jaccardResult.getCellSubType1(),
@@ -283,8 +280,7 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
         null, null, null, null
       );
 
-    Stream<Signature> signatures =
-      this.signatureDao.list(signatureListingOptions.withMandatoryGenes(inputGenes));
+    Stream<Signature> signatures = this.signatureDao.list(signatureListingOptions);
 
     Map<String, Integer> cellType = new HashMap<String, Integer>();
     Map<String, Integer> cellSubType = new HashMap<String, Integer>();
