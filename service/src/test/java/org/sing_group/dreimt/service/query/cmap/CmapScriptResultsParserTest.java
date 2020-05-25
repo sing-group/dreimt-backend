@@ -46,13 +46,13 @@ public class CmapScriptResultsParserTest {
     assertEquals(20, results.size());
 
     CmapResultData firstResult = results.get(0);
-    assertEquals(firstResult.getDrugId(), 1786);
-    assertEquals(firstResult.getTau(), -98.6500443740867d, 0.0d);
-    assertEquals(firstResult.getUpFdr(), 0.003584229390681d, 0.0d);
+    assertEquals(firstResult.getDrugId(), 1020);
+    assertEquals(firstResult.getTau(), -99.9627074398657d, 0.0d);
+    assertEquals(firstResult.getUpFdr(), 0.00203252032520325d, 0.0d);
     assertFalse(firstResult.getDownFdr().isPresent());
-    assertEquals(firstResult.getDrugCommonName(), "RS-I-002-6");
+    assertEquals(firstResult.getDrugCommonName(), "genipin");
     assertEquals(firstResult.getDrugSourceDb(), "LINCS");
-    assertEquals(firstResult.getDrugSourceName(), "BRD-K66254772");
+    assertEquals(firstResult.getDrugSourceName(), "BRD-A04308630");
   }
 
   @Test
@@ -62,12 +62,12 @@ public class CmapScriptResultsParserTest {
     assertEquals(30, results.size());
 
     CmapResultData firstResult = results.get(0);
-    assertEquals(firstResult.getDrugId(), 170);
-    assertEquals(firstResult.getTau(), -94.895673575563d, 0.0d);
-    assertEquals(firstResult.getUpFdr(), 0.00324675324675325d, 0.0d);
-    assertEquals(firstResult.getDownFdr().get().doubleValue(), 0.00714285714285714d, 0.0d);
-    assertEquals(firstResult.getDrugCommonName(), "elesclomol");
+    assertEquals(firstResult.getDrugId(), 1017);
+    assertEquals(firstResult.getTau(), 99.9252895031752d, 0.0d);
+    assertEquals(firstResult.getUpFdr(), 0.00189035916824197d, 0.0d);
+    assertEquals(firstResult.getDownFdr().get().doubleValue(), 0.0748299319727891d, 0.0d);
+    assertEquals(firstResult.getDrugCommonName(), "nicotine");
     assertEquals(firstResult.getDrugSourceDb(), "LINCS");
-    assertEquals(firstResult.getDrugSourceName(), "BRD-K82135108");
+    assertEquals(firstResult.getDrugSourceName(), "BRD-K05395900");
   }
 }

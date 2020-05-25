@@ -42,7 +42,7 @@ public class CmapScriptResultsParser {
     
   private static CmapResultData mapGeneSetResultsLine(String line) {
     String[] fields = line.split("\t");
-    if (fields.length == 15) {
+    if (fields.length == 17) {
       int drugId = Integer.valueOf(fields[0].replaceAll("\"", "").replaceAll("sig_", ""));
       double upFdr = Double.valueOf(fields[2]);
       double tau = Double.valueOf(fields[5]);
@@ -68,7 +68,7 @@ public class CmapScriptResultsParser {
 
   private static CmapResultData mapSignatureResultsLine(String line) {
     String[] fields = line.split("\t");
-    if (fields.length == 18) {
+    if (fields.length == 20) {
       int drugId = Integer.valueOf(fields[0].replaceAll("\"", "").replaceAll("sig_", ""));
       double upFdr = Double.valueOf(fields[2]);
       double downFdr = Double.valueOf(fields[5]);
