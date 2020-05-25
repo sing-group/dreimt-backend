@@ -26,22 +26,22 @@ import java.util.List;
 
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapDrugGeneSetSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapGeneSetSignatureResult;
-import org.sing_group.dreimt.rest.entity.query.cmap.CmapGeneSetSignatureDrugInteractionData;
-import org.sing_group.dreimt.rest.entity.query.cmap.CmapQueryGeneSetSignatureMetadataData;
+import org.sing_group.dreimt.rest.entity.query.cmap.DrugPrioritizationGeneSetSignatureDrugInteractionData;
+import org.sing_group.dreimt.rest.entity.query.cmap.DrugPrioritizationQueryGeneSetSignatureMetadataData;
 import org.sing_group.dreimt.rest.entity.signature.GeneSetSignatureGeneData;
 
 public interface CmapQueryGeneSetSignatureResultsMapper {
 
-  CmapQueryGeneSetSignatureMetadataData toCmapQueryMetadataData(CmapGeneSetSignatureResult cmapResult);
+  DrugPrioritizationQueryGeneSetSignatureMetadataData toCmapQueryMetadataData(CmapGeneSetSignatureResult cmapResult);
 
   GeneSetSignatureGeneData toGeneData(CmapGeneSetSignatureResult cmapResult, boolean onlyUniverseGenes);
 
-  CmapGeneSetSignatureDrugInteractionData[] toCmapDrugInteractionData(
+  DrugPrioritizationGeneSetSignatureDrugInteractionData[] toDrugPrioritizationDrugInteractionData(
     CmapGeneSetSignatureResult result, List<CmapDrugGeneSetSignatureInteraction> cmapDrugInteractions,
     boolean includeSummary
   );
 
-  String toCmapDrugInteractionCsvData(
+  String toDrugPrioritizationDrugInteractionCsvData(
     CmapGeneSetSignatureResult result, List<CmapDrugGeneSetSignatureInteraction> cmapDrugInteractions
   );
 }

@@ -54,7 +54,7 @@ import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardComparison
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult;
 import org.sing_group.dreimt.rest.entity.query.ListingOptionsData;
 import org.sing_group.dreimt.rest.entity.query.jaccard.GeneOverlapData;
-import org.sing_group.dreimt.rest.entity.query.jaccard.JaccardQueryMetadataData;
+import org.sing_group.dreimt.rest.entity.query.jaccard.SignaturesComparisonQueryMetadataData;
 import org.sing_group.dreimt.rest.entity.signature.UpDownSignatureGeneData;
 import org.sing_group.dreimt.rest.filter.CrossDomain;
 import org.sing_group.dreimt.rest.mapper.spi.query.ListingOptionsMapper;
@@ -70,11 +70,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Path("results/jaccard/")
+@Path("results/signatures-comparison/")
 @Produces({APPLICATION_JSON, "text/csv"})
 @Stateless
 @CrossDomain(allowedHeaders = "X-Count")
-@Api("results/jaccard/")
+@Api("results")
 @ApiResponses({
   @ApiResponse(code = 200, message = "successful operation")
 })
@@ -109,18 +109,18 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
   @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}")
   @Produces(APPLICATION_JSON)
   @ApiOperation(
-    value = "Returns the metadata associated with the specified Jaccard result.",
-    response = JaccardQueryMetadataData.class,
+    value = "Returns the metadata associated with the specified signatures comparison result.",
+    response = SignaturesComparisonQueryMetadataData.class,
     code = 200
   )
   @ApiResponses(
-    @ApiResponse(code = 400, message = "Unknown jaccard result: {id}")
+    @ApiResponse(code = 400, message = "Unknown signatures comparison result: {id}")
   )
   @Override
   public Response jaccardQueryMetadata(@PathParam("id") String resultId) {
     return this.jaccardQueryResult(
       resultId,
-      this.mapper::toJaccardQueryMetadataData
+      this.mapper::toSignaturesComparisonQueryMetadataData
     );
   }
 
@@ -128,12 +128,12 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
   @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/genes")
   @Produces(APPLICATION_JSON)
   @ApiOperation(
-    value = "Returns the query genes associated with the specified Jaccard result.",
+    value = "Returns the query genes associated with the specified signatures comparison result.",
     response = UpDownSignatureGeneData.class,
     code = 200
   )
   @ApiResponses(
-    @ApiResponse(code = 400, message = "Unknown jaccard result: {id}")
+    @ApiResponse(code = 400, message = "Unknown signatures comparison result: {id}")
   )
   @Override
   public Response jaccardQueryGenes(
@@ -150,12 +150,12 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
   @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/genes/intersection/{signatureName}")
   @Produces("text/plain")
   @ApiOperation(
-    value = "Returns the query genes associated with the specified Jaccard result.",
+    value = "Returns the intersection between the query genes and the specified signature associated with the specified signatures comparison result.",
     response = String.class,
     code = 200
   )
   @ApiResponses(
-    @ApiResponse(code = 400, message = "Unknown jaccard result: {id}")
+    @ApiResponse(code = 400, message = "Unknown signatures comparison result: {id}")
   )
   @Override
   public Response jaccardIntersectionQueryGenes(
@@ -191,12 +191,12 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
   @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/distribution/cell-type-and-subtype")
   @Produces(APPLICATION_JSON)
   @ApiOperation(
-    value = "Returns the distribution of the cell type and the cell subtype values in the signatures associated to the specified Jaccard result.",
+    value = "Returns the distribution of the cell type and the cell subtype values in the signatures associated to the specified signatures comparison result.",
     response = Map.class,
     code = 200
   )
   @ApiResponses(
-    @ApiResponse(code = 400, message = "Unknown jaccard result: {id}")
+    @ApiResponse(code = 400, message = "Unknown signatures comparison result: {id}")
   )
   @Override
   public Response cellTypeAndSubTypeDistribution(
@@ -213,13 +213,13 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
   @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/overlaps")
   @Produces(APPLICATION_JSON)
   @ApiOperation(
-    value = "Returns the gene overlap results associated with the specified Jaccard result in JSON format.",
+    value = "Returns the gene overlap results associated with the specified signatures comparison result in JSON format.",
     response = GeneOverlapData.class,
     responseContainer = "list",
     code = 200
   )
   @ApiResponses(
-    @ApiResponse(code = 400, message = "Unknown jaccard result: {id}")
+    @ApiResponse(code = 400, message = "Unknown signatures comparison result: {id}")
   )
   @Override
   public Response jaccardQueryGeneOverlaps(
@@ -243,12 +243,12 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
   @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/overlaps")
   @Produces("text/csv")
   @ApiOperation(
-    value = "Returns the gene overlap results associated with the specified Jaccard result in CSV format.",
+    value = "Returns the gene overlap results associated with the specified signatures comparison result in CSV format.",
     response = String.class,
     code = 200
   )
   @ApiResponses(
-    @ApiResponse(code = 400, message = "Unknown jaccard result: {id}")
+    @ApiResponse(code = 400, message = "Unknown signatures comparison result: {id}")
   )
   @Override
   public Response jaccardQueryGeneOverlapsAsCsv(
@@ -306,6 +306,6 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
   
   private JaccardResult getResult(String resultId) {
     return jaccardQueryService.getResult(resultId)
-      .orElseThrow(() -> new IllegalArgumentException("Unknown jaccard result: " + resultId));
+      .orElseThrow(() -> new IllegalArgumentException("Unknown signatures comparison result: " + resultId));
   }
 }

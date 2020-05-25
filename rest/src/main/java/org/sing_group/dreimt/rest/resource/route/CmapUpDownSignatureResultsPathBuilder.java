@@ -30,7 +30,7 @@ public class CmapUpDownSignatureResultsPathBuilder implements RestPathBuilder {
   private UriBuilder builder;
 
   public CmapUpDownSignatureResultsPathBuilder(UriBuilder builder, String resultId) {
-    this.builder = builder.clone().path("results").path("cmap").path("signature").path(resultId);
+    this.builder = builder.clone().path("results").path("drug-prioritization").path("signature").path(resultId);
   }
 
   @Override

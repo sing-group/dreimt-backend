@@ -35,7 +35,7 @@ import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardGeneSetSig
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardResult;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardUpDownSignatureResult;
 import org.sing_group.dreimt.rest.entity.query.jaccard.GeneOverlapData;
-import org.sing_group.dreimt.rest.entity.query.jaccard.JaccardQueryMetadataData;
+import org.sing_group.dreimt.rest.entity.query.jaccard.SignaturesComparisonQueryMetadataData;
 import org.sing_group.dreimt.rest.entity.signature.UpDownSignatureGeneData;
 import org.sing_group.dreimt.rest.mapper.spi.query.jaccard.JaccardQueryResultsMapper;
 import org.sing_group.dreimt.rest.mapper.spi.signature.SignatureMapper;
@@ -55,8 +55,8 @@ public class DefaultJaccardQueryResultsMapper implements JaccardQueryResultsMapp
   }
 
   @Override
-  public JaccardQueryMetadataData toJaccardQueryMetadataData(JaccardResult jaccardResult) {
-    return new JaccardQueryMetadataData(
+  public SignaturesComparisonQueryMetadataData toSignaturesComparisonQueryMetadataData(JaccardResult jaccardResult) {
+    return new SignaturesComparisonQueryMetadataData(
       jaccardResult.getName(),
       jaccardResult.isOnlyUniverseGenes(),
       jaccardResult.getCellType1(),

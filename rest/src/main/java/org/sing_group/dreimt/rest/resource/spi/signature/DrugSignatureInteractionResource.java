@@ -31,8 +31,6 @@ import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionF
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
 import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
-import org.sing_group.dreimt.rest.entity.query.cmap.CmapQueryParameters;
-import org.sing_group.dreimt.rest.entity.query.jaccard.JaccardQueryParameters;
 
 @Local
 public interface DrugSignatureInteractionResource {
@@ -57,10 +55,6 @@ public interface DrugSignatureInteractionResource {
     DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
     DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease, String freeText
   );
-
-  Response jaccardQuery(JaccardQueryParameters jaccardQueryParameters);
-
-  Response cmapQuery(CmapQueryParameters cmapQueryParameters);
 
   Response listSignatureNameValues(
     String signatureName, String cellType1, String cellSubType1, String cellTypeOrSubType1, String cellType2,

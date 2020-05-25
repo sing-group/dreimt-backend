@@ -30,7 +30,7 @@ public class CmapGeneSetSignatureResultsPathBuilder implements RestPathBuilder {
   private UriBuilder builder;
 
   public CmapGeneSetSignatureResultsPathBuilder(UriBuilder builder, String resultId) {
-    this.builder = builder.clone().path("results").path("cmap").path("geneset").path(resultId);
+    this.builder = builder.clone().path("results").path("drug-prioritization").path("geneset").path(resultId);
   }
 
   @Override

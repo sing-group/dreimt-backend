@@ -27,7 +27,7 @@ import javax.inject.Inject;
 import javax.ws.rs.core.UriBuilder;
 
 import org.sing_group.dreimt.domain.entities.example.JaccardPrecalculatedExample;
-import org.sing_group.dreimt.rest.entity.example.JaccardPrecalculatedExampleData;
+import org.sing_group.dreimt.rest.entity.example.SignaturesComparisonExampleData;
 import org.sing_group.dreimt.rest.mapper.spi.example.JaccardPrecalculatedExampleMapper;
 import org.sing_group.dreimt.rest.mapper.spi.execution.ExecutionMapper;
 
@@ -43,8 +43,8 @@ public class DefaultJaccardPrecalculatedExampleMapper implements JaccardPrecalcu
   }
 
   @Override
-  public JaccardPrecalculatedExampleData toJaccardPrecalculatedExampleData(JaccardPrecalculatedExample example) {
-    return new JaccardPrecalculatedExampleData(
+  public SignaturesComparisonExampleData toSignaturesComparisonPrecalculatedExampleData(JaccardPrecalculatedExample example) {
+    return new SignaturesComparisonExampleData(
       example.getWork().getName(),
       example.getWork().getDescription().orElse(null),
       example.getReference(),

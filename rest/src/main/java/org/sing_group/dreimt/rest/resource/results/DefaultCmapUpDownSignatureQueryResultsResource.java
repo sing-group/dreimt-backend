@@ -49,8 +49,8 @@ import org.sing_group.dreimt.domain.entities.execution.cmap.CmapUpDownSignatureD
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapUpDownSignatureResult;
 import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
 import org.sing_group.dreimt.rest.entity.query.ListingOptionsData;
-import org.sing_group.dreimt.rest.entity.query.cmap.CmapQueryUpDownSignatureMetadataData;
-import org.sing_group.dreimt.rest.entity.query.cmap.CmapUpDownSignatureDrugInteractionData;
+import org.sing_group.dreimt.rest.entity.query.cmap.DrugPrioritizationQueryUpDownSignatureMetadataData;
+import org.sing_group.dreimt.rest.entity.query.cmap.DrugPrioritizationUpDownSignatureDrugInteractionData;
 import org.sing_group.dreimt.rest.entity.signature.UpDownSignatureGeneData;
 import org.sing_group.dreimt.rest.filter.CrossDomain;
 import org.sing_group.dreimt.rest.mapper.spi.query.ListingOptionsMapper;
@@ -64,11 +64,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Path("results/cmap/signature/")
+@Path("results/drug-prioritization/signature/")
 @Produces({APPLICATION_JSON, "text/csv"})
 @Stateless
 @CrossDomain(allowedHeaders = "X-Count")
-@Api("results/cmap/signature/")
+@Api("results")
 @ApiResponses({
   @ApiResponse(code = 200, message = "successful operation")
 })
@@ -90,18 +90,18 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
   @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}")
   @Produces(APPLICATION_JSON)
   @ApiOperation(
-    value = "Returns the metadata associated with the specified Cmap result.",
-    response = CmapQueryUpDownSignatureMetadataData.class,
+    value = "Returns the metadata associated with the specified drug prioritization result.",
+    response = DrugPrioritizationQueryUpDownSignatureMetadataData.class,
     code = 200
   )
   @ApiResponses(
-    @ApiResponse(code = 400, message = "Unknown cmap result: {id}")
+    @ApiResponse(code = 400, message = "Unknown drug prioritization result: {id}")
   )
   @Override
   public Response cmapQueryMetadata(@PathParam("id") String resultId) {
     return this.cmapQueryResult(
       resultId,
-      mapper::toCmapQueryMetadataData
+      mapper::toDrugPrioritizationQueryMetadataData
     );
   }
   
@@ -109,12 +109,12 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
   @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/genes")
   @Produces(APPLICATION_JSON)
   @ApiOperation(
-    value = "Returns the query genes associated with the specified Cmap result.",
+    value = "Returns the query genes associated with the specified drug prioritization result.",
     response = UpDownSignatureGeneData.class,
     code = 200
   )
   @ApiResponses(
-    @ApiResponse(code = 400, message = "Unknown cmap result: {id}")
+    @ApiResponse(code = 400, message = "Unknown drug prioritization result: {id}")
   )
   @Override
   public Response cmapQueryGenes(
@@ -136,16 +136,16 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
   }
 
   @GET
-  @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/interactions")
+  @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/associations")
   @Produces(APPLICATION_JSON)
   @ApiOperation(
-    value = "Returns the drug interaction results associated with the specified Cmap result in JSON format.",
-    response = CmapUpDownSignatureDrugInteractionData.class,
+    value = "Returns the drug prioritization results associated with the specified drug prioritization result in JSON format.",
+    response = DrugPrioritizationUpDownSignatureDrugInteractionData.class,
     responseContainer = "list",
     code = 200
   )
   @ApiResponses(
-    @ApiResponse(code = 400, message = "Unknown cmap result: {id}")
+    @ApiResponse(code = 400, message = "Unknown drug prioritization result: {id}")
   )
   @Override
   public Response queryInteractions(
@@ -170,21 +170,21 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
       minTau, maxUpFdr, maxDownFdr, drugSourceName, drugSourceDb, 
       drugCommonName, drugMoa, drugStatus, minDrugDss, 
       page, pageSize, orderField, sortDirection,
-      (cmapResult, interactions) -> mapper.toCmapDrugInteractionData(cmapResult, interactions, includeSummary),
+      (cmapResult, interactions) -> mapper.toDrugPrioritizationDrugInteractionData(cmapResult, interactions, includeSummary),
       APPLICATION_JSON, true
     );
   }
 
   @GET
-  @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/interactions")
+  @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/associations")
   @Produces("text/csv")
   @ApiOperation(
-    value = "Returns the drug interaction results associated with the specified Cmap result in CSV format.",
+    value = "Returns the drug prioritization results associated with the specified drug prioritization result in CSV format.",
     response = String.class,
     code = 200
   )
   @ApiResponses(
-    @ApiResponse(code = 400, message = "Unknown cmap result: {id}")
+    @ApiResponse(code = 400, message = "Unknown drug prioritization result: {id}")
   )
   @Override
   public Response queryInteractionsAsCsv(
@@ -261,11 +261,11 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
   protected CmapUpDownSignatureResult findCmapUpDownSignatureResult(String resultId) {
     CmapResult cmapResult =
       cmapQueryService.getResult(resultId)
-        .orElseThrow(() -> new IllegalArgumentException("Unknown cmap result: " + resultId));
+        .orElseThrow(() -> new IllegalArgumentException("Unknown drug prioritization result: " + resultId));
     
     if (!(cmapResult instanceof CmapUpDownSignatureResult)) {
       throw new IllegalArgumentException(
-        "The specified cmap result (" + resultId + ") corresponds to a GeneSet query. Use the appropiate method."
+        "The specified drug prioritization result (" + resultId + ") corresponds to a GeneSet query. Use the appropiate method."
       );
     }
     
@@ -276,7 +276,7 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
   @Path("params/{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/drug-source-name/values")
   @Produces(APPLICATION_JSON)
   @ApiOperation(
-    value = "Lists the possible drug source name values for the specified Cmap result.",
+    value = "Lists the possible drug source name values for the specified drug prioritization result.",
     response = String.class,
     code = 200
   )
@@ -312,7 +312,7 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
   @Path("params/{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/drug-source-db/values")
   @Produces(APPLICATION_JSON)
   @ApiOperation(
-    value = "Lists the possible drug source database values for the specified Cmap result.",
+    value = "Lists the possible drug source database values for the specified drug prioritization result.",
     response = String.class,
     code = 200
   )
@@ -348,7 +348,7 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
   @Path("params/{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/drug-common-name/values")
   @Produces(APPLICATION_JSON)
   @ApiOperation(
-    value = "Lists the possible drug common name values for the specified Cmap result.",
+    value = "Lists the possible drug common name values for the specified drug prioritization result.",
     response = String.class,
     code = 200
   )
@@ -384,7 +384,7 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
   @Path("params/{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/drug-moa/values")
   @Produces(APPLICATION_JSON)
   @ApiOperation(
-    value = "Lists the possible drug MOA values for the specified Cmap result.",
+    value = "Lists the possible drug MOA values for the specified drug prioritization result.",
     response = String.class,
     code = 200
   )
@@ -420,7 +420,7 @@ public class DefaultCmapUpDownSignatureQueryResultsResource implements CmapUpDow
   @Path("params/{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/drug-status/values")
   @Produces(APPLICATION_JSON)
   @ApiOperation(
-    value = "Lists the possible drug status values for the specified Cmap result.",
+    value = "Lists the possible drug status values for the specified drug prioritization result.",
     response = DrugStatus.class,
     code = 200
   )

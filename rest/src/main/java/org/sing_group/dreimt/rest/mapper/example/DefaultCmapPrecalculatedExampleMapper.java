@@ -27,7 +27,7 @@ import javax.inject.Inject;
 import javax.ws.rs.core.UriBuilder;
 
 import org.sing_group.dreimt.domain.entities.example.CmapPrecalculatedExample;
-import org.sing_group.dreimt.rest.entity.example.CmapPrecalculatedExampleData;
+import org.sing_group.dreimt.rest.entity.example.DrugPrioritizationPrecalculatedExampleData;
 import org.sing_group.dreimt.rest.mapper.spi.example.CmapPrecalculatedExampleMapper;
 import org.sing_group.dreimt.rest.mapper.spi.execution.ExecutionMapper;
 
@@ -43,8 +43,8 @@ public class DefaultCmapPrecalculatedExampleMapper implements CmapPrecalculatedE
   }
 
   @Override
-  public CmapPrecalculatedExampleData toCmapPrecalculatedExampleData(CmapPrecalculatedExample example) {
-    return new CmapPrecalculatedExampleData(
+  public DrugPrioritizationPrecalculatedExampleData toDrugPrioritizationPrecalculatedExampleData(CmapPrecalculatedExample example) {
+    return new DrugPrioritizationPrecalculatedExampleData(
       example.getWork().getName(),
       example.getWork().getDescription().orElse(null),
       example.getReference(),

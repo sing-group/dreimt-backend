@@ -34,7 +34,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.sing_group.dreimt.rest.entity.example.JaccardPrecalculatedExampleData;
+import org.sing_group.dreimt.rest.entity.example.SignaturesComparisonExampleData;
 import org.sing_group.dreimt.rest.filter.CrossDomain;
 import org.sing_group.dreimt.rest.mapper.spi.example.JaccardPrecalculatedExampleMapper;
 import org.sing_group.dreimt.rest.resource.spi.example.JaccardPrecalculatedExampleResource;
@@ -45,13 +45,13 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Path("examples/jaccard/")
+@Path("examples")
 @Produces({
   APPLICATION_JSON
 })
 @Stateless
 @CrossDomain(allowedHeaders = "X-Count")
-@Api("results/jaccard/")
+@Api("examples")
 @ApiResponses({
   @ApiResponse(code = 200, message = "successful operation")
 })
@@ -71,19 +71,20 @@ public class DefaultJaccardPrecalculatedExampleResource implements JaccardPrecal
     this.mapper.setUriBuilder(this.uriInfo.getBaseUriBuilder());
   }
 
+  @Path("signatures-comparison")
   @GET
   @ApiOperation(
-    value = "Lists the jaccard precalculated examples",
-    response = JaccardPrecalculatedExampleData.class,
+    value = "Lists the signatures comparison precalculated examples.",
+    response = SignaturesComparisonExampleData.class,
     responseContainer = "list",
     code = 200
   )
   @Override
   public Response list() {
-    final JaccardPrecalculatedExampleData[] data =
+    final SignaturesComparisonExampleData[] data =
       service.list()
-        .map(this.mapper::toJaccardPrecalculatedExampleData)
-        .toArray(JaccardPrecalculatedExampleData[]::new);
+        .map(this.mapper::toSignaturesComparisonPrecalculatedExampleData)
+        .toArray(SignaturesComparisonExampleData[]::new);
     
     return Response.ok(data).build();
   }

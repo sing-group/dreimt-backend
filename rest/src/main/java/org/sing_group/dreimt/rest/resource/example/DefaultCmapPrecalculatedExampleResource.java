@@ -34,7 +34,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.sing_group.dreimt.rest.entity.example.CmapPrecalculatedExampleData;
+import org.sing_group.dreimt.rest.entity.example.DrugPrioritizationPrecalculatedExampleData;
 import org.sing_group.dreimt.rest.filter.CrossDomain;
 import org.sing_group.dreimt.rest.mapper.spi.example.CmapPrecalculatedExampleMapper;
 import org.sing_group.dreimt.rest.resource.spi.example.CmapPrecalculatedExampleResource;
@@ -45,13 +45,13 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
-@Path("examples/cmap/")
+@Path("examples")
 @Produces({
   APPLICATION_JSON
 })
 @Stateless
 @CrossDomain(allowedHeaders = "X-Count")
-@Api("results/cmap/")
+@Api("examples")
 @ApiResponses({
   @ApiResponse(code = 200, message = "successful operation")
 })
@@ -71,19 +71,20 @@ public class DefaultCmapPrecalculatedExampleResource implements CmapPrecalculate
     this.mapper.setUriBuilder(this.uriInfo.getBaseUriBuilder());
   }
 
+  @Path("drug-prioritization")
   @GET
   @ApiOperation(
-    value = "Lists the cmap precalculated examples",
-    response = CmapPrecalculatedExampleData.class,
+    value = "Lists the drug prioritization precalculated examples.",
+    response = DrugPrioritizationPrecalculatedExampleData.class,
     responseContainer = "list",
     code = 200
   )
   @Override
   public Response list() {
-    final CmapPrecalculatedExampleData[] data =
+    final DrugPrioritizationPrecalculatedExampleData[] data =
       service.list()
-        .map(this.mapper::toCmapPrecalculatedExampleData)
-        .toArray(CmapPrecalculatedExampleData[]::new);
+        .map(this.mapper::toDrugPrioritizationPrecalculatedExampleData)
+        .toArray(DrugPrioritizationPrecalculatedExampleData[]::new);
     
     return Response.ok(data).build();
   }

@@ -36,8 +36,8 @@ import org.sing_group.dreimt.domain.entities.execution.cmap.CmapDrugGeneSetSigna
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapGeneSetSignatureResult;
 import org.sing_group.dreimt.domain.entities.signature.Drug;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
-import org.sing_group.dreimt.rest.entity.query.cmap.CmapGeneSetSignatureDrugInteractionData;
-import org.sing_group.dreimt.rest.entity.query.cmap.CmapQueryGeneSetSignatureMetadataData;
+import org.sing_group.dreimt.rest.entity.query.cmap.DrugPrioritizationGeneSetSignatureDrugInteractionData;
+import org.sing_group.dreimt.rest.entity.query.cmap.DrugPrioritizationQueryGeneSetSignatureMetadataData;
 import org.sing_group.dreimt.rest.entity.signature.GeneSetSignatureGeneData;
 import org.sing_group.dreimt.rest.mapper.signature.EmptyPredictionSummaryGenerator;
 import org.sing_group.dreimt.rest.mapper.signature.PredictionSummaryGenerator;
@@ -51,8 +51,8 @@ public class DefaultCmapQueryGeneSetSignatureResultsMapper implements CmapQueryG
   private DrugMapper drugMapper;
 
   @Override
-  public CmapQueryGeneSetSignatureMetadataData toCmapQueryMetadataData(CmapGeneSetSignatureResult cmapResult) {
-    return new CmapQueryGeneSetSignatureMetadataData(
+  public DrugPrioritizationQueryGeneSetSignatureMetadataData toCmapQueryMetadataData(CmapGeneSetSignatureResult cmapResult) {
+    return new DrugPrioritizationQueryGeneSetSignatureMetadataData(
       cmapResult.getName(),
       cmapResult.getNumPerm(),
       getGenesCount(cmapResult, false),
@@ -75,7 +75,7 @@ public class DefaultCmapQueryGeneSetSignatureResultsMapper implements CmapQueryG
   }
 
   @Override
-  public CmapGeneSetSignatureDrugInteractionData[] toCmapDrugInteractionData(
+  public DrugPrioritizationGeneSetSignatureDrugInteractionData[] toDrugPrioritizationDrugInteractionData(
     CmapGeneSetSignatureResult result,
     List<CmapDrugGeneSetSignatureInteraction> cmapDrugInteractions,
     boolean includeSummary
@@ -85,17 +85,17 @@ public class DefaultCmapQueryGeneSetSignatureResultsMapper implements CmapQueryG
 
     return cmapDrugInteractions.stream()
       .map(
-        c -> new CmapGeneSetSignatureDrugInteractionData(
+        c -> new DrugPrioritizationGeneSetSignatureDrugInteractionData(
           drugMapper.toDrugData(c.getDrug()),
           c.getTau(),
           c.getFdr(),
           summary(result, c, summaryGenerator)
         )
-      ).toArray(CmapGeneSetSignatureDrugInteractionData[]::new);
+      ).toArray(DrugPrioritizationGeneSetSignatureDrugInteractionData[]::new);
   }
 
   @Override
-  public String toCmapDrugInteractionCsvData(
+  public String toDrugPrioritizationDrugInteractionCsvData(
     CmapGeneSetSignatureResult result,
     List<CmapDrugGeneSetSignatureInteraction> cmapDrugInteractions
   ) {

@@ -74,7 +74,7 @@ public class DefaultDreimtInformationResource implements DreimtInformationResour
   @GET
   @Path("information")
   @ApiOperation(
-    value = "Returns general information associated with the DREIMT database", 
+    value = "Returns general information associated with the DREIMT database.", 
     response = DreimtInformationData.class, 
     code = 200
   )
@@ -94,7 +94,7 @@ public class DefaultDreimtInformationResource implements DreimtInformationResour
   @GET
   @Path("statistics")
   @ApiOperation(
-    value = "Returns statistics about the DREIMT database (e.g. number of signatures and drugs)", 
+    value = "Returns statistics about the DREIMT database (e.g. number of signatures and drugs).", 
     response = DreimtStatistics.class, 
     code = 200
   )
@@ -111,7 +111,7 @@ public class DefaultDreimtInformationResource implements DreimtInformationResour
   @Path("versions/current")
   @Produces("text/plain")
   @ApiOperation(
-    value = "Returns the name of the current DREIMT database version", 
+    value = "Returns the name of the current DREIMT database version.", 
     response = String.class, 
     code = 200
   )

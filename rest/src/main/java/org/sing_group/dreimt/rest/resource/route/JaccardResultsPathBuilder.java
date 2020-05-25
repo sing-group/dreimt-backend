@@ -30,7 +30,7 @@ public class JaccardResultsPathBuilder implements RestPathBuilder {
   private UriBuilder builder;
 
   public JaccardResultsPathBuilder(UriBuilder builder, String resultId) {
-    this.builder = builder.clone().path("results").path("jaccard").path(resultId);
+    this.builder = builder.clone().path("results").path("signatures-comparison").path(resultId);
   }
 
   @Override

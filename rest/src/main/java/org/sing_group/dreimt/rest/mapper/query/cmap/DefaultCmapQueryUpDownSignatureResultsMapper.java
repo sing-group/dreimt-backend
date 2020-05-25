@@ -36,8 +36,8 @@ import javax.inject.Inject;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapDrugUpDownSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapUpDownSignatureResult;
 import org.sing_group.dreimt.domain.entities.signature.Drug;
-import org.sing_group.dreimt.rest.entity.query.cmap.CmapQueryUpDownSignatureMetadataData;
-import org.sing_group.dreimt.rest.entity.query.cmap.CmapUpDownSignatureDrugInteractionData;
+import org.sing_group.dreimt.rest.entity.query.cmap.DrugPrioritizationQueryUpDownSignatureMetadataData;
+import org.sing_group.dreimt.rest.entity.query.cmap.DrugPrioritizationUpDownSignatureDrugInteractionData;
 import org.sing_group.dreimt.rest.entity.signature.UpDownSignatureGeneData;
 import org.sing_group.dreimt.rest.mapper.signature.EmptyPredictionSummaryGenerator;
 import org.sing_group.dreimt.rest.mapper.signature.PredictionSummaryGenerator;
@@ -51,8 +51,8 @@ public class DefaultCmapQueryUpDownSignatureResultsMapper implements CmapQueryUp
   private DrugMapper drugMapper;
 
   @Override
-  public CmapQueryUpDownSignatureMetadataData toCmapQueryMetadataData(CmapUpDownSignatureResult cmapResult) {
-    return new CmapQueryUpDownSignatureMetadataData(
+  public DrugPrioritizationQueryUpDownSignatureMetadataData toDrugPrioritizationQueryMetadataData(CmapUpDownSignatureResult cmapResult) {
+    return new DrugPrioritizationQueryUpDownSignatureMetadataData(
       cmapResult.getName(),
       cmapResult.getNumPerm(),
       getUpGenesCount(cmapResult, false),
@@ -81,7 +81,7 @@ public class DefaultCmapQueryUpDownSignatureResultsMapper implements CmapQueryUp
   }
 
   @Override
-  public CmapUpDownSignatureDrugInteractionData[] toCmapDrugInteractionData(
+  public DrugPrioritizationUpDownSignatureDrugInteractionData[] toDrugPrioritizationDrugInteractionData(
     CmapUpDownSignatureResult result,
     List<CmapDrugUpDownSignatureInteraction> cmapDrugInteractions, boolean includeSummary
   ) {
@@ -90,14 +90,14 @@ public class DefaultCmapQueryUpDownSignatureResultsMapper implements CmapQueryUp
 
     return cmapDrugInteractions.stream()
       .map(
-        c -> new CmapUpDownSignatureDrugInteractionData(
+        c -> new DrugPrioritizationUpDownSignatureDrugInteractionData(
           drugMapper.toDrugData(c.getDrug()),
           c.getTau(),
           c.getUpFdr(),
           c.getDownFdr(),
           summary(result, c, summaryGenerator)
         )
-      ).toArray(CmapUpDownSignatureDrugInteractionData[]::new);
+      ).toArray(DrugPrioritizationUpDownSignatureDrugInteractionData[]::new);
   }
 
   @Override
