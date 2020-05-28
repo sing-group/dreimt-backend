@@ -104,8 +104,8 @@ public class DefaultQueryResource implements QueryResource {
   @Path("signatures-comparison")
   @Consumes(MediaType.APPLICATION_JSON)
   @ApiOperation(
-    value = "Calculates the Jaccard indexes between the introduced gene lists and all signatures in the database. "
-      + "The calculus are done asynchronously, thus this method returns a work-data instance with information about "
+    value = "Computes the Jaccard indexes between the input gene lists and all signatures in the database. "
+      + "Calculations are done asynchronously, so this method returns a work-data instance with information about "
       + "the asynchronous task doing the calculations.",
     response = WorkData.class,
     code = 200
@@ -221,8 +221,8 @@ public class DefaultQueryResource implements QueryResource {
   @Path("drug-prioritization")
   @Consumes(MediaType.APPLICATION_JSON)
   @ApiOperation(
-    value = "Makes the drug prioritization analysis for the gene lists introduced. "
-      + "The calculus are done asynchronously, thus this method returns a work-data instance with information about "
+    value = "Performs the drug prioritization analysis for the input gene lists. "
+      + "Calculations are done asynchronously, so this method returns a work-data instance with information about "
       + "the asynchronous task doing the calculations.",
     response = WorkData.class,
     code = 200

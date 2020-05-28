@@ -65,14 +65,14 @@ import io.swagger.models.auth.BasicAuthDefinition;
     name = "query", description = "Operations to perform the DREIMT analyses (i.e. drug prioritization and signatures comparison queries)."
   ),
   @Tag(
-    name = "results", description = "Access to the DREIMT analyses results."
+    name = "results", description = "Access to the DREIMT analysis results."
   ),
   @Tag(name = "database", description = "Operations to obtain information about the DREIMT database."),
   @Tag(name = "database-associations", description = "Access to the drug-signature associations in the DREIMT database."),
   @Tag(name = "signature", description = "Access to the DREIMT signatures information."),
   @Tag(name = "examples", description = "Access to the drug prioritization and signatures comparison precalculated examples."),
-  @Tag(name = "article", description = "Access to the DREIMT articles information."),
-  @Tag(name = "work", description = "Access to the DREIMT works."),
+  @Tag(name = "article", description = "Access to DREIMT article information."),
+  @Tag(name = "work", description = "Access to DREIMT works."),
   @Tag(name = "statistical", description = "Operations to perform statistical tests.")
 })
 @Startup

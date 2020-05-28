@@ -191,7 +191,7 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
   @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}/distribution/cell-type-and-subtype")
   @Produces(APPLICATION_JSON)
   @ApiOperation(
-    value = "Returns the distribution of the cell type and the cell subtype values in the signatures associated to the specified signatures comparison result.",
+    value = "Returns the distribution of the cell type and the cell subtype values in the signatures associated with the specified signatures comparison result.",
     response = Map.class,
     code = 200
   )
