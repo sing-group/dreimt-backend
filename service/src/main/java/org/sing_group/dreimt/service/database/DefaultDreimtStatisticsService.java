@@ -22,8 +22,10 @@
  */
 package org.sing_group.dreimt.service.database;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.security.PermitAll;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.inject.Inject;
 
 import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
@@ -31,7 +33,8 @@ import org.sing_group.dreimt.domain.dao.spi.signature.DrugDao;
 import org.sing_group.dreimt.domain.dao.spi.signature.SignatureDao;
 import org.sing_group.dreimt.service.spi.database.DreimtStatisticsService;
 
-@Stateless
+@Startup
+@Singleton
 @PermitAll
 public class DefaultDreimtStatisticsService implements DreimtStatisticsService {
 
@@ -41,13 +44,26 @@ public class DefaultDreimtStatisticsService implements DreimtStatisticsService {
   @Inject
   private SignatureDao signatureDao;
 
+  private long drugCount;
+  private long signaturesCount;
+
   @Override
   public long drugCount() {
-    return drugDao.count();
+    return this.drugCount;
   }
 
   @Override
   public long signaturesCount() {
-    return signatureDao.count(new SignatureListingOptions());
+    return this.signaturesCount;
+  }
+
+  @PostConstruct
+  private void postConstruct() {
+    this.updateStatistics();
+  }
+
+  private void updateStatistics() {
+    this.drugCount = this.drugDao.count();
+    this.signaturesCount = this.signatureDao.count(new SignatureListingOptions());
   }
 }
