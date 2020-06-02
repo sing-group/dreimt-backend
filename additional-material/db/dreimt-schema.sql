@@ -269,10 +269,8 @@ DROP TABLE IF EXISTS `drug_target_genes`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `drug_target_genes` (
   `id` int(11) NOT NULL,
-  `gene` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`id`,`gene`),
-  KEY `FKh74f9x833fssvhb68d0tsho5i` (`gene`),
-  CONSTRAINT `FKh74f9x833fssvhb68d0tsho5i` FOREIGN KEY (`gene`) REFERENCES `genes` (`gene`),
+  `targetGene` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  UNIQUE KEY `UKgkm03ywjdhxhjs7c2c4f56m7g` (`id`,`targetGene`),
   CONSTRAINT `FKo1a2ki6iv2kn5dtf2gi9gmiqk` FOREIGN KEY (`id`) REFERENCES `drug` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -827,4 +825,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-05-28  9:52:34
+-- Dump completed on 2020-06-02  9:27:48

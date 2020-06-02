@@ -40,7 +40,6 @@ import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
@@ -61,7 +60,6 @@ import org.sing_group.dreimt.domain.dao.DaoHelper;
 import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.dao.ListingOptions.SortField;
 import org.sing_group.dreimt.domain.dao.spi.signature.DrugSignatureInteractionDao;
-import org.sing_group.dreimt.domain.dao.spi.signature.GeneDao;
 import org.sing_group.dreimt.domain.entities.signature.ArticleMetadata;
 import org.sing_group.dreimt.domain.entities.signature.CellTypeAndSubtype;
 import org.sing_group.dreimt.domain.entities.signature.Drug;
@@ -86,9 +84,6 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
   private DaoHelper<Integer, FullDrugSignatureInteraction> dh;
 
-  @Inject
-  private GeneDao geneDao;
-
   DefaultDrugSignatureInteractionDao() {}
 
   public DefaultDrugSignatureInteractionDao(EntityManager em) {
@@ -108,7 +103,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
           new Drug(
             fdsi.getDrugCommonName(), fdsi.getDrugSourceName(), fdsi.getDrugSourceDb(), fdsi.getDrugStatus(),
             reconstructSet(fdsi.getDrugMoa()),
-            this.geneDao.getGenes(reconstructSet(fdsi.getDrugTargetGenes()), false),
+            reconstructSet(fdsi.getDrugTargetGenes()),
             fdsi.getDrugDss()
           );
 

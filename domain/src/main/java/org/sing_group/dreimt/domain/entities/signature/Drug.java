@@ -22,12 +22,9 @@
  */
 package org.sing_group.dreimt.domain.entities.signature;
 
-import static java.util.stream.Collectors.toSet;
-
 import java.io.Serializable;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -37,8 +34,6 @@ import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -65,14 +60,13 @@ public class Drug implements Serializable {
   )
   private Set<String> moa;
 
-  @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  @JoinTable(
+  @ElementCollection(fetch = FetchType.EAGER)
+  @CollectionTable(
     name = "drug_target_genes",
-    joinColumns = @JoinColumn(name = "id", referencedColumnName = "id"),
-    inverseJoinColumns = @JoinColumn(name = "gene", referencedColumnName = "gene"),
-    uniqueConstraints = @UniqueConstraint(columnNames = {"id", "gene"})
+    joinColumns = @JoinColumn(name = "id"),
+    uniqueConstraints = @UniqueConstraint(columnNames = {"id", "targetGene"})
   )
-  private Set<Gene> targetGenes;
+  private Set<String> targetGene;
 
   @Column(nullable = true)
   private Double dss;
@@ -80,14 +74,14 @@ public class Drug implements Serializable {
   Drug() {}
 
   public Drug(
-    String commonName, String sourceName, String sourceDb, DrugStatus status, Set<String> moa, Set<Gene> genes, Double dss
+    String commonName, String sourceName, String sourceDb, DrugStatus status, Set<String> moa, Set<String> genes, Double dss
   ) {
     this.commonName = commonName;
     this.sourceName = sourceName;
     this.sourceDb = sourceDb;
     this.status = status;
     this.moa = moa;
-    this.targetGenes = genes;
+    this.targetGene = genes;
     this.dss = dss;
   }
 
@@ -112,7 +106,7 @@ public class Drug implements Serializable {
   }
 
   public Set<String> getTargetGenes() {
-    return targetGenes.stream().map(Gene::getGene).collect(toSet());
+    return targetGene;
   }
 
   public Double getDss() {
