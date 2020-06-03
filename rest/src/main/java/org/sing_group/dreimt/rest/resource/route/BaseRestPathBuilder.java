@@ -32,8 +32,8 @@ import org.sing_group.dreimt.domain.entities.signature.Signature;
 public final class BaseRestPathBuilder implements RestPathBuilder {
   private final UriBuilder builder;
 
-  public BaseRestPathBuilder(UriBuilder builder) {
-    this.builder = builder;
+  public BaseRestPathBuilder() {
+    this.builder = UriBuilder.fromPath("");
   }
 
   public SignatureGenesRestPathBuilder signatureGenes(Signature signature) {
@@ -47,7 +47,7 @@ public final class BaseRestPathBuilder implements RestPathBuilder {
   public JaccardResultsPathBuilder jaccardResult(String resultId) {
     return new JaccardResultsPathBuilder(this.builder, resultId);
   }
-  
+
   public CmapUpDownSignatureResultsPathBuilder cmapUpDownSignatureResult(String resultId) {
     return new CmapUpDownSignatureResultsPathBuilder(this.builder, resultId);
   }

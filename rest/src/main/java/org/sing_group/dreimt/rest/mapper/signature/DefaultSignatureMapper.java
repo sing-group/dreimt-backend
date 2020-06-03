@@ -22,10 +22,7 @@
  */
 package org.sing_group.dreimt.rest.mapper.signature;
 
-import static java.util.Objects.requireNonNull;
-
 import javax.enterprise.inject.Default;
-import javax.ws.rs.core.UriBuilder;
 
 import org.sing_group.dreimt.domain.entities.signature.GeneSetSignature;
 import org.sing_group.dreimt.domain.entities.signature.Signature;
@@ -39,16 +36,10 @@ import org.sing_group.dreimt.rest.resource.route.BaseRestPathBuilder;
 
 @Default
 public class DefaultSignatureMapper implements SignatureMapper {
-  private UriBuilder uriBuilder;
-
-  @Override
-  public void setUriBuilder(UriBuilder uriBuilder) {
-    this.uriBuilder = requireNonNull(uriBuilder);
-  }
 
   @Override
   public SignatureData toSignatureData(Signature signature) {
-    final BaseRestPathBuilder pathBuilder = new BaseRestPathBuilder(getUriBuilder());
+    final BaseRestPathBuilder pathBuilder = new BaseRestPathBuilder();
 
     return new SignatureData(
       signature.getSignatureName(),
@@ -75,11 +66,11 @@ public class DefaultSignatureMapper implements SignatureMapper {
       signature.getArticleMetadata().isPresent() ? pathBuilder.articleMetadata(signature.getArticleMetadata().get()).build() : null
     );
   }
-  
+
   @Override
   public SignatureDataSummary toSignatureDataSummary(Signature signature) {
-    final BaseRestPathBuilder pathBuilder = new BaseRestPathBuilder(getUriBuilder());
-    
+    final BaseRestPathBuilder pathBuilder = new BaseRestPathBuilder();
+
     return new SignatureDataSummary(
       signature.getSignatureName(),
       signature.getCellTypeA(),
@@ -94,13 +85,6 @@ public class DefaultSignatureMapper implements SignatureMapper {
       pathBuilder.signatureGenes(signature).build(),
       signature.getArticleMetadata().isPresent() ? pathBuilder.articleMetadata(signature.getArticleMetadata().get()).build() : null
     );
-  }
-
-  private UriBuilder getUriBuilder() {
-    if (this.uriBuilder == null) {
-      throw new IllegalStateException("The UriBuilder has not been initialized.");
-    }
-    return this.uriBuilder;
   }
 
   @Override

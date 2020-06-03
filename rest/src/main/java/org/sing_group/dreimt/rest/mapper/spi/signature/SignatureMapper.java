@@ -22,18 +22,14 @@
  */
 package org.sing_group.dreimt.rest.mapper.spi.signature;
 
-import javax.ws.rs.core.UriBuilder;
-
 import org.sing_group.dreimt.domain.entities.signature.Signature;
 import org.sing_group.dreimt.rest.entity.signature.SignatureData;
 import org.sing_group.dreimt.rest.entity.signature.SignatureDataSummary;
 
 public interface SignatureMapper {
-  void setUriBuilder(UriBuilder uriBuilder);
-
   SignatureData toSignatureData(Signature signature);
-  
+
   SignatureDataSummary toSignatureDataSummary(Signature signature);
-  
+
   Object toSignatureGeneData(Signature signature, boolean onlyUniverseGenes);
 }

@@ -22,14 +22,9 @@
  */
 package org.sing_group.dreimt.rest.mapper.spi.execution;
 
-import javax.ws.rs.core.UriBuilder;
-
 import org.sing_group.dreimt.domain.entities.execution.WorkEntity;
 import org.sing_group.dreimt.rest.entity.execution.WorkData;
 
 public interface ExecutionMapper {
-  
-  void setUriBuilder(UriBuilder uriBuilder);
-
   WorkData toWorkData(WorkEntity work);
 }

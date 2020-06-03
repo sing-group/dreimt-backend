@@ -24,7 +24,6 @@ package org.sing_group.dreimt.rest.mapper.example;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
-import javax.ws.rs.core.UriBuilder;
 
 import org.sing_group.dreimt.domain.entities.example.JaccardPrecalculatedExample;
 import org.sing_group.dreimt.rest.entity.example.SignaturesComparisonExampleData;
@@ -36,11 +35,6 @@ public class DefaultJaccardPrecalculatedExampleMapper implements JaccardPrecalcu
 
   @Inject
   private ExecutionMapper executionMapper;
-
-  @Override
-  public void setUriBuilder(UriBuilder uriBuilder) {
-    this.executionMapper.setUriBuilder(uriBuilder);
-  }
 
   @Override
   public SignaturesComparisonExampleData toSignaturesComparisonPrecalculatedExampleData(JaccardPrecalculatedExample example) {

@@ -22,7 +22,6 @@
  */
 package org.sing_group.dreimt.rest.mapper.signature;
 
-import static java.util.Objects.requireNonNull;
 import static java.util.stream.Collectors.joining;
 
 import java.util.Set;
@@ -30,7 +29,6 @@ import java.util.stream.Stream;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
-import javax.ws.rs.core.UriBuilder;
 
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 import org.sing_group.dreimt.rest.entity.signature.DrugSignatureInteractionData;
@@ -46,11 +44,6 @@ public class DefaultDrugSignatureInteractionMapper implements DrugSignatureInter
 
   @Inject
   private SignatureMapper signatureMapper;
-
-  @Override
-  public void setUriBuilder(UriBuilder uriBuilder) {
-    this.signatureMapper.setUriBuilder(requireNonNull(uriBuilder));
-  }
 
   @Override
   public DrugSignatureInteractionData[] toDrugSignatureInteractionData(

@@ -28,7 +28,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_XML;
 
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
@@ -37,9 +36,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 import org.sing_group.dreimt.domain.entities.execution.WorkEntity;
 import org.sing_group.dreimt.rest.entity.execution.WorkData;
@@ -66,15 +63,7 @@ public class DefaultWorkResource implements WorkResource {
   
   @Inject
   private ExecutionMapper mapper;
-  
-  @Context
-  private UriInfo uriInfo;
-  
-  @PostConstruct
-  public void postConstruct() {
-    this.mapper.setUriBuilder(this.uriInfo.getBaseUriBuilder());
-  }
-  
+
   @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}")
   @GET
   @ApiOperation(

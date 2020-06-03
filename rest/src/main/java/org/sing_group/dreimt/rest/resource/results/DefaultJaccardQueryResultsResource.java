@@ -31,7 +31,6 @@ import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.DefaultValue;
@@ -40,11 +39,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.ResponseBuilder;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
 
 import org.sing_group.dreimt.domain.dao.SortDirection;
 import org.sing_group.dreimt.domain.dao.execution.jaccard.GeneOverlapListingOptions;
@@ -94,16 +90,6 @@ public class DefaultJaccardQueryResultsResource implements JaccardQueryResultsRe
   
   @Inject
   private ValuesDistributionMapper valuesDistributionMapper;
-
-  @Context
-  private UriInfo uriInfo;
-
-  @PostConstruct
-  public void postConstruct() {
-    final UriBuilder uriBuilder = this.uriInfo.getBaseUriBuilder();
-
-    this.mapper.setUriBuilder(uriBuilder);
-  }
 
   @GET
   @Path("{id: [0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}}")

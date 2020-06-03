@@ -22,13 +22,9 @@
  */
 package org.sing_group.dreimt.rest.mapper.spi.example;
 
-import javax.ws.rs.core.UriBuilder;
-
 import org.sing_group.dreimt.domain.entities.example.JaccardPrecalculatedExample;
 import org.sing_group.dreimt.rest.entity.example.SignaturesComparisonExampleData;
 
 public interface JaccardPrecalculatedExampleMapper {
-  void setUriBuilder(UriBuilder uriBuilder);
-
   SignaturesComparisonExampleData toSignaturesComparisonPrecalculatedExampleData(JaccardPrecalculatedExample example);
 }

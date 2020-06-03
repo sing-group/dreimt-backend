@@ -33,18 +33,14 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
 
 import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
 import org.sing_group.dreimt.domain.entities.execution.WorkEntity;
@@ -87,17 +83,6 @@ public class DefaultQueryResource implements QueryResource {
 
   @Inject
   private ExecutionMapper executionMapper;
-  
-  @Context
-  private UriInfo uriInfo;
-  
-  @PostConstruct
-  public void postConstruct() {
-    final UriBuilder uriBuilder = this.uriInfo.getBaseUriBuilder();
-
-    this.executionMapper.setUriBuilder(uriBuilder);
-  }
-
 
   @POST
   @Produces(APPLICATION_JSON)
@@ -125,8 +110,7 @@ public class DefaultQueryResource implements QueryResource {
 
     validateQueryGenes(upGenes, downGenes);
 
-    final UriBuilder uriBuilder = this.uriInfo.getBaseUriBuilder();
-    final BaseRestPathBuilder pathBuilder = new BaseRestPathBuilder(uriBuilder);
+    final BaseRestPathBuilder pathBuilder = new BaseRestPathBuilder();
 
     final Function<String, String> resultUriBuilder =
       id -> pathBuilder.jaccardResult(id).build().toString();
@@ -235,8 +219,7 @@ public class DefaultQueryResource implements QueryResource {
 
     validateQueryGenes(upGenes, downGenes);
 
-    final UriBuilder uriBuilder = this.uriInfo.getBaseUriBuilder();
-    final BaseRestPathBuilder pathBuilder = new BaseRestPathBuilder(uriBuilder);
+    final BaseRestPathBuilder pathBuilder = new BaseRestPathBuilder();
 
     final Function<String, String> resultUriBuilder =
       (downGenes.isEmpty() || upGenes.isEmpty()) ? id -> pathBuilder.cmapGeneSetSignatureResult(id).build().toString() : id -> pathBuilder.cmapUpDownSignatureResult(id).build().toString();

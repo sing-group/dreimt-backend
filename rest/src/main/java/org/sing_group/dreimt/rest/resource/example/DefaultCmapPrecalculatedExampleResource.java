@@ -24,15 +24,12 @@ package org.sing_group.dreimt.rest.resource.example;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 import org.sing_group.dreimt.rest.entity.example.DrugPrioritizationPrecalculatedExampleData;
 import org.sing_group.dreimt.rest.filter.CrossDomain;
@@ -62,14 +59,6 @@ public class DefaultCmapPrecalculatedExampleResource implements CmapPrecalculate
   
   @Inject
   private CmapPrecalculatedExampleMapper mapper;
-  
-  @Context
-  private UriInfo uriInfo;
-  
-  @PostConstruct
-  public void postConstruct() {
-    this.mapper.setUriBuilder(this.uriInfo.getBaseUriBuilder());
-  }
 
   @Path("drug-prioritization")
   @GET

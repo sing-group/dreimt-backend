@@ -22,13 +22,11 @@
  */
 package org.sing_group.dreimt.rest.mapper.spi.example;
 
-import javax.ws.rs.core.UriBuilder;
-
 import org.sing_group.dreimt.domain.entities.example.CmapPrecalculatedExample;
 import org.sing_group.dreimt.rest.entity.example.DrugPrioritizationPrecalculatedExampleData;
 
 public interface CmapPrecalculatedExampleMapper {
-  void setUriBuilder(UriBuilder uriBuilder);
-
-  DrugPrioritizationPrecalculatedExampleData toDrugPrioritizationPrecalculatedExampleData(CmapPrecalculatedExample example);
+  DrugPrioritizationPrecalculatedExampleData toDrugPrioritizationPrecalculatedExampleData(
+    CmapPrecalculatedExample example
+  );
 }

@@ -24,7 +24,6 @@ package org.sing_group.dreimt.rest.resource.signature;
 
 import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.BadRequestException;
@@ -33,10 +32,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriBuilder;
-import javax.ws.rs.core.UriInfo;
 
 import org.sing_group.dreimt.domain.dao.ListingOptions.SortField;
 import org.sing_group.dreimt.domain.dao.SortDirection;
@@ -71,9 +67,6 @@ import io.swagger.annotations.ApiResponses;
 })
 public class DefaultDrugSignatureInteractionResource implements DrugSignatureInteractionResource {
 
-  @Context
-  private UriInfo uriInfo;
-
   @Inject
   private DrugSignatureInteractionService service;
 
@@ -82,13 +75,6 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
 
   @Inject
   private ListingOptionsMapper listingOptionsMapper;
-
-  @PostConstruct
-  public void postConstruct() {
-    final UriBuilder uriBuilder = this.uriInfo.getBaseUriBuilder();
-
-    this.drugSignatureMapper.setUriBuilder(uriBuilder);
-  }
 
   @GET
   @Produces(APPLICATION_JSON)

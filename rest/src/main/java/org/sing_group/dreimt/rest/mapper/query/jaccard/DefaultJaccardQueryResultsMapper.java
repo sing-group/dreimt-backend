@@ -22,13 +22,10 @@
  */
 package org.sing_group.dreimt.rest.mapper.query.jaccard;
 
-import static java.util.Objects.requireNonNull;
-
 import java.util.List;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
-import javax.ws.rs.core.UriBuilder;
 
 import org.sing_group.dreimt.domain.entities.execution.jaccard.GeneOverlap;
 import org.sing_group.dreimt.domain.entities.execution.jaccard.JaccardGeneSetSignatureResult;
@@ -45,14 +42,6 @@ public class DefaultJaccardQueryResultsMapper implements JaccardQueryResultsMapp
 
   @Inject
   private SignatureMapper signatureMapper;
-
-  private UriBuilder uriBuilder;
-
-  @Override
-  public void setUriBuilder(UriBuilder uriBuilder) {
-    this.uriBuilder = requireNonNull(uriBuilder);
-    this.signatureMapper.setUriBuilder(this.uriBuilder);
-  }
 
   @Override
   public SignaturesComparisonQueryMetadataData toSignaturesComparisonQueryMetadataData(JaccardResult jaccardResult) {
