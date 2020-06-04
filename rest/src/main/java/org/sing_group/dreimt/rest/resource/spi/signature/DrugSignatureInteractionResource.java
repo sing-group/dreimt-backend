@@ -42,7 +42,7 @@ public interface DrugSignatureInteractionResource {
     String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
     String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
     DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
-    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease, String freeText,
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease,
     boolean includeSummary
   );
   
@@ -53,7 +53,7 @@ public interface DrugSignatureInteractionResource {
     String disease, String signatureSourceDb, Integer signaturePubMedId, String drugSourceName, String drugSourceDb,
     String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss,
     DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr,
-    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease, String freeText
+    DrugInteractionEffect cellType1Effect, String cellType1Treatment, String cellType1Disease
   );
 
   Response listSignatureNameValues(

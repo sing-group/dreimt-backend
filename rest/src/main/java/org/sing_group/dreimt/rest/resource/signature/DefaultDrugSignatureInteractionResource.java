@@ -26,7 +26,6 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -115,23 +114,8 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("cellType1Effect") DrugInteractionEffect cellType1Effect,
     @QueryParam("cellType1Treatment") String cellType1Treatment,
     @QueryParam("cellType1Disease") String cellType1Disease,
-    @QueryParam("freeText") String freeText,
     @QueryParam("includeSummary") @DefaultValue("false") boolean includeSummary
   ) {
-    if (
-      freeText != null && (signatureName != null || cellType1 != null || cellSubType1 != null || cellType2 != null
-        || cellSubType2 != null || cellTypeOrSubType1 != null || cellTypeOrSubType2 != null 
-        || experimentalDesign != null || organism != null || disease != null
-        || cellType1Effect != null || cellType1Treatment != null || cellType1Disease !=  null
-        || signatureSourceDb != null || signaturePubMedId != null || drugSourceName != null || drugSourceDb != null
-        || drugCommonName != null || drugMoa != null || drugStatus != null || minDrugDss != null
-        || interactionType != null || minTau != null || maxUpFdr != null
-        || maxDownFdr != null)
-    ) {
-      throw new BadRequestException("freeText parameter is not compatible with other filters");
-    }
-
-    if(freeText == null) {
       final SignatureListingOptions signatureListingOptions =
         new SignatureListingOptions(
           signatureName, cellType1, cellSubType1, cellTypeOrSubType1, cellType2, cellSubType2, cellTypeOrSubType2,
@@ -154,19 +138,6 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
       return Response.ok(data, APPLICATION_JSON)
         .header("X-Count", count)
         .build();
-    } else {
-      final DrugSignatureInteractionData[] data =
-        this.drugSignatureMapper.toDrugSignatureInteractionData(
-          service.list(listingOptionsMapper.toListingOptions(getListingOptions(page, pageSize, orderField, sortDirection)), freeText),
-          includeSummary
-        );
-
-      final long count = service.count(freeText);
-
-      return Response.ok(data, APPLICATION_JSON)
-        .header("X-Count", count)
-        .build();
-    }
   }
   
   @GET
@@ -207,23 +178,8 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
     @QueryParam("maxDownFdr") Double maxDownFdr,
     @QueryParam("cellType1Effect") DrugInteractionEffect cellType1Effect,
     @QueryParam("cellType1Treatment") String cellType1Treatment,
-    @QueryParam("cellType1Disease") String cellType1Disease,
-    @QueryParam("freeText") String freeText
+    @QueryParam("cellType1Disease") String cellType1Disease
   ) {
-    if (
-      freeText != null && (signatureName != null || cellType1 != null || cellSubType1 != null || cellType2 != null
-      || cellSubType2 != null || cellTypeOrSubType1 != null || cellTypeOrSubType2 != null 
-      || experimentalDesign != null || organism != null || disease != null
-      || cellType1Effect != null || cellType1Treatment != null || cellType1Disease !=  null
-      || signatureSourceDb != null || signaturePubMedId != null || drugSourceName != null || drugSourceDb != null
-      || drugCommonName != null || drugMoa != null || drugStatus != null || minDrugDss != null
-      || interactionType != null || minTau != null || maxUpFdr != null
-      || maxDownFdr != null)
-    ) {
-      throw new BadRequestException("freeText parameter is not compatible with other filters");
-    }
-    
-    if (freeText == null) {
       final SignatureListingOptions signatureListingOptions =
         new SignatureListingOptions(
           signatureName, cellType1, cellSubType1, cellTypeOrSubType1, cellType2, cellSubType2, cellTypeOrSubType2,
@@ -241,14 +197,6 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
       final String data = this.drugSignatureMapper.toDrugSignatureInteractionCsvData(service.list(listingOptions));
 
       return Response.ok(data, "text/csv").build();
-    } else {
-      final String data =
-        this.drugSignatureMapper.toDrugSignatureInteractionCsvData(
-          service.list(listingOptionsMapper.toListingOptions(getListingOptions(page, pageSize, orderField, sortDirection)), freeText)
-        );
-
-      return Response.ok(data, "text/csv").build();
-    }
   }
 
   private ListingOptionsData getListingOptions(

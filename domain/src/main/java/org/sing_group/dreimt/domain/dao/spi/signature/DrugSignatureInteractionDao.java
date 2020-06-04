@@ -24,7 +24,6 @@ package org.sing_group.dreimt.domain.dao.spi.signature;
 
 import java.util.stream.Stream;
 
-import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.dao.signature.DrugSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.CellTypeAndSubtype;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
@@ -36,10 +35,6 @@ public interface DrugSignatureInteractionDao {
   Stream<DrugSignatureInteraction> list(DrugSignatureInteractionListingOptions listingOptions);
 
   long count(DrugSignatureInteractionListingOptions listingOptions);
-
-  Stream<DrugSignatureInteraction> list(ListingOptions listingOptions, String freeText);
-
-  long count(String freeText);
 
   Stream<String> listSignatureNameValues(DrugSignatureInteractionListingOptions listingOptions);
 
@@ -68,11 +63,11 @@ public interface DrugSignatureInteractionDao {
   Stream<String> listDrugSourceDbValues(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<String> listDrugCommonNameValues(DrugSignatureInteractionListingOptions listingOptions);
-  
+
   Stream<String> listDrugMoaValues(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<DrugStatus> listDrugStatusValues(DrugSignatureInteractionListingOptions listingOptions);
-  
+
   Stream<String> listCellType1TreatmentValues(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<String> listCellType1DiseaseValues(DrugSignatureInteractionListingOptions listingOptions);

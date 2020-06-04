@@ -28,7 +28,6 @@ import javax.annotation.security.PermitAll;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 
-import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.dao.signature.DrugSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.dao.spi.signature.DrugSignatureInteractionDao;
 import org.sing_group.dreimt.domain.entities.signature.CellTypeAndSubtype;
@@ -53,16 +52,6 @@ public class DefaultDrugSignatureInteractionService implements DrugSignatureInte
   @Override
   public long count(DrugSignatureInteractionListingOptions listingOptions) {
     return this.dao.count(listingOptions);
-  }
-
-  @Override
-  public Stream<DrugSignatureInteraction> list(ListingOptions listingOptions, String freeText) {
-    return this.dao.list(listingOptions, freeText);
-  }
-
-  @Override
-  public long count(String freeText) {
-    return this.dao.count(freeText);
   }
 
   @Override

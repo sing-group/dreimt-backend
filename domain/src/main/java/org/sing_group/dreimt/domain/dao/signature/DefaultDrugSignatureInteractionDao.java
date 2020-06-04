@@ -26,7 +26,6 @@ import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
 import static javax.transaction.Transactional.TxType.MANDATORY;
-import static org.sing_group.dreimt.domain.dao.ListingOptions.noModification;
 import static org.sing_group.dreimt.domain.dao.signature.DefaultSignatureDao.CELL_TYPE_AND_SUBTYPE_COMPARATOR;
 
 import java.util.ArrayList;
@@ -221,99 +220,6 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       final Predicate[] predicates = createPredicates(listingOptions, root);
 
       query = query.select(cb.count(root)).where(predicates);
-
-      return this.em.createQuery(query).getSingleResult();
-    }
-  }
-
-  @Override
-  public Stream<DrugSignatureInteraction> list(ListingOptions listingOptions, String freeText) {
-    if (!listingOptions.hasAnyQueryModification()) {
-      return reconstruct(this.dh.list().stream());
-    } else {
-      final CriteriaBuilder cb = this.dh.cb();
-      CriteriaQuery<FullDrugSignatureInteraction> query = dh.createCBQuery();
-      final Root<FullDrugSignatureInteraction> root = query.from(dh.getEntityType());
-
-      DrugSignatureInteractionListingOptions drugSignatureListingOptions =
-        createDrugSignatureListingOptionsFromFreeText(listingOptions, freeText);
-
-      query =
-        query.select(root)
-          .where(cb.or(createPredicates(drugSignatureListingOptions, root)))
-          .orderBy(createOrders(drugSignatureListingOptions, root));
-
-      TypedQuery<FullDrugSignatureInteraction> typedQuery = em.createQuery(query);
-      if (listingOptions.hasResultLimits()) {
-        final int start = listingOptions.getStart().getAsInt();
-        final int end = listingOptions.getEnd().getAsInt();
-
-        typedQuery =
-          typedQuery
-            .setFirstResult(start)
-            .setMaxResults(end - start + 1);
-      }
-
-      return reconstruct(typedQuery.getResultList().stream());
-    }
-  }
-  
-  private DrugSignatureInteractionListingOptions createDrugSignatureListingOptionsFromFreeText(
-    ListingOptions listingOptions, String freeText
-  ) {
-    SignatureListingOptions signatureListingOptions =
-      new SignatureListingOptions(
-        freeText, // signatureName
-        freeText, // cellType1
-        freeText, // cellSubType1
-        null,     // cellTypeOrSubType1
-        freeText, // cellType2
-        freeText, // cellSubType2
-        null,     // cellTypeOrSubType2
-        null, // experimentalDesign
-        freeText, // organism
-        freeText, // disease
-        null, // sourceDb
-        null, // signaturePubMedId,
-        freeText, // cellType1Treatment
-        freeText // cellType1Disease
-      );
-
-    DrugSignatureInteractionListingOptions drugSignatureListingOptions =
-      new DrugSignatureInteractionListingOptions(
-        listingOptions, signatureListingOptions,
-        null, // interactionType
-        freeText, // drugSourceName
-        freeText, // drugSourceDb
-        freeText, // drugCommonName
-        freeText, // drugMoa
-        null, // drugStatus
-        null, //
-        null, // minTau
-        null, // maxUpFdr
-        null, // maxDownFdr
-        null  // cellType1Effect
-      );
-
-    return drugSignatureListingOptions;
-  }
-
-  @Override
-  public long count(String freeText) {
-    if (freeText.isEmpty()) {
-      return this.dh.count();
-    } else {
-      final CriteriaBuilder cb = dh.cb();
-
-      CriteriaQuery<Long> query = cb.createQuery(Long.class);
-      final Root<FullDrugSignatureInteraction> root = query.from(dh.getEntityType());
-
-      DrugSignatureInteractionListingOptions drugSignatureListingOptions =
-        createDrugSignatureListingOptionsFromFreeText(noModification(), freeText);
-
-      final Predicate[] predicates = createPredicates(drugSignatureListingOptions, root);
-
-      query = query.select(cb.count(root)).where(cb.or(predicates));
 
       return this.em.createQuery(query).getSingleResult();
     }

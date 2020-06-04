@@ -26,7 +26,6 @@ import java.util.stream.Stream;
 
 import javax.ejb.Local;
 
-import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.dao.signature.DrugSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.CellTypeAndSubtype;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
@@ -39,10 +38,6 @@ public interface DrugSignatureInteractionService {
   Stream<DrugSignatureInteraction> list(DrugSignatureInteractionListingOptions listingOptions);
 
   long count(DrugSignatureInteractionListingOptions listingOptions);
-
-  Stream<DrugSignatureInteraction> list(ListingOptions listingOptions, String freeText);
-
-  long count(String freeText);
 
   Stream<String> listSignatureNameValues(DrugSignatureInteractionListingOptions listingOptions);
 
