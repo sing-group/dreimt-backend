@@ -541,20 +541,6 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   }
 
   @Override
-  public Stream<String> listDrugSourceNameValues(
-    DrugSignatureInteractionListingOptions listingOptions
-  ) {
-    return this.listColumnValues(String.class, "drugSourceName", listingOptions);
-  }
-
-  @Override
-  public Stream<String> listDrugSourceDbValues(
-    DrugSignatureInteractionListingOptions listingOptions
-  ) {
-    return this.listColumnValues(String.class, "drugSourceDb", listingOptions);
-  }
-
-  @Override
   public Stream<String> listDrugCommonNameValues(
     DrugSignatureInteractionListingOptions listingOptions
   ) {
@@ -574,7 +560,6 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   ) {
     return this.listColumnValues(DrugStatus.class, "drugStatus", listingOptions);
   }
-  
 
   @Override
   public Stream<Integer> listSignaturePubMedIdValues(DrugSignatureInteractionListingOptions listingOptions) {

@@ -57,10 +57,6 @@ public interface DrugSignatureInteractionService {
 
   Stream<Integer> listSignaturePubMedIdValues(DrugSignatureInteractionListingOptions listingOptions);
 
-  Stream<String> listDrugSourceNameValues(DrugSignatureInteractionListingOptions listingOptions);
-
-  Stream<String> listDrugSourceDbValues(DrugSignatureInteractionListingOptions listingOptions);
-
   Stream<String> listDrugCommonNameValues(DrugSignatureInteractionListingOptions listingOptions);
 
   Stream<String> listDrugMoaValues(DrugSignatureInteractionListingOptions listingOptions);
