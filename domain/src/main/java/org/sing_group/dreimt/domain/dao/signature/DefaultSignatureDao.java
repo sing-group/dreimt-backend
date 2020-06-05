@@ -200,7 +200,7 @@ public class DefaultSignatureDao implements SignatureDao {
 
   @Override
   public long count(SignatureListingOptions listingOptions) {
-    return this.list(listingOptions).count();
+    return listColumnValues("signatureName", String.class, listingOptions).distinct().count();
   }
 
   private <T extends Signature> Predicate[] createPredicates(
@@ -426,20 +426,26 @@ public class DefaultSignatureDao implements SignatureDao {
     return listColumnValues("signatureType", String.class, signatureListingOptions).map(SignatureType::valueOf);
   }
 
-  private <T> Stream<T> listColumnValues(
+  private <T> Stream<T> listColumn(
     String columnName, Class<T> targetClass, SignatureListingOptions signatureListingOptions
-  ) {
+    ) {
     final CriteriaBuilder cb = dh.cb();
     CriteriaQuery<T> query = cb.createQuery(targetClass);
     final Root<Signature> root = query.from(dh.getEntityType());
 
-    query = query.select(root.get(columnName)).distinct(true);
+    query = query.select(root.get(columnName));
 
     if (signatureListingOptions.hasAnyQueryModification()) {
       query = query.where(createPredicates(signatureListingOptions, null, root));
     }
 
     return this.em.createQuery(query).getResultList().stream();
+  }
+
+  private <T> Stream<T> listColumnValues(
+    String columnName, Class<T> targetClass, SignatureListingOptions signatureListingOptions
+  ) {
+    return this.listColumn(columnName, targetClass, signatureListingOptions).distinct();
   }
 
   @Override
