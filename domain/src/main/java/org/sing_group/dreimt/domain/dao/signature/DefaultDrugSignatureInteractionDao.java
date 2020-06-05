@@ -421,7 +421,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       joins.add(root.get(column).as(String.class));
     }
 
-    query = query.multiselect(joins).distinct(true);
+    query = query.multiselect(joins);
 
     if (listingOptions.hasAnyQueryModification()) {
       query = query.where(createPredicates(listingOptions, root));
