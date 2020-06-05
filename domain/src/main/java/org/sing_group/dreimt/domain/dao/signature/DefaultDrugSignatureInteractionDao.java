@@ -648,8 +648,6 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       andPredicates.add(cb.equal(pubMedIdPath, signaturePubMedId));
     });
 
-    fieldLikeQueryBuilder.accept("drugSourceName", true, listingOptions.getDrugSourceName());
-    fieldLikeQueryBuilder.accept("drugSourceDb", true, listingOptions.getDrugSourceDb());
     fieldLikeQueryBuilder.accept("drugCommonName", true, listingOptions.getDrugCommonName());
     fieldLikeQueryBuilder.accept("drugMoa", false, listingOptions.getDrugMoa());
 
