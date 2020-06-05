@@ -24,16 +24,15 @@ package org.sing_group.dreimt.rest.entity.signature;
 
 import java.io.Serializable;
 import java.net.URI;
-import java.util.Set;
 
 public class SignatureDataSummary implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private String signatureName;
-  private Set<String> cellTypeA;
-  private Set<String> cellSubTypeA;
-  private Set<String> cellTypeB;
-  private Set<String> cellSubTypeB;
+  private String cellTypeA;
+  private String cellSubTypeA;
+  private String cellTypeB;
+  private String cellSubTypeB;
   private String sourceDb;
   private String sourceDbUrl;
   private String articleTitle;
@@ -46,9 +45,9 @@ public class SignatureDataSummary implements Serializable {
   SignatureDataSummary() {}
 
   public SignatureDataSummary(
-    String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA, Set<String> cellTypeB,
-    Set<String> cellSubTypeB, String sourceDb, String sourceDbUrl, Integer articlePubMedId, String articleTitle,
-    String articleAuthors, URI signatureGenesUri, URI articleMetadataUri
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB, String sourceDb,
+    String sourceDbUrl, Integer articlePubMedId, String articleTitle, String articleAuthors, URI signatureGenesUri,
+    URI articleMetadataUri
   ) {
     super();
     this.signatureName = signatureName;
@@ -70,19 +69,19 @@ public class SignatureDataSummary implements Serializable {
     return signatureName;
   }
 
-  public Set<String> getCellTypeA() {
+  public String getCellTypeA() {
     return cellTypeA;
   }
 
-  public Set<String> getCellSubTypeA() {
+  public String getCellSubTypeA() {
     return cellSubTypeA;
   }
 
-  public Set<String> getCellTypeB() {
+  public String getCellTypeB() {
     return cellTypeB;
   }
 
-  public Set<String> getCellSubTypeB() {
+  public String getCellSubTypeB() {
     return cellSubTypeB;
   }
 

@@ -33,10 +33,6 @@ TRUNCATE TABLE `full_drug_signature_interaction`;
 
 TRUNCATE TABLE `signature_updown_genes`;
 TRUNCATE TABLE `signature_geneset_genes`;
-TRUNCATE TABLE `signature_cell_type_a`;
-TRUNCATE TABLE `signature_cell_subtype_a`;
-TRUNCATE TABLE `signature_cell_type_b`;
-TRUNCATE TABLE `signature_cell_subtype_b`;
 TRUNCATE TABLE `signature_disease`;
 TRUNCATE TABLE `signature_disease_a`;
 TRUNCATE TABLE `signature_disease_b`;
@@ -87,10 +83,6 @@ ALTER TABLE `precalculated_example` AUTO_INCREMENT = 1;
 
 ALTER TABLE `signature_updown_genes` AUTO_INCREMENT = 1;
 ALTER TABLE `signature_geneset_genes` AUTO_INCREMENT = 1;
-ALTER TABLE `signature_cell_type_a` AUTO_INCREMENT = 1;
-ALTER TABLE `signature_cell_subtype_a` AUTO_INCREMENT = 1;
-ALTER TABLE `signature_cell_type_b` AUTO_INCREMENT = 1;
-ALTER TABLE `signature_cell_subtype_b` AUTO_INCREMENT = 1;
 ALTER TABLE `signature_disease` AUTO_INCREMENT = 1;
 ALTER TABLE `signature_disease_a` AUTO_INCREMENT = 1;
 ALTER TABLE `signature_disease_b` AUTO_INCREMENT = 1;

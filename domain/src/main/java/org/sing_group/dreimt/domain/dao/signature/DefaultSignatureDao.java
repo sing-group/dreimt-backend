@@ -218,16 +218,16 @@ public class DefaultSignatureDao implements SignatureDao {
     }
 
     if (listingOptions.getCellTypeAndSubType1Filter().isApplicable()) {
-      Join<Signature, String> joinSignatureCellTypeA = root.join("cellTypeA", JoinType.LEFT);
-      Join<Signature, String> joinSignatureCellTypeB = root.join("cellTypeB", JoinType.LEFT);
-      Join<Signature, String> joinSignatureCellSubTypeA = root.join("cellSubTypeA", JoinType.LEFT);
-      Join<Signature, String> joinSignatureCellSubTypeB = root.join("cellSubTypeB", JoinType.LEFT);
+      Path<String> cellTypeA = root.get("cellTypeA");
+      Path<String> cellTypeB = root.get("cellTypeB");
+      Path<String> cellSubTypeA = root.get("cellSubTypeA");
+      Path<String> cellSubTypeB = root.get("cellSubTypeB");
 
       andPredicates.add(
         listingOptions.getCellTypeAndSubType1Filter().getPredicate(
           cb, listingOptions.getCellTypeAndSubType2Filter(),
-          joinSignatureCellTypeA, joinSignatureCellSubTypeA,
-          joinSignatureCellTypeB, joinSignatureCellSubTypeB
+          cellTypeA, cellSubTypeA,
+          cellTypeB, cellSubTypeB
         )
       );
     }
@@ -317,7 +317,7 @@ public class DefaultSignatureDao implements SignatureDao {
     List<Selection<?>> joins = new LinkedList<>();
 
     for (String column : columns) {
-      joins.add(root.join(column).as(String.class));
+      joins.add(root.get(column).as(String.class));
     }
 
     query = query.multiselect(joins).distinct(true);
@@ -432,7 +432,7 @@ public class DefaultSignatureDao implements SignatureDao {
     final CriteriaBuilder cb = dh.cb();
     CriteriaQuery<T> query = cb.createQuery(targetClass);
     final Root<Signature> root = query.from(dh.getEntityType());
-
+    
     query = query.select(root.get(columnName));
 
     if (signatureListingOptions.hasAnyQueryModification()) {

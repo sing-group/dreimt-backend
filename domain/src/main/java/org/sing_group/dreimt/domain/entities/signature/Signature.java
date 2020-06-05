@@ -54,41 +54,10 @@ public abstract class Signature implements Serializable {
   @Id
   private String signatureName;
 
-  @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(
-    name = "signature_cell_type_a",
-    joinColumns = @JoinColumn(name = "signatureName"),
-    uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "cellType"})
-  )
-  @Column(name = "cellType", nullable = false)
-  private Set<String> cellTypeA;
-
-  @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(
-    name = "signature_cell_subtype_a",
-    joinColumns = @JoinColumn(name = "signatureName"),
-    uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "cellSubType"})
-  )
-  @Column(name = "cellSubType", nullable = false)
-  private Set<String> cellSubTypeA;
-
-  @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(
-    name = "signature_cell_type_b",
-    joinColumns = @JoinColumn(name = "signatureName"),
-    uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "cellType"})
-  )
-  @Column(name = "cellType", nullable = false)
-  private Set<String> cellTypeB;
-
-  @ElementCollection(fetch = FetchType.EAGER)
-  @CollectionTable(
-    name = "signature_cell_subtype_b",
-    joinColumns = @JoinColumn(name = "signatureName"),
-    uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "cellSubType"})
-  )
-  @Column(name = "cellSubType", nullable = false)
-  private Set<String> cellSubTypeB;
+  private String cellTypeA;
+  private String cellSubTypeA;
+  private String cellTypeB;
+  private String cellSubTypeB;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "article_pubmedId", referencedColumnName = "pubmedId", nullable = true)
@@ -153,10 +122,10 @@ public abstract class Signature implements Serializable {
   Signature() {}
 
   public Signature(
-    String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA, Set<String> cellTypeB,
-    Set<String> cellSubTypeB, String sourceDb, String sourceDbUrl, ExperimentalDesign experimentalDesign,
-    String organism, Set<String> disease, Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA,
-    Set<String> diseaseB, String localisationA, String localisationB, String stateA, String stateB
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB, String sourceDb,
+    String sourceDbUrl, ExperimentalDesign experimentalDesign, String organism, Set<String> disease,
+    Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA, Set<String> diseaseB, String localisationA,
+    String localisationB, String stateA, String stateB
   ) {
     this(
       signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, null, sourceDb, sourceDbUrl, experimentalDesign,
@@ -165,11 +134,10 @@ public abstract class Signature implements Serializable {
   }
 
   public Signature(
-    String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA, Set<String> cellTypeB,
-    Set<String> cellSubTypeB, ArticleMetadata articleMetadata, String sourceDb, String sourceDbUrl,
-    ExperimentalDesign experimentalDesign, String organism, Set<String> disease, Set<String> treatmentA,
-    Set<String> treatmentB, Set<String> diseaseA, Set<String> diseaseB, String localisationA, String localisationB,
-    String stateA, String stateB
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ArticleMetadata articleMetadata, String sourceDb, String sourceDbUrl, ExperimentalDesign experimentalDesign,
+    String organism, Set<String> disease, Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA,
+    Set<String> diseaseB, String localisationA, String localisationB, String stateA, String stateB
   ) {
     this.signatureName = signatureName;
     this.cellTypeA = cellTypeA;
@@ -202,19 +170,19 @@ public abstract class Signature implements Serializable {
     return signatureName;
   }
 
-  public Set<String> getCellTypeA() {
+  public String getCellTypeA() {
     return cellTypeA;
   }
 
-  public Set<String> getCellSubTypeA() {
+  public String getCellSubTypeA() {
     return cellSubTypeA;
   }
 
-  public Set<String> getCellTypeB() {
+  public String getCellTypeB() {
     return cellTypeB;
   }
 
-  public Set<String> getCellSubTypeB() {
+  public String getCellSubTypeB() {
     return cellSubTypeB;
   }
 

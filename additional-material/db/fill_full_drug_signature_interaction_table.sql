@@ -12,11 +12,7 @@ FROM
     ) AS drug RIGHT JOIN (
         SELECT drug_signature_interaction.drugId, drug_signature_interaction.upFdr, drug_signature_interaction.downFdr, drug_signature_interaction.tau, drug_signature_interaction.interactionType, drug_signature_interaction.cellTypeAEffect, drug_signature_interaction.cellTypeBEffect, signature_join.*
         FROM drug_signature_interaction LEFT JOIN (
-            SELECT signature_cell_subtype_b_join .*, GROUP_CONCAT(cellSubType ORDER BY cellSubType ASC SEPARATOR '##') AS cellSubTypeB 
-            FROM signature_cell_subtype_b RIGHT JOIN (
-                SELECT signature_cell_type_b_join .*, GROUP_CONCAT(cellType ORDER BY cellType ASC SEPARATOR '##') AS cellTypeB FROM signature_cell_type_b RIGHT JOIN (
-                    SELECT signature_cell_subtype_a_join .*, GROUP_CONCAT(cellSubType ORDER BY cellSubType ASC SEPARATOR '##') AS cellSubTypeA
-                    FROM signature_cell_subtype_a RIGHT JOIN (
+
                         SELECT signature_treatment_b_join .*, GROUP_CONCAT(treatmentB ORDER BY treatmentB ASC SEPARATOR '##') AS treatmentB
                         FROM signature_treatment_b RIGHT JOIN (
                             SELECT signature_treatment_a_join .*, GROUP_CONCAT(treatmentA ORDER BY treatmentA ASC SEPARATOR '##') AS treatmentA
@@ -25,13 +21,9 @@ FROM
                                 FROM signature_disease_b RIGHT JOIN (
                                     SELECT signature_disease_a_join .*, GROUP_CONCAT(diseaseA ORDER BY diseaseA ASC SEPARATOR '##') AS diseaseA
                                     FROM signature_disease_a RIGHT JOIN (
-                                        SELECT signature_disease_join.*, GROUP_CONCAT(cellType ORDER BY cellType ASC  SEPARATOR '##') AS cellTypeA
-                                        FROM signature_cell_type_a RIGHT JOIN (
-                                            SELECT signature.*, GROUP_CONCAT(disease ORDER BY disease ASC SEPARATOR '##') AS disease
+                                        SELECT signature.*, GROUP_CONCAT(disease ORDER BY disease ASC SEPARATOR '##') AS disease
                                             FROM signature LEFT JOIN 
                                                 signature_disease ON signature.signatureName = signature_disease.signatureName GROUP BY signatureName
-                                        ) AS signature_disease_join
-                                        ON signature_cell_type_a.signatureName = signature_disease_join.signatureName GROUP BY signatureName
                                     ) AS signature_disease_a_join
                                     ON signature_disease_a.signatureName = signature_disease_a_join.signatureName GROUP BY signatureName
                                 ) AS signature_disease_b_join
@@ -40,12 +32,7 @@ FROM
                             ON signature_treatment_a.signatureName = signature_treatment_a_join.signatureName GROUP BY signatureName
                         ) AS signature_treatment_b_join
                         ON signature_treatment_b.signatureName = signature_treatment_b_join.signatureName GROUP BY signatureName
-                    ) AS signature_cell_subtype_a_join
-                    ON signature_cell_subtype_a.signatureName = signature_cell_subtype_a_join.signatureName GROUP BY signatureName
-                ) AS signature_cell_type_b_join
-                ON signature_cell_type_b.signatureName = signature_cell_type_b_join.signatureName GROUP BY signatureName
-            ) AS signature_cell_subtype_b_join
-            ON signature_cell_subtype_b.signatureName = signature_cell_subtype_b_join.signatureName GROUP BY signatureName
+
         ) AS signature_join
         ON signature_join.signatureName  = drug_signature_interaction.signature
     ) AS interactions

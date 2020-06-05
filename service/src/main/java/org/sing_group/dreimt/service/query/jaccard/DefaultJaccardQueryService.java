@@ -285,11 +285,13 @@ public class DefaultJaccardQueryService implements JaccardQueryService {
     Map<String, Integer> cellType = new HashMap<String, Integer>();
     Map<String, Integer> cellSubType = new HashMap<String, Integer>();
     signatures.forEach(s -> {
-      Set<String> cellTypes = new HashSet<>(s.getCellTypeA());
-      cellTypes.addAll(s.getCellTypeB());
+      Set<String> cellTypes = new HashSet<>();
+      cellTypes.add(s.getCellTypeA());
+      cellTypes.add(s.getCellTypeB());
 
-      Set<String> cellSubTypes = new HashSet<>(s.getCellSubTypeA());
-      cellSubTypes.addAll(s.getCellSubTypeB());
+      Set<String> cellSubTypes = new HashSet<>();
+      cellSubTypes.add(s.getCellSubTypeA());
+      cellSubTypes.add(s.getCellSubTypeB());
 
       cellTypes.forEach(cT -> {
         cellType.put(cT, cellType.getOrDefault(cT, 0) + 1);

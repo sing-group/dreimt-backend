@@ -45,10 +45,10 @@ public class UpDownSignature extends Signature {
   UpDownSignature() {}
   
   public UpDownSignature(
-    String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA, Set<String> cellTypeB,
-    Set<String> cellSubTypeB, String sourceDb, String sourceDbUrl, ExperimentalDesign experimentalDesign,
-    String organism, Set<String> disease, Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA,
-    Set<String> diseaseB, String localisationA, String localisationB, String stateA, String stateB
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB, String sourceDb,
+    String sourceDbUrl, ExperimentalDesign experimentalDesign, String organism, Set<String> disease,
+    Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA, Set<String> diseaseB, String localisationA,
+    String localisationB, String stateA, String stateB
   ) {
     super(
       signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, sourceDb, sourceDbUrl, experimentalDesign,
@@ -57,11 +57,10 @@ public class UpDownSignature extends Signature {
   }
 
   public UpDownSignature(
-    String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA, Set<String> cellTypeB,
-    Set<String> cellSubTypeB, ArticleMetadata articleMetadata, String sourceDb, String sourceDbUrl,
-    ExperimentalDesign experimentalDesign, String organism, Set<String> disease, Set<String> treatmentA,
-    Set<String> treatmentB, Set<String> diseaseA, Set<String> diseaseB, String localisationA, String localisationB,
-    String stateA, String stateB
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
+    ArticleMetadata articleMetadata, String sourceDb, String sourceDbUrl, ExperimentalDesign experimentalDesign,
+    String organism, Set<String> disease, Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA,
+    Set<String> diseaseB, String localisationA, String localisationB, String stateA, String stateB
   ) {
     super(
       signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, articleMetadata, sourceDb, sourceDbUrl,

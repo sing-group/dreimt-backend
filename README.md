@@ -43,10 +43,9 @@ The `additional-material/db` contains several files related with the DREIMT db i
 ```
 sudo mysql dreimt < additional-material/db/dreimt-db-initialization.sql
 sudo mysql dreimt < additional-material/db/dreimt-schema.sql
-zcat additional-material/db/dreimt-data.sql.gz  | sudo mysql dreimt
+zcat additional-material/db/dreimt-data.sql.gz | sudo mysql dreimt
 sudo mysql dreimt < additional-material/db/fill_full_drug_signature_interaction_table.sql
 ```
-
 
 #### Building the application
 The application can be built with the following Maven command:

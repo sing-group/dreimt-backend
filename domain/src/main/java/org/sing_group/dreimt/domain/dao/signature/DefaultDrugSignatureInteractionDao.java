@@ -29,6 +29,7 @@ import static javax.transaction.Transactional.TxType.MANDATORY;
 import static org.sing_group.dreimt.domain.dao.signature.DefaultSignatureDao.CELL_TYPE_AND_SUBTYPE_COMPARATOR;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -110,10 +111,10 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
           buildSignature(
             fdsi.getSignatureType(),
             fdsi.getSignatureName(),
-            reconstructSet(fdsi.getSignatureCellTypeA()),
-            reconstructSet(fdsi.getSignatureCellSubTypeA()),
-            reconstructSet(fdsi.getSignatureCellTypeB()),
-            reconstructSet(fdsi.getSignatureCellSubTypeB()),
+            fdsi.getSignatureCellTypeA(),
+            fdsi.getSignatureCellSubTypeA(),
+            fdsi.getSignatureCellTypeB(),
+            fdsi.getSignatureCellSubTypeB(),
             fdsi.getArticleMetadata(),
             fdsi.getSignatureSourceDb(),
             fdsi.getSignatureSourceDbUrl(),
@@ -138,11 +139,11 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   }
 
   private static Signature buildSignature(
-    SignatureType signatureType, String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA,
-    Set<String> cellTypeB, Set<String> cellSubTypeB, Optional<ArticleMetadata> articleMetadata, String sourceDb,
-    String sourceDbUrl, ExperimentalDesign experimentalDesign, String organism, Set<String> disease,
-    Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA, Set<String> diseaseB, String localisationA,
-    String localisationB, String stateA, String stateB
+    SignatureType signatureType, String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB,
+    String cellSubTypeB, Optional<ArticleMetadata> articleMetadata, String sourceDb, String sourceDbUrl,
+    ExperimentalDesign experimentalDesign, String organism, Set<String> disease, Set<String> treatmentA,
+    Set<String> treatmentB, Set<String> diseaseA, Set<String> diseaseB, String localisationA, String localisationB,
+    String stateA, String stateB
   ) {
     if (signatureType.equals(SignatureType.GENESET)) {
       if (articleMetadata.isPresent()) {
@@ -231,12 +232,9 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   ) {
     return listMultipleColumnCollectionValues(
       listingOptions, "signatureCellTypeA", "signatureCellSubTypeA", "signatureCellTypeB", "signatureCellSubTypeB"
-    )
-      .map(tuple -> {
-        List<CellTypeAndSubtype> list = tupleToCellTypeAndSubtype(tuple, 0, 1);
-        list.addAll(tupleToCellTypeAndSubtype(tuple, 2, 3));
-        return list;
-      })
+    ).map(tuple -> {
+      return Arrays.asList(tupleToCellTypeAndSubtype(tuple, 0, 1), tupleToCellTypeAndSubtype(tuple, 2, 3));
+    })
       .flatMap(List::stream)
       .distinct()
       .filter(
@@ -253,12 +251,12 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       "signatureCellTypeB", "signatureCellSubTypeB", "signatureDiseaseB"
     )
       .map(tuple -> {
-        List<CellTypeAndSubtype> listA = tupleToCellTypeAndSubtype(tuple, 0, 1);
-        List<CellTypeAndSubtype> listB = tupleToCellTypeAndSubtype(tuple, 3, 4);
+        CellTypeAndSubtype typeA = tupleToCellTypeAndSubtype(tuple, 0, 1);
+        CellTypeAndSubtype typeB = tupleToCellTypeAndSubtype(tuple, 3, 4);
 
         String additionalSetFieldFilter = listingOptions.getSignatureListingOptions().getCellType1Disease().orElse("");
-        List<CustomCellTypeAndSubtype> list = toCustomCellTypeAndSubtypeList(tuple.get(2), additionalSetFieldFilter, listA);
-        list.addAll(toCustomCellTypeAndSubtypeList(tuple.get(5), additionalSetFieldFilter, listB));
+        List<CustomCellTypeAndSubtype> list = toCustomCellTypeAndSubtypeList(tuple.get(2), additionalSetFieldFilter, typeA);
+        list.addAll(toCustomCellTypeAndSubtypeList(tuple.get(5), additionalSetFieldFilter, typeB));
 
         return list;
       })
@@ -279,12 +277,12 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       "signatureCellTypeB", "signatureCellSubTypeB", "signatureTreatmentB"
     )
       .map(tuple -> {
-        List<CellTypeAndSubtype> listA = tupleToCellTypeAndSubtype(tuple, 0, 1);
-        List<CellTypeAndSubtype> listB = tupleToCellTypeAndSubtype(tuple, 3, 4);
+        CellTypeAndSubtype typeA = tupleToCellTypeAndSubtype(tuple, 0, 1);
+        CellTypeAndSubtype typeB = tupleToCellTypeAndSubtype(tuple, 3, 4);
 
         String additionalSetFieldFilter = listingOptions.getSignatureListingOptions().getCellType1Treatment().orElse("");
-        List<CustomCellTypeAndSubtype> list = toCustomCellTypeAndSubtypeList(tuple.get(2), additionalSetFieldFilter, listA);
-        list.addAll(toCustomCellTypeAndSubtypeList(tuple.get(5), additionalSetFieldFilter, listB));
+        List<CustomCellTypeAndSubtype> list = toCustomCellTypeAndSubtypeList(tuple.get(2), additionalSetFieldFilter, typeA);
+        list.addAll(toCustomCellTypeAndSubtypeList(tuple.get(5), additionalSetFieldFilter, typeB));
 
         return list;
       })
@@ -298,15 +296,15 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   }
 
   private static List<CustomCellTypeAndSubtype> toCustomCellTypeAndSubtypeList(
-    Object additionalSetFieldValue, String additionalSetFieldFilter, List<CellTypeAndSubtype> list
+    Object additionalSetFieldValue, String additionalSetFieldFilter, CellTypeAndSubtype cellTypeAndSubtype
   ) {
     List<CustomCellTypeAndSubtype> toret = new LinkedList<>();
 
-    if(additionalSetFieldValue != null) {
+    if (additionalSetFieldValue != null) {
       Set<String> fieldValues = reconstructSet(additionalSetFieldValue.toString());
-      for(String value : fieldValues) {
-        if(value.contains(additionalSetFieldFilter)) {
-          list.stream().map(t -> new CustomCellTypeAndSubtype(t, value)).forEach(toret::add);
+      for (String value : fieldValues) {
+        if (value.contains(additionalSetFieldFilter)) {
+          toret.add(new CustomCellTypeAndSubtype(cellTypeAndSubtype, value));
         }
       }
     }
@@ -336,29 +334,11 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     return this.em.createQuery(query).getResultList().stream();
   }
 
-  private static List<CellTypeAndSubtype> tupleToCellTypeAndSubtype(Tuple tuple, int typeIndex, int subTypeIndex) {
-    Set<String> types = null;
-    if (tuple.get(typeIndex) != null) {
-      types = reconstructSet(tuple.get(typeIndex).toString());
-    }
+  private static CellTypeAndSubtype tupleToCellTypeAndSubtype(Tuple tuple, int typeIndex, int subTypeIndex) {
+    String type = tuple.get(typeIndex).toString();
+    String subType = tuple.get(subTypeIndex).toString();
 
-    Set<String> subTypes = emptySet();
-    if (tuple.get(subTypeIndex) != null) {
-      subTypes = reconstructSet(tuple.get(subTypeIndex).toString());
-    }
-
-    List<CellTypeAndSubtype> toret = new LinkedList<>();
-    for (String type : types) {
-      if (subTypes.isEmpty()) {
-        toret.add(new CellTypeAndSubtype(type, null));
-      } else {
-        for (String subType : subTypes) {
-          toret.add(new CellTypeAndSubtype(type, subType));
-        }
-      }
-    }
-
-    return toret;
+    return new CellTypeAndSubtype(type, subType);
   }
 
   private static class CustomCellTypeAndSubtype extends CellTypeAndSubtype {
@@ -416,25 +396,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     return listMultipleColumnCollectionValues(
       listingOptions, "signatureCellTypeA", "signatureCellSubTypeA", "signatureCellTypeB", "signatureCellSubTypeB"
     )
-      .map(tuple -> {
-        List<CellTypeAndSubtype> a = tupleToCellTypeAndSubtype(tuple, 0, 1);
-        List<CellTypeAndSubtype> b = tupleToCellTypeAndSubtype(tuple, 2, 3);
-
-        List<CellTypeAndSubtype> toret = new LinkedList<>();
-        for (CellTypeAndSubtype ctsa : a) {
-          for (CellTypeAndSubtype ctsb : b) {
-            toret.addAll(getTuplePair(signatureListingOptions, ctsa, ctsb));
-          }
-        }
-        if (toret.isEmpty()) {
-          throw new IllegalArgumentException(
-            "Error processing match against cellType1 filter: " +
-              signatureListingOptions.getCellTypeAndSubType1Filter().toString()
-          );
-        }
-
-        return toret;
-      })
+      .map(tuple -> getTuplePair(signatureListingOptions, tupleToCellTypeAndSubtype(tuple, 0, 1), tupleToCellTypeAndSubtype(tuple, 2, 3)))
       .flatMap(List::stream)
       .filter(DefaultDrugSignatureInteractionDao::notEmpty)
       .distinct()
@@ -453,7 +415,15 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       toret.add(a);
     }
 
-    return toret;
+
+    if (!toret.isEmpty()) {
+      return toret;
+    }
+
+    throw new IllegalArgumentException(
+      "Error processing match against cellType1 filter: "
+        + signatureListingOptions.getCellTypeAndSubType1Filter().toString()
+    );
   }
 
   private static boolean notEmpty(CellTypeAndSubtype cellTypeAndSubType) {
@@ -624,12 +594,12 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     final SignatureListingOptions signatureListingOptions = listingOptions.getSignatureListingOptions();
 
     final TriConsumer<String, Boolean, Optional<String>> fieldLikeQueryBuilder =
-      (attributeName, onlyRightLike, queryValue) -> {
+      (attributeName, useEquals, queryValue) -> {
         if (queryValue.isPresent()) {
           final Path<String> field = root.get(attributeName);
 
-          if (onlyRightLike) {
-            andPredicates.add(cb.like(cb.upper(field), queryValue.get().toUpperCase() + "%"));
+          if (useEquals) {
+            andPredicates.add(cb.equal(cb.upper(field), queryValue.get().toUpperCase()));
           } else {
             andPredicates.add(cb.like(cb.upper(field), "%" + queryValue.get().toUpperCase() + "%"));
           }
@@ -680,7 +650,7 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
     fieldLikeQueryBuilder.accept("drugSourceName", true, listingOptions.getDrugSourceName());
     fieldLikeQueryBuilder.accept("drugSourceDb", true, listingOptions.getDrugSourceDb());
-    fieldLikeQueryBuilder.accept("drugCommonName", false, listingOptions.getDrugCommonName());
+    fieldLikeQueryBuilder.accept("drugCommonName", true, listingOptions.getDrugCommonName());
     fieldLikeQueryBuilder.accept("drugMoa", false, listingOptions.getDrugMoa());
 
     listingOptions.getDrugStatus().ifPresent(drugStatus -> {

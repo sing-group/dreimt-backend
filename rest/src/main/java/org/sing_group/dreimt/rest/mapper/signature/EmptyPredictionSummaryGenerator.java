@@ -37,8 +37,8 @@ public class EmptyPredictionSummaryGenerator extends PredictionSummaryGenerator 
   @Override
   public String interpretation(
     String signatureName, double tau, DrugSignatureInteractionType interactionType, String drugCommonName,
-    String stateA, Set<String> cellSubTypeA, Set<String> treatmentA, Set<String> diseaseA, String stateB,
-    Set<String> cellSubTypeB, Set<String> treatmentB, Set<String> diseaseB
+    String stateA, String cellSubTypeA, Set<String> treatmentA, Set<String> diseaseA, 
+    String stateB, String cellSubTypeB, Set<String> treatmentB, Set<String> diseaseB
   ) {
     return "";
   }

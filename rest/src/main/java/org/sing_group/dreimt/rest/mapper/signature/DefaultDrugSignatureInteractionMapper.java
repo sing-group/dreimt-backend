@@ -87,10 +87,10 @@ public class DefaultDrugSignatureInteractionMapper implements DrugSignatureInter
         .append("\"").append(i.getDrug().getCommonName()).append("\"").append(",")
         .append("\"").append(signatureSummaryGenerator.interpretation(i)).append("\"").append(",")
 
-        .append("\"").append(setString(i.getSignature().getCellTypeA())).append("\"").append(",")
-        .append("\"").append(setString(i.getSignature().getCellSubTypeA())).append("\"").append(",")
-        .append("\"").append(setString(i.getSignature().getCellTypeB())).append("\"").append(",")
-        .append("\"").append(setString(i.getSignature().getCellSubTypeB())).append("\"").append(",")
+        .append("\"").append(i.getSignature().getCellTypeA()).append("\"").append(",")
+        .append("\"").append(i.getSignature().getCellSubTypeA()).append("\"").append(",")
+        .append("\"").append(i.getSignature().getCellTypeB()).append("\"").append(",")
+        .append("\"").append(i.getSignature().getCellSubTypeB()).append("\"").append(",")
 
         .append("\"").append(i.getSignature().getSignatureName()).append("\"").append(",")
 

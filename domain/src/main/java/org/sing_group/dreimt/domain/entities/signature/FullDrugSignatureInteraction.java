@@ -59,7 +59,9 @@ import javax.persistence.Table;
     @Index(columnList = "signatureOrganism"),
     @Index(columnList = "signatureSourceDb"),
     @Index(columnList = "signatureCellTypeA"),
-    @Index(columnList = "signatureCellTypeB")
+    @Index(columnList = "signatureCellSubTypeA"),
+    @Index(columnList = "signatureCellTypeB"),
+    @Index(columnList = "signatureCellSubTypeB")
   }
 )
 public class FullDrugSignatureInteraction implements Serializable {

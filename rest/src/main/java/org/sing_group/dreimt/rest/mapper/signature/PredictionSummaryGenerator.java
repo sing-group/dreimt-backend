@@ -53,8 +53,8 @@ public class PredictionSummaryGenerator {
 
   public String interpretation(
     String signatureName, double tau, DrugSignatureInteractionType interactionType, String drugCommonName,
-    String stateA, Set<String> cellSubTypeA, Set<String> treatmentA, Set<String> diseaseA,
-    String stateB, Set<String> cellSubTypeB, Set<String> treatmentB, Set<String> diseaseB
+    String stateA, String cellSubTypeA, Set<String> treatmentA, Set<String> diseaseA,
+    String stateB, String cellSubTypeB, Set<String> treatmentB, Set<String> diseaseB
   ) {
     String effect = getEffect(tau);
 
@@ -90,9 +90,9 @@ public class PredictionSummaryGenerator {
 
   private static String interpretation(
     String signatureName, String effect, String drugCommonName, boolean addComparedTo,
-    String stateA, Set<String> cellSubTypeA, Set<String> treatmentA, Set<String> diseaseA,
+    String stateA, String cellSubTypeA, Set<String> treatmentA, Set<String> diseaseA,
     Map<String, List<String>> mapTreatmentA,
-    String stateB, Set<String> cellSubTypeB, Set<String> treatmentB, Set<String> diseaseB,
+    String stateB, String cellSubTypeB, Set<String> treatmentB, Set<String> diseaseB,
     Map<String, List<String>> mapTreatmentB
   ) {
     String treatmentAStr =
@@ -110,7 +110,7 @@ public class PredictionSummaryGenerator {
       .append(" ")
       .append(stateA)
       .append(stateA.isEmpty() ? "" : " ")
-      .append(concat(new LinkedList<>(cellSubTypeA)));
+      .append(cellSubTypeA);
 
     if (!treatmentAStr.isEmpty()) {
       interpretation
@@ -128,7 +128,7 @@ public class PredictionSummaryGenerator {
         .append(" compared to ")
         .append(stateB)
         .append(stateB.isEmpty() ? "" : " ")
-        .append(concat(new LinkedList<>(cellSubTypeB)));
+        .append(cellSubTypeB);
 
       if (!treatmentBStr.isEmpty()) {
         interpretation

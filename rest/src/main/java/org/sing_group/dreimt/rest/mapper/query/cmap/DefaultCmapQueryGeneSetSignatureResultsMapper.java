@@ -22,11 +22,9 @@
  */
 package org.sing_group.dreimt.rest.mapper.query.cmap;
 
-import static java.util.Arrays.asList;
 import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.joining;
 
-import java.util.HashSet;
 import java.util.List;
 
 import javax.enterprise.inject.Default;
@@ -155,8 +153,8 @@ public class DefaultCmapQueryGeneSetSignatureResultsMapper implements CmapQueryG
 
     return predictionSummaryGenerator.interpretation(
       "query-signature", interaction.getTau(), interactionType, interaction.getDrug().getCommonName(),
-      "", new HashSet<>(asList(result.getCaseType())), emptySet(), emptySet(),
-      "", new HashSet<>(asList(result.getReferenceType())), emptySet(), emptySet()
+      "", result.getCaseType(), emptySet(), emptySet(),
+      "", result.getReferenceType(), emptySet(), emptySet()
     );
   }
 }

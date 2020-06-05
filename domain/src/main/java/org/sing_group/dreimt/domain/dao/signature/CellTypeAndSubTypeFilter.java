@@ -30,7 +30,6 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 
@@ -86,9 +85,6 @@ public class CellTypeAndSubTypeFilter {
     Path<DrugInteractionEffect> cellTypeBEffect,
     DrugInteractionEffect drugEffectFilter
   ) {
-    Expression<String> cellTypeOrSubTypeA = cb.concat(cellTypeA, cellSubTypeA);
-    Expression<String> cellTypeOrSubTypeB = cb.concat(cellTypeB, cellSubTypeB);
-    
     List<Predicate> cellTypeAPredicates = new LinkedList<>();
     List<Predicate> cellTypeBPredicates = new LinkedList<>();
 
@@ -112,8 +108,8 @@ public class CellTypeAndSubTypeFilter {
 
     if (!cellTypeAndSubType2Filter.isApplicable()) {
       if (isOr) {
-        cellTypeAPredicates.add(cb.like(cellTypeOrSubTypeA, "%" + type1 + "%"));
-        cellTypeBPredicates.add(cb.like(cellTypeOrSubTypeB, "%" + type1 + "%"));
+        cellTypeAPredicates.add(cb.or(cb.equal(cellTypeA, type1), cb.equal(cellSubTypeA, type1)));
+        cellTypeBPredicates.add(cb.or(cb.equal(cellTypeB, type1), cb.equal(cellSubTypeB, type1)));
       } else {
         cellTypeAPredicates.addAll(typeAndSubTypePredicates(cb, cellTypeA, cellSubTypeA, type1, subType1));
         cellTypeBPredicates.addAll(typeAndSubTypePredicates(cb, cellTypeB, cellSubTypeB, type1, subType1));
@@ -130,22 +126,22 @@ public class CellTypeAndSubTypeFilter {
 
     if (isOr) {
       if (cellTypeAndSubType2Filter.isOr) {
-        cellTypeAPredicates.add(cb.like(cellTypeOrSubTypeA, "%" + type1 + "%"));
-        cellTypeBPredicates.add(cb.like(cellTypeOrSubTypeB, "%" + type1 + "%"));
+        cellTypeAPredicates.add(cb.or(cb.equal(cellTypeA, type1), cb.equal(cellSubTypeA, type1)));
+        cellTypeBPredicates.add(cb.or(cb.equal(cellTypeB, type1), cb.equal(cellSubTypeB, type1)));
         
         return cb.or(
           cb.and(
             andPredicate(cb, cellTypeAPredicates),
-            cb.like(cellTypeOrSubTypeB, "%" + type2 + "%")
+            cb.or(cb.equal(cellTypeB, type2), cb.equal(cellSubTypeB, type2))
           ),
           cb.and(
-            cb.like(cellTypeOrSubTypeA, "%" + type2 + "%"),
+            cb.or(cb.equal(cellTypeA, type2), cb.equal(cellSubTypeA, type2)),
             andPredicate(cb, cellTypeBPredicates)
           )
         );
       } else {
-        cellTypeAPredicates.add(cb.like(cellTypeOrSubTypeA, "%" + type1 + "%"));
-        cellTypeBPredicates.add(cb.like(cellTypeOrSubTypeB, "%" + type1 + "%"));
+        cellTypeAPredicates.add(cb.or(cb.equal(cellTypeA, type1), cb.equal(cellSubTypeA, type1)));
+        cellTypeBPredicates.add(cb.or(cb.equal(cellTypeB, type1), cb.equal(cellSubTypeB, type1)));
         
         return cb.or(
           cb.and(
@@ -174,11 +170,11 @@ public class CellTypeAndSubTypeFilter {
         return cb.or(
           cb.and(
             andPredicate(cb, cellTypeBPredicates),
-            cb.like(cellTypeOrSubTypeA, "%" + type2 + "%")
+            cb.or(cb.equal(cellTypeA, type2), cb.equal(cellSubTypeA, type2))
           ),
           cb.and(
               andPredicate(cb, cellTypeAPredicates),
-              cb.like(cellTypeOrSubTypeB, "%" + type2 + "%")
+              cb.or(cb.equal(cellTypeB, type2), cb.equal(cellSubTypeB, type2))
           )
         );
       } else {
@@ -221,10 +217,10 @@ public class CellTypeAndSubTypeFilter {
   ) {
     List<Predicate> predicates = new LinkedList<>();
     if (!typeFilter.isEmpty()) {
-      predicates.add(cb.like(typePath, "%" + typeFilter + "%"));
+      predicates.add(cb.equal(typePath, typeFilter));
     }
     if (!subTypeFilter.isEmpty()) {
-      predicates.add(cb.like(subTypePath, "%" + subTypeFilter + "%"));
+      predicates.add(cb.equal(subTypePath, subTypeFilter));
     }
     return predicates;
   }

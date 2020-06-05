@@ -31,10 +31,6 @@ DROP TABLE `full_drug_signature_interaction`;
 
 DROP TABLE `signature_updown_genes`;
 DROP TABLE `signature_geneset_genes`;
-DROP TABLE `signature_cell_type_a`;
-DROP TABLE `signature_cell_subtype_a`;
-DROP TABLE `signature_cell_type_b`;
-DROP TABLE `signature_cell_subtype_b`;
 DROP TABLE `signature_disease`;
 DROP TABLE `signature_disease_a`;
 DROP TABLE `signature_disease_b`;

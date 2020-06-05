@@ -590,6 +590,10 @@ DROP TABLE IF EXISTS `signature`;
 CREATE TABLE `signature` (
   `signatureType` varchar(31) COLLATE utf8mb4_unicode_ci NOT NULL,
   `signatureName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cellSubTypeA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cellSubTypeB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cellTypeA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cellTypeB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `experimentalDesign` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `localisationA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `localisationB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -602,66 +606,6 @@ CREATE TABLE `signature` (
   PRIMARY KEY (`signatureName`),
   KEY `FKob3uvde5er8oiayu91rowlcgm` (`article_pubmedId`),
   CONSTRAINT `FKob3uvde5er8oiayu91rowlcgm` FOREIGN KEY (`article_pubmedId`) REFERENCES `article_metadata` (`pubmedId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `signature_cell_subtype_a`
---
-
-DROP TABLE IF EXISTS `signature_cell_subtype_a`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `signature_cell_subtype_a` (
-  `signatureName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `cellSubType` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`signatureName`,`cellSubType`),
-  CONSTRAINT `FKdw9fhtdt3vj45vjc453jl7ovh` FOREIGN KEY (`signatureName`) REFERENCES `signature` (`signatureName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `signature_cell_subtype_b`
---
-
-DROP TABLE IF EXISTS `signature_cell_subtype_b`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `signature_cell_subtype_b` (
-  `signatureName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `cellSubType` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`signatureName`,`cellSubType`),
-  CONSTRAINT `FKm67vnhg2rbgdctv8gh6055y8l` FOREIGN KEY (`signatureName`) REFERENCES `signature` (`signatureName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `signature_cell_type_a`
---
-
-DROP TABLE IF EXISTS `signature_cell_type_a`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `signature_cell_type_a` (
-  `signatureName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `cellType` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`signatureName`,`cellType`),
-  CONSTRAINT `FKav0ta8w7h6p10gfa7uddvfxl5` FOREIGN KEY (`signatureName`) REFERENCES `signature` (`signatureName`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `signature_cell_type_b`
---
-
-DROP TABLE IF EXISTS `signature_cell_type_b`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `signature_cell_type_b` (
-  `signatureName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `cellType` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  PRIMARY KEY (`signatureName`,`cellType`),
-  CONSTRAINT `FKd2cpam0rgflkr9yhsj7cwfihj` FOREIGN KEY (`signatureName`) REFERENCES `signature` (`signatureName`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -825,4 +769,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-02 18:40:59
+-- Dump completed on 2020-06-04 18:23:33

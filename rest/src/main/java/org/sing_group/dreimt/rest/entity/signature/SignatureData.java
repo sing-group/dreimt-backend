@@ -33,10 +33,10 @@ public class SignatureData implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private String signatureName;
-  private Set<String> cellTypeA;
-  private Set<String> cellSubTypeA;
-  private Set<String> cellTypeB;
-  private Set<String> cellSubTypeB;
+  private String cellTypeA;
+  private String cellSubTypeA;
+  private String cellTypeB;
+  private String cellSubTypeB;
   private String sourceDb;
   private String sourceDbUrl;
   private ExperimentalDesign experimentalDesign;
@@ -59,11 +59,11 @@ public class SignatureData implements Serializable {
   SignatureData() {}
 
   public SignatureData(
-    String signatureName, Set<String> cellTypeA, Set<String> cellSubTypeA, Set<String> cellTypeB,
-    Set<String> cellSubTypeB, String sourceDb, String sourceDbUrl, ExperimentalDesign experimentalDesign, String organism,
-    Set<String> disease, Set<String> diseaseA, Set<String> diseaseB, Set<String> treatmentA, Set<String> treatmentB,
-    String stateA, String stateB, Integer articlePubMedId, String articleTitle, String articleAuthors,
-    SignatureType signatureType, URI signatureGenesUri, URI articleMetadataUri
+    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB, String sourceDb,
+    String sourceDbUrl, ExperimentalDesign experimentalDesign, String organism, Set<String> disease,
+    Set<String> diseaseA, Set<String> diseaseB, Set<String> treatmentA, Set<String> treatmentB, String stateA,
+    String stateB, Integer articlePubMedId, String articleTitle, String articleAuthors, SignatureType signatureType,
+    URI signatureGenesUri, URI articleMetadataUri
   ) {
     super();
     this.signatureName = signatureName;
@@ -95,26 +95,26 @@ public class SignatureData implements Serializable {
     return signatureName;
   }
 
-  public Set<String> getCellTypeA() {
+  public String getCellTypeA() {
     return cellTypeA;
   }
 
-  public Set<String> getCellSubTypeA() {
+  public String getCellSubTypeA() {
     return cellSubTypeA;
   }
 
-  public Set<String> getCellTypeB() {
+  public String getCellTypeB() {
     return cellTypeB;
   }
 
-  public Set<String> getCellSubTypeB() {
+  public String getCellSubTypeB() {
     return cellSubTypeB;
   }
 
   public String getArticleTitle() {
     return articleTitle;
   }
-  
+
   public String getArticleAuthors() {
     return articleAuthors;
   }
