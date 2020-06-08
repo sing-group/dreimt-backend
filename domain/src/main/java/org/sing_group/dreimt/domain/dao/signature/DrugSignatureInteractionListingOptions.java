@@ -31,48 +31,39 @@ import java.util.Optional;
 import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.DrugInteractionEffect;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
-import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
 
 public class DrugSignatureInteractionListingOptions implements Serializable {
   private static final long serialVersionUID = 1L;
 
   private final ListingOptions listingOptions;
   private final SignatureListingOptions signatureListingOptions;
+  private final DrugListingOptions drugListingOptions;
   private final DrugSignatureInteractionType interactionType;
-  private final String drugCommonName;
-  private final String drugMoa;
-  private final DrugStatus drugStatus;
-  private final Double minDrugDss;
   private final Double minTau;
   private final Double maxUpFdr;
   private final Double maxDownFdr;
   private final DrugInteractionEffect cellType1Effect;
 
   public DrugSignatureInteractionListingOptions(
-    SignatureListingOptions signatureListingOptions, DrugSignatureInteractionType interactionType,
-    String drugCommonName, String drugMoa, DrugStatus drugStatus, Double minDrugDss, Double minTau, Double maxUpFdr,
+    SignatureListingOptions signatureListingOptions, DrugListingOptions drugListingOptions, DrugSignatureInteractionType interactionType,
+    Double minTau, Double maxUpFdr,
     Double maxDownFdr, DrugInteractionEffect cellType1Effect
   ) {
     this(
-      noModification(), signatureListingOptions, interactionType, drugCommonName, drugMoa, drugStatus, minDrugDss,
-      minTau, maxUpFdr, maxDownFdr, cellType1Effect
+      noModification(), signatureListingOptions, drugListingOptions, interactionType, minTau, maxUpFdr, maxDownFdr, cellType1Effect
     );
   }
 
   public DrugSignatureInteractionListingOptions(
-    ListingOptions listingOptions, SignatureListingOptions signatureListingOptions,
-    DrugSignatureInteractionType interactionType, String drugCommonName, String drugMoa, DrugStatus drugStatus,
-    Double minDrugDss, Double minTau, Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect
+    ListingOptions listingOptions, SignatureListingOptions signatureListingOptions, DrugListingOptions drugListingOptions,
+    DrugSignatureInteractionType interactionType, Double minTau, Double maxUpFdr, Double maxDownFdr, DrugInteractionEffect cellType1Effect
   ) {
     validateCellTypeAEffect(cellType1Effect, signatureListingOptions);
 
     this.listingOptions = listingOptions;
     this.signatureListingOptions = signatureListingOptions;
     this.interactionType = interactionType;
-    this.drugCommonName = drugCommonName;
-    this.drugMoa = drugMoa;
-    this.drugStatus = drugStatus;
-    this.minDrugDss = minDrugDss;
+    this.drugListingOptions = drugListingOptions;
     this.minTau = minTau;
     this.maxUpFdr = maxUpFdr;
     this.maxDownFdr = maxDownFdr;
@@ -90,11 +81,8 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
   public boolean hasAnyQueryModification() {
     return this.listingOptions.hasAnyQueryModification()
       || this.signatureListingOptions.hasAnyQueryModification()
+      || this.drugListingOptions.hasAnyQueryModification()
       || this.interactionType != null
-      || this.drugCommonName != null
-      || this.drugMoa != null
-      || this.drugStatus != null
-      || this.minDrugDss != null
       || this.minTau != null
       || this.maxUpFdr != null
       || this.maxDownFdr != null
@@ -108,25 +96,13 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
   public SignatureListingOptions getSignatureListingOptions() {
     return signatureListingOptions;
   }
+  
+  public DrugListingOptions getDrugListingOptions() {
+    return drugListingOptions;
+  }
 
   public Optional<DrugSignatureInteractionType> getInteractionType() {
     return ofNullable(interactionType);
-  }
-
-  public Optional<String> getDrugCommonName() {
-    return ofNullable(drugCommonName);
-  }
-
-  public Optional<String> getDrugMoa() {
-    return ofNullable(drugMoa);
-  }
-
-  public Optional<DrugStatus> getDrugStatus() {
-    return ofNullable(drugStatus);
-  }
-
-  public Optional<Double> getMinDrugDss() {
-    return ofNullable(minDrugDss);
   }
 
   public Optional<Double> getMinTau() {
@@ -149,10 +125,6 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((drugCommonName == null) ? 0 : drugCommonName.hashCode());
-    result = prime * result + ((drugMoa == null) ? 0 : drugMoa.hashCode());
-    result = prime * result + ((drugStatus == null) ? 0 : drugStatus.hashCode());
-    result = prime * result + ((minDrugDss == null) ? 0 : minDrugDss.hashCode());
     result = prime * result + ((interactionType == null) ? 0 : interactionType.hashCode());
     result = prime * result + ((listingOptions == null) ? 0 : listingOptions.hashCode());
     result = prime * result + ((maxDownFdr == null) ? 0 : maxDownFdr.hashCode());
@@ -160,6 +132,7 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     result = prime * result + ((minTau == null) ? 0 : minTau.hashCode());
     result = prime * result + ((cellType1Effect == null) ? 0 : cellType1Effect.hashCode());
     result = prime * result + ((signatureListingOptions == null) ? 0 : signatureListingOptions.hashCode());
+    result = prime * result + ((drugListingOptions == null) ? 0 : drugListingOptions.hashCode());
     return result;
   }
 
@@ -172,26 +145,6 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     if (getClass() != obj.getClass())
       return false;
     DrugSignatureInteractionListingOptions other = (DrugSignatureInteractionListingOptions) obj;
-    if (drugCommonName == null) {
-      if (other.drugCommonName != null)
-        return false;
-    } else if (!drugCommonName.equals(other.drugCommonName))
-      return false;
-    if (drugMoa == null) {
-      if (other.drugMoa != null)
-        return false;
-    } else if (!drugMoa.equals(other.drugMoa))
-      return false;
-    if (drugStatus == null) {
-      if (other.drugStatus != null)
-        return false;
-    } else if (!drugStatus.equals(other.drugStatus))
-      return false;
-    if (minDrugDss == null) {
-      if (other.minDrugDss != null)
-        return false;
-    } else if (!minDrugDss.equals(other.minDrugDss))
-      return false;
     if (interactionType != other.interactionType)
       return false;
     if (listingOptions == null) {
@@ -223,6 +176,11 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
       if (other.signatureListingOptions != null)
         return false;
     } else if (!signatureListingOptions.equals(other.signatureListingOptions))
+      return false;
+    if (drugListingOptions == null) {
+      if (other.drugListingOptions != null)
+        return false;
+    } else if (!drugListingOptions.equals(other.drugListingOptions))
       return false;
     return true;
   }

@@ -35,6 +35,7 @@ import javax.ws.rs.core.Response;
 
 import org.sing_group.dreimt.domain.dao.ListingOptions.SortField;
 import org.sing_group.dreimt.domain.dao.SortDirection;
+import org.sing_group.dreimt.domain.dao.signature.DrugListingOptions;
 import org.sing_group.dreimt.domain.dao.signature.DrugSignatureInteractionListingOptions;
 import org.sing_group.dreimt.domain.dao.signature.SignatureListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.CellTypeAndSubtype;
@@ -120,12 +121,15 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         experimentalDesign, organism, disease, signatureSourceDb, signaturePubMedId, cellType1Treatment,
         cellType1Disease
       );
+    
+    final DrugListingOptions drugListingOptions =
+      new DrugListingOptions(drugCommonName, drugMoa, drugStatus, minDrugDss);
 
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         listingOptionsMapper.toListingOptions(getListingOptions(page, pageSize, orderField, sortDirection)),
-        signatureListingOptions, interactionType, drugCommonName, drugMoa, drugStatus, minDrugDss,
-        minTau, maxUpFdr, maxDownFdr, cellType1Effect
+        signatureListingOptions, drugListingOptions,
+        interactionType, minTau, maxUpFdr, maxDownFdr, cellType1Effect
       );
 
     final DrugSignatureInteractionData[] data =
@@ -183,11 +187,14 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         cellType1Disease
       );
 
+    final DrugListingOptions drugListingOptions =
+      new DrugListingOptions(drugCommonName, drugMoa, drugStatus, minDrugDss);
+
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
         listingOptionsMapper.toListingOptions(getListingOptions(page, pageSize, orderField, sortDirection)),
-        signatureListingOptions, interactionType, drugCommonName, drugMoa, drugStatus, minDrugDss,
-        minTau, maxUpFdr, maxDownFdr, cellType1Effect
+        signatureListingOptions, drugListingOptions,
+        interactionType, minTau, maxUpFdr, maxDownFdr, cellType1Effect
       );
 
     final String data = this.drugSignatureMapper.toDrugSignatureInteractionCsvData(service.list(listingOptions));
@@ -251,10 +258,12 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         cellType1Disease
       );
 
+    final DrugListingOptions drugListingOptions =
+      new DrugListingOptions(drugCommonName, drugMoa, drugStatus, minDrugDss);
+
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions, interactionType, drugCommonName, drugMoa, drugStatus, minDrugDss, minTau, maxUpFdr,
-        maxDownFdr, cellType1Effect
+        signatureListingOptions, drugListingOptions, interactionType, minTau, maxUpFdr, maxDownFdr, cellType1Effect
       );
 
     final String[] data =
@@ -303,10 +312,12 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         cellType1Disease
       );
 
+    final DrugListingOptions drugListingOptions =
+      new DrugListingOptions(drugCommonName, drugMoa, drugStatus, minDrugDss);
+
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions, interactionType, drugCommonName, drugMoa, drugStatus, minDrugDss, minTau, maxUpFdr,
-        maxDownFdr, cellType1Effect
+        signatureListingOptions, drugListingOptions, interactionType, minTau, maxUpFdr, maxDownFdr, cellType1Effect
       );
 
     final CellTypeAndSubtype[] data =
@@ -358,10 +369,12 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         cellType1Disease
       );
 
+    final DrugListingOptions drugListingOptions =
+      new DrugListingOptions(drugCommonName, drugMoa, drugStatus, minDrugDss);
+
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions, interactionType, drugCommonName, drugMoa, drugStatus, minDrugDss, minTau, maxUpFdr,
-        maxDownFdr, cellType1Effect
+        signatureListingOptions, drugListingOptions, interactionType, minTau, maxUpFdr, maxDownFdr, cellType1Effect
       );
 
     final CellTypeAndSubtype[] data =
@@ -413,10 +426,12 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         cellType1Disease
       );
 
+    final DrugListingOptions drugListingOptions =
+      new DrugListingOptions(drugCommonName, drugMoa, drugStatus, minDrugDss);
+
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions, interactionType, drugCommonName, drugMoa, drugStatus, minDrugDss, minTau, maxUpFdr,
-        maxDownFdr, cellType1Effect
+        signatureListingOptions, drugListingOptions, interactionType, minTau, maxUpFdr, maxDownFdr, cellType1Effect
       );
 
     final ExperimentalDesign[] data =
@@ -468,10 +483,12 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         cellType1Disease
       );
 
+    final DrugListingOptions drugListingOptions =
+      new DrugListingOptions(drugCommonName, drugMoa, drugStatus, minDrugDss);
+
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions, interactionType, drugCommonName, drugMoa, drugStatus, minDrugDss, minTau, maxUpFdr,
-        maxDownFdr, cellType1Effect
+        signatureListingOptions, drugListingOptions, interactionType, minTau, maxUpFdr, maxDownFdr, cellType1Effect
       );
 
     final String[] data =
@@ -523,10 +540,12 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         cellType1Disease
       );
 
+    final DrugListingOptions drugListingOptions =
+      new DrugListingOptions(drugCommonName, drugMoa, drugStatus, minDrugDss);
+
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions, interactionType, drugCommonName, drugMoa, drugStatus, minDrugDss, minTau, maxUpFdr,
-        maxDownFdr, cellType1Effect
+        signatureListingOptions, drugListingOptions, interactionType, minTau, maxUpFdr, maxDownFdr, cellType1Effect
       );
 
     final String[] data =
@@ -578,10 +597,12 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         cellType1Disease
       );
 
+    final DrugListingOptions drugListingOptions =
+      new DrugListingOptions(drugCommonName, drugMoa, drugStatus, minDrugDss);
+
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions, interactionType, drugCommonName, drugMoa, drugStatus, minDrugDss, minTau, maxUpFdr,
-        maxDownFdr, cellType1Effect
+        signatureListingOptions, drugListingOptions, interactionType, minTau, maxUpFdr, maxDownFdr, cellType1Effect
       );
 
     final String[] data =
@@ -633,10 +654,12 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         cellType1Disease
       );
 
+    final DrugListingOptions drugListingOptions =
+      new DrugListingOptions(drugCommonName, drugMoa, drugStatus, minDrugDss);
+
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions, interactionType, drugCommonName, drugMoa, drugStatus, minDrugDss, minTau, maxUpFdr,
-        maxDownFdr, cellType1Effect
+        signatureListingOptions, drugListingOptions, interactionType, minTau, maxUpFdr, maxDownFdr, cellType1Effect
       );
 
     final DrugSignatureInteractionType[] data =
@@ -688,10 +711,12 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         cellType1Disease
       );
 
+    final DrugListingOptions drugListingOptions =
+      new DrugListingOptions(drugCommonName, drugMoa, drugStatus, minDrugDss);
+
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions, interactionType, drugCommonName, drugMoa, drugStatus, minDrugDss, minTau, maxUpFdr,
-        maxDownFdr, cellType1Effect
+        signatureListingOptions, drugListingOptions, interactionType, minTau, maxUpFdr, maxDownFdr, cellType1Effect
       );
 
     final Integer[] data =
@@ -743,10 +768,12 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         cellType1Disease
       );
 
+    final DrugListingOptions drugListingOptions =
+      new DrugListingOptions(drugCommonName, drugMoa, drugStatus, minDrugDss);
+
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions, interactionType, drugCommonName, drugMoa, drugStatus, minDrugDss, minTau, maxUpFdr,
-        maxDownFdr, cellType1Effect
+        signatureListingOptions, drugListingOptions, interactionType, minTau, maxUpFdr, maxDownFdr, cellType1Effect
       );
 
     final String[] data =
@@ -798,10 +825,12 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         cellType1Disease
       );
 
+    final DrugListingOptions drugListingOptions =
+      new DrugListingOptions(drugCommonName, drugMoa, drugStatus, minDrugDss);
+
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions, interactionType, drugCommonName, drugMoa, drugStatus, minDrugDss, minTau, maxUpFdr,
-        maxDownFdr, cellType1Effect
+        signatureListingOptions, drugListingOptions, interactionType, minTau, maxUpFdr, maxDownFdr, cellType1Effect
       );
 
     final String[] data =
@@ -853,10 +882,12 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         cellType1Disease
       );
 
+    final DrugListingOptions drugListingOptions =
+      new DrugListingOptions(drugCommonName, drugMoa, drugStatus, minDrugDss);
+
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions, interactionType, drugCommonName, drugMoa, drugStatus, minDrugDss, minTau, maxUpFdr,
-        maxDownFdr, cellType1Effect
+        signatureListingOptions, drugListingOptions, interactionType, minTau, maxUpFdr, maxDownFdr, cellType1Effect
       );
 
     final DrugStatus[] data =
@@ -908,10 +939,12 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         cellType1Disease
       );
 
+    final DrugListingOptions drugListingOptions =
+      new DrugListingOptions(drugCommonName, drugMoa, drugStatus, minDrugDss);
+
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions, interactionType, drugCommonName, drugMoa, drugStatus, minDrugDss, minTau, maxUpFdr,
-        maxDownFdr, cellType1Effect
+        signatureListingOptions, drugListingOptions, interactionType, minTau, maxUpFdr, maxDownFdr, cellType1Effect
       );
 
     final String[] data =
@@ -963,10 +996,12 @@ public class DefaultDrugSignatureInteractionResource implements DrugSignatureInt
         cellType1Disease
       );
 
+    final DrugListingOptions drugListingOptions =
+      new DrugListingOptions(drugCommonName, drugMoa, drugStatus, minDrugDss);
+
     final DrugSignatureInteractionListingOptions listingOptions =
       new DrugSignatureInteractionListingOptions(
-        signatureListingOptions, interactionType, drugCommonName, drugMoa, drugStatus, minDrugDss, minTau, maxUpFdr,
-        maxDownFdr, cellType1Effect
+        signatureListingOptions, drugListingOptions, interactionType, minTau, maxUpFdr, maxDownFdr, cellType1Effect
       );
 
     final String[] data =

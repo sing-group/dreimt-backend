@@ -557,8 +557,9 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     final DrugSignatureInteractionListingOptions listingOptions,
     final Root<FullDrugSignatureInteraction> root
   ) {
+    final SignatureListingOptions signatureListingOptions = listingOptions.getSignatureListingOptions();
+    final DrugListingOptions drugListingOptions = listingOptions.getDrugListingOptions();
     final CriteriaBuilder cb = this.dh.cb();
-
     final List<Predicate> andPredicates = new ArrayList<>();
 
     if (listingOptions.getMinTau().isPresent()) {
@@ -579,10 +580,10 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       andPredicates.add(cb.lessThanOrEqualTo(downFdr, listingOptions.getMaxDownFdr().get()));
     }
 
-    if (listingOptions.getMinDrugDss().isPresent()) {
+    if (drugListingOptions.getMinDrugDss().isPresent()) {
       final Path<Double> drugDss = root.get("drugDss");
 
-      andPredicates.add(cb.greaterThanOrEqualTo(drugDss, listingOptions.getMinDrugDss().get()));
+      andPredicates.add(cb.greaterThanOrEqualTo(drugDss, drugListingOptions.getMinDrugDss().get()));
     }
 
     if (listingOptions.getInteractionType().isPresent()) {
@@ -590,8 +591,6 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
       andPredicates.add(cb.equal(interactionType, listingOptions.getInteractionType().get()));
     }
-
-    final SignatureListingOptions signatureListingOptions = listingOptions.getSignatureListingOptions();
 
     final TriConsumer<String, Boolean, Optional<String>> fieldLikeQueryBuilder =
       (attributeName, useEquals, queryValue) -> {
@@ -648,10 +647,10 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       andPredicates.add(cb.equal(pubMedIdPath, signaturePubMedId));
     });
 
-    fieldLikeQueryBuilder.accept("drugCommonName", true, listingOptions.getDrugCommonName());
-    fieldLikeQueryBuilder.accept("drugMoa", false, listingOptions.getDrugMoa());
+    fieldLikeQueryBuilder.accept("drugCommonName", true, drugListingOptions.getDrugCommonName());
+    fieldLikeQueryBuilder.accept("drugMoa", false, drugListingOptions.getDrugMoa());
 
-    listingOptions.getDrugStatus().ifPresent(drugStatus -> {
+    drugListingOptions.getDrugStatus().ifPresent(drugStatus -> {
       final Path<DrugStatus> drugStatusPath = root.get("drugStatus");
 
       andPredicates.add(cb.equal(drugStatusPath, drugStatus));
