@@ -321,18 +321,21 @@ CREATE TABLE `full_drug_signature_interaction` (
   KEY `IDX4hkkniqx8jx0t74qcpqco6dit` (`tau`),
   KEY `IDXl2qoayrbw9v7uacqregtqpc3q` (`upFdr`),
   KEY `IDXbc2mh9iwhk7eb2erlf57k1w8w` (`downFdr`),
+  KEY `IDX8c14rrae4uhejpd2qi5rny223` (`interactionType`),
   KEY `IDXjeyb6tx2m8w82apv673e6x4gy` (`drugCommonName`),
-  KEY `IDXkua6pu0gkbql9gbcy9dddg5is` (`drugSourceName`),
   KEY `IDX1508ma2bjjx77uahdqt6tqnp0` (`drugMoa`),
   KEY `IDXbrd94o0ah3jrh5erhp81lkv3m` (`drugDss`),
+  KEY `IDXi4g8hqyd6oq3lhq1gw27j9kx6` (`drugStatus`),
   KEY `IDXab8o6290f312y62e07v4y5r00` (`signatureName`),
   KEY `IDXc51wckwyvrmt1dny9fl4pnw9f` (`signatureType`),
   KEY `IDXffpxt44kp8ch04udpvr06l4f9` (`signatureExperimentalDesign`),
   KEY `IDXcfolo4fcjm3mteqv5cuae81c5` (`signatureOrganism`),
   KEY `IDXmhy6pg1dvekcc075ww20vsu20` (`signatureSourceDb`),
   KEY `IDXk9opwyikpvq3rae10815y3xau` (`signatureCellTypeA`),
+  KEY `IDX8rch74ur527b71b3hd2140msl` (`signatureCellSubTypeA`),
   KEY `IDXghdkqt1s647y0d2prw8uwct37` (`signatureCellTypeB`),
-  KEY `FKboll38t85j69hdb7uf9c5gvh4` (`signatureArticlePubmedId`),
+  KEY `IDX6jlkbkv0dilb4nf4wwov6ivk9` (`signatureCellSubTypeB`),
+  KEY `IDX9tcaphoydkciw3ottkw4pka69` (`signatureArticlePubmedId`),
   CONSTRAINT `FKboll38t85j69hdb7uf9c5gvh4` FOREIGN KEY (`signatureArticlePubmedId`) REFERENCES `article_metadata` (`pubmedId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -769,4 +772,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-04 18:23:33
+-- Dump completed on 2020-06-08 10:09:02

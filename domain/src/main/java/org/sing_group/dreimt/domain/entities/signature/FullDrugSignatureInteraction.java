@@ -47,11 +47,12 @@ import javax.persistence.Table;
     @Index(columnList = "tau"),
     @Index(columnList = "upFdr"),
     @Index(columnList = "downFdr"),
+    @Index(columnList = "interactionType"),
 
     @Index(columnList = "drugCommonName"),
-    @Index(columnList = "drugSourceName"),
     @Index(columnList = "drugMoa"),
     @Index(columnList = "drugDss"),
+    @Index(columnList = "drugStatus"),
 
     @Index(columnList = "signatureName"),
     @Index(columnList = "signatureType"),
@@ -61,7 +62,8 @@ import javax.persistence.Table;
     @Index(columnList = "signatureCellTypeA"),
     @Index(columnList = "signatureCellSubTypeA"),
     @Index(columnList = "signatureCellTypeB"),
-    @Index(columnList = "signatureCellSubTypeB")
+    @Index(columnList = "signatureCellSubTypeB"),
+    @Index(columnList = "signatureArticlePubmedId")
   }
 )
 public class FullDrugSignatureInteraction implements Serializable {
