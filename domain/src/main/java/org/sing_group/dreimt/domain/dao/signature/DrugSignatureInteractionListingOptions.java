@@ -82,7 +82,11 @@ public class DrugSignatureInteractionListingOptions implements Serializable {
     return this.listingOptions.hasAnyQueryModification()
       || this.signatureListingOptions.hasAnyQueryModification()
       || this.drugListingOptions.hasAnyQueryModification()
-      || this.interactionType != null
+      || this.hasAnyDrugSignatureInteractionQueryModification();
+  }
+
+  public boolean hasAnyDrugSignatureInteractionQueryModification() {
+    return this.interactionType != null
       || this.minTau != null
       || this.maxUpFdr != null
       || this.maxDownFdr != null

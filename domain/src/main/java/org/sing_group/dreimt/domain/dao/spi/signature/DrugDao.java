@@ -23,11 +23,20 @@
 package org.sing_group.dreimt.domain.dao.spi.signature;
 
 import java.util.Optional;
+import java.util.stream.Stream;
 
+import org.sing_group.dreimt.domain.dao.signature.DrugListingOptions;
 import org.sing_group.dreimt.domain.entities.signature.Drug;
+import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
 
 public interface DrugDao {
   Optional<Drug> get(int id);
 
   long count();
+
+  Stream<String> listDrugCommonNameValues(DrugListingOptions listingOptions);
+
+  Stream<String> listDrugMoaValues(DrugListingOptions listingOptions);
+
+  Stream<DrugStatus> listDrugStatusValues(DrugListingOptions listingOptions);
 }

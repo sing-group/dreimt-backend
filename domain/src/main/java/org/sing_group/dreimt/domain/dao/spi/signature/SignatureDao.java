@@ -55,4 +55,8 @@ public interface SignatureDao {
   Stream<SignatureType> listSignatureTypeValues(SignatureListingOptions signatureListingOptions);
 
   Stream<Integer> listSignaturePubMedIdValues(SignatureListingOptions signatureListingOptions);
+
+  Stream<String> listCellType1DiseaseValues(SignatureListingOptions signatureListingOptions);
+
+  Stream<String> listCellType1TreatmentValues(SignatureListingOptions signatureListingOptions);
 }

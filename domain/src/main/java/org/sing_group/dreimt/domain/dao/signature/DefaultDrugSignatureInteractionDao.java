@@ -40,6 +40,7 @@ import java.util.stream.Stream;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.inject.Default;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Tuple;
@@ -59,7 +60,9 @@ import javax.transaction.Transactional;
 import org.sing_group.dreimt.domain.dao.DaoHelper;
 import org.sing_group.dreimt.domain.dao.ListingOptions;
 import org.sing_group.dreimt.domain.dao.ListingOptions.SortField;
+import org.sing_group.dreimt.domain.dao.spi.signature.DrugDao;
 import org.sing_group.dreimt.domain.dao.spi.signature.DrugSignatureInteractionDao;
+import org.sing_group.dreimt.domain.dao.spi.signature.SignatureDao;
 import org.sing_group.dreimt.domain.entities.signature.ArticleMetadata;
 import org.sing_group.dreimt.domain.entities.signature.CellTypeAndSubtype;
 import org.sing_group.dreimt.domain.entities.signature.Drug;
@@ -83,6 +86,12 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   private EntityManager em;
 
   private DaoHelper<Integer, FullDrugSignatureInteraction> dh;
+  
+  @Inject
+  private SignatureDao signatureDao;
+
+  @Inject
+  private DrugDao drugDao;
 
   DefaultDrugSignatureInteractionDao() {}
 
@@ -230,6 +239,13 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   public Stream<CellTypeAndSubtype> listCellTypeAndSubtype1Values(
     DrugSignatureInteractionListingOptions listingOptions
   ) {
+    if (
+      !listingOptions.hasAnyDrugSignatureInteractionQueryModification()
+        && !listingOptions.getDrugListingOptions().hasAnyQueryModification()
+    ) {
+      return this.signatureDao.listCellTypeAndSubtype1Values(listingOptions.getSignatureListingOptions());
+    }
+    
     return listMultipleColumnCollectionValues(
       listingOptions, "signatureCellTypeA", "signatureCellSubTypeA", "signatureCellTypeB", "signatureCellSubTypeB"
     ).map(tuple -> {
@@ -245,6 +261,19 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
   @Override
   public Stream<String> listCellType1DiseaseValues(DrugSignatureInteractionListingOptions listingOptions) {
+    SignatureListingOptions signatureListingOptions = listingOptions.getSignatureListingOptions();
+
+    if (!signatureListingOptions.getCellTypeAndSubType1Filter().isApplicable()) {
+      throw new IllegalArgumentException("A cellType1 filter must be defined in orter to list cellTypeAndSubType2 values");
+    }
+
+    if (
+      !listingOptions.hasAnyDrugSignatureInteractionQueryModification()
+        && !listingOptions.getDrugListingOptions().hasAnyQueryModification()
+    ) {
+      return this.signatureDao.listCellType1DiseaseValues(signatureListingOptions);
+    }
+
     return listMultipleColumnCollectionValues(
       listingOptions,
       "signatureCellTypeA", "signatureCellSubTypeA", "signatureDiseaseA",
@@ -271,6 +300,19 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
   @Override
   public Stream<String> listCellType1TreatmentValues(DrugSignatureInteractionListingOptions listingOptions) {
+    SignatureListingOptions signatureListingOptions = listingOptions.getSignatureListingOptions();
+
+    if (!signatureListingOptions.getCellTypeAndSubType1Filter().isApplicable()) {
+      throw new IllegalArgumentException("A cellType1 filter must be defined in orter to list cellTypeAndSubType2 values");
+    }
+
+    if (
+      !listingOptions.hasAnyDrugSignatureInteractionQueryModification()
+        && !listingOptions.getDrugListingOptions().hasAnyQueryModification()
+    ) {
+      return this.signatureDao.listCellType1TreatmentValues(signatureListingOptions);
+    }
+
     return listMultipleColumnCollectionValues(
       listingOptions,
       "signatureCellTypeA", "signatureCellSubTypeA", "signatureTreatmentA",
@@ -341,48 +383,6 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     return new CellTypeAndSubtype(type, subType);
   }
 
-  private static class CustomCellTypeAndSubtype extends CellTypeAndSubtype {
-
-    private String additionalInfo;
-
-    public CustomCellTypeAndSubtype(CellTypeAndSubtype type, String additionalInfo) {
-      super(type.getType(), type.getSubType());
-      this.additionalInfo = additionalInfo;
-    }
-
-    public String getAdditionalInfo() {
-      return additionalInfo;
-    }
-
-    @Override
-    public int hashCode() {
-      final int prime = 31;
-      int result = super.hashCode();
-      result = prime * result + super.hashCode();
-      result = prime * result + ((additionalInfo == null) ? 0 : additionalInfo.hashCode());
-      return result;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-      if (this == obj)
-        return true;
-      if (!super.equals(obj))
-        return false;
-      if (getClass() != obj.getClass())
-        return false;
-      CustomCellTypeAndSubtype other = (CustomCellTypeAndSubtype) obj;
-      if (!super.equals(other))
-        return false;
-      if (additionalInfo == null) {
-        if (other.additionalInfo != null)
-          return false;
-      } else if (!additionalInfo.equals(other.additionalInfo))
-        return false;
-      return true;
-    }
-  }
-
   @Override
   public Stream<CellTypeAndSubtype> listCellTypeAndSubtype2Values(
     DrugSignatureInteractionListingOptions listingOptions
@@ -391,6 +391,13 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
     if (!signatureListingOptions.getCellTypeAndSubType1Filter().isApplicable()) {
       throw new IllegalArgumentException("A cellType1 filter must be defined in orter to list cellTypeAndSubType2 values");
+    }
+    
+    if (
+      !listingOptions.hasAnyDrugSignatureInteractionQueryModification()
+        && !listingOptions.getDrugListingOptions().hasAnyQueryModification()
+    ) {
+      return this.signatureDao.listCellTypeAndSubtype2Values(signatureListingOptions);
     }
 
     return listMultipleColumnCollectionValues(
@@ -447,6 +454,13 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
   @Override
   public Stream<String> listDiseaseValues(DrugSignatureInteractionListingOptions listingOptions) {
+    if (
+      !listingOptions.hasAnyDrugSignatureInteractionQueryModification()
+        && !listingOptions.getDrugListingOptions().hasAnyQueryModification()
+    ) {
+      return this.signatureDao.listDiseaseValues(listingOptions.getSignatureListingOptions());
+    }
+
     Stream<String> diseaseValues = this.listSetColumnValues("signatureDisease", listingOptions);
     if (listingOptions.getSignatureListingOptions().getDisease().isPresent()) {
       final String diseaseFilter = listingOptions.getSignatureListingOptions().getDisease().get().toLowerCase();
@@ -469,21 +483,49 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   public Stream<ExperimentalDesign> listExperimentalDesignValues(
     DrugSignatureInteractionListingOptions listingOptions
   ) {
+    if (
+      !listingOptions.hasAnyDrugSignatureInteractionQueryModification()
+        && !listingOptions.getDrugListingOptions().hasAnyQueryModification()
+    ) {
+      return this.signatureDao.listExperimentalDesignValues(listingOptions.getSignatureListingOptions());
+    }
+
     return this.listColumnValues(ExperimentalDesign.class, "signatureExperimentalDesign", listingOptions);
   }
 
   @Override
   public Stream<String> listSignatureNameValues(DrugSignatureInteractionListingOptions listingOptions) {
+    if (
+      !listingOptions.hasAnyDrugSignatureInteractionQueryModification()
+        && !listingOptions.getDrugListingOptions().hasAnyQueryModification()
+    ) {
+      return this.signatureDao.listSignatureNameValues(listingOptions.getSignatureListingOptions());
+    }
+
     return this.listColumnValues(String.class, "signatureName", listingOptions);
   }
 
   @Override
   public Stream<String> listOrganismValues(DrugSignatureInteractionListingOptions listingOptions) {
+    if (
+      !listingOptions.hasAnyDrugSignatureInteractionQueryModification()
+        && !listingOptions.getDrugListingOptions().hasAnyQueryModification()
+    ) {
+      return this.signatureDao.listOrganismValues(listingOptions.getSignatureListingOptions());
+    }
+
     return this.listColumnValues(String.class, "signatureOrganism", listingOptions);
   }
 
   @Override
   public Stream<String> listSignatureSourceDbValues(DrugSignatureInteractionListingOptions listingOptions) {
+    if (
+      !listingOptions.hasAnyDrugSignatureInteractionQueryModification()
+        && !listingOptions.getDrugListingOptions().hasAnyQueryModification()
+    ) {
+      return this.signatureDao.listSourceDbValues(listingOptions.getSignatureListingOptions());
+    }
+
     return this.listColumnValues(String.class, "signatureSourceDb", listingOptions);
   }
 
@@ -514,6 +556,13 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   public Stream<String> listDrugCommonNameValues(
     DrugSignatureInteractionListingOptions listingOptions
   ) {
+    if (
+      !listingOptions.hasAnyDrugSignatureInteractionQueryModification()
+        && !listingOptions.getSignatureListingOptions().hasAnyQueryModification()
+    ) {
+      return this.drugDao.listDrugCommonNameValues(listingOptions.getDrugListingOptions());
+    }
+
     return this.listColumnValues(String.class, "drugCommonName", listingOptions);
   }
 
@@ -521,6 +570,13 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   public Stream<String> listDrugMoaValues(
     DrugSignatureInteractionListingOptions listingOptions
   ) {
+    if (
+      !listingOptions.hasAnyDrugSignatureInteractionQueryModification()
+        && !listingOptions.getSignatureListingOptions().hasAnyQueryModification()
+    ) {
+      return this.drugDao.listDrugMoaValues(listingOptions.getDrugListingOptions());
+    }
+
     return this.listSetColumnValues("drugMoa", listingOptions);
   }
   
@@ -528,11 +584,25 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   public Stream<DrugStatus> listDrugStatusValues(
     DrugSignatureInteractionListingOptions listingOptions
   ) {
+    if (
+      !listingOptions.hasAnyDrugSignatureInteractionQueryModification()
+        && !listingOptions.getSignatureListingOptions().hasAnyQueryModification()
+    ) {
+      return this.drugDao.listDrugStatusValues(listingOptions.getDrugListingOptions());
+    }
+
     return this.listColumnValues(DrugStatus.class, "drugStatus", listingOptions);
   }
 
   @Override
   public Stream<Integer> listSignaturePubMedIdValues(DrugSignatureInteractionListingOptions listingOptions) {
+    if (
+      !listingOptions.hasAnyDrugSignatureInteractionQueryModification()
+        && !listingOptions.getDrugListingOptions().hasAnyQueryModification()
+    ) {
+      return this.signatureDao.listSignaturePubMedIdValues(listingOptions.getSignatureListingOptions());
+    }
+    
     final CriteriaBuilder cb = dh.cb();
 
     CriteriaQuery<Integer> query = cb.createQuery(Integer.class);
@@ -580,10 +650,10 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       andPredicates.add(cb.lessThanOrEqualTo(downFdr, listingOptions.getMaxDownFdr().get()));
     }
 
-    if (drugListingOptions.getMinDrugDss().isPresent()) {
+    if (drugListingOptions.getMinDss().isPresent()) {
       final Path<Double> drugDss = root.get("drugDss");
 
-      andPredicates.add(cb.greaterThanOrEqualTo(drugDss, drugListingOptions.getMinDrugDss().get()));
+      andPredicates.add(cb.greaterThanOrEqualTo(drugDss, drugListingOptions.getMinDss().get()));
     }
 
     if (listingOptions.getInteractionType().isPresent()) {
@@ -647,10 +717,10 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
       andPredicates.add(cb.equal(pubMedIdPath, signaturePubMedId));
     });
 
-    fieldLikeQueryBuilder.accept("drugCommonName", true, drugListingOptions.getDrugCommonName());
-    fieldLikeQueryBuilder.accept("drugMoa", false, drugListingOptions.getDrugMoa());
+    fieldLikeQueryBuilder.accept("drugCommonName", true, drugListingOptions.getCommonName());
+    fieldLikeQueryBuilder.accept("drugMoa", false, drugListingOptions.getMoa());
 
-    drugListingOptions.getDrugStatus().ifPresent(drugStatus -> {
+    drugListingOptions.getStatus().ifPresent(drugStatus -> {
       final Path<DrugStatus> drugStatusPath = root.get("drugStatus");
 
       andPredicates.add(cb.equal(drugStatusPath, drugStatus));

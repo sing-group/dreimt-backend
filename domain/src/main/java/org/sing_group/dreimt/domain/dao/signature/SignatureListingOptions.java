@@ -192,7 +192,7 @@ public class SignatureListingOptions implements Serializable {
       || this.signatureType != null
       || this.sourceDb != null
       || this.signaturePubMedId != null
-      || this.mandatoryGenes != null
+      || (this.mandatoryGenes != null && !this.mandatoryGenes.isEmpty())
       || this.cellType1Disease != null
       || this.cellType1Treatment != null;
   }

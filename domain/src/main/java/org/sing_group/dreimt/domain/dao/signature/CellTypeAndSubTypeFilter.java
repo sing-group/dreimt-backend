@@ -228,27 +228,27 @@ public class CellTypeAndSubTypeFilter {
   public boolean matchesFilter(CellTypeAndSubtype cellTypeAndSubType) {
     if (isOr) {
       if (
-        cellTypeAndSubType.getType() != null && !cellTypeAndSubType.getType().toLowerCase()
-          .contains(this.type.toLowerCase())
+        cellTypeAndSubType.getType() != null && !this.type.isEmpty() && !cellTypeAndSubType.getType()
+          .equals(this.type)
       ) {
         if (
-          cellTypeAndSubType.getSubType() != null && !cellTypeAndSubType.getSubType().toLowerCase()
-            .contains(this.type.toLowerCase())
+          cellTypeAndSubType.getSubType() != null && !this.type.isEmpty() && !cellTypeAndSubType.getSubType()
+            .equals(this.type)
         ) {
           return false;
         }
       }
     } else {
       if (
-        cellTypeAndSubType.getType() != null
-          && !cellTypeAndSubType.getType().toLowerCase().contains(this.type.toLowerCase())
+        cellTypeAndSubType.getType() != null && !this.type.isEmpty() 
+          && !cellTypeAndSubType.getType().equals(this.type)
       ) {
         return false;
       }
 
       if (
-        cellTypeAndSubType.getSubType() != null
-          && !cellTypeAndSubType.getSubType().toLowerCase().contains(this.subType.toLowerCase())
+        cellTypeAndSubType.getSubType() != null && !this.subType.isEmpty() 
+          && !cellTypeAndSubType.getSubType().equals(this.subType)
       ) {
         return false;
       }

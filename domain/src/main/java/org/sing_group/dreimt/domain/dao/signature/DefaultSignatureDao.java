@@ -320,7 +320,7 @@ public class DefaultSignatureDao implements SignatureDao {
       joins.add(root.get(column).as(String.class));
     }
 
-    query = query.multiselect(joins).distinct(true);
+    query = query.multiselect(joins);
 
     if (signatureListingOptions.hasAnyQueryModification()) {
       query = query.where(createPredicates(signatureListingOptions, null, root));
@@ -374,11 +374,128 @@ public class DefaultSignatureDao implements SignatureDao {
   }
 
   @Override
+  public Stream<String> listCellType1DiseaseValues(SignatureListingOptions signatureListingOptions) {
+    return listMultipleColumnWithJoinCollectionValues(
+      signatureListingOptions,
+      new String[] {
+        "cellTypeA", "cellSubTypeA", "cellTypeB", "cellSubTypeB"
+      },
+      new String[] {
+        "diseaseA", "diseaseB"
+      }
+    )
+      .map(tuple -> {
+        CellTypeAndSubtype typeA = tupleToCellTypeAndSubtype(tuple, 0, 1);
+        CellTypeAndSubtype typeB = tupleToCellTypeAndSubtype(tuple, 2, 3);
+
+        String additionalSetFieldFilter = signatureListingOptions.getCellType1Disease().orElse("");
+        List<CustomCellTypeAndSubtype> list = new LinkedList<>();
+        CustomCellTypeAndSubtype customTypeA =
+          toCustomCellTypeAndSubtypeList((String) tuple.get(4), additionalSetFieldFilter, typeA);
+        if (customTypeA != null) {
+          list.add(customTypeA);
+        }
+        CustomCellTypeAndSubtype customTypeB =
+          toCustomCellTypeAndSubtypeList((String) tuple.get(5), additionalSetFieldFilter, typeB);
+        if (customTypeB != null) {
+          list.add(customTypeB);
+        }
+
+        return list;
+      })
+      .flatMap(List::stream)
+      .distinct()
+      .filter(
+        value -> signatureListingOptions.getCellTypeAndSubType1Filter().matchesFilter(value)
+      )
+      .map(CustomCellTypeAndSubtype::getAdditionalInfo)
+      .distinct();
+  }
+  
+  @Override
+  public Stream<String> listCellType1TreatmentValues(SignatureListingOptions signatureListingOptions) {
+    return listMultipleColumnWithJoinCollectionValues(
+      signatureListingOptions,
+      new String[] {
+        "cellTypeA", "cellSubTypeA", "cellTypeB", "cellSubTypeB"
+      },
+      new String[] {
+        "treatmentA", "treatmentB"
+      }
+    )
+      .map(tuple -> {
+        CellTypeAndSubtype typeA = tupleToCellTypeAndSubtype(tuple, 0, 1);
+        CellTypeAndSubtype typeB = tupleToCellTypeAndSubtype(tuple, 2, 3);
+
+        String additionalSetFieldFilter = signatureListingOptions.getCellType1Disease().orElse("");
+        List<CustomCellTypeAndSubtype> list = new LinkedList<>();
+        CustomCellTypeAndSubtype customTypeA =
+          toCustomCellTypeAndSubtypeList((String) tuple.get(4), additionalSetFieldFilter, typeA);
+        if (customTypeA != null) {
+          list.add(customTypeA);
+        }
+        CustomCellTypeAndSubtype customTypeB =
+          toCustomCellTypeAndSubtypeList((String) tuple.get(5), additionalSetFieldFilter, typeB);
+        if (customTypeB != null) {
+          list.add(customTypeB);
+        }
+
+        return list;
+      })
+      .flatMap(List::stream)
+      .distinct()
+      .filter(
+        value -> signatureListingOptions.getCellTypeAndSubType1Filter().matchesFilter(value)
+      )
+      .map(CustomCellTypeAndSubtype::getAdditionalInfo)
+      .distinct();
+  }
+
+  private Stream<Tuple> listMultipleColumnWithJoinCollectionValues(
+    SignatureListingOptions signatureListingOptions, String[] columns, String[] joinColumns
+  ) {
+    final CriteriaBuilder cb = dh.cb();
+    CriteriaQuery<Tuple> query = cb.createTupleQuery();
+    final Root<Signature> root = query.from(dh.getEntityType());
+
+    List<Selection<?>> joins = new LinkedList<>();
+
+    for (String column : columns) {
+      joins.add(root.get(column).as(String.class));
+    }
+
+    for (String column : joinColumns) {
+      joins.add(root.join(column).as(String.class));
+    }
+
+    query = query.multiselect(joins);
+
+    if (signatureListingOptions.hasAnyQueryModification()) {
+      query = query.where(createPredicates(signatureListingOptions, null, root));
+    }
+
+    return this.em.createQuery(query).getResultList().stream();
+  }
+
+  private static CustomCellTypeAndSubtype toCustomCellTypeAndSubtypeList(
+    String additionalSetFieldValue, String additionalSetFieldFilter, CellTypeAndSubtype cellTypeAndSubtype
+  ) {
+
+    if (additionalSetFieldValue != null) {
+      if (additionalSetFieldValue.contains(additionalSetFieldFilter)) {
+        return new CustomCellTypeAndSubtype(cellTypeAndSubtype, additionalSetFieldValue);
+      }
+    }
+
+    return null;
+  }
+
+  @Override
   public Stream<String> listDiseaseValues(SignatureListingOptions signatureListingOptions) {
     Stream<String> diseaseValues = listElementCollectionValues(signatureListingOptions, "disease");
     if (signatureListingOptions.getDisease().isPresent()) {
       return diseaseValues
-        .filter(d -> d.contains(signatureListingOptions.getDisease().get()));
+        .filter(d -> d.equals(signatureListingOptions.getDisease().get()));
     } else {
       return diseaseValues;
     }
