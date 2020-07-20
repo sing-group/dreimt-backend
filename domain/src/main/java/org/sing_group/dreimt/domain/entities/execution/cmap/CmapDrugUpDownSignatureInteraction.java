@@ -58,7 +58,10 @@ public class CmapDrugUpDownSignatureInteraction implements Serializable {
 
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
   @JoinColumn(
-    name = "cmapResultId", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(
+    name = "cmapResultId", 
+    referencedColumnName = "id", 
+    nullable = false, 
+    foreignKey = @ForeignKey(
       name = "FK_cmap_result_cmap_result_updown_drug_interactions"
     )
   )

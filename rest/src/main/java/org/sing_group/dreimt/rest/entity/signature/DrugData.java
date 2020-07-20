@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
+import org.sing_group.dreimt.domain.entities.signature.DrugTargetGene;
 
 public class DrugData implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -35,14 +36,16 @@ public class DrugData implements Serializable {
   private String sourceDb;
   private DrugStatus status;
   private Set<String> moa;
-  private Set<String> targetGenes;
+  private Set<DrugTargetGene> targetGenes;
   private Double dss;
+  private String pubChemId;
+  private int dbProfilesCount;
 
   DrugData() {}
 
   public DrugData(
-    String commonName, String sourceName, String sourceDb, DrugStatus status, Set<String> moa, Set<String> targetGenes,
-    Double dss
+    String commonName, String sourceName, String sourceDb, DrugStatus status, Set<String> moa,
+    Set<DrugTargetGene> targetGenes, Double dss, String pubChemId, int dbProfilesCount
   ) {
     super();
     this.commonName = commonName;
@@ -52,6 +55,8 @@ public class DrugData implements Serializable {
     this.moa = moa;
     this.targetGenes = targetGenes;
     this.dss = dss;
+    this.pubChemId = pubChemId;
+    this.dbProfilesCount = dbProfilesCount;
   }
 
   public String getCommonName() {
@@ -74,11 +79,19 @@ public class DrugData implements Serializable {
     return moa;
   }
 
-  public Set<String> getTargetGenes() {
+  public Set<DrugTargetGene> getTargetGenes() {
     return targetGenes;
   }
 
   public Double getDss() {
     return dss;
+  }
+
+  public String getPubChemId() {
+    return pubChemId;
+  }
+
+  public int getDbProfilesCount() {
+    return dbProfilesCount;
   }
 }

@@ -81,11 +81,16 @@ public class FullDrugSignatureInteraction implements Serializable {
   private DrugStatus drugStatus;
   private String drugMoa;
 
-  @Column(length = 450)
+  @Column(length = 600)
   private String drugTargetGenes;
 
   @Column(nullable = true)
   private Double drugDss;
+  
+  @Column(nullable = true)
+  private String drugPubChemId;
+  
+  private int drugDbProfilesCount;
 
   private String signatureName;
 
@@ -105,9 +110,13 @@ public class FullDrugSignatureInteraction implements Serializable {
 
   private String signatureDisease;
   private String signatureCellTypeA;
+  private String signatureCellTypeAOntologyId;
   private String signatureCellSubTypeA;
+  private String signatureCellSubTypeAOntologyId;
   private String signatureCellTypeB;
+  private String signatureCellTypeBOntologyId;
   private String signatureCellSubTypeB;
+  private String signatureCellSubTypeBOntologyId;
 
   private String signatureTreatmentA;
   private String signatureTreatmentB;
@@ -189,6 +198,14 @@ public class FullDrugSignatureInteraction implements Serializable {
     return drugDss;
   }
 
+  public String getDrugPubChemId() {
+    return drugPubChemId;
+  }
+
+  public int getDrugDbProfilesCount() {
+    return drugDbProfilesCount;
+  }
+
   public String getSignatureName() {
     return signatureName;
   }
@@ -225,16 +242,32 @@ public class FullDrugSignatureInteraction implements Serializable {
     return signatureCellTypeA;
   }
 
+  public String getSignatureCellTypeAOntologyId() {
+    return signatureCellTypeAOntologyId;
+  }
+
   public String getSignatureCellSubTypeA() {
     return signatureCellSubTypeA;
+  }
+
+  public String getSignatureCellSubTypeAOntologyId() {
+    return signatureCellSubTypeAOntologyId;
   }
 
   public String getSignatureCellTypeB() {
     return signatureCellTypeB;
   }
 
+  public String getSignatureCellTypeBOntologyId() {
+    return signatureCellTypeBOntologyId;
+  }
+
   public String getSignatureCellSubTypeB() {
     return signatureCellSubTypeB;
+  }
+
+  public String getSignatureCellSubTypeBOntologyId() {
+    return signatureCellSubTypeBOntologyId;
   }
 
   public String getSignatureDiseaseA() {

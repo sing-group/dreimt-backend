@@ -45,25 +45,30 @@ public class UpDownSignature extends Signature {
   UpDownSignature() {}
   
   public UpDownSignature(
-    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB, String sourceDb,
-    String sourceDbUrl, ExperimentalDesign experimentalDesign, String organism, Set<String> disease,
-    Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA, Set<String> diseaseB, String localisationA,
-    String localisationB, String stateA, String stateB
+    String signatureName, String cellTypeA, String cellTypeAOntologyId, String cellSubTypeA,
+    String cellSubTypeAOntologyId, String cellTypeB, String cellTypeBOntologyId, String cellSubTypeB,
+    String cellSubTypeBOntologyId, String sourceDb, String sourceDbUrl, ExperimentalDesign experimentalDesign,
+    String organism, Set<String> disease, Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA,
+    Set<String> diseaseB, String localisationA, String localisationB, String stateA, String stateB
   ) {
     super(
-      signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, sourceDb, sourceDbUrl, experimentalDesign,
+      signatureName, cellTypeA, cellTypeAOntologyId, cellSubTypeA, cellSubTypeAOntologyId, cellTypeB,
+      cellTypeBOntologyId, cellSubTypeB, cellSubTypeBOntologyId, sourceDb, sourceDbUrl, experimentalDesign,
       organism, disease, treatmentA, treatmentB, diseaseA, diseaseB, localisationA, localisationB, stateA, stateB
     );
   }
 
   public UpDownSignature(
-    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
-    ArticleMetadata articleMetadata, String sourceDb, String sourceDbUrl, ExperimentalDesign experimentalDesign,
-    String organism, Set<String> disease, Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA,
-    Set<String> diseaseB, String localisationA, String localisationB, String stateA, String stateB
+    String signatureName, String cellTypeA, String cellTypeAOntologyId, String cellSubTypeA,
+    String cellSubTypeAOntologyId, String cellTypeB, String cellTypeBOntologyId, String cellSubTypeB,
+    String cellSubTypeBOntologyId, ArticleMetadata articleMetadata, String sourceDb, String sourceDbUrl,
+    ExperimentalDesign experimentalDesign, String organism, Set<String> disease, Set<String> treatmentA,
+    Set<String> treatmentB, Set<String> diseaseA, Set<String> diseaseB, String localisationA, String localisationB,
+    String stateA, String stateB
   ) {
     super(
-      signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, articleMetadata, sourceDb, sourceDbUrl,
+      signatureName, cellTypeA, cellTypeAOntologyId, cellSubTypeA, cellSubTypeAOntologyId, cellTypeB,
+      cellTypeBOntologyId, cellSubTypeB, cellSubTypeBOntologyId, articleMetadata, sourceDb, sourceDbUrl,
       experimentalDesign, organism, disease, treatmentA, treatmentB, diseaseA, diseaseB, localisationA, localisationB,
       stateA, stateB
     );

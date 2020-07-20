@@ -23,14 +23,17 @@
 package org.sing_group.dreimt.rest.mapper.signature;
 
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 
-import java.util.Set;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Stream;
 
 import javax.enterprise.inject.Default;
 import javax.inject.Inject;
 
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
+import org.sing_group.dreimt.domain.entities.signature.DrugTargetGene;
 import org.sing_group.dreimt.rest.entity.signature.DrugSignatureInteractionData;
 import org.sing_group.dreimt.rest.mapper.spi.signature.DrugMapper;
 import org.sing_group.dreimt.rest.mapper.spi.signature.DrugSignatureInteractionMapper;
@@ -75,22 +78,46 @@ public class DefaultDrugSignatureInteractionMapper implements DrugSignatureInter
     PredictionSummaryGenerator signatureSummaryGenerator = new PredictionSummaryGenerator();
     StringBuilder sb = new StringBuilder();
     sb.append(
-      "drug_common_name,summary,"
-        + "case_cell_type,case_cell_subtype,reference_cell_type,reference_cell_subtype,"
+      "drug_common_name,drug_pubchem_id,summary,"
+        + "case_cell_type,case_cell_type_ontology_id,case_cell_subtype,"
+        + "case_cell_subtype_ontology_id,reference_cell_type,"
+        + "reference_cell_type_ontology_id,reference_cell_subtype,"
+        + "reference_cell_subtype_ontology_id,"
         + "signature_name,up_fdr,down_fdr,tau,"
         + "drug_specificity_score,drug_status,drug_moa,"
+        + "drug_target_gene_names,drug_target_gene_ids,"
         + "prediction_type,organism,experimental_design\n"
     );
+    
 
     interactions.forEach(i -> {
+      String cellTypeAOntologyId = i.getSignature().getCellTypeAOntologyId();
+      String cellSubTypeAOntologyId = i.getSignature().getCellSubTypeAOntologyId();
+      String cellTypeBOntologyId = i.getSignature().getCellTypeBOntologyId();
+      String cellSubTypeBOntologyId = i.getSignature().getCellSubTypeBOntologyId();
+      
+      List<String> drugTargetGeneNames =
+        i.getDrug().getTargetGenes().stream().map(DrugTargetGene::getGeneName).collect(toList());
+      List<String> drugTargetGeneIds =
+        i.getDrug().getTargetGenes().stream().map(DrugTargetGene::getGeneId).collect(toList());
+  
       sb
         .append("\"").append(i.getDrug().getCommonName()).append("\"").append(",")
+        .append("\"").append(i.getDrug().getPubChemId()).append("\"").append(",")
+
         .append("\"").append(signatureSummaryGenerator.interpretation(i)).append("\"").append(",")
 
         .append("\"").append(i.getSignature().getCellTypeA()).append("\"").append(",")
+        .append("\"").append(cellTypeAOntologyId == null ? "" : cellTypeAOntologyId).append("\"").append(",")
+        
         .append("\"").append(i.getSignature().getCellSubTypeA()).append("\"").append(",")
+        .append("\"").append(cellSubTypeAOntologyId == null ? "" : cellSubTypeAOntologyId).append("\"").append(",")
+        
         .append("\"").append(i.getSignature().getCellTypeB()).append("\"").append(",")
+        .append("\"").append(cellTypeBOntologyId == null ? "" : cellTypeBOntologyId).append("\"").append(",")
+        
         .append("\"").append(i.getSignature().getCellSubTypeB()).append("\"").append(",")
+        .append("\"").append(cellSubTypeBOntologyId == null ? "" : cellSubTypeBOntologyId).append("\"").append(",")
 
         .append("\"").append(i.getSignature().getSignatureName()).append("\"").append(",")
 
@@ -100,7 +127,10 @@ public class DefaultDrugSignatureInteractionMapper implements DrugSignatureInter
 
         .append(i.getDrug().getDss() == null ? "" : i.getDrug().getDss()).append(",")
         .append("\"").append(i.getDrug().getStatus()).append("\"").append(",")
-        .append("\"").append(setString(i.getDrug().getMoa())).append("\"").append(",")
+        .append("\"").append(collectionString(i.getDrug().getMoa())).append("\"").append(",")
+        
+        .append("\"").append(collectionString(drugTargetGeneNames)).append("\"").append(",")
+        .append("\"").append(collectionString(drugTargetGeneIds)).append("\"").append(",")
 
         .append("\"").append(i.getInteractionType().toString()).append("\"").append(",")
         .append("\"").append(i.getSignature().getOrganism()).append("\"").append(",")
@@ -111,7 +141,7 @@ public class DefaultDrugSignatureInteractionMapper implements DrugSignatureInter
     return sb.toString();
   }
 
-  private static String setString(Set<String> elements) {
+  private static String collectionString(Collection<String> elements) {
     return elements.stream().collect(joining(", "));
   }
 }

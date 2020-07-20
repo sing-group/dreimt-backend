@@ -55,9 +55,13 @@ public abstract class Signature implements Serializable {
   private String signatureName;
 
   private String cellTypeA;
+  private String cellTypeAOntologyId;
+  private String cellSubTypeAOntologyId;
   private String cellSubTypeA;
   private String cellTypeB;
+  private String cellTypeBOntologyId;
   private String cellSubTypeB;
+  private String cellSubTypeBOntologyId;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "article_pubmedId", referencedColumnName = "pubmedId", nullable = true)
@@ -73,9 +77,11 @@ public abstract class Signature implements Serializable {
 
   @ElementCollection(fetch = FetchType.EAGER)
   @CollectionTable(
-    name = "signature_disease",
-    joinColumns = @JoinColumn(name = "signatureName"),
-    uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "disease"})
+    name = "signature_disease", 
+    joinColumns = @JoinColumn(name = "signatureName"), 
+    uniqueConstraints = @UniqueConstraint(columnNames = {
+      "signatureName", "disease"
+    })
   )
   private Set<String> disease;
 
@@ -83,7 +89,9 @@ public abstract class Signature implements Serializable {
   @CollectionTable(
     name = "signature_treatment_a",
     joinColumns = @JoinColumn(name = "signatureName"),
-    uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "treatmentA"})
+    uniqueConstraints = @UniqueConstraint(columnNames = {
+      "signatureName", "treatmentA"
+    })
   )
   private Set<String> treatmentA;
 
@@ -91,7 +99,9 @@ public abstract class Signature implements Serializable {
   @CollectionTable(
     name = "signature_treatment_b",
     joinColumns = @JoinColumn(name = "signatureName"),
-    uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "treatmentB"})
+    uniqueConstraints = @UniqueConstraint(columnNames = {
+      "signatureName", "treatmentB"
+    })
   )
   private Set<String> treatmentB;
 
@@ -99,7 +109,9 @@ public abstract class Signature implements Serializable {
   @CollectionTable(
     name = "signature_disease_a",
     joinColumns = @JoinColumn(name = "signatureName"),
-    uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "diseaseA"})
+    uniqueConstraints = @UniqueConstraint(columnNames = {
+      "signatureName", "diseaseA"
+    })
   )
   private Set<String> diseaseA;
 
@@ -107,7 +119,9 @@ public abstract class Signature implements Serializable {
   @CollectionTable(
     name = "signature_disease_b",
     joinColumns = @JoinColumn(name = "signatureName"),
-    uniqueConstraints = @UniqueConstraint(columnNames = {"signatureName", "diseaseB"})
+    uniqueConstraints = @UniqueConstraint(columnNames = {
+      "signatureName", "diseaseB"
+    })
   )
   private Set<String> diseaseB;
 
@@ -122,28 +136,36 @@ public abstract class Signature implements Serializable {
   Signature() {}
 
   public Signature(
-    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB, String sourceDb,
-    String sourceDbUrl, ExperimentalDesign experimentalDesign, String organism, Set<String> disease,
-    Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA, Set<String> diseaseB, String localisationA,
-    String localisationB, String stateA, String stateB
+    String signatureName, String cellTypeA, String cellTypeAOntologyId, String cellSubTypeA,
+    String cellSubTypeAOntologyId, String cellTypeB, String cellTypeBOntologyId, String cellSubTypeB,
+    String cellSubTypeBOntologyId, String sourceDb, String sourceDbUrl, ExperimentalDesign experimentalDesign,
+    String organism, Set<String> disease, Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA,
+    Set<String> diseaseB, String localisationA, String localisationB, String stateA, String stateB
   ) {
     this(
-      signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, null, sourceDb, sourceDbUrl, experimentalDesign,
+      signatureName, cellTypeA, cellTypeAOntologyId, cellSubTypeA, cellSubTypeAOntologyId, cellTypeB,
+      cellTypeBOntologyId, cellSubTypeB, cellSubTypeBOntologyId, null, sourceDb, sourceDbUrl, experimentalDesign,
       organism, disease, treatmentA, treatmentB, diseaseA, diseaseB, localisationA, localisationB, stateA, stateB
     );
   }
 
   public Signature(
-    String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB, String cellSubTypeB,
-    ArticleMetadata articleMetadata, String sourceDb, String sourceDbUrl, ExperimentalDesign experimentalDesign,
-    String organism, Set<String> disease, Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA,
-    Set<String> diseaseB, String localisationA, String localisationB, String stateA, String stateB
+    String signatureName, String cellTypeA, String cellTypeAOntologyId, String cellSubTypeA,
+    String cellSubTypeAOntologyId, String cellTypeB, String cellTypeBOntologyId, String cellSubTypeB,
+    String cellSubTypeBOntologyId, ArticleMetadata articleMetadata, String sourceDb, String sourceDbUrl,
+    ExperimentalDesign experimentalDesign, String organism, Set<String> disease, Set<String> treatmentA,
+    Set<String> treatmentB, Set<String> diseaseA, Set<String> diseaseB, String localisationA, String localisationB,
+    String stateA, String stateB
   ) {
     this.signatureName = signatureName;
     this.cellTypeA = cellTypeA;
+    this.cellTypeAOntologyId = cellTypeAOntologyId;
     this.cellSubTypeA = cellSubTypeA;
+    this.cellSubTypeAOntologyId = cellSubTypeAOntologyId;
     this.cellTypeB = cellTypeB;
+    this.cellTypeBOntologyId = cellTypeBOntologyId;
     this.cellSubTypeB = cellSubTypeB;
+    this.cellSubTypeBOntologyId = cellSubTypeBOntologyId;
     this.articleMetadata = articleMetadata;
     this.sourceDb = sourceDb;
     this.sourceDbUrl = sourceDbUrl;
@@ -174,22 +196,38 @@ public abstract class Signature implements Serializable {
     return cellTypeA;
   }
 
+  public String getCellTypeAOntologyId() {
+    return cellTypeAOntologyId;
+  }
+
   public String getCellSubTypeA() {
     return cellSubTypeA;
+  }
+
+  public String getCellSubTypeAOntologyId() {
+    return cellSubTypeAOntologyId;
   }
 
   public String getCellTypeB() {
     return cellTypeB;
   }
 
+  public String getCellTypeBOntologyId() {
+    return cellTypeBOntologyId;
+  }
+
   public String getCellSubTypeB() {
     return cellSubTypeB;
+  }
+
+  public String getCellSubTypeBOntologyId() {
+    return cellSubTypeBOntologyId;
   }
 
   public String getSourceDb() {
     return sourceDb;
   }
-  
+
   public String getSourceDbUrl() {
     return sourceDbUrl;
   }

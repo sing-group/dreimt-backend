@@ -35,7 +35,7 @@ public class DefaultDrugMapper implements DrugMapper {
   public DrugData toDrugData(Drug drug) {
     return new DrugData(
       drug.getCommonName(), drug.getSourceName(), drug.getSourceDb(), drug.getStatus(), drug.getMoa(),
-      drug.getTargetGenes(), drug.getDss()
+      drug.getTargetGenes(), drug.getDss(), drug.getPubChemId(), drug.getDbProfilesCount()
     );
   }
 }

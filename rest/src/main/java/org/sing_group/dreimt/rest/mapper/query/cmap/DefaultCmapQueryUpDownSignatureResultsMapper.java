@@ -24,8 +24,10 @@ package org.sing_group.dreimt.rest.mapper.query.cmap;
 
 import static java.util.Collections.emptySet;
 import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
 import static org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType.SIGNATURE;
 
+import java.util.Collection;
 import java.util.List;
 
 import javax.enterprise.inject.Default;
@@ -34,6 +36,7 @@ import javax.inject.Inject;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapDrugUpDownSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.execution.cmap.CmapUpDownSignatureResult;
 import org.sing_group.dreimt.domain.entities.signature.Drug;
+import org.sing_group.dreimt.domain.entities.signature.DrugTargetGene;
 import org.sing_group.dreimt.rest.entity.query.cmap.DrugPrioritizationQueryUpDownSignatureMetadataData;
 import org.sing_group.dreimt.rest.entity.query.cmap.DrugPrioritizationUpDownSignatureDrugInteractionData;
 import org.sing_group.dreimt.rest.entity.signature.UpDownSignatureGeneData;
@@ -106,15 +109,25 @@ public class DefaultCmapQueryUpDownSignatureResultsMapper implements CmapQueryUp
     PredictionSummaryGenerator summaryGenerator = new PredictionSummaryGenerator();
     StringBuilder sb = new StringBuilder();
     sb.append(
-      "drug_name,summary,up_dr,down_fdr,tau,drug_specificity_score,drug_source_db,drug_source_name,drug_status,drug_moa,\n"
+      "drug_name,drug_pubchem_id,summary,up_dr,down_fdr,tau,drug_specificity_score,drug_source_db,"
+      + "drug_source_name,drug_status,drug_moa,drug_target_gene_names,drug_target_gene_ids\n"
     );
     cmapDrugInteractions.stream()
       .forEach(c -> {
         Drug drug = c.getDrug();
 
+        List<String> drugTargetGeneNames =
+          c.getDrug().getTargetGenes().stream().map(DrugTargetGene::getGeneName).collect(toList());
+        List<String> drugTargetGeneIds =
+          c.getDrug().getTargetGenes().stream().map(DrugTargetGene::getGeneId).collect(toList());
+
         sb
           .append("\"")
           .append(drug.getCommonName())
+          .append("\"")
+          .append(",")
+          .append("\"")
+          .append(drug.getPubChemId())
           .append("\"")
           .append(",")
           .append("\"")
@@ -142,7 +155,15 @@ public class DefaultCmapQueryUpDownSignatureResultsMapper implements CmapQueryUp
           .append("\"")
           .append(",")
           .append("\"")
-          .append(drug.getMoa().stream().collect(joining(", ")))
+          .append(collectionString(drug.getMoa()))
+          .append("\"")
+          .append(",")
+          .append("\"")
+          .append(collectionString(drugTargetGeneNames))
+          .append("\"")
+          .append(",")
+          .append("\"")
+          .append(collectionString(drugTargetGeneIds))
           .append("\"")
           .append("\n");
       });
@@ -159,5 +180,9 @@ public class DefaultCmapQueryUpDownSignatureResultsMapper implements CmapQueryUp
       "", result.getCaseType(), emptySet(), emptySet(),
       "", result.getReferenceType(), emptySet(), emptySet()
     );
+  }
+
+  private static String collectionString(Collection<String> elements) {
+    return elements.stream().collect(joining(", "));
   }
 }

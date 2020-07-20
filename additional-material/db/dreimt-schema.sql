@@ -209,7 +209,9 @@ DROP TABLE IF EXISTS `drug`;
 CREATE TABLE `drug` (
   `id` int(11) NOT NULL,
   `commonName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `dbProfilesCount` int(11) DEFAULT NULL,
   `dss` double DEFAULT NULL,
+  `pubChemId` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `sourceDb` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `sourceName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
@@ -269,8 +271,9 @@ DROP TABLE IF EXISTS `drug_target_genes`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `drug_target_genes` (
   `id` int(11) NOT NULL,
-  `targetGene` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  UNIQUE KEY `UKgkm03ywjdhxhjs7c2c4f56m7g` (`id`,`targetGene`),
+  `geneId` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `geneName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  UNIQUE KEY `UKt1grh2v0bxaueouh6hvmroqbc` (`id`,`geneId`,`geneName`),
   CONSTRAINT `FKo1a2ki6iv2kn5dtf2gi9gmiqk` FOREIGN KEY (`id`) REFERENCES `drug` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -288,17 +291,23 @@ CREATE TABLE `full_drug_signature_interaction` (
   `cellTypeBEffect` int(11) DEFAULT NULL,
   `downFdr` double DEFAULT NULL,
   `drugCommonName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `drugDbProfilesCount` int(11) NOT NULL,
   `drugDss` double DEFAULT NULL,
   `drugMoa` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `drugPubChemId` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `drugSourceDb` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `drugSourceName` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `drugStatus` int(11) DEFAULT NULL,
-  `drugTargetGenes` varchar(450) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `drugTargetGenes` varchar(600) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `interactionType` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureCellSubTypeA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `signatureCellSubTypeAOntologyId` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureCellSubTypeB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `signatureCellSubTypeBOntologyId` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureCellTypeA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `signatureCellTypeAOntologyId` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureCellTypeB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `signatureCellTypeBOntologyId` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureDisease` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureDiseaseA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `signatureDiseaseB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -594,9 +603,13 @@ CREATE TABLE `signature` (
   `signatureType` varchar(31) COLLATE utf8mb4_unicode_ci NOT NULL,
   `signatureName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `cellSubTypeA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cellSubTypeAOntologyId` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cellSubTypeB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cellSubTypeBOntologyId` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cellTypeA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cellTypeAOntologyId` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `cellTypeB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `cellTypeBOntologyId` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `experimentalDesign` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `localisationA` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `localisationB` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
@@ -772,4 +785,4 @@ CREATE TABLE `work_step` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-06-08 10:09:02
+-- Dump completed on 2020-07-20 11:27:59

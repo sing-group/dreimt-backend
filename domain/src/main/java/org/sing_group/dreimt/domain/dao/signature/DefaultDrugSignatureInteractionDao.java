@@ -71,6 +71,7 @@ import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionField;
 import org.sing_group.dreimt.domain.entities.signature.DrugSignatureInteractionType;
 import org.sing_group.dreimt.domain.entities.signature.DrugStatus;
+import org.sing_group.dreimt.domain.entities.signature.DrugTargetGene;
 import org.sing_group.dreimt.domain.entities.signature.ExperimentalDesign;
 import org.sing_group.dreimt.domain.entities.signature.FullDrugSignatureInteraction;
 import org.sing_group.dreimt.domain.entities.signature.GeneSetSignature;
@@ -112,8 +113,8 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
           new Drug(
             fdsi.getDrugCommonName(), fdsi.getDrugSourceName(), fdsi.getDrugSourceDb(), fdsi.getDrugStatus(),
             reconstructSet(fdsi.getDrugMoa()),
-            reconstructSet(fdsi.getDrugTargetGenes()),
-            fdsi.getDrugDss()
+            reconstructDrugTargetGenes(reconstructSet(fdsi.getDrugTargetGenes())),
+            fdsi.getDrugDss(), fdsi.getDrugPubChemId(), fdsi.getDrugDbProfilesCount()
           );
 
         Signature signature =
@@ -121,9 +122,13 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
             fdsi.getSignatureType(),
             fdsi.getSignatureName(),
             fdsi.getSignatureCellTypeA(),
+            fdsi.getSignatureCellTypeAOntologyId(),
             fdsi.getSignatureCellSubTypeA(),
+            fdsi.getSignatureCellSubTypeAOntologyId(),
             fdsi.getSignatureCellTypeB(),
+            fdsi.getSignatureCellTypeBOntologyId(),
             fdsi.getSignatureCellSubTypeB(),
+            fdsi.getSignatureCellSubTypeBOntologyId(),
             fdsi.getArticleMetadata(),
             fdsi.getSignatureSourceDb(),
             fdsi.getSignatureSourceDbUrl(),
@@ -148,22 +153,25 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
   }
 
   private static Signature buildSignature(
-    SignatureType signatureType, String signatureName, String cellTypeA, String cellSubTypeA, String cellTypeB,
-    String cellSubTypeB, Optional<ArticleMetadata> articleMetadata, String sourceDb, String sourceDbUrl,
-    ExperimentalDesign experimentalDesign, String organism, Set<String> disease, Set<String> treatmentA,
-    Set<String> treatmentB, Set<String> diseaseA, Set<String> diseaseB, String localisationA, String localisationB,
-    String stateA, String stateB
+    SignatureType signatureType, String signatureName, String cellTypeA, String cellTypeAOntologyId,
+    String cellSubTypeA, String cellSubTypeAOntologyId, String cellTypeB, String cellTypeBOntologyId,
+    String cellSubTypeB, String cellSubTypeBOntologyId, Optional<ArticleMetadata> articleMetadata, String sourceDb,
+    String sourceDbUrl, ExperimentalDesign experimentalDesign, String organism, Set<String> disease,
+    Set<String> treatmentA, Set<String> treatmentB, Set<String> diseaseA, Set<String> diseaseB, String localisationA,
+    String localisationB, String stateA, String stateB
   ) {
     if (signatureType.equals(SignatureType.GENESET)) {
       if (articleMetadata.isPresent()) {
         return new GeneSetSignature(
-          signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, articleMetadata.get(), sourceDb, sourceDbUrl,
+          signatureName, cellTypeA, cellTypeAOntologyId, cellSubTypeA, cellSubTypeAOntologyId, cellTypeB,
+          cellTypeBOntologyId, cellSubTypeB, cellSubTypeBOntologyId, articleMetadata.get(), sourceDb, sourceDbUrl,
           experimentalDesign, organism, disease, treatmentA, treatmentB, diseaseA, diseaseB, localisationA,
           localisationB, stateA, stateB
         );
       } else {
         return new GeneSetSignature(
-          signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, sourceDb, sourceDbUrl,
+          signatureName, cellTypeA, cellTypeAOntologyId, cellSubTypeA, cellSubTypeAOntologyId, cellTypeB,
+          cellTypeBOntologyId, cellSubTypeB, cellSubTypeBOntologyId, sourceDb, sourceDbUrl,
           experimentalDesign, organism, disease, treatmentA, treatmentB, diseaseA, diseaseB, localisationA,
           localisationB, stateA, stateB
         );
@@ -171,13 +179,15 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
     } else {
       if (articleMetadata.isPresent()) {
         return new UpDownSignature(
-          signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, articleMetadata.get(), sourceDb, sourceDbUrl,
+          signatureName, cellTypeA, cellTypeAOntologyId, cellSubTypeA, cellSubTypeAOntologyId, cellTypeB,
+          cellTypeBOntologyId, cellSubTypeB, cellSubTypeBOntologyId, articleMetadata.get(), sourceDb, sourceDbUrl,
           experimentalDesign, organism, disease, treatmentA, treatmentB, diseaseA, diseaseB, localisationA,
           localisationB, stateA, stateB
         );
       } else {
         return new UpDownSignature(
-          signatureName, cellTypeA, cellSubTypeA, cellTypeB, cellSubTypeB, sourceDb, sourceDbUrl, experimentalDesign,
+          signatureName, cellTypeA, cellTypeAOntologyId, cellSubTypeA, cellSubTypeAOntologyId, cellTypeB,
+          cellTypeBOntologyId, cellSubTypeB, cellSubTypeBOntologyId, sourceDb, sourceDbUrl, experimentalDesign,
           organism, disease, treatmentA, treatmentB, diseaseA, diseaseB, localisationA, localisationB, stateA, stateB
         );
       }
@@ -186,6 +196,13 @@ public class DefaultDrugSignatureInteractionDao implements DrugSignatureInteract
 
   private static Set<String> reconstructSet(String field) {
     return field == null ? emptySet() : Stream.of(field.split("##")).map(String::trim).collect(toSet());
+  }
+
+  private static Set<DrugTargetGene> reconstructDrugTargetGenes(Set<String> targetGenes) {
+    return targetGenes.isEmpty() ? emptySet() : targetGenes.stream().map(tG -> {
+      String[] split = tG.split("\\|");
+      return new DrugTargetGene(split[0], split[1]);
+    }).collect(toSet());
   }
 
   @Override

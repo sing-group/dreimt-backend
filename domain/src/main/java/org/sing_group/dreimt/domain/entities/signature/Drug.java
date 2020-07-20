@@ -48,6 +48,9 @@ public class Drug implements Serializable {
   private String commonName;
   private String sourceName;
   private String sourceDb;
+  
+  @Column(nullable = true)
+  private int dbProfilesCount;
 
   @Enumerated(EnumType.ORDINAL) 
   private DrugStatus status;
@@ -64,17 +67,21 @@ public class Drug implements Serializable {
   @CollectionTable(
     name = "drug_target_genes",
     joinColumns = @JoinColumn(name = "id"),
-    uniqueConstraints = @UniqueConstraint(columnNames = {"id", "targetGene"})
+    uniqueConstraints = @UniqueConstraint(columnNames = {"id", "geneId", "geneName"})
   )
-  private Set<String> targetGene;
+  private Set<DrugTargetGene> targetGene;
 
   @Column(nullable = true)
   private Double dss;
+  
+  @Column(nullable = true)
+  private String pubChemId;
 
   Drug() {}
 
   public Drug(
-    String commonName, String sourceName, String sourceDb, DrugStatus status, Set<String> moa, Set<String> genes, Double dss
+    String commonName, String sourceName, String sourceDb, DrugStatus status, Set<String> moa,
+    Set<DrugTargetGene> genes, Double dss, String pubChemId, int dbProfilesCount
   ) {
     this.commonName = commonName;
     this.sourceName = sourceName;
@@ -83,6 +90,8 @@ public class Drug implements Serializable {
     this.moa = moa;
     this.targetGene = genes;
     this.dss = dss;
+    this.pubChemId = pubChemId;
+    this.dbProfilesCount = dbProfilesCount;
   }
 
   public String getCommonName() {
@@ -105,12 +114,20 @@ public class Drug implements Serializable {
     return moa;
   }
 
-  public Set<String> getTargetGenes() {
+  public Set<DrugTargetGene> getTargetGenes() {
     return targetGene;
   }
 
   public Double getDss() {
     return dss;
+  }
+
+  public String getPubChemId() {
+    return pubChemId;
+  }
+
+  public int getDbProfilesCount() {
+    return dbProfilesCount;
   }
 
   @Override
