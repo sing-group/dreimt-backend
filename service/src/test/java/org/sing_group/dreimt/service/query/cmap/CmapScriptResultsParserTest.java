@@ -46,28 +46,28 @@ public class CmapScriptResultsParserTest {
     assertEquals(20, results.size());
 
     CmapResultData firstResult = results.get(0);
-    assertEquals(firstResult.getDrugId(), 1020);
-    assertEquals(firstResult.getTau(), -99.9627074398657d, 0.0d);
-    assertEquals(firstResult.getUpFdr(), 0.00203252032520325d, 0.0d);
+    assertEquals(firstResult.getDrugId(), 157);
+    assertEquals(firstResult.getTau(), -99.813223757938d, 0.0d);
+    assertEquals(firstResult.getUpFdr(), 0.00956937799043062, 0.0d);
     assertFalse(firstResult.getDownFdr().isPresent());
-    assertEquals(firstResult.getDrugCommonName(), "genipin");
+    assertEquals(firstResult.getDrugCommonName(), "estradiol-benzoate");
     assertEquals(firstResult.getDrugSourceDb(), "LINCS");
-    assertEquals(firstResult.getDrugSourceName(), "BRD-A04308630");
+    assertEquals(firstResult.getDrugSourceName(), "BRD-A36066264");
   }
 
   @Test
   public void testParseSignatureResults() throws IOException {
     List<CmapResultData> results =
       CmapScriptResultsParser.parseSignatureResults(testSignatureResultsFile).collect(toList());
-    assertEquals(30, results.size());
+    assertEquals(20, results.size());
 
     CmapResultData firstResult = results.get(0);
-    assertEquals(firstResult.getDrugId(), 1017);
-    assertEquals(firstResult.getTau(), 99.9252895031752d, 0.0d);
-    assertEquals(firstResult.getUpFdr(), 0.00189035916824197d, 0.0d);
-    assertEquals(firstResult.getDownFdr().get().doubleValue(), 0.0748299319727891d, 0.0d);
-    assertEquals(firstResult.getDrugCommonName(), "nicotine");
+    assertEquals(firstResult.getDrugId(), 157);
+    assertEquals(firstResult.getTau(), -99.813223757938d, 0.0d);
+    assertEquals(firstResult.getUpFdr(), 0.00956937799043062, 0.0d);
+    assertEquals(firstResult.getDownFdr().get().doubleValue(), 0.00278551532033426d, 0.0d);
+    assertEquals(firstResult.getDrugCommonName(), "estradiol-benzoate");
     assertEquals(firstResult.getDrugSourceDb(), "LINCS");
-    assertEquals(firstResult.getDrugSourceName(), "BRD-K05395900");
+    assertEquals(firstResult.getDrugSourceName(), "BRD-A36066264");
   }
 }

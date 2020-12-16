@@ -33,6 +33,9 @@ import java.util.stream.Stream;
 import org.sing_group.dreimt.service.spi.query.cmap.CmapResultData;
 
 public class CmapScriptResultsParser {
+  
+  private static final int SIGNATURE_RESULTS_FIELDS = 22;
+  private static final int GENESET_RESULTS_FIELDS = 19;
 
   public static Stream<CmapResultData> parseGeneSetResults(File resultsFile) throws IOException {
     return lines(resultsFile.toPath())
@@ -42,7 +45,7 @@ public class CmapScriptResultsParser {
     
   private static CmapResultData mapGeneSetResultsLine(String line) {
     String[] fields = line.split("\t");
-    if (fields.length == 17) {
+    if (fields.length == GENESET_RESULTS_FIELDS) {
       int drugId = Integer.valueOf(fields[0].replaceAll("\"", "").replaceAll("sig_", ""));
       double upFdr = Double.valueOf(fields[2]);
       double tau = Double.valueOf(fields[5]);
@@ -55,7 +58,7 @@ public class CmapScriptResultsParser {
       );
     } else {
       throw new RuntimeException(
-        "Error reading the Cmap results file: one line does not have the expected number of fields (15)"
+        "Error reading the Cmap results file: one line does not have the expected number of fields (" + GENESET_RESULTS_FIELDS + ")"
       );
     }
   }
@@ -68,7 +71,7 @@ public class CmapScriptResultsParser {
 
   private static CmapResultData mapSignatureResultsLine(String line) {
     String[] fields = line.split("\t");
-    if (fields.length == 20) {
+    if (fields.length == SIGNATURE_RESULTS_FIELDS) {
       int drugId = Integer.valueOf(fields[0].replaceAll("\"", "").replaceAll("sig_", ""));
       double upFdr = Double.valueOf(fields[2]);
       double downFdr = Double.valueOf(fields[5]);
@@ -82,7 +85,7 @@ public class CmapScriptResultsParser {
       );
     } else {
       throw new RuntimeException(
-        "Error reading the Cmap results file: one line does not have the expected number of fields (18)"
+        "Error reading the Cmap results file: one line does not have the expected number of fields (" + SIGNATURE_RESULTS_FIELDS + ")"
       );
     }
   }
