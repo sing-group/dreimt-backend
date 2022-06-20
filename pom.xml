@@ -140,7 +140,7 @@
 		<apache.commons-math3.version>3.6.1</apache.commons-math3.version>
 
 		<!-- Resteasy specific version required, as it fixes ResourceInfo injection bug -->
-		<resteasy.version>3.0.24.Final</resteasy.version>
+		<resteasy.version>3.14.0.Final</resteasy.version>
 
 		<!-- Testing dependecies versions -->
 		<arquillian.jacoco.version>1.0.0.Alpha9</arquillian.jacoco.version>
