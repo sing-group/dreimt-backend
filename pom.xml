@@ -135,7 +135,7 @@
 		<fluent-commons.version>0.1.0-SNAPSHOT</fluent-commons.version>
 		<swagger.version>1.5.16</swagger.version>
 		<wildfly.arquillian.container.version>2.1.0.Final</wildfly.arquillian.container.version>
-		<wildfly.version>10.1.0.Final</wildfly.version>
+		<wildfly.version>21.0.1.Final</wildfly.version>
 		<sing.math.version>0.1.1</sing.math.version>
 		<apache.commons-math3.version>3.6.1</apache.commons-math3.version>
 
